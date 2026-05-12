@@ -6,7 +6,7 @@
     "price": 30,
     "spice": "Medium",
     "description": "Crispy golden triangle stuffed with spiced potatoes.",
-    "image": "img/8.avif"
+    "image": "assets/img/samosa.png"
   },
   {
     "id": 2,
@@ -15,7 +15,7 @@
     "price": 50,
     "spice": "High",
     "description": "Hollow crispy puris filled with spicy, tangy water and chickpeas.",
-    "image": "img/2.avif"
+    "image": "assets/img/chaat.png"
   },
   {
     "id": 3,
@@ -24,7 +24,7 @@
     "price": 20,
     "spice": "Low",
     "description": "Aromatic tea brewed with spices and milk.",
-    "image": "img/7.avif"
+    "image": "assets/img/chai.png"
   },
   {
     "id": 4,
@@ -33,7 +33,7 @@
     "price": 35,
     "spice": "Medium",
     "description": "Deep-fried pastry filled with spicy lentils.",
-    "image": "img/9.avif"
+    "image": "assets/img/kachori.png"
   },
   {
     "id": 5,
@@ -42,7 +42,7 @@
     "price": 45,
     "spice": "High",
     "description": "Crunchy puffed rice mixed with tangy tamarind chutney.",
-    "image": "img/1.avif"
+    "image": "assets/img/bhelpuri.png"
   },
   {
     "id": 6,
@@ -51,6 +51,6 @@
     "price": 35,
     "spice": "High",
     "description": "Crispy puris topped with potatoes, onions, chutneys, and fine sev.",
-    "image": "img/panipuri.jpg"
+    "image": "assets/img/sevpuri.png"
   }
 ]

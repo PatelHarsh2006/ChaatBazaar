@@ -2,7 +2,7 @@ let menuItems = [];
 
 async function fetchMenu() {
   try {
-    const response = await fetch('data/menu.json');
+    const response = await fetch('assets/data/menu.json');
     menuItems = await response.json();
     init();
   } catch (error) {
