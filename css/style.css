@@ -756,3 +756,87 @@
         gap: 0.8rem;
       }
     }
+   /* ===== 404 Error Page ===== */
+
+.error-page{
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg,#ffab91,#ff5722);
+  padding: 2rem;
+  text-align: center;
+}
+
+.error-container{
+  background: rgba(255,255,255,0.15);
+  padding: 3rem 2rem;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+  max-width: 650px;
+  width: 100%;
+}
+
+.error-code{
+  font-size: 8rem;
+  color: white;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.error-title{
+  font-size: 2.5rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.error-subtitle{
+  color:#fff3e0;
+  margin-bottom:1rem;
+  font-size:1.1rem;
+  font-weight:500;
+}
+
+.error-text{
+  font-size: 1.1rem;
+  color: #fff3e0;
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.error-page .btn-primary{
+  display: inline-block;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.error-page .btn-primary:hover{
+  transform: translateY(-3px) scale(1.03);
+}
+
+/* ===== Responsive 404 ===== */
+
+@media(max-width:600px){
+
+  .error-code{
+    font-size: 5rem;
+  }
+
+  .error-title{
+    font-size: 1.8rem;
+  }
+
+  .error-subtitle{
+    font-size:1rem;
+  }
+
+  .error-text{
+    font-size: 1rem;
+  }
+
+  .error-container{
+    padding: 2rem 1.5rem;
+  }
+}
