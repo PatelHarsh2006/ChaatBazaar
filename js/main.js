@@ -189,6 +189,7 @@ function setupFilterButtons() {
 function setupCartToggle() {
   const cartOpenBtn = document.getElementById("cart-open-btn");
   const cartCloseBtn = document.getElementById("cart-close");
+  if (!cartOpenBtn || !cartCloseBtn) return; // Exit if cart elements don't exist on this page
 
   cartOpenBtn.addEventListener("click", (e) => {
     e.preventDefault();
@@ -213,6 +214,7 @@ function setupCartToggle() {
 function setupOrderNowScroll() {
   const orderNowBtn = document.getElementById("order-now-btn");
   const menuSection = document.getElementById("menu");
+  if (!orderNowBtn || !menuSection) return; // Exit if order button or menu section don't exist on this page
 
   orderNowBtn.addEventListener("click", () => {
     menuSection.scrollIntoView({ behavior: "smooth" });
@@ -222,6 +224,7 @@ function setupOrderNowScroll() {
 function setupSearch() {
   const searchInput = document.getElementById("search-input");
   const searchBtn = document.getElementById("search-btn");
+  if (!searchInput || !searchBtn) return; // Exit if search elements don't exist on this page
 
   function searchMenu() {
     const query = searchInput.value.trim().toLowerCase();
@@ -247,6 +250,8 @@ function setupSearch() {
 
 function setupContactForm() {
   const form = document.getElementById("contact-form");
+  if (!form) return; // Exit if contact form doesn't exist on this page
+  
   const formSuccess = document.getElementById("form-success");
 
   const nameInput    = form.querySelector("#name");
@@ -312,6 +317,8 @@ function setupContactForm() {
 
 function setupNewsletterForm() {
   const newsletterForm = document.getElementById("newsletter-form");
+  if (!newsletterForm) return; // Exit if newsletter form doesn't exist on this page
+  
   const emailInput = newsletterForm.querySelector("#newsletter-email");
 
   newsletterForm.addEventListener("submit", (e) => {
