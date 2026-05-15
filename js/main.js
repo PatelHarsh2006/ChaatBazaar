@@ -62,26 +62,66 @@ function createCard(item) {
   const card = document.createElement("article");
   card.className = "card";
   card.tabIndex = 0;
-  card.setAttribute("aria-label", `${item.name} - ${item.description}. Price: ${formatPrice(item.price)}.`);
+
+  card.setAttribute(
+    "aria-label",
+    `${item.name} - ${item.description}. Price: ${formatPrice(item.price)}.`
+  );
+
+  const existingItem = cart.find(ci => ci.item.id === item.id);
+
+  let buttonHTML = "";
+
+  if (existingItem) {
+    buttonHTML = `
+      <div class="qty-controls">
+        <button class="decrease-btn">-</button>
+        <span>${existingItem.quantity}</span>
+        <button class="increase-btn">+</button>
+      </div>
+    `;
+  } else {
+    buttonHTML = `
+      <button class="add-btn" aria-label="Add ${item.name} to cart">
+        Add
+      </button>
+    `;
+  }
 
   card.innerHTML = `
     <img src="${item.image}" alt="${item.name}" loading="lazy" />
+
     <div class="card-content">
       <h3>${item.name}</h3>
       <p>${item.description}</p>
     </div>
+
     <div class="card-footer">
       <span class="price">${formatPrice(item.price)}</span>
-      <button class="add-btn" aria-label="Add ${item.name} to cart">Add</button>
+      ${buttonHTML}
     </div>
   `;
 
   const addBtn = card.querySelector(".add-btn");
-  addBtn.addEventListener("click", () => addToCart(item.id));
+
+  if (addBtn) {
+    addBtn.addEventListener("click", () => addToCart(item.id));
+  }
+
+  const increaseBtn = card.querySelector(".increase-btn");
+
+  if (increaseBtn) {
+    increaseBtn.addEventListener("click", () => addToCart(item.id));
+  }
+
+  const decreaseBtn = card.querySelector(".decrease-btn");
+
+  if (decreaseBtn) {
+    decreaseBtn.addEventListener("click", () => removeFromCart(item.id));
+  }
 
   return card;
 }
-
 function renderSpecials() {
   // Pick top 3 items as specials
   const specials = menuItems.slice(0, 3);
@@ -144,20 +184,29 @@ function updateCartCount() {
 
 function addToCart(id) {
   const item = menuItems.find(i => i.id === id);
+
   if (!item) return;
 
   const cartItem = cart.find(ci => ci.item.id === id);
+
   if (cartItem) {
     cartItem.quantity++;
   } else {
     cart.push({ item, quantity: 1 });
   }
+
   updateCartCount();
   renderCart();
-}
 
+  const activeFilter =
+    document.querySelector(".filter-btn.active")?.dataset.filter || "All";
+
+  renderMenu(activeFilter);
+  renderSpecials();
+}
 function removeFromCart(id) {
   const cartIndex = cart.findIndex(ci => ci.item.id === id);
+
   if (cartIndex === -1) return;
 
   if (cart[cartIndex].quantity > 1) {
@@ -165,10 +214,16 @@ function removeFromCart(id) {
   } else {
     cart.splice(cartIndex, 1);
   }
+
   updateCartCount();
   renderCart();
-}
 
+  const activeFilter =
+    document.querySelector(".filter-btn.active")?.dataset.filter || "All";
+
+  renderMenu(activeFilter);
+  renderSpecials();
+}
 // ===== Event Listeners =====
 
 function setupFilterButtons() {
