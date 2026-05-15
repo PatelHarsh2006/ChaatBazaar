@@ -219,30 +219,123 @@ function setupOrderNowScroll() {
   });
 }
 
+// AFTER — paste this replacement
 function setupSearch() {
-  const searchInput = document.getElementById("search-input");
-  const searchBtn = document.getElementById("search-btn");
+  const searchInput    = document.getElementById("search-input");
+  const searchBtn      = document.getElementById("search-btn");
+  const searchClearBtn = document.getElementById("search-clear-btn");
+  const searchWrapper  = document.getElementById("search-wrapper");
 
+  // ── Debounce helper ──────────────────────────────────────
+  function debounce(fn, delay = 300) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), delay);
+    };
+  }
+
+  // ── Core search logic ────────────────────────────────────
   function searchMenu() {
     const query = searchInput.value.trim().toLowerCase();
+
     if (!query) {
-      // Show all
       renderMenu("All");
+      toggleNoResults(false);
       return;
     }
-    const filtered = menuItems.filter(item => item.name.toLowerCase().includes(query) || item.description.toLowerCase().includes(query));
+
+    const filtered = menuItems.filter(
+      item =>
+        item.name.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query) ||
+        item.category.toLowerCase().includes(query)
+    );
+
     menuContainer.innerHTML = "";
-    filtered.forEach(item => {
-      menuContainer.appendChild(createCard(item));
+
+    if (filtered.length === 0) {
+      toggleNoResults(true, searchInput.value.trim());
+    } else {
+      toggleNoResults(false);
+      filtered.forEach(item => menuContainer.appendChild(createCard(item)));
+    }
+  }
+
+  // ── No-results message ───────────────────────────────────
+  function toggleNoResults(show, query = "") {
+    let msg = document.getElementById("no-results-msg");
+
+    // Create the element if it doesn't exist yet
+    if (!msg) {
+      msg = document.createElement("p");
+      msg.id = "no-results-msg";
+      msg.setAttribute("role", "status");
+      msg.setAttribute("aria-live", "polite");
+      msg.className = "no-results-msg";
+      menuContainer.parentNode.insertBefore(msg, menuContainer.nextSibling);
+    }
+
+    if (show) {
+      msg.textContent = `No items found for "${query}". Try a different keyword.`;
+      msg.style.display = "block";
+    } else {
+      msg.style.display = "none";
+    }
+  }
+
+  // ── Clear button ─────────────────────────────────────────
+  function updateClearBtn() {
+    if (!searchClearBtn) return;
+    const hasValue = searchInput.value.length > 0;
+    searchClearBtn.style.display = hasValue ? "flex" : "none";
+  }
+
+  if (searchClearBtn) {
+    searchClearBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      updateClearBtn();
+      toggleNoResults(false);
+      renderMenu("All");
+      searchInput.focus();
     });
   }
 
+  // ── Focus ring on wrapper ────────────────────────────────
+  if (searchWrapper) {
+    searchInput.addEventListener("focus", () =>
+      searchWrapper.classList.add("search-focused")
+    );
+    searchInput.addEventListener("blur", () =>
+      searchWrapper.classList.remove("search-focused")
+    );
+  }
+
+  // ── Event listeners ──────────────────────────────────────
+  const debouncedSearch = debounce(searchMenu, 300);
+
+  // Live search as user types
+  searchInput.addEventListener("input", () => {
+    updateClearBtn();
+    debouncedSearch();
+  });
+
+  // Button click
   searchBtn.addEventListener("click", searchMenu);
+
+  // Keyboard shortcuts
   searchInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      searchMenu();
+    if (e.key === "Enter")  searchMenu();
+    if (e.key === "Escape") {
+      searchInput.value = "";
+      updateClearBtn();
+      toggleNoResults(false);
+      renderMenu("All");
     }
   });
+
+  // Initial state
+  updateClearBtn();
 }
 
 function setupContactForm() {

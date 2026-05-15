@@ -29,10 +29,50 @@
       </div>
       <a href="#about" class="nav-link">About</a>
       <a href="#cart-sidebar" class="nav-link" id="cart-open-btn" aria-label="Open Cart">Cart (<span id="cart-count">0</span>)</a>
-      <div class="search-bar" role="search">
-        <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" />
-        <button aria-label="Search" id="search-btn"></button>
-      </div>
+     <!-- AFTER — paste this replacement -->
+<div class="search-wrapper" id="search-wrapper" role="search" aria-label="Search menu items">
+
+  <!-- Magnifier icon -->
+  <span class="search-icon" aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor"
+         stroke-width="2.5" stroke-linecap="round"
+         stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+  </span>
+
+  <!-- Input -->
+  <input
+    type="search"
+    id="search-input"
+    class="search-input"
+    placeholder="Search snacks, chaat…"
+    aria-label="Search menu items"
+    autocomplete="off"
+    spellcheck="false"
+  />
+
+  <!-- Clear button — hidden until user types -->
+  <button
+    id="search-clear-btn"
+    class="search-clear-btn"
+    aria-label="Clear search"
+    aria-hidden="true"
+    type="button"
+    style="display:none"
+  >✕</button>
+
+  <!-- Submit button -->
+  <button
+    id="search-btn"
+    class="search-btn"
+    aria-label="Submit search"
+    type="button"
+  >Search</button>
+
+</div>
     </nav>
   </div>
 </header>
