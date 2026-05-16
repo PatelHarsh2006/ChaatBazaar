@@ -47,7 +47,7 @@ const menuContainer = document.getElementById("menu-cards");
 const cartCount = document.getElementById("cart-count");
 const cartSidebar = document.getElementById("cart-sidebar");
 const cartItemsContainer = document.getElementById("cart-items");
-const cartTotal = document.getElementById("cart-total");
+const cartTotal = document.getElementById("cart-total") || document.getElementById("total-price");
 const checkoutBtn = document.getElementById("checkout-btn");
 
 let cart = JSON.parse(localStorage.getItem('chaatCart')) || [];
@@ -88,6 +88,7 @@ function createCard(item) {
 }
 
 function renderSpecials() {
+  if (!specialsContainer) return;
   const specials = menuItems.slice(0, 3);
 
   // 1. Show skeletons immediately
@@ -103,6 +104,7 @@ function renderSpecials() {
 }
 
 function renderMenu(filter = "All") {
+  if (!menuContainer) return;
   // 1. Show skeletons immediately
   showSkeletonCards(menuContainer, 4);
 
@@ -130,6 +132,8 @@ function renderMenu(filter = "All") {
 }
 
 function renderCart() {
+  if (!cartItemsContainer) return;
+  
   // 1. Show skeletons briefly when cart first opens
   if (cart.length > 0) {
     showSkeletonCartItems(cart.length);
@@ -143,8 +147,8 @@ function renderCart() {
         `<p style="text-align:center;color:#5d4037;margin-top:2rem;">
            Your cart is empty.
          </p>`;
-      checkoutBtn.disabled = true;
-      cartTotal.textContent = "Total: ₹0";
+      if (checkoutBtn) checkoutBtn.disabled = true;
+      if (cartTotal) cartTotal.textContent = "Total: ₹0";
       return;
     }
 
@@ -194,6 +198,7 @@ function renderCart() {
           cart = cart.filter(ci => ci.item.id !== item.id);
           updateCartCount();
           renderCart();
+          saveCart();
         });
 
       cartItemsContainer.appendChild(cartItem);
@@ -203,13 +208,14 @@ function renderCart() {
       (sum, ci) => sum + ci.item.price * ci.quantity,
       0
     );
-    cartTotal.textContent = `Total: ${formatPrice(total)}`;
-    checkoutBtn.disabled = false;
+    if (cartTotal) cartTotal.textContent = `Total: ${formatPrice(total)}`;
+    if (checkoutBtn) checkoutBtn.disabled = false;
 
   }, 600); // short delay — cart data is already local
 }
 
 function updateCartCount() {
+  if (!cartCount) return;
   const totalCount = cart.reduce((sum, cartItem) => sum + cartItem.quantity, 0);
   cartCount.textContent = totalCount;
 }
@@ -249,6 +255,7 @@ function removeFromCart(id) {
 
 function setupFilterButtons() {
   const filterButtons = document.querySelectorAll(".filter-btn");
+  if (filterButtons.length === 0) return;
   filterButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       filterButtons.forEach(b => {
@@ -266,20 +273,27 @@ function setupCartToggle() {
   const cartOpenBtn = document.getElementById("cart-open-btn");
   const cartCloseBtn = document.getElementById("cart-close");
 
-  cartOpenBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    cartSidebar.setAttribute("aria-hidden", "false");
-    cartSidebar.style.transform = "translateX(0)";
-  });
+  if (cartOpenBtn && cartSidebar) {
+    cartOpenBtn.addEventListener("click", (e) => {
+      // Only prevent default if it's a hash link
+      if (cartOpenBtn.getAttribute("href").startsWith("#")) {
+        e.preventDefault();
+        cartSidebar.setAttribute("aria-hidden", "false");
+        cartSidebar.style.transform = "translateX(0)";
+      }
+    });
+  }
 
-  cartCloseBtn.addEventListener("click", () => {
-    cartSidebar.setAttribute("aria-hidden", "true");
-    cartSidebar.style.transform = "translateX(100%)";
-  });
+  if (cartCloseBtn && cartSidebar) {
+    cartCloseBtn.addEventListener("click", () => {
+      cartSidebar.setAttribute("aria-hidden", "true");
+      cartSidebar.style.transform = "translateX(100%)";
+    });
+  }
 
   // Close cart on Escape key when open
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && cartSidebar.getAttribute("aria-hidden") === "false") {
+    if (cartSidebar && e.key === "Escape" && cartSidebar.getAttribute("aria-hidden") === "false") {
       cartSidebar.setAttribute("aria-hidden", "true");
       cartSidebar.style.transform = "translateX(100%)";
     }
@@ -290,14 +304,18 @@ function setupOrderNowScroll() {
   const orderNowBtn = document.getElementById("order-now-btn");
   const menuSection = document.getElementById("menu");
 
-  orderNowBtn.addEventListener("click", () => {
-    menuSection.scrollIntoView({ behavior: "smooth" });
-  });
+  if (orderNowBtn && menuSection) {
+    orderNowBtn.addEventListener("click", () => {
+      menuSection.scrollIntoView({ behavior: "smooth" });
+    });
+  }
 }
 
 function setupSearch() {
   const searchInput = document.getElementById("search-input");
   const searchBtn = document.getElementById("search-btn");
+
+  if (!searchInput || !searchBtn) return;
 
   function searchMenu() {
     const query = searchInput.value.trim().toLowerCase();
@@ -323,6 +341,8 @@ function setupSearch() {
 
 function setupContactForm() {
   const form = document.getElementById("contact-form");
+  if (!form) return;
+
   const formSuccess = document.getElementById("form-success");
 
   const nameInput    = form.querySelector("#name");
@@ -337,10 +357,10 @@ function setupContactForm() {
     e.preventDefault();
 
     // Clear previous errors and hide any success banner
-    errorName.textContent    = "";
-    errorEmail.textContent   = "";
-    errorMessage.textContent = "";
-    formSuccess.style.display = "none";
+    if (errorName) errorName.textContent    = "";
+    if (errorEmail) errorEmail.textContent   = "";
+    if (errorMessage) errorMessage.textContent = "";
+    if (formSuccess) formSuccess.style.display = "none";
 
     const nameVal    = nameInput.value.trim();
     const emailVal   = emailInput.value.trim();
@@ -350,44 +370,46 @@ function setupContactForm() {
 
     // Validate Name — empty check first, then length
     if (nameVal === "") {
-      errorName.textContent = "Name is required.";
+      if (errorName) errorName.textContent = "Name is required.";
       valid = false;
     } else if (nameVal.length < 2) {
-      errorName.textContent = "Name must be at least 2 characters.";
+      if (errorName) errorName.textContent = "Name must be at least 2 characters.";
       valid = false;
     }
 
     // Validate Email — empty check first, then format
     if (emailVal === "") {
-      errorEmail.textContent = "Email is required.";
+      if (errorEmail) errorEmail.textContent = "Email is required.";
       valid = false;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
-      errorEmail.textContent = "Please enter a valid email address.";
+      if (errorEmail) errorEmail.textContent = "Please enter a valid email address.";
       valid = false;
     }
 
     // Validate Message — empty check first, then length
     if (messageVal === "") {
-      errorMessage.textContent = "Message is required.";
+      if (errorMessage) errorMessage.textContent = "Message is required.";
       valid = false;
     } else if (messageVal.length < 10) {
-      errorMessage.textContent = "Message must be at least 10 characters.";
+      if (errorMessage) errorMessage.textContent = "Message must be at least 10 characters.";
       valid = false;
     }
 
     if (!valid) return;
 
     // Show inline success banner and reset form after 3 s
-    formSuccess.style.display = "block";
+    if (formSuccess) formSuccess.style.display = "block";
     setTimeout(() => {
       form.reset();
-      formSuccess.style.display = "none";
+      if (formSuccess) formSuccess.style.display = "none";
     }, 3000);
   });
 }
 
 function setupNewsletterForm() {
   const newsletterForm = document.getElementById("newsletter-form");
+  if (!newsletterForm) return;
+
   const emailInput = newsletterForm.querySelector("#newsletter-email");
 
   newsletterForm.addEventListener("submit", (e) => {
@@ -404,6 +426,16 @@ function setupNewsletterForm() {
     newsletterForm.reset();
   });
 }
+
+// Global checkout function for inline onclick
+window.checkout = function() {
+  if (cart.length === 0) return;
+  alert("Thank you for your order! Your delicious chaat is on the way.");
+  cart = [];
+  saveCart();
+  updateCartCount();
+  renderCart();
+};
 
 // ===== Initialization =====
 

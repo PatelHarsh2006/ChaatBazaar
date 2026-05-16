@@ -9,30 +9,34 @@
 <body>
 
 <header>
-  <div class="logo">ChaatBazar 🍴</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="menu.html">Menu</a>
-    <a href="cart.html">Cart</a>
-    <a href="about.html">About</a>
-  </nav>
+  <div class="header-inner container" role="banner">
+    <a href="index.html" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
+    <nav role="navigation" aria-label="Primary Navigation">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="menu.html" class="nav-link active">Menu</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="cart.html" class="nav-link" id="cart-open-btn" aria-label="Open Cart">Cart (<span id="cart-count">0</span>)</a>
+    </nav>
+  </div>
 </header>
 
-<section class="menu-page">
-  <h1>Our Menu</h1>
-  <div class="filter">
-    <button onclick="filterCategory('All')">All</button>
-    <button onclick="filterCategory('Snacks')">Snacks</button>
-    <button onclick="filterCategory('Chaat')">Chaat</button>
-    <button onclick="filterCategory('Beverages')">Beverages</button>
-  </div>
-  <div class="menu-container" id="menu-container">
-    <!-- JS will dynamically load items -->
-  </div>
-</section>
+<main class="container">
+  <section id="menu" class="menu" style="padding: 4rem 1rem;">
+    <h1 class="section-title">Explore Our Menu</h1>
+    <div class="filter-buttons" role="toolbar" aria-label="Filter menu categories">
+      <button class="filter-btn active" data-filter="All" aria-pressed="true">All</button>
+      <button class="filter-btn" data-filter="Snacks" aria-pressed="false">Snacks</button>
+      <button class="filter-btn" data-filter="Chaat" aria-pressed="false">Chaat</button>
+      <button class="filter-btn" data-filter="Beverages" aria-pressed="false">Beverages</button>
+    </div>
+    <div class="cards" id="menu-cards" aria-live="polite">
+      <!-- Menu cards injected here -->
+    </div>
+  </section>
+</main>
 
 <footer>
-  <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
+  <p>© 2026 ChaatBazar. All rights reserved.</p>
 </footer>
 
 <script src="js/main.js"></script>

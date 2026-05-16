@@ -9,24 +9,33 @@
 <body>
 
 <header>
-  <div class="logo">ChaatBazar 🍴</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="menu.html">Menu</a>
-    <a href="cart.html">Cart</a>
-    <a href="about.html">About</a>
-  </nav>
+  <div class="header-inner container" role="banner">
+    <a href="index.html" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
+    <nav role="navigation" aria-label="Primary Navigation">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="menu.html" class="nav-link">Menu</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="cart.html" class="nav-link active" id="cart-open-btn" aria-label="Open Cart">Cart (<span id="cart-count">0</span>)</a>
+    </nav>
+  </div>
 </header>
 
-<section class="cart-page">
-  <h1>Your Cart</h1>
-  <div id="cart-items"></div>
-  <p id="total-price"></p>
-  <button onclick="checkout()">Checkout</button>
-</section>
+<main class="container">
+  <section class="cart-page" style="padding: 4rem 1rem;">
+    <h1 class="section-title">Your Cart</h1>
+    <div id="cart-items" style="max-width: 800px; margin: 0 auto;">
+      <!-- Cart items injected here -->
+    </div>
+    
+    <div id="cart-summary" style="max-width: 800px; margin: 2rem auto; text-align: right; background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.1);">
+      <h2 id="cart-total" style="color: #bf360c; margin-bottom: 1.5rem; font-size: 2rem;">Total: ₹0</h2>
+      <button id="checkout-btn" class="btn-primary" onclick="checkout()" disabled>Proceed to Checkout</button>
+    </div>
+  </section>
+</main>
 
 <footer>
-  <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
+  <p>© 2026 ChaatBazar. All rights reserved.</p>
 </footer>
 
 <script src="js/main.js"></script>

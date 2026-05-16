@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About Us - ChaatBazar 🍴</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner container" role="banner">
+    <a href="index.html" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
+    <nav role="navigation" aria-label="Primary Navigation">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="menu.html" class="nav-link">Menu</a>
+      <a href="about.html" class="nav-link active">About</a>
+      <a href="cart.html" class="nav-link" id="cart-open-btn" aria-label="Open Cart">Cart (<span id="cart-count">0</span>)</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- About Section -->
+  <section id="about" class="about" role="region" aria-label="About ChaatBazar">
+    <div class="container">
+      <h1 class="section-title">About Us</h1>
+      <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem;">At <strong>ChaatBazar</strong>, we bring you the authentic flavors of India's vibrant street food culture, freshly prepared and delivered hot right to your door. Our passion is to share the love of chaat, snacks, and beverages made from time-tested recipes.</p>
+      
+      <div class="team" aria-label="Meet our team">
+        <article class="team-member" tabindex="0">
+          <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya Sharma - Founder & Head Chef" />
+          <h4>Priya Sharma</h4>
+          <p>Founder & Head Chef - Crafting every dish with love and authenticity.</p>
+        </article>
+        <article class="team-member" tabindex="0">
+          <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Anjali Verma - Customer Support" />
+          <h4>Anjali Verma</h4>
+          <p>Customer Support - Always here to assist you with your orders.</p>
+        </article>
+      </div>
+
+      <h2 class="section-title">Contact Us</h2>
+      <form class="contact-form" id="contact-form" novalidate aria-label="Contact Form">
+        <label for="name">Name <span class="required">*</span></label>
+        <input type="text" id="name" name="name" required aria-required="true" minlength="2" />
+        <div class="error-msg" id="error-name" aria-live="assertive"></div>
+
+        <label for="email">Email <span class="required">*</span></label>
+        <input type="email" id="email" name="email" required aria-required="true" />
+        <div class="error-msg" id="error-email" aria-live="assertive"></div>
+
+        <label for="message">Message <span class="required">*</span></label>
+        <textarea id="message" name="message" required aria-required="true" minlength="10"></textarea>
+        <div class="error-msg" id="error-message" aria-live="assertive"></div>
+
+        <div class="form-success-msg" id="form-success" role="alert" aria-live="polite" style="display:none;">
+          Your message has been sent. We'll get back to you soon.
+        </div>
+        <button type="submit" class="btn-submit">Send Message</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>© 2026 ChaatBazar. All rights reserved.</p>
+</footer>
+
+<script src="js/main.js"></script> 
+</body>
+</html>
