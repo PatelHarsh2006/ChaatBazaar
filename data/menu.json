@@ -1,7 +1,42 @@
 [
-  {"id":1,"name":"Samosa","category":"Snacks","price":15,"spice":"Medium","image":"../img/samosa.jpg"},
-  {"id":2,"name":"Kachori","category":"Snacks","price":20,"spice":"Medium","image":"../img/9.avif"},
-  {"id":3,"name":"Pani Puri","category":"Chaat","price":30,"spice":"High","image":"../img/panipuri.jpg"},
-  {"id":4,"name":"Sev Puri","category":"Chaat","price":35,"spice":"High","image":"../img/sevpuri.jpg"},
-  {"id":5,"name":"Chai","category":"Beverages","price":10,"spice":"Low","image":"../img/chai.jpg"}
+  {
+    "id": 1,
+    "name": "Samosa",
+    "category": "Snacks",
+    "price": 15,
+    "spice": "Medium",
+    "image": "../img/samosa.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Kachori",
+    "category": "Snacks",
+    "price": 20,
+    "spice": "Medium",
+    "image": "../img/9.avif"
+  },
+  {
+    "id": 3,
+    "name": "Dahi Puri",
+    "category": "Chaat",
+    "price": 30,
+    "spice": "High",
+    "image": "../img/panipuri.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Sev Puri",
+    "category": "Chaat",
+    "price": 35,
+    "spice": "High",
+    "image": "../img/sevpuri.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Chai",
+    "category": "Beverages",
+    "price": 10,
+    "spice": "Low",
+    "image": "../img/chai.jpg"
+  }
 ]

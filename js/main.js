@@ -4,40 +4,40 @@ const menuItems = [
     name: "Samosa",
     category: "Snacks",
     price: 30,
-    description: "Crispy golden triangle stuffed with spiced potatoes.",
-    image: "../img/8.avif"
+    description: "Golden-fried triangular pastry packed with spiced potatoes, peas, and herbs — served with mint and tamarind chutney.",
+    image: "img/samosa.avif"
   },
   {
     id: 2,
-    name: "Pani Puri",
+    name: "Dahi Puri",
     category: "Chaat",
     price: 50,
-    description: "Hollow crispy puris filled with spicy, tangy water and chickpeas.",
-    image: "../img/2.avif"
+    description: "Crispy puris filled with spiced potatoes, tangy tamarind chutney, and creamy chilled dahi.",
+    image: "img/dahipuri.avif"
   },
   {
     id: 3,
     name: "Masala Chai",
     category: "Beverages",
     price: 20,
-    description: "Aromatic tea brewed with spices and milk.",
-    image: "../img/7.avif"
+    description: "Rich, warming tea simmered with ginger, cardamom, cinnamon, and cloves, blended with full-cream milk.",
+    image: "img/masalachai.avif"
   },
   {
     id: 4,
     name: "Kachori",
     category: "Snacks",
     price: 35,
-    description: "Deep-fried pastry filled with spicy lentils.",
-    image: "../img/9.avif"
+    description: "Flaky, deep-fried pastry packed with a spiced filling of urad dal, fennel seeds, and dried mango powder.",
+    image: "img/kachori.avif"
   },
   {
     id: 5,
-    name: "Bhel Puri",
+    name: "Sev Puri",
     category: "Chaat",
     price: 45,
-    description: "Crunchy puffed rice mixed with tangy tamarind chutney.",
-    image: "../img/1.avif"
+    description: "Flat crispy puris topped with potatoes, onions, chutneys, and a generous sprinkle of sev.",
+    image: "img/sevpuri.avif"
   },
 ];
 
@@ -249,25 +249,25 @@ function setupContactForm() {
   const form = document.getElementById("contact-form");
   const formSuccess = document.getElementById("form-success");
 
-  const nameInput    = form.querySelector("#name");
-  const emailInput   = form.querySelector("#email");
+  const nameInput = form.querySelector("#name");
+  const emailInput = form.querySelector("#email");
   const messageInput = form.querySelector("#message");
 
-  const errorName    = form.querySelector("#error-name");
-  const errorEmail   = form.querySelector("#error-email");
+  const errorName = form.querySelector("#error-name");
+  const errorEmail = form.querySelector("#error-email");
   const errorMessage = form.querySelector("#error-message");
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
     // Clear previous errors and hide any success banner
-    errorName.textContent    = "";
-    errorEmail.textContent   = "";
+    errorName.textContent = "";
+    errorEmail.textContent = "";
     errorMessage.textContent = "";
     formSuccess.style.display = "none";
 
-    const nameVal    = nameInput.value.trim();
-    const emailVal   = emailInput.value.trim();
+    const nameVal = nameInput.value.trim();
+    const emailVal = emailInput.value.trim();
     const messageVal = messageInput.value.trim();
 
     let valid = true;
@@ -329,6 +329,42 @@ function setupNewsletterForm() {
   });
 }
 
+function setupCheckout() {
+  checkoutBtn.addEventListener("click", () => {
+    if (cart.length === 0) return;
+
+    const session = localStorage.getItem("cb_session");
+    if (!session) {
+      window.location.href = "auth.html?redirect=index.html";
+      return;
+    }
+
+    const ordersKey = `cb_orders_${session}`;
+    const orders = JSON.parse(localStorage.getItem(ordersKey) || "[]");
+
+    const total = cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
+    const order = {
+      id: Date.now(),
+      date: new Date().toISOString(),
+      items: cart.map(ci => ({
+        name: ci.item.name,
+        price: ci.item.price,
+        quantity: ci.quantity
+      })),
+      total
+    };
+
+    orders.push(order);
+    localStorage.setItem(ordersKey, JSON.stringify(orders));
+
+    cart = [];
+    updateCartCount();
+    renderCart();
+
+    alert(`✅ Order placed! Total: ₹${total}\nView it in your Order History.`);
+  });
+}
+
 // ===== Initialization =====
 
 function init() {
@@ -343,6 +379,7 @@ function init() {
   setupSearch();
   setupContactForm();
   setupNewsletterForm();
+  setupCheckout();
 }
 
 document.addEventListener("DOMContentLoaded", init);

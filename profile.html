@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Profile — ChaatBazar 🍴</title>
+  <meta name="description" content="Manage your ChaatBazar profile, saved addresses and order history." />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="css/profile.css" />
+</head>
+
+<body>
+
+  <!-- Slim top nav -->
+  <header>
+    <div class="header-inner container">
+      <a href="index.html" class="logo">ChaatBazar 🍴</a>
+      <nav role="navigation" aria-label="Primary Navigation">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#menu" class="nav-link">Menu</a>
+        <a href="index.html#about" class="nav-link">About</a>
+        <div id="nav-profile-slot"></div>
+      </nav>
+    </div>
+  </header>
+
+  <div class="profile-layout">
+
+    <!-- ===== LEFT SIDEBAR ===== -->
+    <aside class="profile-sidebar">
+      <div class="sidebar-avatar" id="sidebar-initials">U</div>
+      <div class="sidebar-name" id="sidebar-name">User</div>
+      <div class="sidebar-email" id="sidebar-email">user@example.com</div>
+
+      <nav class="profile-nav" aria-label="Profile sections">
+        <a href="#profile" class="profile-nav-item" data-section="profile">My Profile</a>
+        <a href="#addresses" class="profile-nav-item" data-section="addresses">Saved Addresses</a>
+        <a href="#orders" class="profile-nav-item" data-section="orders">Order History</a>
+      </nav>
+
+      <button class="profile-logout-btn" id="profile-logout-btn">Logout</button>
+    </aside>
+
+    <!-- ===== RIGHT CONTENT ===== -->
+    <main class="profile-content">
+
+      <!-- My Profile Panel -->
+      <section id="panel-profile" class="profile-panel" aria-label="My Profile">
+        <div class="panel-card">
+          <h2 class="panel-title">My Profile</h2>
+          <p class="panel-sub">Update your personal information below.</p>
+          <form id="profile-edit-form" class="profile-form" novalidate>
+            <div class="pf-field">
+              <label for="edit-name">Full Name</label>
+              <input type="text" id="edit-name" placeholder="Your name" required />
+            </div>
+            <div class="pf-field">
+              <label for="edit-email">Email <span class="readonly-note">(cannot change)</span></label>
+              <input type="email" id="edit-email" disabled />
+            </div>
+            <div class="pf-field">
+              <label for="edit-phone">Phone</label>
+              <input type="tel" id="edit-phone" placeholder="+91 98765 43210" />
+            </div>
+            <div class="pf-msg" id="profile-save-msg" role="status" aria-live="polite"></div>
+            <button type="submit" class="pf-save-btn">Save Changes</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Saved Addresses Panel -->
+      <section id="panel-addresses" class="profile-panel" aria-label="Saved Addresses">
+        <div class="panel-card">
+          <h2 class="panel-title">Saved Addresses</h2>
+          <p class="panel-sub">Add delivery addresses for faster checkout.</p>
+          <div id="address-list" class="addr-list"></div>
+          <p id="address-empty" class="panel-empty" style="display:none;">No saved addresses yet.</p>
+          <div class="addr-add-box">
+            <h3 class="addr-add-title">➕ Add New Address</h3>
+            <form id="add-address-form" class="profile-form" novalidate>
+              <div class="pf-field">
+                <label for="addr-label">Label (e.g. Home, Work)</label>
+                <input type="text" id="addr-label" placeholder="Home" required />
+              </div>
+              <div class="pf-field">
+                <label for="addr-text">Full Address</label>
+                <textarea id="addr-text" rows="3" placeholder="Street, City, PIN..." required></textarea>
+              </div>
+              <div class="pf-msg" id="addr-save-msg" role="status" aria-live="polite"></div>
+              <button type="submit" class="pf-save-btn">Add Address</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Order History Panel -->
+      <section id="panel-orders" class="profile-panel" aria-label="Order History">
+        <div class="panel-card">
+          <h2 class="panel-title">Order History</h2>
+          <p class="panel-sub">All your past orders from ChaatBazar.</p>
+          <div id="orders-list" class="orders-list"></div>
+          <p id="orders-empty" class="panel-empty" style="display:none;">You haven't placed any orders yet. <a
+              href="index.html#menu">Browse the menu →</a></p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/navbar.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+
+</html>

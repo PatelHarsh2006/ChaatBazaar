@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login / Sign Up — ChaatBazar 🍴</title>
+  <meta name="description"
+    content="Login or create your ChaatBazar account to track orders, save addresses and more." />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+
+<body class="auth-body">
+
+  <div class="auth-page">
+
+    <!-- Left brand panel -->
+    <div class="auth-brand">
+      <a href="index.html" class="auth-logo">ChaatBazar 🍴</a>
+      <h1 class="auth-tagline">Authentic Indian<br>Street Food,<br>Delivered Hot.</h1>
+      <p class="auth-sub">Join thousands of food lovers who order fresh chaat every day.</p>
+      <div class="auth-brand-art" aria-hidden="true">🥘🍛🫕</div>
+    </div>
+
+    <!-- Right form panel -->
+    <div class="auth-form-panel">
+      <div class="auth-card">
+
+        <div class="auth-tabs" role="tablist">
+          <button id="tab-login" class="auth-tab active" role="tab" aria-selected="true"
+            aria-controls="form-login">Login</button>
+          <button id="tab-signup" class="auth-tab" role="tab" aria-selected="false" aria-controls="form-signup">Sign
+            Up</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="form-login" class="auth-inner-form active" novalidate aria-label="Login form">
+          <div class="auth-field">
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" placeholder="you@example.com" required autocomplete="email" />
+          </div>
+          <div class="auth-field">
+            <label for="login-password">Password</label>
+            <div class="pw-wrapper">
+              <input type="password" id="login-password" placeholder="••••••••" required
+                autocomplete="current-password" />
+              <button type="button" class="toggle-pw" data-target="login-password"
+                aria-label="Toggle password visibility">👁️</button>
+            </div>
+          </div>
+          <div class="auth-error" id="login-error" role="alert" aria-live="assertive"></div>
+          <button type="submit" class="auth-submit-btn">Login</button>
+          <p class="auth-switch">Don't have an account? <button type="button" class="auth-switch-btn"
+              id="go-signup">Sign up</button></p>
+        </form>
+
+        <!-- Sign Up Form -->
+        <form id="form-signup" class="auth-inner-form" novalidate aria-label="Sign up form">
+          <div class="auth-field">
+            <label for="signup-name">Full Name</label>
+            <input type="text" id="signup-name" placeholder="Priya Sharma" required autocomplete="name" />
+          </div>
+          <div class="auth-field">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" placeholder="you@example.com" required autocomplete="email" />
+          </div>
+          <div class="auth-field">
+            <label for="signup-phone">Phone (optional)</label>
+            <input type="tel" id="signup-phone" placeholder="+91 98765 43210" autocomplete="tel" />
+          </div>
+          <div class="auth-field">
+            <label for="signup-password">Password</label>
+            <div class="pw-wrapper">
+              <input type="password" id="signup-password" placeholder="Min. 6 characters" required
+                autocomplete="new-password" />
+              <button type="button" class="toggle-pw" data-target="signup-password"
+                aria-label="Toggle password visibility">👁️</button>
+            </div>
+          </div>
+          <div class="auth-field">
+            <label for="signup-confirm">Confirm Password</label>
+            <div class="pw-wrapper">
+              <input type="password" id="signup-confirm" placeholder="Repeat password" required
+                autocomplete="new-password" />
+              <button type="button" class="toggle-pw" data-target="signup-confirm"
+                aria-label="Toggle confirm password visibility">👁️</button>
+            </div>
+          </div>
+          <div class="auth-error" id="signup-error" role="alert" aria-live="assertive"></div>
+          <button type="submit" class="auth-submit-btn">Create Account</button>
+          <p class="auth-switch">Already have an account? <button type="button" class="auth-switch-btn"
+              id="go-login">Login</button></p>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // Cross-form tab links
+    document.getElementById('go-signup').addEventListener('click', () => {
+      document.getElementById('tab-signup').click();
+    });
+    document.getElementById('go-login').addEventListener('click', () => {
+      document.getElementById('tab-login').click();
+    });
+  </script>
+</body>
+
+</html>

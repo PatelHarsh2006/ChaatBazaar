@@ -1,34 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cart - ChaatBazar</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/cart.css">
+  <link rel="stylesheet" href="css/profile.css">
 </head>
+
 <body>
 
-<header>
-  <div class="logo">ChaatBazar 🍴</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="menu.html">Menu</a>
-    <a href="cart.html">Cart</a>
-    <a href="about.html">About</a>
-  </nav>
-</header>
+  <header>
+    <div class="logo">ChaatBazar 🍴</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="cart.html">Cart</a>
+      <a href="about.html">About</a>
+      <div id="nav-profile-slot"></div>
+    </nav>
+  </header>
 
-<section class="cart-page">
-  <h1>Your Cart</h1>
-  <div id="cart-items"></div>
-  <p id="total-price"></p>
-  <button onclick="checkout()">Checkout</button>
-</section>
+  <section class="cart-page">
+    <h1>Your Cart</h1>
+    <div id="cart-items"></div>
+    <p id="total-price"></p>
+    <button onclick="checkout()">Checkout</button>
+  </section>
 
-<footer>
-  <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
-</footer>
+  <footer>
+    <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
+  </footer>
 
-<script src="js/main.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/main.js"></script>
 </body>
+
 </html>

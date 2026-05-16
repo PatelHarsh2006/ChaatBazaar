@@ -1,0 +1,244 @@
+/* ===== About Section ===== */
+section.about {
+  padding: 5rem 1rem 7rem;
+  background: white;
+  color: #3e3e3e;
+  user-select: text;
+}
+
+.about .container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about h2 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #bf360c;
+  margin-bottom: 2rem;
+  text-align: center;
+  user-select: none;
+}
+
+.about p {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #5d4037;
+  margin-bottom: 2rem;
+}
+
+.team {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.team-member {
+  flex: 1 1 220px;
+  background: #fff3e0;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.1);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  user-select: none;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.team-member:hover {
+  box-shadow: 0 12px 28px rgb(0 0 0 / 0.15);
+  transform: translateY(-5px);
+}
+
+.team-member img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  margin: 0 auto 1.2rem;
+  object-fit: cover;
+  user-select: none;
+  border: 4px solid white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.team-member h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: #3e2723;
+}
+
+.team-member p {
+  font-size: 0.95rem;
+  color: #5d4037;
+  user-select: text;
+  line-height: 1.4;
+}
+
+/* ===== Contact Form ===== */
+form.contact-form {
+  max-width: 500px;
+  margin: 0 auto;
+  background: #fff3e0;
+  padding: 2rem 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.12);
+  user-select: text;
+}
+
+form.contact-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #bf360c;
+  user-select: none;
+}
+
+form.contact-form input,
+form.contact-form textarea {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  border: 2px solid #ffcc99;
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+  user-select: text;
+}
+
+form.contact-form input:focus,
+form.contact-form textarea:focus {
+  border-color: #ff5722;
+  outline: none;
+}
+
+form.contact-form textarea {
+  min-height: 100px;
+}
+
+.error-msg {
+  font-size: 0.85rem;
+  color: #c0392b;
+  margin-top: -1rem;
+  margin-bottom: 0.8rem;
+  min-height: 1rem;
+  display: block;
+  user-select: none;
+}
+
+.form-success-msg {
+  margin-top: 0.8rem;
+  margin-bottom: 1rem;
+  padding: 0.8rem 1rem;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-left: 4px solid #43a047;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  animation: fadeInDown 0.4s ease;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btn-submit {
+  background: #ff5722;
+  color: white;
+  font-weight: 700;
+  padding: 0.9rem 2rem;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 8px 25px rgb(255 87 34 / 0.7);
+  transition: background 0.3s ease;
+  user-select: none;
+  width: 100%;
+}
+
+.btn-submit:hover {
+  background: #e64a19;
+}
+
+/* ===== Testimonials ===== */
+section.testimonials {
+  padding: 5rem 1rem 7rem;
+  background: #fff3e0;
+  color: #3e2723;
+  user-select: none;
+}
+
+.testimonial-cards {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.testimonial {
+  background: white;
+  padding: 3rem 2rem 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.1);
+  max-width: 320px;
+  position: relative;
+  font-style: italic;
+  user-select: text;
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial::before {
+  content: "\201C";
+  position: absolute;
+  font-size: 4rem;
+  top: 0px;
+  left: 20px;
+  color: #ff5722;
+  font-weight: 900;
+  user-select: none;
+  line-height: 1;
+}
+
+.testimonial p {
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.testimonial .author {
+  font-weight: 700;
+  text-align: right;
+  color: #bf360c;
+  user-select: text;
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+  .team {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .testimonial-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+}
