@@ -77,7 +77,7 @@ function createCard(item) {
     </div>
     <div class="card-footer">
       <span class="price">${formatPrice(item.price)}</span>
-      <button class="add-btn" aria-label="Add ${item.name} to cart">Add</button>
+      <button class="add-btn" aria-label="Add ${item.name} to cart">Order Now</button>
     </div>
   `;
 

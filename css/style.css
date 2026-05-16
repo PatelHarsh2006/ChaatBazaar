@@ -447,6 +447,23 @@
       justify-content: space-between;
       align-items: center;
     }
+
+    /* {arrage the card footer} */
+    .card-footer{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+       width: 100%;
+    }
+
+    /* {applied css in icons} */
+.font_awesome{
+  align-items: center;
+  margin-left: 45%;
+  display: flex;
+  gap: 1.5rem;
+}
+
     #checkout-btn {
       background: #ff5722;
       border: none;
