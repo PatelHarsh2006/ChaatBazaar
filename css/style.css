@@ -571,12 +571,29 @@
       min-height: 100px;
     }
     .error-msg {
-      font-size: 0.9rem;
-      color: #e64a19;
+      font-size: 0.85rem;
+      color: #c0392b;
       margin-top: -1rem;
-      margin-bottom: 1rem;
-      display: none;
+      margin-bottom: 0.8rem;
+      min-height: 1rem;
+      display: block;
       user-select: none;
+    }
+    .form-success-msg {
+      margin-top: 0.8rem;
+      margin-bottom: 1rem;
+      padding: 0.8rem 1rem;
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      border-left: 4px solid #43a047;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      animation: fadeInDown 0.4s ease;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
     .btn-submit {
       background: #ff5722;
