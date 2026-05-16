@@ -249,25 +249,25 @@ function setupContactForm() {
   const form = document.getElementById("contact-form");
   const formSuccess = document.getElementById("form-success");
 
-  const nameInput    = form.querySelector("#name");
-  const emailInput   = form.querySelector("#email");
+  const nameInput = form.querySelector("#name");
+  const emailInput = form.querySelector("#email");
   const messageInput = form.querySelector("#message");
 
-  const errorName    = form.querySelector("#error-name");
-  const errorEmail   = form.querySelector("#error-email");
+  const errorName = form.querySelector("#error-name");
+  const errorEmail = form.querySelector("#error-email");
   const errorMessage = form.querySelector("#error-message");
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
     // Clear previous errors and hide any success banner
-    errorName.textContent    = "";
-    errorEmail.textContent   = "";
+    errorName.textContent = "";
+    errorEmail.textContent = "";
     errorMessage.textContent = "";
     formSuccess.style.display = "none";
 
-    const nameVal    = nameInput.value.trim();
-    const emailVal   = emailInput.value.trim();
+    const nameVal = nameInput.value.trim();
+    const emailVal = emailInput.value.trim();
     const messageVal = messageInput.value.trim();
 
     let valid = true;
@@ -344,5 +344,42 @@ function init() {
   setupContactForm();
   setupNewsletterForm();
 }
+
+const hamburgerBtn = document.getElementById("hamburger-btn");
+const nav = document.querySelector("nav");
+
+hamburgerBtn.addEventListener("click", () => {
+  nav.classList.toggle("active");
+});
+
+const navLinks = document.querySelectorAll("nav a");
+
+navLinks.forEach(link => {
+
+  link.addEventListener("click", (e) => {
+
+    const isDropdownToggle =
+      link.classList.contains("dropdown-toggle");
+
+    if (window.innerWidth <= 768 && isDropdownToggle) {
+      return;
+    }
+
+    nav.classList.remove("active");
+  });
+
+});
+
+const dropdownToggle = document.querySelector(".dropdown-toggle");
+const mobileDropdown = document.querySelector(".mobile-dropdown");
+
+dropdownToggle.addEventListener("click", (e) => {
+
+  if (window.innerWidth <= 768) {
+    e.preventDefault();
+
+    mobileDropdown.classList.toggle("active");
+  }
+});
 
 document.addEventListener("DOMContentLoaded", init);

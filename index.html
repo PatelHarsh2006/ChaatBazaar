@@ -1,166 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ChaatBazar 🍴 | Authentic Indian Street Food Delivered Hot</title>
-  
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<!-- Header & Navigation -->
-<header>
-  <div class="header-inner container" role="banner">
-    <a href="#" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
-    <nav role="navigation" aria-label="Primary Navigation">
-      <a href="#hero" class="nav-link active" tabindex="0">Home</a>
-      <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
-        <a href="#menu" class="dropdown-toggle nav-link">Menu</a>
-        <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
-          <a href="#specials" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Specials">Specials</a>
-          <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Snacks">Snacks</a>
-          <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Chaat">Chaat</a>
-          <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Beverages">Beverages</a>
-          <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="All">All</a>
+  <!-- Header & Navigation -->
+  <header>
+    <div class="header-inner container" role="banner">
+      <a href="#" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
+      <button class="hamburger" id="hamburger-btn" aria-label="Toggle Menu">
+        ☰
+      </button>
+      <nav role="navigation" aria-label="Primary Navigation">
+        <a href="#hero" class="nav-link active" tabindex="0">Home</a>
+        <div class="dropdown mobile-dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
+          <a href="#menu" class="dropdown-toggle nav-link">Menu</a>
+          <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
+            <a href="#specials" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Specials">Specials</a>
+            <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Snacks">Snacks</a>
+            <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Chaat">Chaat</a>
+            <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Beverages">Beverages</a>
+            <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="All">All</a>
+          </div>
         </div>
-      </div>
-      <a href="#about" class="nav-link">About</a>
-      <a href="#cart-sidebar" class="nav-link" id="cart-open-btn" aria-label="Open Cart">Cart (<span id="cart-count">0</span>)</a>
-      <div class="search-bar" role="search">
-        <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" />
-        <button aria-label="Search" id="search-btn"></button>
-      </div>
-    </nav>
-  </div>
-</header>
-
-<!-- Hero Section -->
-<section id="hero" class="hero" role="region" aria-label="Hero Section">
-  <div class="hero-content">
-    <h1>Authentic Indian Street Food Delivered Hot!</h1>
-    <p>Delicious Samosa, Kachori, Pani Puri and more, right to your doorstep within 5 km.</p>
-    <button class="btn-primary" id="order-now-btn" aria-haspopup="true" aria-controls="menu">Order Now</button>
-  </div>
-  <div class="hero-image" aria-hidden="true">
-    <img src="img/chaat.png" alt="Colorful Indian street food platter" />
-  </div>
-</section>
-
-<!-- Specials Section -->
-<section id="specials" class="specials" role="region" aria-label="Today's Specials">
-  <h2 class="section-title">Today's Specials</h2>
-  <div class="cards" id="specials-cards">
-    <!-- Special cards will be injected here -->
-  </div>
-</section>
-
-<!-- Menu Section -->
-<section id="menu" class="menu" role="region" aria-label="Full Menu">
-  <h2 class="section-title">Explore Our Menu</h2>
-  <div class="filter-buttons" role="toolbar" aria-label="Filter menu categories">
-    <button class="filter-btn active" data-filter="All" aria-pressed="true">All</button>
-    <button class="filter-btn" data-filter="Snacks" aria-pressed="false">Snacks</button>
-    <button class="filter-btn" data-filter="Chaat" aria-pressed="false">Chaat</button>
-    <button class="filter-btn" data-filter="Beverages" aria-pressed="false">Beverages</button>
-  </div>
-  <div class="cards" id="menu-cards" aria-live="polite" aria-relevant="additions removals">
-    <!-- Menu cards injected here -->
-  </div>
-</section>
-
-<!-- About Section -->
-<section id="about" class="about" role="region" aria-label="About ChaatBazar">
-  <div class="container">
-    <h2>About Us</h2>
-    <p>At <strong>ChaatBazar</strong>, we bring you the authentic flavors of India's vibrant street food culture, freshly prepared and delivered hot right to your door. Our passion is to share the love of chaat, snacks, and beverages made from time-tested recipes.</p>
-    <div class="team" aria-label="Meet our team">
-      <article class="team-member" tabindex="0">
-        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya Sharma - Founder & Head Chef" />
-        <h4>Priya Sharma</h4>
-        <p>Founder & Head Chef - Crafting every dish with love and authenticity.</p>
-      </article>
-      <article class="team-member" tabindex="0">
-        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Anjali Verma - Customer Support" />
-        <h4>Anjali Verma</h4>
-        <p>Customer Support - Always here to assist you with your orders.</p>
-      </article>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#cart-sidebar" class="nav-link" id="cart-open-btn" aria-label="Open Cart">Cart (<span
+            id="cart-count">0</span>)</a>
+        <div class="search-bar" role="search">
+          <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" />
+          <button aria-label="Search" id="search-btn"></button>
+        </div>
+      </nav>
     </div>
+  </header>
 
-    <!-- Contact Form -->
-    <h2>Contact Us</h2>
-    <form class="contact-form" id="contact-form" novalidate aria-label="Contact Form">
-      <label for="name">Name <span class="required">*</span></label>
-      <input type="text" id="name" name="name" required aria-required="true" minlength="2" />
-      <div class="error-msg" id="error-name" aria-live="assertive"></div>
+  <!-- Hero Section -->
+  <section id="hero" class="hero" role="region" aria-label="Hero Section">
+    <div class="hero-content">
+      <h1>Authentic Indian Street Food Delivered Hot!</h1>
+      <p>Delicious Samosa, Kachori, Pani Puri and more, right to your doorstep within 5 km.</p>
+      <button class="btn-primary" id="order-now-btn" aria-haspopup="true" aria-controls="menu">Order Now</button>
+    </div>
+    <div class="hero-image" aria-hidden="true">
+      <img src="img/chaat.png" alt="Colorful Indian street food platter" />
+    </div>
+  </section>
 
-      <label for="email">Email <span class="required">*</span></label>
-      <input type="email" id="email" name="email" required aria-required="true" />
-      <div class="error-msg" id="error-email" aria-live="assertive"></div>
+  <!-- Specials Section -->
+  <section id="specials" class="specials" role="region" aria-label="Today's Specials">
+    <h2 class="section-title">Today's Specials</h2>
+    <div class="cards" id="specials-cards">
+      <!-- Special cards will be injected here -->
+    </div>
+  </section>
 
-      <label for="message">Message <span class="required">*</span></label>
-      <textarea id="message" name="message" required aria-required="true" minlength="10"></textarea>
-      <div class="error-msg" id="error-message" aria-live="assertive"></div>
+  <!-- Menu Section -->
+  <section id="menu" class="menu" role="region" aria-label="Full Menu">
+    <h2 class="section-title">Explore Our Menu</h2>
+    <div class="filter-buttons" role="toolbar" aria-label="Filter menu categories">
+      <button class="filter-btn active" data-filter="All" aria-pressed="true">All</button>
+      <button class="filter-btn" data-filter="Snacks" aria-pressed="false">Snacks</button>
+      <button class="filter-btn" data-filter="Chaat" aria-pressed="false">Chaat</button>
+      <button class="filter-btn" data-filter="Beverages" aria-pressed="false">Beverages</button>
+    </div>
+    <div class="cards" id="menu-cards" aria-live="polite" aria-relevant="additions removals">
+      <!-- Menu cards injected here -->
+    </div>
+  </section>
 
-      <div class="form-success-msg" id="form-success" role="alert" aria-live="polite" style="display:none;">
-        Your message has been sent. We'll get back to you soon.
+  <!-- About Section -->
+  <section id="about" class="about" role="region" aria-label="About ChaatBazar">
+    <div class="container">
+      <h2>About Us</h2>
+      <p>At <strong>ChaatBazar</strong>, we bring you the authentic flavors of India's vibrant street food culture,
+        freshly prepared and delivered hot right to your door. Our passion is to share the love of chaat, snacks, and
+        beverages made from time-tested recipes.</p>
+      <div class="team" aria-label="Meet our team">
+        <article class="team-member" tabindex="0">
+          <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya Sharma - Founder & Head Chef" />
+          <h4>Priya Sharma</h4>
+          <p>Founder & Head Chef - Crafting every dish with love and authenticity.</p>
+        </article>
+        <article class="team-member" tabindex="0">
+          <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Anjali Verma - Customer Support" />
+          <h4>Anjali Verma</h4>
+          <p>Customer Support - Always here to assist you with your orders.</p>
+        </article>
       </div>
-      <button type="submit" class="btn-submit">Send Message</button>
+
+      <!-- Contact Form -->
+      <h2>Contact Us</h2>
+      <form class="contact-form" id="contact-form" novalidate aria-label="Contact Form">
+        <label for="name">Name <span class="required">*</span></label>
+        <input type="text" id="name" name="name" required aria-required="true" minlength="2" />
+        <div class="error-msg" id="error-name" aria-live="assertive"></div>
+
+        <label for="email">Email <span class="required">*</span></label>
+        <input type="email" id="email" name="email" required aria-required="true" />
+        <div class="error-msg" id="error-email" aria-live="assertive"></div>
+
+        <label for="message">Message <span class="required">*</span></label>
+        <textarea id="message" name="message" required aria-required="true" minlength="10"></textarea>
+        <div class="error-msg" id="error-message" aria-live="assertive"></div>
+
+        <div class="form-success-msg" id="form-success" role="alert" aria-live="polite" style="display:none;">
+          Your message has been sent. We'll get back to you soon.
+        </div>
+        <button type="submit" class="btn-submit">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials" role="region" aria-label="Customer Testimonials">
+    <h2 class="section-title">What Our Customers Say</h2>
+    <div class="testimonial-cards">
+      <blockquote class="testimonial" tabindex="0">
+        <p>The Samosas were crispy and flavorful, delivered piping hot! Amazing service and quality.</p>
+        <cite class="author">- Meera K.</cite>
+      </blockquote>
+      <blockquote class="testimonial" tabindex="0">
+        <p>Love the variety and authentic taste. The Pani Puri is the best I've had outside India!</p>
+        <cite class="author">- Arjun P.</cite>
+      </blockquote>
+      <blockquote class="testimonial" tabindex="0">
+        <p>Quick delivery and very friendly staff. The Kachoris are my go-to snack now. Highly recommended!</p>
+        <cite class="author">- Sneha M.</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Newsletter Signup -->
+  <section class="newsletter" role="region" aria-label="Newsletter Signup">
+    <h2>Subscribe to Our Newsletter</h2>
+    <p>Get the latest deals, menu updates, and exclusive offers delivered to your inbox.</p>
+    <form class="newsletter-form" id="newsletter-form" aria-label="Newsletter subscription form">
+      <input type="email" id="newsletter-email" name="newsletter-email" placeholder="Enter your email" required
+        aria-required="true" />
+      <button type="submit" aria-label="Subscribe to newsletter">Subscribe</button>
     </form>
-  </div>
-</section>
+  </section>
 
-<!-- Testimonials -->
-<section class="testimonials" role="region" aria-label="Customer Testimonials">
-  <h2 class="section-title">What Our Customers Say</h2>
-  <div class="testimonial-cards">
-    <blockquote class="testimonial" tabindex="0">
-      <p>The Samosas were crispy and flavorful, delivered piping hot! Amazing service and quality.</p>
-      <cite class="author">- Meera K.</cite>
-    </blockquote>
-    <blockquote class="testimonial" tabindex="0">
-      <p>Love the variety and authentic taste. The Pani Puri is the best I've had outside India!</p>
-      <cite class="author">- Arjun P.</cite>
-    </blockquote>
-    <blockquote class="testimonial" tabindex="0">
-      <p>Quick delivery and very friendly staff. The Kachoris are my go-to snack now. Highly recommended!</p>
-      <cite class="author">- Sneha M.</cite>
-    </blockquote>
-  </div>
-</section>
+  <!-- Cart Sidebar -->
+  <aside id="cart-sidebar" role="region" aria-label="Shopping Cart" aria-hidden="true">
+    <div id="cart-header">
+      Your Cart
+      <button id="cart-close" aria-label="Close Cart">&times;</button>
+    </div>
+    <div id="cart-items" tabindex="0" aria-live="polite" aria-relevant="additions removals">
+      <!-- Cart items injected here -->
+    </div>
+    <div id="cart-footer">
+      <span id="cart-total">Total: ₹0</span>
+      <button id="checkout-btn" disabled>Checkout</button>
+    </div>
+  </aside>
 
-<!-- Newsletter Signup -->
-<section class="newsletter" role="region" aria-label="Newsletter Signup">
-  <h2>Subscribe to Our Newsletter</h2>
-  <p>Get the latest deals, menu updates, and exclusive offers delivered to your inbox.</p>
-  <form class="newsletter-form" id="newsletter-form" aria-label="Newsletter subscription form">
-    <input type="email" id="newsletter-email" name="newsletter-email" placeholder="Enter your email" required aria-required="true" />
-    <button type="submit" aria-label="Subscribe to newsletter">Subscribe</button>
-  </form>
-</section>
+  <!-- Footer -->
+  <footer>
+    <p>© 2026 ChaatBazar. All rights reserved.</p>
+  </footer>
 
-<!-- Cart Sidebar -->
-<aside id="cart-sidebar" role="region" aria-label="Shopping Cart" aria-hidden="true">
-  <div id="cart-header">
-    Your Cart
-    <button id="cart-close" aria-label="Close Cart">&times;</button>
-  </div>
-  <div id="cart-items" tabindex="0" aria-live="polite" aria-relevant="additions removals">
-    <!-- Cart items injected here -->
-  </div>
-  <div id="cart-footer">
-    <span id="cart-total">Total: ₹0</span>
-    <button id="checkout-btn" disabled>Checkout</button>
-  </div>
-</aside>
-
-<!-- Footer -->
-<footer>
-  <p>© 2026 ChaatBazar. All rights reserved.</p>
-</footer>
-
-<script src="js/main.js"></script> 
+  <script src="js/main.js"></script>
 </body>
+
 </html>
