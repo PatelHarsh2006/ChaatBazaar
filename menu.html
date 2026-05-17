@@ -10,6 +10,7 @@
 
 <header>
   <div class="logo">ChaatBazar 🍴</div>
+
   <nav>
     <a href="index.html">Home</a>
     <a href="menu.html">Menu</a>
@@ -20,12 +21,27 @@
 
 <section class="menu-page">
   <h1>Our Menu</h1>
+
   <div class="filter">
-    <button onclick="filterCategory('All')">All</button>
-    <button onclick="filterCategory('Snacks')">Snacks</button>
-    <button onclick="filterCategory('Chaat')">Chaat</button>
-    <button onclick="filterCategory('Beverages')">Beverages</button>
+
+    <button class="btn" onclick="filterCategory('All')">
+      All
+    </button>
+
+    <button class="btn" onclick="filterCategory('Snacks')">
+      Snacks
+    </button>
+
+    <button class="btn" onclick="filterCategory('Chaat')">
+      Chaat
+    </button>
+
+    <button class="btn" onclick="filterCategory('Beverages')">
+      Beverages
+    </button>
+
   </div>
+
   <div class="menu-container" id="menu-container">
     <!-- JS will dynamically load items -->
   </div>
@@ -36,5 +52,6 @@
 </footer>
 
 <script src="js/main.js"></script>
+
 </body>
 </html>
