@@ -5,11 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ChaatBazar 🍴 | Authentic Indian Street Food Delivered Hot</title>
   
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+<!-- Header & Navigation -->
 <header>
   <div class="header-inner container" role="banner">
     <a href="#" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
@@ -35,6 +37,7 @@
   </div>
 </header>
 
+<!-- Hero Section -->
 <section id="hero" class="hero" role="region" aria-label="Hero Section">
   <div class="hero-content">
     <h1>Authentic Indian Street Food Delivered Hot!</h1>
@@ -46,12 +49,15 @@
   </div>
 </section>
 
+<!-- Specials Section -->
 <section id="specials" class="specials" role="region" aria-label="Today's Specials">
   <h2 class="section-title">Today's Specials</h2>
   <div class="cards" id="specials-cards">
-    </div>
+    <!-- Special cards will be injected here -->
+  </div>
 </section>
 
+<!-- Menu Section -->
 <section id="menu" class="menu" role="region" aria-label="Full Menu">
   <h2 class="section-title">Explore Our Menu</h2>
   <div class="filter-buttons" role="toolbar" aria-label="Filter menu categories">
@@ -61,9 +67,11 @@
     <button class="filter-btn" data-filter="Beverages" aria-pressed="false">Beverages</button>
   </div>
   <div class="cards" id="menu-cards" aria-live="polite" aria-relevant="additions removals">
-    </div>
+    <!-- Menu cards injected here -->
+  </div>
 </section>
 
+<!-- About Section -->
 <section id="about" class="about" role="region" aria-label="About ChaatBazar">
   <div class="container">
     <h2>About Us</h2>
@@ -81,6 +89,7 @@
       </article>
     </div>
 
+    <!-- Contact Form -->
     <h2>Contact Us</h2>
     <form class="contact-form" id="contact-form" novalidate aria-label="Contact Form">
       <label for="name">Name <span class="required">*</span></label>
@@ -103,6 +112,7 @@
   </div>
 </section>
 
+<!-- Testimonials -->
 <section class="testimonials" role="region" aria-label="Customer Testimonials">
   <h2 class="section-title">What Our Customers Say</h2>
   <div class="testimonial-cards">
@@ -121,6 +131,7 @@
   </div>
 </section>
 
+<!-- Newsletter Signup -->
 <section class="newsletter" role="region" aria-label="Newsletter Signup">
   <h2>Subscribe to Our Newsletter</h2>
   <p>Get the latest deals, menu updates, and exclusive offers delivered to your inbox.</p>
@@ -130,19 +141,22 @@
   </form>
 </section>
 
+<!-- Cart Sidebar -->
 <aside id="cart-sidebar" role="region" aria-label="Shopping Cart" aria-hidden="true">
   <div id="cart-header">
     Your Cart
     <button id="cart-close" aria-label="Close Cart">&times;</button>
   </div>
   <div id="cart-items" tabindex="0" aria-live="polite" aria-relevant="additions removals">
-    </div>
+    <!-- Cart items injected here -->
+  </div>
   <div id="cart-footer">
     <span id="cart-total">Total: ₹0</span>
     <button id="checkout-btn" disabled>Checkout</button>
   </div>
 </aside>
 
+<!-- Footer -->
 <footer>
   <p>© 2026 ChaatBazar. All rights reserved.</p>
 </footer>
