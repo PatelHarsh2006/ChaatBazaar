@@ -453,6 +453,7 @@ function init() {
   setupSearch();
   setupContactForm();
   setupNewsletterForm();
+  setupDarkMode();
 }
 
 document.addEventListener("DOMContentLoaded", init);
@@ -522,4 +523,35 @@ function showSkeletonCartItems(count = 2) {
   for (let i = 0; i < count; i++) {
     cartItemsContainer.appendChild(createSkeletonCartItem());
   }
+}
+/*DARK MODE TOGGLE */
+
+function setupDarkMode() {
+
+  const themeToggle = document.getElementById("theme-toggle");
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem("theme");
+
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark-mode");
+    themeToggle.textContent = "☀️";
+  }
+
+  // Toggle Theme
+  themeToggle.addEventListener("click", () => {
+
+    document.body.classList.toggle("dark-mode");
+
+    const isDark = document.body.classList.contains("dark-mode");
+
+    if (isDark) {
+      localStorage.setItem("theme", "dark");
+      themeToggle.textContent = "☀️";
+    } else {
+      localStorage.setItem("theme", "light");
+      themeToggle.textContent = "🌙";
+    }
+
+  });
 }
