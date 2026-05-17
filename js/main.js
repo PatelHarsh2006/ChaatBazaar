@@ -268,20 +268,20 @@ function setupCartToggle() {
 
   cartOpenBtn.addEventListener("click", (e) => {
     e.preventDefault();
+    cartSidebar.classList.add("open");
     cartSidebar.setAttribute("aria-hidden", "false");
-    cartSidebar.style.transform = "translateX(0)";
   });
 
   cartCloseBtn.addEventListener("click", () => {
+    cartSidebar.classList.remove("open");
     cartSidebar.setAttribute("aria-hidden", "true");
-    cartSidebar.style.transform = "translateX(100%)";
   });
 
   // Close cart on Escape key when open
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && cartSidebar.getAttribute("aria-hidden") === "false") {
+    if (e.key === "Escape" && cartSidebar.classList.contains("open")) {
+      cartSidebar.classList.remove("open");
       cartSidebar.setAttribute("aria-hidden", "true");
-      cartSidebar.style.transform = "translateX(100%)";
     }
   });
 }
@@ -441,6 +441,13 @@ function setupNewsletterForm() {
 
 // ===== Initialization =====
 
+function setupCheckoutButton() {
+  const checkoutBtn = document.getElementById("checkout-btn");
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", checkout);
+  }
+}
+
 function init() {
   renderSpecials();
   renderMenu("All");
@@ -453,6 +460,7 @@ function init() {
   setupSearch();
   setupContactForm();
   setupNewsletterForm();
+  setupCheckoutButton();
 }
 
 document.addEventListener("DOMContentLoaded", init);
@@ -522,4 +530,29 @@ function showSkeletonCartItems(count = 2) {
   for (let i = 0; i < count; i++) {
     cartItemsContainer.appendChild(createSkeletonCartItem());
   }
+}
+
+// ===== Checkout Function =====
+function checkout() {
+  if (cart.length === 0) {
+    alert("Your cart is empty. Please add items before checkout.");
+    return;
+  }
+
+  const total = cart.reduce(
+    (sum, ci) => sum + ci.item.price * ci.quantity,
+    0
+  );
+
+  const itemList = cart
+    .map(ci => `${ci.item.name} x${ci.quantity} = ₹${ci.item.price * ci.quantity}`)
+    .join("\n");
+
+  alert(`Order Summary:\n\n${itemList}\n\nTotal: ₹${total}\n\nThank you for your order! Your food will be delivered soon.`);
+
+  // Clear the cart after successful checkout
+  cart = [];
+  updateCartCount();
+  renderCart();
+  saveCart();
 }
