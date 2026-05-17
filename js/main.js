@@ -523,3 +523,33 @@ function showSkeletonCartItems(count = 2) {
     cartItemsContainer.appendChild(createSkeletonCartItem());
   }
 }
+const checkoutModal = document.getElementById("checkoutModal");
+const placeOrderBtn = document.getElementById("placeOrderBtn");
+const closeModalBtn = document.getElementById("closeModalBtn");
+
+checkoutBtn.addEventListener("click", () => {
+    checkoutModal.classList.remove("hidden");
+});
+
+closeModalBtn.addEventListener("click", () => {
+    checkoutModal.classList.add("hidden");
+});
+
+placeOrderBtn.addEventListener("click", () => {
+
+    const name = document.getElementById("customerName").value;
+    const address = document.getElementById("customerAddress").value;
+    const phone = document.getElementById("customerPhone").value;
+
+    if(name === "" || address === "" || phone === "") {
+        alert("Please fill all details");
+        return;
+    }
+
+    alert("Order placed successfully!");
+
+    cart = [];
+    updateCart();
+
+    checkoutModal.classList.add("hidden");
+});
