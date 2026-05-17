@@ -925,3 +925,107 @@
   width: 90px;
   border-radius: 6px;
 }
+/* DARK MODE*/
+
+body.dark-mode {
+  background: #121212;
+  color: #f5f5f5;
+  transition: all 0.3s ease;
+}
+
+/* Header */
+body.dark-mode header {
+  background: #1e1e1e;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.7);
+}
+
+/* Navbar Links */
+body.dark-mode nav a {
+  color: white;
+}
+
+/* Hero */
+body.dark-mode .hero {
+  background: linear-gradient(120deg, #1f1f1f, #2b2b2b);
+}
+
+/* Sections */
+body.dark-mode section.specials,
+body.dark-mode section.menu,
+body.dark-mode section.about,
+body.dark-mode section.testimonials {
+  background: #181818;
+  color: white;
+}
+
+/* Cards */
+body.dark-mode .card,
+body.dark-mode .testimonial,
+body.dark-mode .team-member,
+body.dark-mode .cart-item,
+body.dark-mode form.contact-form {
+  background: #242424;
+  color: white;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+}
+
+/* Text Colors */
+body.dark-mode .card h3,
+body.dark-mode .team-member h4,
+body.dark-mode .about h2,
+body.dark-mode .section-title,
+body.dark-mode .cart-item-info h4 {
+  color: #ffb74d;
+}
+
+body.dark-mode p,
+body.dark-mode .card p,
+body.dark-mode .testimonial p,
+body.dark-mode .team-member p {
+  color: #dddddd;
+}
+
+/* Inputs */
+body.dark-mode input,
+body.dark-mode textarea {
+  background: #2a2a2a;
+  color: white;
+  border: 1px solid #444;
+}
+
+/* Search Bar */
+body.dark-mode .search-bar input {
+  background: #2a2a2a;
+  color: white;
+}
+
+/* Cart Sidebar */
+body.dark-mode #cart-sidebar {
+  background: #1f1f1f;
+}
+
+/* Footer */
+body.dark-mode footer {
+  background: #111;
+}
+
+/* Toggle Button */
+#theme-toggle {
+  border: none;
+  background: white;
+  color: #ff5722;
+  padding: 0.5rem 0.9rem;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#theme-toggle:hover {
+  transform: scale(1.1);
+}
+
+body.dark-mode #theme-toggle {
+  background: #333;
+  color: #ffd54f;
+}
