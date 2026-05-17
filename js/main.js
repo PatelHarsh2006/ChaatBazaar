@@ -50,17 +50,45 @@ const cartItemsContainer = document.getElementById("cart-items");
 const cartTotal = document.getElementById("cart-total");
 const checkoutBtn = document.getElementById("checkout-btn");
 
-let cart = JSON.parse(localStorage.getItem('chaatCart')) || [];
+const CART_KEY = "chaatbazaar-cart";
+
+let cart = [];
 
 function saveCart() {
-  localStorage.setItem('chaatCart', JSON.stringify(cart));
+  try {
+    const data = cart.map(({ item, quantity }) => ({ id: item.id, quantity }));
+    localStorage.setItem(CART_KEY, JSON.stringify(data));
+  } catch (e) {
+    // ignore quota / serialization errors
+  }
 }
 
+function loadCart() {
+  try {
+    const raw = localStorage.getItem(CART_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return;
+
+    cart = parsed
+      .map(({ id, quantity }) => {
+        const item = menuItems.find(mi => mi.id === id);
+        const q = Number(quantity);
+        if (!item || !Number.isFinite(q) || q < 1) return null;
+        return { item, quantity: q };
+      })
+      .filter(Boolean);
+  } catch (e) {
+    // corrupted data — reset to empty cart
+    localStorage.removeItem(CART_KEY);
+    cart = [];
+  }
+}
 
 function formatPrice(price) {
   return `₹${price}`;
 }
-
+ 
 // ===== Render Functions =====
 
 function createCard(item) {
@@ -135,8 +163,14 @@ function renderCart() {
     showSkeletonCartItems(cart.length);
   }
 
-  setTimeout(() => {
-    cartItemsContainer.innerHTML = "";
+
+
+
+  cart.forEach(({ item, quantity }) => {
+    const cartItem = document.createElement("div");
+    cartItem.className = "cart-item";
+    cartItem.tabIndex = 0;
+    cartItem.setAttribute("aria-label", `${item.name}, quantity ${quantity}, price ${formatPrice(item.price * quantity)}`);
 
     if (cart.length === 0) {
       cartItemsContainer.innerHTML =
@@ -226,6 +260,7 @@ function addToCart(id) {
   } else {
     cart.push({ item, quantity: 1 });
   }
+  saveCart();
   updateCartCount();
   renderCart();
   saveCart();
@@ -240,6 +275,7 @@ function removeFromCart(id) {
   } else {
     cart.splice(cartIndex, 1);
   }
+  saveCart();
   updateCartCount();
   renderCart();
   saveCart();
@@ -442,6 +478,7 @@ function setupNewsletterForm() {
 // ===== Initialization =====
 
 function init() {
+  loadCart();
   renderSpecials();
   renderMenu("All");
   updateCartCount();
