@@ -67,6 +67,7 @@ function createCard(item) {
   const card = document.createElement("article");
   card.className = "card";
   card.tabIndex = 0;
+  card.dataset.itemId = item.id;
   card.setAttribute("aria-label", `${item.name} - ${item.description}. Price: ${formatPrice(item.price)}.`);
 
   card.innerHTML = `
@@ -77,14 +78,39 @@ function createCard(item) {
     </div>
     <div class="card-footer">
       <span class="price">${formatPrice(item.price)}</span>
-      <button class="add-btn" aria-label="Add ${item.name} to cart">Add</button>
+      <div class="action-container"></div>
     </div>
   `;
 
-  const addBtn = card.querySelector(".add-btn");
-  addBtn.addEventListener("click", () => addToCart(item.id));
+  renderCardButton(card, item.id);
 
   return card;
+}
+
+function renderCardButton(card, id) {
+  const actionContainer = card.querySelector('.action-container');
+  const cartItem = cart.find(ci => ci.item.id === id);
+  const quantity = cartItem ? cartItem.quantity : 0;
+
+  if (quantity > 0) {
+    actionContainer.innerHTML = `
+      <div class="card-qty-controls">
+        <button class="card-qty-btn decrease" aria-label="Decrease quantity">−</button>
+        <span class="card-qty">${quantity}</span>
+        <button class="card-qty-btn increase" aria-label="Increase quantity">+</button>
+      </div>
+    `;
+    actionContainer.querySelector('.decrease').addEventListener('click', () => removeFromCart(id));
+    actionContainer.querySelector('.increase').addEventListener('click', () => addToCart(id));
+  } else {
+    actionContainer.innerHTML = `<button class="add-btn" aria-label="Add to cart">Add</button>`;
+    actionContainer.querySelector('.add-btn').addEventListener('click', () => addToCart(id));
+  }
+}
+
+function syncAllCardButtons(id) {
+  const cards = document.querySelectorAll(`.card[data-item-id="${id}"]`);
+  cards.forEach(card => renderCardButton(card, id));
 }
 
 function renderSpecials() {
@@ -194,6 +220,7 @@ function renderCart() {
           cart = cart.filter(ci => ci.item.id !== item.id);
           updateCartCount();
           renderCart();
+          syncAllCardButtons(item.id);
         });
 
       cartItemsContainer.appendChild(cartItem);
@@ -229,6 +256,7 @@ function addToCart(id) {
   updateCartCount();
   renderCart();
   saveCart();
+  syncAllCardButtons(id);
 }
 
 function removeFromCart(id) {
@@ -243,6 +271,7 @@ function removeFromCart(id) {
   updateCartCount();
   renderCart();
   saveCart();
+  syncAllCardButtons(id);
 }
 
 // ===== Event Listeners =====
