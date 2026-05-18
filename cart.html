@@ -21,9 +21,11 @@
 
 <section class="cart-page">
   <h1>Your Cart</h1>
-  <div id="cart-items"></div>
-  <p id="total-price"></p>
-  <button onclick="checkout()">Checkout</button>
+  <div id="cart-items" aria-live="polite" aria-relevant="additions removals"></div>
+  <div id="cart-footer" style="margin-top: 2rem; border-top: 1px solid #ddd; padding-top: 1rem;">
+    <span id="cart-total" style="font-weight: 700; font-size: 1.2rem; color: #bf360c;">Total: ₹0</span>
+    <button id="checkout-btn" disabled style="margin-top: 1rem; width: 100%; padding: 0.75rem; background-color: #bf360c; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 700;">Checkout</button>
+  </div>
 </section>
 
 <footer>
