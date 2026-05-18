@@ -49,6 +49,106 @@ const menuItems = [
     rating: 4.6,
     reviews: 110
   },
+  {
+    id: 6,
+    name: "Masala Dosa",
+    category: "Dosa",
+    price: 120,
+    description: "Crispy rice crepe filled with spiced potato curry.",
+    image: "img/dosa.png",
+    rating: 4.8,
+    reviews: 245
+  },
+  {
+    id: 7,
+    name: "Plain Dosa",
+    category: "Dosa",
+    price: 80,
+    description: "Simple, thin, and crispy South Indian crepe.",
+    image: "img/dosa.png",
+    rating: 4.5,
+    reviews: 180
+  },
+  {
+    id: 8,
+    name: "Cheese Dosa",
+    category: "Dosa",
+    price: 150,
+    description: "Crispy dosa loaded with melting cheese.",
+    image: "img/dosa.png",
+    rating: 4.7,
+    reviews: 310
+  },
+  {
+    id: 9,
+    name: "Paneer Dosa",
+    category: "Dosa",
+    price: 160,
+    description: "Delicious dosa stuffed with spiced paneer filling.",
+    image: "img/dosa.png",
+    rating: 4.9,
+    reviews: 290
+  },
+  {
+    id: 10,
+    name: "Mysore Masala Dosa",
+    category: "Dosa",
+    price: 140,
+    description: "Spicy red chutney spread inside with potato filling.",
+    image: "img/dosa.png",
+    rating: 4.8,
+    reviews: 420
+  },
+  {
+    id: 11,
+    name: "Onion Dosa",
+    category: "Dosa",
+    price: 100,
+    description: "Crispy dosa topped with finely chopped onions.",
+    image: "img/dosa.png",
+    rating: 4.4,
+    reviews: 150
+  },
+  {
+    id: 12,
+    name: "Rava Dosa",
+    category: "Dosa",
+    price: 110,
+    description: "Thin and crispy semolina crepe with a unique texture.",
+    image: "img/dosa.png",
+    rating: 4.6,
+    reviews: 210
+  },
+  {
+    id: 13,
+    name: "Butter Dosa",
+    category: "Dosa",
+    price: 130,
+    description: "Rich and crispy dosa cooked with generous amounts of butter.",
+    image: "img/dosa.png",
+    rating: 4.9,
+    reviews: 500
+  },
+  {
+    id: 14,
+    name: "Spring Dosa",
+    category: "Dosa",
+    price: 170,
+    description: "Fusion dosa stuffed with stir-fried vegetables and sauces.",
+    image: "img/dosa.png",
+    rating: 4.7,
+    reviews: 125
+  },
+  {
+    id: 15,
+    name: "Chocolate Dosa",
+    category: "Dosa",
+    price: 180,
+    description: "A sweet fusion treat smeared with rich chocolate syrup.",
+    image: "img/dosa.png",
+    rating: 4.3,
+    reviews: 90
+  }
 ];
 
 // ===== Globals =====
@@ -100,7 +200,7 @@ function formatPrice(price) {
 
 // ===== Render Functions =====
 
-function createCard(item) {
+function createCard(item, isDosaGateway = false) {
   const card = document.createElement("article");
   card.className = "card";
   card.tabIndex = 0;
@@ -108,6 +208,9 @@ function createCard(item) {
 
   const currentRating = item.rating ? item.rating.toFixed(1) : "0.0";
   const currentReviews = item.reviews || 0;
+
+  const btnLabel = isDosaGateway ? "View All Dosas" : `Add ${item.name} to cart`;
+  const btnText = isDosaGateway ? "View All Dosas" : "Add";
 
   card.innerHTML = `
     <img src="${item.image}" alt="${item.name}" loading="lazy" />
@@ -127,12 +230,19 @@ function createCard(item) {
     </div>
     <div class="card-footer">
       <span class="price">${formatPrice(item.price)}</span>
-      <button class="add-btn" aria-label="Add ${item.name} to cart">Add</button>
+      <button class="add-btn" aria-label="${btnLabel}">${btnText}</button>
     </div>
   `;
 
   const addBtn = card.querySelector(".add-btn");
-  addBtn.addEventListener("click", () => addToCart(item.id));
+  addBtn.addEventListener("click", () => {
+    if (isDosaGateway) {
+      const dosaFilterBtn = document.querySelector('.filter-btn[data-filter="Dosa"]');
+      if (dosaFilterBtn) dosaFilterBtn.click();
+    } else {
+      addToCart(item.id);
+    }
+  });
 
   const stars = card.querySelectorAll(".star");
   stars.forEach(star => {
@@ -187,10 +297,15 @@ function renderMenu(filter = "All") {
   setTimeout(() => {
     menuContainer.innerHTML = "";
 
-    const filteredItems =
-      filter === "All"
-        ? menuItems
-        : menuItems.filter(item => item.category === filter);
+    let filteredItems;
+    if (filter === "All") {
+      const nonDosas = menuItems.filter(item => item.category !== "Dosa");
+      const firstDosa = menuItems.find(item => item.category === "Dosa");
+      filteredItems = [...nonDosas];
+      if (firstDosa) filteredItems.push(firstDosa);
+    } else {
+      filteredItems = menuItems.filter(item => item.category === filter);
+    }
 
     if (filteredItems.length === 0) {
       menuContainer.innerHTML =
@@ -201,7 +316,8 @@ function renderMenu(filter = "All") {
     }
 
     filteredItems.forEach(item => {
-      menuContainer.appendChild(createCard(item));
+      const isGateway = filter === "All" && item.category === "Dosa";
+      menuContainer.appendChild(createCard(item, isGateway));
     });
   }, 1200); // remove/reduce when using a real API
 }

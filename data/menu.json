@@ -3,5 +3,15 @@
   {"id":2,"name":"Kachori","category":"Snacks","price":20,"spice":"Medium","image":"../img/9.avif","rating":4.5,"reviews":85},
   {"id":3,"name":"Pani Puri","category":"Chaat","price":30,"spice":"High","image":"../img/panipuri.jpg","rating":4.9,"reviews":320},
   {"id":4,"name":"Sev Puri","category":"Chaat","price":35,"spice":"High","image":"../img/sevpuri.jpg","rating":4.6,"reviews":110},
-  {"id":5,"name":"Chai","category":"Beverages","price":10,"spice":"Low","image":"../img/chai.jpg","rating":4.7,"reviews":210}
+  {"id":5,"name":"Chai","category":"Beverages","price":10,"spice":"Low","image":"../img/chai.jpg","rating":4.7,"reviews":210},
+  {"id":6,"name":"Masala Dosa","category":"Dosa","price":120,"spice":"Medium","image":"../img/dosa.png","rating":4.8,"reviews":245},
+  {"id":7,"name":"Plain Dosa","category":"Dosa","price":80,"spice":"Low","image":"../img/dosa.png","rating":4.5,"reviews":180},
+  {"id":8,"name":"Cheese Dosa","category":"Dosa","price":150,"spice":"Medium","image":"../img/dosa.png","rating":4.7,"reviews":310},
+  {"id":9,"name":"Paneer Dosa","category":"Dosa","price":160,"spice":"Medium","image":"../img/dosa.png","rating":4.9,"reviews":290},
+  {"id":10,"name":"Mysore Masala Dosa","category":"Dosa","price":140,"spice":"High","image":"../img/dosa.png","rating":4.8,"reviews":420},
+  {"id":11,"name":"Onion Dosa","category":"Dosa","price":100,"spice":"Medium","image":"../img/dosa.png","rating":4.4,"reviews":150},
+  {"id":12,"name":"Rava Dosa","category":"Dosa","price":110,"spice":"Low","image":"../img/dosa.png","rating":4.6,"reviews":210},
+  {"id":13,"name":"Butter Dosa","category":"Dosa","price":130,"spice":"Medium","image":"../img/dosa.png","rating":4.9,"reviews":500},
+  {"id":14,"name":"Spring Dosa","category":"Dosa","price":170,"spice":"Medium","image":"../img/dosa.png","rating":4.7,"reviews":125},
+  {"id":15,"name":"Chocolate Dosa","category":"Dosa","price":180,"spice":"Low","image":"../img/dosa.png","rating":4.3,"reviews":90}
 ]
