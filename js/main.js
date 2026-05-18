@@ -5,7 +5,9 @@ const menuItems = [
     category: "Snacks",
     price: 30,
     description: "Crispy golden triangle stuffed with spiced potatoes.",
-    image: "img/8.avif"
+    image: "img/8.avif",
+    rating: 4.8,
+    reviews: 150
   },
   {
     id: 2,
@@ -13,7 +15,9 @@ const menuItems = [
     category: "Chaat",
     price: 50,
     description: "Hollow crispy puris filled with spicy, tangy water and chickpeas.",
-    image: "img/2.avif"
+    image: "img/2.avif",
+    rating: 4.9,
+    reviews: 320
   },
   {
     id: 3,
@@ -21,7 +25,9 @@ const menuItems = [
     category: "Beverages",
     price: 20,
     description: "Aromatic tea brewed with spices and milk.",
-    image: "img/7.avif"
+    image: "img/7.avif",
+    rating: 4.7,
+    reviews: 210
   },
   {
     id: 4,
@@ -29,7 +35,9 @@ const menuItems = [
     category: "Snacks",
     price: 35,
     description: "Deep-fried pastry filled with spicy lentils.",
-    image: "img/9.avif"
+    image: "img/9.avif",
+    rating: 4.5,
+    reviews: 85
   },
   {
     id: 5,
@@ -37,7 +45,9 @@ const menuItems = [
     category: "Chaat",
     price: 45,
     description: "Crunchy puffed rice mixed with tangy tamarind chutney.",
-    image: "img/1.avif"
+    image: "img/1.avif",
+    rating: 4.6,
+    reviews: 110
   },
 ];
 
@@ -51,9 +61,36 @@ const cartTotal = document.getElementById("cart-total");
 const checkoutBtn = document.getElementById("checkout-btn");
 
 let cart = JSON.parse(localStorage.getItem('chaatCart')) || [];
+let userRatings = JSON.parse(localStorage.getItem('chaatRatings')) || {};
 
 function saveCart() {
   localStorage.setItem('chaatCart', JSON.stringify(cart));
+}
+
+function loadRatings() {
+  menuItems.forEach(item => {
+    if (userRatings[item.id]) {
+      item.rating = userRatings[item.id].rating;
+      item.reviews = userRatings[item.id].reviews;
+    }
+  });
+}
+
+function saveItemRating(id, newRating) {
+  const item = menuItems.find(i => i.id === id);
+  if (!item) return;
+
+  const oldRating = item.rating || 0;
+  const oldReviews = item.reviews || 0;
+
+  item.rating = ((oldRating * oldReviews) + newRating) / (oldReviews + 1);
+  item.reviews = oldReviews + 1;
+
+  userRatings[id] = { rating: item.rating, reviews: item.reviews };
+  localStorage.setItem('chaatRatings', JSON.stringify(userRatings));
+  
+  // Re-render everything to reflect updated rating and ordering
+  init();
 }
 
 
@@ -69,11 +106,24 @@ function createCard(item) {
   card.tabIndex = 0;
   card.setAttribute("aria-label", `${item.name} - ${item.description}. Price: ${formatPrice(item.price)}.`);
 
+  const currentRating = item.rating ? item.rating.toFixed(1) : "0.0";
+  const currentReviews = item.reviews || 0;
+
   card.innerHTML = `
     <img src="${item.image}" alt="${item.name}" loading="lazy" />
     <div class="card-content">
       <h3>${item.name}</h3>
       <p>${item.description}</p>
+      <div class="rating-container">
+        <span class="rating-text">⭐ ${currentRating} (${currentReviews} reviews)</span>
+        <div class="stars" data-id="${item.id}">
+          <span class="star" data-value="1">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="5">★</span>
+        </div>
+      </div>
     </div>
     <div class="card-footer">
       <span class="price">${formatPrice(item.price)}</span>
@@ -83,6 +133,14 @@ function createCard(item) {
 
   const addBtn = card.querySelector(".add-btn");
   addBtn.addEventListener("click", () => addToCart(item.id));
+
+  const stars = card.querySelectorAll(".star");
+  stars.forEach(star => {
+    star.addEventListener("click", (e) => {
+      const val = parseInt(e.target.dataset.value);
+      saveItemRating(item.id, val);
+    });
+  });
 
   return card;
 }
@@ -100,6 +158,25 @@ function renderSpecials() {
       specialsContainer.appendChild(createCard(item));
     });
   }, 1500); // remove/reduce when using a real API
+}
+
+function renderBestReviewed() {
+  const bestReviewedContainer = document.getElementById("best-reviewed-cards");
+  if (!bestReviewedContainer) return;
+
+  // Sort by rating (descending), then reviews (descending)
+  const bestItems = [...menuItems]
+    .sort((a, b) => b.rating - a.rating || b.reviews - a.reviews)
+    .slice(0, 3);
+
+  showSkeletonCards(bestReviewedContainer, bestItems.length);
+
+  setTimeout(() => {
+    bestReviewedContainer.innerHTML = "";
+    bestItems.forEach(item => {
+      bestReviewedContainer.appendChild(createCard(item));
+    });
+  }, 1500);
 }
 
 function renderMenu(filter = "All") {
@@ -442,7 +519,9 @@ function setupNewsletterForm() {
 // ===== Initialization =====
 
 function init() {
+  loadRatings();
   renderSpecials();
+  renderBestReviewed();
   renderMenu("All");
   updateCartCount();
   renderCart();

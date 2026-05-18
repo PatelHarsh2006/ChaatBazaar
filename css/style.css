@@ -925,3 +925,45 @@
   width: 90px;
   border-radius: 6px;
 }
+
+/* ===== Rating Styles ===== */
+.rating-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.8rem;
+}
+
+.rating-text {
+  font-size: 0.85rem;
+  color: #bf360c;
+  font-weight: 600;
+}
+
+.stars {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.star {
+  font-size: 1.2rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+.star:hover,
+.star:hover ~ .star {
+  color: #ffcc00;
+  transform: scale(1.1);
+}
+
+/* Make previous stars gold when hovering */
+.stars:hover .star {
+  color: #ffcc00;
+}
+.stars .star:hover ~ .star {
+  color: #ccc;
+}
