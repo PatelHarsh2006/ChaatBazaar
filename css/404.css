@@ -1,0 +1,126 @@
+/* 404 page styles */
+
+.page-404 {
+  min-height: calc(100vh - 130px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: linear-gradient(120deg, #ffab91, #ff5722);;
+}
+
+.content-wrap {
+  text-align: center;
+  max-width: 660px;
+  border: 2px solid wheat;
+  min-height: 72vh;
+  background-color: #ffab94;
+  border-radius: 12px;
+
+}
+
+food-trail {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.food-item {
+  font-size: 2.5rem;
+  display: inline-block;
+  animation: floatUp 2.6s ease-in-out infinite;
+}
+
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-14px); }
+}
+
+.err-number {
+  font-size: 180px;
+  font-weight: 900;
+  color: #ff6b00;
+  line-height: 1;
+  font-family: 'Poppins', sans-serif;
+}
+
+
+.content-wrap h1 {
+  font-size: 3.7rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.content-wrap h2{
+    color: #fff;
+}
+
+.content-wrap p {
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  font-family: 'Poppins', sans-serif;
+  padding: 3.5px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+  
+}
+
+.btn-primary {
+  background-color: #fff;
+  color: #ff5722;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+  border: 2px solid #ff6b00;
+}
+
+.btn-primary:hover {
+ background: #e64a19;
+      color: white;
+      box-shadow: 0 10px 30px rgb(230 74 25 / 0.8);
+}
+
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* mobile */
+@media (max-width: 480px) {
+  .err-number {
+    font-size: 80px;
+  }
+
+  .content-wrap h1 {
+    font-size: 1.3rem;
+  }
+
+  .btn-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-primary {
+    width: 100%;
+    text-align: center;
+  }
+}

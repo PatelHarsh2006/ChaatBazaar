@@ -97,7 +97,9 @@ Follow these steps to contribute your changes to **ChaatBazaar**:
 
 2. Include "Before" and "After" screenshots of the webpage for all changes, in the Pull Request description.
 
-3. If the original repository gets updated after you fork it, you should sync your fork before creating a new PR. This prevents merge conflicts and outdated code.<br>
+3. Install the "Live Server" extension and run the project, through Live Server to prevent issues such as images or pages not displaying correctly due to relative file paths.
+
+4. If the original repository gets updated after you fork it, you should sync your fork before creating a new PR. This prevents merge conflicts and outdated code.<br>
 So always follow the below steps, before any Pull request, for the corresponding Branch, to keep the repository upto date :
 
 

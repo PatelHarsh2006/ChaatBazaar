@@ -17,33 +17,31 @@
 
 <body>
 
-  <!-- Header & Navigation -->
-  <header>
-    <div class="header-inner container" role="banner">
-      <a href="#" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
-      <nav role="navigation" aria-label="Primary Navigation">
-        <a href="#hero" class="nav-link active" tabindex="0">Home</a>
-        <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
-          <a href="#menu" class="dropdown-toggle nav-link">Menu</a>
-          <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
-            <a href="#specials" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Specials">Specials</a>
-            <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Snacks">Snacks</a>
-            <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Chaat">Chaat</a>
-            <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Beverages">Beverages</a>
-            <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="All">All</a>
-          </div>
+<!-- Header & Navigation -->
+<header>
+  <div class="header-inner container" role="banner">
+    <a href="#" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
+    <nav role="navigation" aria-label="Primary Navigation">
+      <a href="#hero" class="nav-link active" tabindex="0">Home</a>
+      <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
+        <a href="#menu" class="dropdown-toggle nav-link">Menu</a>
+        <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
+          <a href="#specials" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Specials">Specials</a>
+          <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Snacks">Snacks</a>
+          <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Chaat">Chaat</a>
+          <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Beverages">Beverages</a>
+          <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="All">All</a>
         </div>
-        <a href="#about" class="nav-link">About</a>
-        <a href="#cart-sidebar" class="nav-link" id="cart-open-btn" aria-label="Open Cart">Cart (<span
-            id="cart-count">0</span>)</a>
-        <div class="search-bar" role="search">
-          <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" />
-          <button aria-label="Search" id="search-btn"></button>
-        </div>
-        <div id="nav-profile-slot"></div>
-      </nav>
-    </div>
-  </header>
+      </div>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#cart-sidebar" class="nav-link" id="cart-open-btn" aria-label="Open Cart">Cart (<span id="cart-count">0</span>)</a>
+      <div class="search-bar" role="search">
+        <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" />
+        <button aria-label="Search" id="search-btn"></button>
+      </div>
+    </nav>
+  </div>
+</header>
 
   <!-- Hero Section -->
   <section id="hero" class="hero" role="region" aria-label="Hero Section">
@@ -65,19 +63,19 @@
     </div>
   </section>
 
-  <!-- Menu Section -->
-  <section id="menu" class="menu" role="region" aria-label="Full Menu">
-    <h2 class="section-title">Explore Our Menu</h2>
-    <div class="filter-buttons" role="toolbar" aria-label="Filter menu categories">
-      <button class="filter-btn active" data-filter="All" aria-pressed="true">All</button>
-      <button class="filter-btn" data-filter="Snacks" aria-pressed="false">Snacks</button>
-      <button class="filter-btn" data-filter="Chaat" aria-pressed="false">Chaat</button>
-      <button class="filter-btn" data-filter="Beverages" aria-pressed="false">Beverages</button>
-    </div>
-    <div class="cards" id="menu-cards" aria-live="polite" aria-relevant="additions removals">
-      <!-- Menu cards injected here -->
-    </div>
-  </section>
+<!-- Menu Section -->
+<section id="menu" class="menu" role="region" aria-label="Full Menu">
+  <h2 class="section-title">Explore Our Menu</h2>
+  <div class="filter-buttons" role="toolbar" aria-label="Filter menu categories">
+    <button class="filter-btn active" data-filter="All" aria-pressed="true">All</button>
+    <button class="filter-btn" data-filter="Snacks" aria-pressed="false">Snacks</button>
+    <button class="filter-btn" data-filter="Chaat" aria-pressed="false">Chaat</button>
+    <button class="filter-btn" data-filter="Beverages" aria-pressed="false">Beverages</button>
+  </div>
+  <div class="cards" id="menu-cards" aria-live="polite" aria-relevant="additions removals">
+    <!-- Menu cards injected here -->
+  </div>
+</section>
 
   <!-- About Section -->
   <section id="about" class="about" role="region" aria-label="About ChaatBazar">
