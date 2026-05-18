@@ -632,6 +632,104 @@ function setupNewsletterForm() {
   });
 }
 
+function setupFeedbackForm() {
+  const form = document.getElementById("feedback-form");
+  if (!form) return;
+
+  const successMsg = document.getElementById("feedback-success");
+  const ratingInput = document.getElementById("feedback-rating-val");
+  const commentsInput = document.getElementById("feedback-comments");
+  
+  const errorRating = document.getElementById("error-feedback-rating");
+  const errorComments = document.getElementById("error-feedback-comments");
+  const starsGroup = document.getElementById("feedback-stars-group");
+  const starBtns = starsGroup.querySelectorAll(".star-btn");
+
+  // Handle Interactive Rating Input
+  starBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const val = parseInt(btn.dataset.value);
+      ratingInput.value = val;
+      errorRating.textContent = "";
+
+      // Highlight stars up to clicked one
+      starBtns.forEach(s => {
+        const starVal = parseInt(s.dataset.value);
+        if (starVal <= val) {
+          s.classList.add("selected");
+          s.setAttribute("aria-checked", "true");
+        } else {
+          s.classList.remove("selected");
+          s.setAttribute("aria-checked", "false");
+        }
+      });
+    });
+
+    // Support keyboard accessibility
+    btn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        btn.click();
+      }
+    });
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    // Reset error messages and success banner
+    errorRating.textContent = "";
+    errorComments.textContent = "";
+    successMsg.style.display = "none";
+
+    const ratingVal = ratingInput.value;
+    const commentsVal = commentsInput.value.trim();
+    const nameVal = document.getElementById("feedback-name").value.trim();
+
+    let valid = true;
+
+    if (!ratingVal) {
+      errorRating.textContent = "Please select a rating.";
+      valid = false;
+    }
+
+    if (commentsVal === "") {
+      errorComments.textContent = "Comments are required.";
+      valid = false;
+    } else if (commentsVal.length < 5) {
+      errorComments.textContent = "Please write a comment of at least 5 characters.";
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    // Persist feedback locally in localStorage
+    const feedbackList = JSON.parse(localStorage.getItem("chaatPlatformFeedback")) || [];
+    const newFeedback = {
+      name: nameVal || "Anonymous",
+      rating: parseInt(ratingVal),
+      comments: commentsVal,
+      timestamp: new Date().toISOString()
+    };
+    feedbackList.push(newFeedback);
+    localStorage.setItem("chaatPlatformFeedback", JSON.stringify(feedbackList));
+
+    // Show success message
+    successMsg.style.display = "block";
+
+    // Clear form and star selections
+    setTimeout(() => {
+      form.reset();
+      ratingInput.value = "";
+      starBtns.forEach(s => {
+        s.classList.remove("selected");
+        s.setAttribute("aria-checked", "false");
+      });
+      successMsg.style.display = "none";
+    }, 3000);
+  });
+}
+
 // ===== Initialization =====
 
 function init() {
@@ -648,6 +746,7 @@ function init() {
   setupSearch();
   setupContactForm();
   setupNewsletterForm();
+  setupFeedbackForm();
 }
 
 document.addEventListener("DOMContentLoaded", init);

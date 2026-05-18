@@ -967,3 +967,80 @@
 .stars .star:hover ~ .star {
   color: #ccc;
 }
+
+/* ===== Feedback Section ===== */
+.feedback-section {
+  padding: 4rem 1rem;
+  background-color: #fffde7;
+  text-align: center;
+  user-select: text;
+}
+.feedback-section .container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.feedback-subtitle {
+  color: #5d4037;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+form.feedback-form {
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  text-align: left;
+}
+form.feedback-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #bf360c;
+}
+form.feedback-form input[type="text"],
+form.feedback-form textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: 2px solid #ffe082;
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+form.feedback-form input[type="text"]:focus,
+form.feedback-form textarea:focus {
+  border-color: #ffb300;
+  outline: none;
+}
+form.feedback-form textarea {
+  min-height: 120px;
+}
+.feedback-stars-input {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.3rem;
+  user-select: none;
+}
+.feedback-stars-input .star-btn {
+  font-size: 2rem;
+  color: #e0e0e0;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+  outline: none;
+}
+.feedback-stars-input .star-btn:focus-visible {
+  outline: 2px dashed #ffb300;
+  border-radius: 4px;
+}
+.feedback-stars-input .star-btn.selected {
+  color: #ffb300;
+  transform: scale(1.15);
+}
+.feedback-stars-input .star-btn:hover {
+  transform: scale(1.2);
+}
+.required {
+  color: #c0392b;
+}
