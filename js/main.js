@@ -1,5 +1,6 @@
 let menuItems = [];
 let currentCategory = "All";
+let orders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
 
 // ===== Fetch Menu Data =====
 async function loadMenuData() {
@@ -103,13 +104,10 @@ function createCard(item, highlightQuery = "") {
 
 function renderSpecials() {
   if (!specialsContainer) return;
-  // Pick top 3 items as specials
   const specials = menuItems.slice(0, 3);
 
-  // 1. Show skeletons immediately
   showSkeletonCards(specialsContainer, specials.length);
 
-  // 2. Simulate async load
   setTimeout(() => {
     specialsContainer.innerHTML = "";
     specials.forEach(item => {
@@ -128,10 +126,8 @@ function renderMenu(filter = "All") {
 function applyAllFilters() {
   if (!menuContainer) return;
 
-  // 1. Show skeleton cards while computing
   showSkeletonCards(menuContainer, 4);
 
-  // 2. Render cards after dynamic timing delay
   setTimeout(() => {
     menuContainer.innerHTML = "";
 
@@ -150,15 +146,12 @@ function applyAllFilters() {
     const veganCheck = document.getElementById("dietary-vegan");
     const gfCheck = document.getElementById("dietary-gf");
 
-    // Unified sequential filtering
     let filtered = menuItems;
 
-    // Filter 1: Category
     if (currentCategory !== "All") {
       filtered = filtered.filter(item => item.category === currentCategory);
     }
 
-    // Filter 2: Fuzzy keyword search
     if (query) {
       filtered = filtered.filter(item =>
         fuzzyMatch(item.name, query) ||
@@ -167,21 +160,17 @@ function applyAllFilters() {
       );
     }
 
-    // Filter 3: Price range slider
     filtered = filtered.filter(item => item.price <= maxPrice);
 
-    // Filter 4: Spice level
     if (selectedSpice !== "All") {
       filtered = filtered.filter(item => item.spice === selectedSpice);
     }
 
-    // Filter 5: Ratings
     if (minRating !== "All") {
       const ratingVal = parseFloat(minRating);
       filtered = filtered.filter(item => (item.rating || 5) >= ratingVal);
     }
 
-    // Filter 6: Dietary tags
     if (veganCheck && veganCheck.checked) {
       filtered = filtered.filter(item => item.dietary && item.dietary.includes("vegan"));
     }
@@ -189,7 +178,6 @@ function applyAllFilters() {
       filtered = filtered.filter(item => item.dietary && item.dietary.includes("gluten-free"));
     }
 
-    // Render result
     if (filtered.length === 0) {
       menuContainer.innerHTML = `
         <p style="text-align:center;color:#bf360c;font-weight:600;width:100%;margin-top:2rem;">
@@ -201,13 +189,12 @@ function applyAllFilters() {
     filtered.forEach(item => {
       menuContainer.appendChild(createCard(item, query));
     });
-  }, 800); // responsive delayed loading animation
+  }, 800);
 }
 
 function renderCart() {
   if (!cartItemsContainer) return;
 
-  // 1. Show skeletons briefly when cart first opens
   if (cart.length > 0) {
     showSkeletonCartItems(cart.length);
   }
@@ -254,19 +241,16 @@ function renderCart() {
         </div>
       `;
 
-      // Decrease quantity
       const decreaseBtn = cartItem.querySelector(".qty-decrease");
       if (decreaseBtn) {
         decreaseBtn.addEventListener("click", () => removeFromCart(item.id));
       }
 
-      // Increase quantity
       const increaseBtn = cartItem.querySelector(".qty-increase");
       if (increaseBtn) {
         increaseBtn.addEventListener("click", () => addToCart(item.id));
       }
 
-      // Remove entirely
       const removeBtn = cartItem.querySelector(".cart-item-remove");
       if (removeBtn) {
         removeBtn.addEventListener("click", () => {
@@ -287,7 +271,7 @@ function renderCart() {
     if (cartTotal) cartTotal.textContent = `Total: ${formatPrice(total)}`;
     if (checkoutBtn) checkoutBtn.disabled = false;
 
-  }, 600); // short delay — cart data is already local
+  }, 600);
 }
 
 function updateCartCount() {
@@ -297,13 +281,130 @@ function updateCartCount() {
   }
 }
 
+// ===== My Orders Dashboard & Real-Time Tracking Engine =====
+
+function updateOrderStatuses() {
+  let changed = false;
+  const now = Date.now();
+
+  orders.forEach(order => {
+    if (order.status === "Delivered") return;
+
+    // Time elapsed in seconds since order checkout
+    const elapsedSeconds = (now - order.timestamp) / 1000;
+    let targetStatus = "Pending";
+
+    if (elapsedSeconds >= 45) {
+      targetStatus = "Delivered";
+    } else if (elapsedSeconds >= 25) {
+      targetStatus = "On the Way";
+    } else if (elapsedSeconds >= 10) {
+      targetStatus = "Preparing";
+    }
+
+    if (order.status !== targetStatus) {
+      order.status = targetStatus;
+      changed = true;
+    }
+  });
+
+  if (changed) {
+    localStorage.setItem('chaatOrders', JSON.stringify(orders));
+    renderOrdersList();
+  }
+}
+
+function renderOrdersList() {
+  const container = document.getElementById("orders-container");
+  if (!container) return;
+
+  if (orders.length === 0) {
+    container.innerHTML = `
+      <div class="empty-orders">
+        <h2>No Orders Found</h2>
+        <p>You haven't placed any orders yet. Explore our delicious street food menu!</p>
+        <a href="menu.html" class="btn-primary" style="display:inline-block;margin-top:1.5rem;text-decoration:none;">Explore Menu</a>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = "";
+
+  orders.forEach(order => {
+    const card = document.createElement("article");
+    card.className = "order-card";
+    
+    const isPreparing = order.status === "Preparing" || order.status === "On the Way" || order.status === "Delivered" ? "active" : "";
+    const isOnWay = order.status === "On the Way" || order.status === "Delivered" ? "active" : "";
+    const isDelivered = order.status === "Delivered" ? "active" : "";
+
+    const statusClass = "status-" + order.status.toLowerCase().replace(/\s+/g, "-");
+    
+    let itemsHtml = "";
+    order.items.forEach(ci => {
+      itemsHtml += `
+        <div class="order-item-row">
+          <span>${ci.item.name} × ${ci.quantity}</span>
+          <span>${formatPrice(ci.item.price * ci.quantity)}</span>
+        </div>
+      `;
+    });
+
+    card.innerHTML = `
+      <div class="order-card-header">
+        <div class="order-meta-info">
+          <span class="order-id">Order ID: <strong>${order.id}</strong></span>
+          <span class="order-date">${order.date}</span>
+        </div>
+        <span class="status-badge ${statusClass}">${order.status}</span>
+      </div>
+
+      <div class="order-timeline">
+        <div class="timeline-step active ${order.status === 'Pending' ? 'current' : ''}">
+          <div class="step-circle">1</div>
+          <span class="step-label">Ordered</span>
+        </div>
+        <div class="timeline-line ${isPreparing}"></div>
+        <div class="timeline-step ${isPreparing} ${order.status === 'Preparing' ? 'current' : ''}">
+          <div class="step-circle">2</div>
+          <span class="step-label">Preparing</span>
+        </div>
+        <div class="timeline-line ${isOnWay}"></div>
+        <div class="timeline-step ${isOnWay} ${order.status === 'On the Way' ? 'current' : ''}">
+          <div class="step-circle">3</div>
+          <span class="step-label">On the Way</span>
+        </div>
+        <div class="timeline-line ${isDelivered}"></div>
+        <div class="timeline-step ${isDelivered} ${order.status === 'Delivered' ? 'current' : ''}">
+          <div class="step-circle">4</div>
+          <span class="step-label">Delivered</span>
+        </div>
+      </div>
+
+      <div class="order-items-list">
+        ${itemsHtml}
+      </div>
+
+      <div class="order-card-footer">
+        <div class="order-total-price">
+          <span>Total Paid:</span>
+          <strong>${formatPrice(order.total)}</strong>
+        </div>
+        <button class="btn-reorder" onclick="reorderOrder('${order.id}')">Reorder Items</button>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
 // ===== Global Window Handlers for Multi-page support =====
 
 window.filterCategory = function(category) {
   currentCategory = category;
   applyAllFilters();
 
-  // Update active button states
   const buttons = document.querySelectorAll(".filter-btn, .filter button");
   buttons.forEach(btn => {
     const filterAttr = btn.dataset.filter || (btn.getAttribute("onclick") ? btn.getAttribute("onclick").match(/'([^']+)'/)[1] : "");
@@ -318,11 +419,62 @@ window.filterCategory = function(category) {
 };
 
 window.checkout = function() {
-  alert("Thank you for your order! Your delicious chaat is on the way.");
+  if (cart.length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+
+  const newOrder = {
+    id: "CB-" + Math.floor(100000 + Math.random() * 900000),
+    date: new Date().toLocaleDateString(undefined, {
+      month: 'short', day: 'numeric', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    }),
+    timestamp: Date.now(),
+    items: JSON.parse(JSON.stringify(cart)),
+    total: cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0),
+    status: "Pending"
+  };
+
+  orders.unshift(newOrder);
+  localStorage.setItem('chaatOrders', JSON.stringify(orders));
+
   cart = [];
   updateCartCount();
   renderCart();
   saveCart();
+
+  alert("Thank you for your order! Your hot street food is on the way. Redirecting to your Orders dashboard...");
+  window.location.href = "orders.html";
+};
+
+window.reorderOrder = function(orderId) {
+  const pastOrder = orders.find(o => o.id === orderId);
+  if (!pastOrder) return;
+
+  pastOrder.items.forEach(orderItem => {
+    const existingCartItem = cart.find(ci => ci.item.id === orderItem.item.id);
+    if (existingCartItem) {
+      existingCartItem.quantity += orderItem.quantity;
+    } else {
+      cart.push({
+        item: orderItem.item,
+        quantity: orderItem.quantity
+      });
+    }
+  });
+
+  updateCartCount();
+  renderCart();
+  saveCart();
+
+  alert("Items added back to your cart successfully!");
+
+  const sidebar = document.getElementById("cart-sidebar");
+  if (sidebar) {
+    sidebar.setAttribute("aria-hidden", "false");
+    sidebar.style.transform = "translateX(0)";
+  }
 };
 
 // ===== Cart Operations =====
@@ -340,6 +492,12 @@ function addToCart(id) {
   updateCartCount();
   renderCart();
   saveCart();
+
+  // Slide open the cart sidebar automatically for a premium UX when adding items on index.html
+  if (cartSidebar) {
+    cartSidebar.setAttribute("aria-hidden", "false");
+    cartSidebar.style.transform = "translateX(0)";
+  }
 }
 
 function removeFromCart(id) {
@@ -389,7 +547,6 @@ function setupCartToggle() {
     cartSidebar.style.transform = "translateX(100%)";
   });
 
-  // Close cart on Escape key when open
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && cartSidebar.getAttribute("aria-hidden") === "false") {
       cartSidebar.setAttribute("aria-hidden", "true");
@@ -424,7 +581,6 @@ function setupSearchSuggestions() {
       return;
     }
 
-    // Filter matching suggestions
     const matches = menuItems.filter(item =>
       item.name.toLowerCase().includes(query) ||
       (item.category && item.category.toLowerCase().includes(query))
@@ -450,7 +606,6 @@ function setupSearchSuggestions() {
         searchInput.value = item.name;
         suggestionsContainer.style.display = "none";
 
-        // Scroll to menu section smoothly
         const menuSection = document.getElementById("menu");
         if (menuSection) {
           menuSection.scrollIntoView({ behavior: "smooth" });
@@ -467,7 +622,6 @@ function setupSearchSuggestions() {
   searchInput.addEventListener("input", showSuggestions);
   searchInput.addEventListener("focus", showSuggestions);
 
-  // Close suggestions when clicking outside
   document.addEventListener("click", (e) => {
     if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
       suggestionsContainer.style.display = "none";
@@ -517,7 +671,6 @@ function setupAdvancedFilters() {
     }
   });
 
-  // Price Slider Bindings
   const priceSlider = document.getElementById("price-range-slider");
   const priceSliderVal = document.getElementById("price-slider-val");
   if (priceSlider && priceSliderVal) {
@@ -528,19 +681,16 @@ function setupAdvancedFilters() {
     });
   }
 
-  // Spice level Dropdown Bindings
   const spiceSelect = document.getElementById("spice-level-select");
   if (spiceSelect) {
     spiceSelect.addEventListener("change", applyAllFilters);
   }
 
-  // Minimum Rating selector
   const ratingSelect = document.getElementById("rating-select");
   if (ratingSelect) {
     ratingSelect.addEventListener("change", applyAllFilters);
   }
 
-  // Dietary Checkboxes
   const veganCheck = document.getElementById("dietary-vegan");
   if (veganCheck) {
     veganCheck.addEventListener("change", applyAllFilters);
@@ -551,7 +701,6 @@ function setupAdvancedFilters() {
     gfCheck.addEventListener("change", applyAllFilters);
   }
 
-  // Reset Filters Button
   const resetBtn = document.getElementById("reset-filters-btn");
   if (resetBtn) {
     resetBtn.addEventListener("click", () => {
@@ -570,7 +719,6 @@ function setupAdvancedFilters() {
 
       currentCategory = "All";
 
-      // Reset category button highlights
       const buttons = document.querySelectorAll(".filter-btn, .filter button");
       buttons.forEach(btn => {
         const filterAttr = btn.dataset.filter || (btn.getAttribute("onclick") ? btn.getAttribute("onclick").match(/'([^']+)'/)[1] : "");
@@ -606,9 +754,8 @@ function setupContactForm() {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    // Clear previous errors and hide any success banner
-    errorName.textContent = "";
-    errorEmail.textContent = "";
+    errorName.textContent    = "";
+    errorEmail.textContent   = "";
     errorMessage.textContent = "";
     formSuccess.style.display = "none";
 
@@ -618,7 +765,6 @@ function setupContactForm() {
 
     let valid = true;
 
-    // Validate Name
     if (nameVal === "") {
       errorName.textContent = "Name is required.";
       valid = false;
@@ -627,7 +773,6 @@ function setupContactForm() {
       valid = false;
     }
 
-    // Validate Email
     if (emailVal === "") {
       errorEmail.textContent = "Email is required.";
       valid = false;
@@ -636,7 +781,6 @@ function setupContactForm() {
       valid = false;
     }
 
-    // Validate Message
     if (messageVal === "") {
       errorMessage.textContent = "Message is required.";
       valid = false;
@@ -647,7 +791,6 @@ function setupContactForm() {
 
     if (!valid) return;
 
-    // Show success banner and reset form after 3 s
     formSuccess.style.display = "block";
     setTimeout(() => {
       form.reset();
@@ -714,15 +857,9 @@ function setupCheckout() {
 // ===== Initialization =====
 
 async function init() {
-  await loadMenuData();
-
-  renderSpecials();
-  applyAllFilters(); // Initial unified dynamic card rendering
-  updateCartCount();
-  renderCart();
-
-  setupFilterButtons();
+  // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
   setupCartToggle();
+  setupFilterButtons();
   setupOrderNowScroll();
   setupSearchSuggestions();
   setupSearch();
@@ -732,16 +869,30 @@ async function init() {
 
   if (checkoutBtn) {
     checkoutBtn.addEventListener("click", () => {
-      alert("Thank you for your order! Your delicious chaat is on the way.");
-      cart = [];
-      updateCartCount();
-      renderCart();
-      saveCart();
+      window.checkout();
     });
   }
+
+  // Load database items asynchronously without blocking UI interactions
+  await loadMenuData();
+
+  renderSpecials();
+  applyAllFilters();
+  updateCartCount();
+  renderCart();
+
+  // Run dynamic order rendering and simulated status progress updates
+  renderOrdersList();
+  updateOrderStatuses();
+  setInterval(updateOrderStatuses, 3000); // Check status progress every 3s
 }
 
-document.addEventListener("DOMContentLoaded", init);
+// Prevent race condition if DOMContentLoaded has already fired on direct reload
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
 
 // ===== Skeleton UI Helpers =====
 
