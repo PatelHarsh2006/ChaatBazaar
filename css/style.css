@@ -46,7 +46,7 @@
     .header-inner {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0.8rem 1rem;
+      padding: 1rem 1.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -61,7 +61,7 @@
     nav {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 1.8rem;
       font-weight: 600;
     }
     nav a {
@@ -127,29 +127,44 @@
     .search-bar {
       position: relative;
       margin-left: 1rem;
+      display:flex;
+      align-items: center;
     }
     .search-bar input {
-      padding: 0.4rem 1.8rem 0.4rem 0.8rem;
-      border-radius: 20px;
+      padding: 0.7rem 3rem 0.7rem 1rem;
+      border-radius: 999px;
       border: none;
       outline: none;
-      font-size: 1rem;
-      transition: box-shadow 0.3s ease;
-      width: 200px;
+      font-size: 0.95rem;
+      background: white;
+      color: #333;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+      width: 320px;
     }
     .search-bar input:focus {
-      box-shadow: 0 0 10px #ff5722;
+      box-shadow: 0 0 0 3px rgb(255 255 255 / 0.4),0 0 12px rgb(230 74 25 / 0.7);
+      transform: scale(1.02);
+
+    }
+    .search-bar input:hover {
+      box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
     }
     .search-bar button {
       position: absolute;
-      right: 6px;
+      right: 12px;
       top: 50%;
       transform: translateY(-50%);
       border: none;
       background: transparent;
       color: #ff5722;
-      font-size: 1.2rem;
-      user-select: none;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+    .search-bar button:hover {
+      color: #e64a19;
+      transform: translateY(-50%) scale(1.1);
     }
 
     /* ===== Hero Section ===== */
@@ -1538,4 +1553,78 @@ mark.highlight {
   background: #bf360c;
   box-shadow: 0 6px 20px rgba(191, 54, 12, 0.4);
   transform: translateY(-1px);
+}
+/* ===== Responsive Navbar ===== */
+
+@media (max-width: 992px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  nav {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+  .search-bar {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+  .search-bar input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo {
+    font-size: 1.5rem;
+  }
+  nav {
+    justify-content: center;
+  }
+  nav a {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.9rem;
+  }
+  .dropdown-menu {
+    min-width: 120px;
+  }
+  .search-bar input {
+    font-size: 0.9rem;
+    padding: 0.65rem 2.5rem 0.65rem 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdown {
+    width: 100%;
+  }
+  .dropdown-toggle {
+    justify-content: center;
+    width: 100%;
+  }
+  .dropdown-menu {
+    position: static;
+    width: 100%;
+    margin-top: 0.4rem;
+    border-radius: 10px;
+    opacity: 0;
+    visibility: hidden;
+    max-height: 0;
+    overflow: hidden;
+    transform: none;
+    transition: all 0.3s ease;
+  }
+  .dropdown:hover .dropdown-menu,
+  .dropdown:focus-within .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    max-height: 500px;
+  }
+  .dropdown-menu a {
+    text-align: center;
+    padding: 0.8rem;
+  }
 }
