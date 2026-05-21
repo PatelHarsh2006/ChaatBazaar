@@ -799,22 +799,41 @@ function setupContactForm() {
   });
 }
 
-function setupNewsletterForm() {
-  const newsletterForm = document.getElementById("newsletter-form");
-  if (!newsletterForm) return;
-  const emailInput = newsletterForm.querySelector("#newsletter-email");
 
-  newsletterForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+// ==== Newsletter form submission ====
 
-    const emailVal = emailInput.value.trim();
-    if (!emailVal || !/\S+@\S+\.\S+/.test(emailVal)) {
-      alert("Please enter a valid email address.");
-      return;
+const newsletterForm = document.getElementById('newsletter-form');
+const newsletterEmail = document.getElementById('newsletter-email');
+
+if (newsletterForm) {
+  newsletterForm.addEventListener('submit', function (e) {
+    e.preventDefault(); 
+
+    const email = newsletterEmail.value.trim();
+
+    const existing = document.getElementById('newsletter-msg');
+    if (existing) existing.remove();
+
+    const msg = document.createElement('p');
+    msg.id = 'newsletter-msg';
+
+    if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      // Valid email → success
+      msg.className = 'newsletter-success';
+      msg.setAttribute('role', 'alert');
+      msg.textContent = '🎉 Thanks for subscribing! Check your inbox for exclusive deals.';
+      newsletterForm.reset(); 
+    } else {
+      // Invalid email → error
+      msg.className = 'newsletter-error';
+      msg.setAttribute('role', 'alert');
+      msg.textContent = '⚠️ Please enter a valid email address.';
     }
 
-    alert("Thank you for subscribing!");
-    newsletterForm.reset();
+    
+    newsletterForm.insertAdjacentElement('afterend', msg);
+
+    setTimeout(() => msg.remove(), 5000);
   });
 }
 

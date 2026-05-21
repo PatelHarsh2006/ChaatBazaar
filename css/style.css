@@ -657,7 +657,8 @@
     }
 
     /* ===== Newsletter Signup ===== */
-    section.newsletter {
+
+     section.newsletter {
       background: #ff5722;
       color: white;
       padding: 3rem 1rem 5rem;
@@ -705,7 +706,37 @@
     }
     .newsletter-form button:hover {
       background: #fbe9e7;
-    }
+    } 
+
+    
+   /* Newsletter feedback messages */
+
+#newsletter-msg {
+  margin-top: 12px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  animation: fadeInMsg 0.3s ease;
+}
+
+.newsletter-success {
+  background-color: #e6f9f0;
+  color: #1a7a4a;
+  border: 1px solid #a3d9b8;
+}
+
+.newsletter-error {
+  background-color: #fff3e0;
+  color: #c0560a;
+  border: 1px solid #f4a94e;
+}
+
+@keyframes fadeInMsg {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
     /* ===== Footer ===== */
     footer {
