@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us | ChaatBazaar</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff3e0;
+            color: #222;
+            line-height: 1.7;
+        }
+
+        header {
+            background: linear-gradient(135deg, #e85d04, #ffba08);
+            color: white;
+            padding: 90px 10%;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            max-width: 700px;
+            margin: auto;
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 70px 0;
+        }
+
+        .section {
+            margin-bottom: 70px;
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            color: #e85d04;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: "";
+            width: 70px;
+            height: 4px;
+            background: #ffba08;
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            border-radius: 5px;
+        }
+
+        .section p {
+            margin-top: 25px;
+            font-size: 1.05rem;
+            color: #5c4b3b;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ffe0b2, #fff3e0);
+            padding: 40px;
+            border-radius: 20px;
+            border-left: 6px solid #e85d04;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: #fff8ef;
+            padding: 30px 25px;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-top: 5px solid #e85d04;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: #2b1d0e;
+            font-size: 1.2rem;
+        }
+
+        .feature-card p {
+            color: #6b4f3a;
+            font-size: 0.98rem;
+        }
+
+        footer {
+            background: #2b1d0e;
+            color: #f3d9b1;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+        }
+
+        footer p {
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+
+            header {
+                padding: 70px 7%;
+            }
+
+            header h1 {
+                font-size: 2.3rem;
+            }
+
+            .section h2 {
+                font-size: 1.7rem;
+            }
+
+            .container {
+                width: 92%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>About ChaatBazaar</h1>
+
+        <p>
+            Bringing the vibrant flavors of Indian street food into a modern,
+            interactive, and delightful digital experience.
+        </p>
+    </header>
+
+    <div class="container">
+
+        <section class="section">
+
+            <h2>Who We Are</h2>
+
+            <p>
+                ChaatBazaar is an interactive Indian street food delivery platform
+                inspired by the energy, flavors, and diversity of local food streets
+                across India. The project combines authentic food culture with a
+                clean and responsive web experience designed for modern users.
+            </p>
+
+            <div class="highlight">
+                <p>
+                    From spicy chaats to iconic snacks, ChaatBazaar celebrates the
+                    joy of Indian street food through engaging design, smooth navigation,
+                    and user-friendly functionality.
+                </p>
+            </div>
+
+        </section>
+
+        <section class="section">
+
+            <h2>What Makes Us Special</h2>
+
+            <div class="features-grid">
+
+                <div class="feature-card">
+                    <h3>Responsive Design</h3>
+
+                    <p>
+                        Seamlessly optimized for desktops, tablets, and mobile devices
+                        for an enjoyable browsing experience everywhere.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Interactive Food Browsing</h3>
+
+                    <p>
+                        Explore a colorful collection of delicious Indian street food
+                        through a visually engaging interface.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Live Cart Functionality</h3>
+
+                    <p>
+                        Dynamically manage orders with a real-time shopping cart system
+                        built for simplicity and convenience.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Search & Filter System</h3>
+
+                    <p>
+                        Quickly discover your favorite dishes using intuitive search
+                        and category-based filtering options.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="section">
+
+            <h2>Open Source & Community</h2>
+
+            <p>
+                ChaatBazaar is proudly open source and encourages contributors to
+                improve functionality, accessibility, performance, and design.
+                Every contribution helps enhance the experience for users and the
+                developer community alike.
+            </p>
+
+            <p>
+                Whether you are a beginner contributor or an experienced developer,
+                collaboration and innovation are always welcome.
+            </p>
+
+        </section>
+
+        <section class="section">
+
+            <h2>Our Vision</h2>
+
+            <p>
+                Our vision is to create a digital platform where food, culture,
+                creativity, and technology blend seamlessly together. ChaatBazaar
+                aims to deliver not just meals, but the vibrant experience of
+                India's iconic street food culture.
+            </p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <p>© 2026 ChaatBazaar • Crafted with flavor, culture, and creativity.</p>
+    </footer>
+
+</body>
+</html>
