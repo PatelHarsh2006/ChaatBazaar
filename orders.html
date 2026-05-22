@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders - ChaatBazar</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="favicon.png" type="image/png" />
+</head>
+<body>
+
+<header>
+  <div class="header-inner container" role="banner">
+    <a href="index.html" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
+    <nav role="navigation" aria-label="Primary Navigation">
+      <a href="index.html" class="nav-link">Home</a>
+      <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
+        <a href="menu.html" class="dropdown-toggle nav-link">Menu</a>
+        <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
+          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('All')">All</a>
+          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Snacks')">Snacks</a>
+          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Chaat')">Chaat</a>
+          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Beverages')">Beverages</a>
+        </div>
+      </div>
+      <a href="index.html#about" class="nav-link">About</a>
+      <a href="orders.html" class="nav-link active">Orders</a>
+      <a href="cart.html" class="nav-link">Cart</a>
+      <div class="search-bar" role="search">
+        <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" autocomplete="off" />
+        <button aria-label="Search" id="search-btn"></button>
+        <div class="search-suggestions" id="search-suggestions" style="display: none;"></div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<section class="orders-page container">
+  <h1>My Orders</h1>
+  
+  <div class="orders-container" id="orders-container" aria-live="polite">
+    <!-- Active and historical orders will be rendered here dynamically -->
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

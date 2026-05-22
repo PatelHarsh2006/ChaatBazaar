@@ -7,7 +7,9 @@
   
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="favicon.png" type="image/png" />
 </head>
 <body>
 
@@ -28,10 +30,12 @@
         </div>
       </div>
       <a href="#about" class="nav-link">About</a>
+      <a href="orders.html" class="nav-link">Orders</a>
       <a href="#cart-sidebar" class="nav-link" id="cart-open-btn" aria-label="Open Cart">Cart (<span id="cart-count">0</span>)</a>
       <div class="search-bar" role="search">
-        <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" />
+        <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" autocomplete="off" />
         <button aria-label="Search" id="search-btn"></button>
+        <div class="search-suggestions" id="search-suggestions" style="display: none;"></div>
       </div>
     </nav>
   </div>
@@ -65,6 +69,64 @@
     <button class="filter-btn" data-filter="Snacks" aria-pressed="false">Snacks</button>
     <button class="filter-btn" data-filter="Chaat" aria-pressed="false">Chaat</button>
     <button class="filter-btn" data-filter="Beverages" aria-pressed="false">Beverages</button>
+  </div>
+
+  <div class="filter-toggle-container">
+    <button class="btn-filter-toggle" id="filter-toggle-btn" aria-expanded="false" aria-controls="advanced-filters">
+      <span>⚙️ Advanced Filters</span>
+    </button>
+  </div>
+
+  <div class="advanced-filters" id="advanced-filters" style="display: none;">
+    <div class="filter-grid">
+      <!-- Price Range Slider -->
+      <div class="filter-group">
+        <label for="price-range-slider">Max Price: <span id="price-slider-val">₹100</span></label>
+        <input type="range" id="price-range-slider" min="10" max="100" step="5" value="100" aria-valuemin="10" aria-valuemax="100" aria-valuenow="100" />
+      </div>
+
+      <!-- Spice Level Selector -->
+      <div class="filter-group">
+        <label for="spice-level-select">Spice Level</label>
+        <select id="spice-level-select">
+          <option value="All">All Spice Levels</option>
+          <option value="Low">🌶️ Low</option>
+          <option value="Medium">🌶️🌶️ Medium</option>
+          <option value="High">🌶️🌶️🌶️ High</option>
+        </select>
+      </div>
+
+      <!-- Rating Selector -->
+      <div class="filter-group">
+        <label for="rating-select">Minimum Rating</label>
+        <select id="rating-select">
+          <option value="All">All Ratings</option>
+          <option value="4.6">⭐ 4.6+ Stars</option>
+          <option value="4.8">⭐⭐ 4.8+ Stars</option>
+          <option value="4.9">⭐⭐⭐ 4.9+ Stars</option>
+        </select>
+      </div>
+
+      <!-- Dietary Preferences -->
+      <div class="filter-group dietary-group">
+        <label>Dietary Preferences</label>
+        <div class="checkbox-container">
+          <label class="custom-checkbox">
+            <input type="checkbox" id="dietary-vegan" />
+            <span class="checkbox-label">🌱 Vegan</span>
+          </label>
+          <label class="custom-checkbox">
+            <input type="checkbox" id="dietary-gf" />
+            <span class="checkbox-label">🌾 Gluten-Free</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Reset Filters Button -->
+    <div class="filter-actions">
+      <button class="btn-reset-filters" id="reset-filters-btn">Reset All Filters</button>
+    </div>
   </div>
   <div class="cards" id="menu-cards" aria-live="polite" aria-relevant="additions removals">
     <!-- Menu cards injected here -->
@@ -158,6 +220,12 @@
 
 <!-- Footer -->
 <footer>
+  <div class="social-icons">
+    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+    <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+  </div>
   <p>© 2026 ChaatBazar. All rights reserved.</p>
 </footer>
 
