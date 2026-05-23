@@ -4,45 +4,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Orders - ChaatBazar</title>
-  
-  <!-- Google Fonts -->
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- CSS -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="favicon.png" type="image/png" />
+
+  <!-- Leaflet CSS (MAP) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
 </head>
+
 <body>
 
 <header>
-  <div class="header-inner container" role="banner">
-    <a href="index.html" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
-    <nav role="navigation" aria-label="Primary Navigation">
+  <div class="header-inner container">
+    <a href="index.html" class="logo">ChaatBazar 🍴</a>
+
+    <nav>
       <a href="index.html" class="nav-link">Home</a>
-      <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
-        <a href="menu.html" class="dropdown-toggle nav-link">Menu</a>
-        <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
-          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('All')">All</a>
-          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Snacks')">Snacks</a>
-          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Chaat')">Chaat</a>
-          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Beverages')">Beverages</a>
-        </div>
-      </div>
-      <a href="index.html#about" class="nav-link">About</a>
+      <a href="menu.html" class="nav-link">Menu</a>
       <a href="orders.html" class="nav-link active">Orders</a>
       <a href="cart.html" class="nav-link">Cart</a>
-      <div class="search-bar" role="search">
-        <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" autocomplete="off" />
-        <button aria-label="Search" id="search-btn"></button>
-        <div class="search-suggestions" id="search-suggestions" style="display: none;"></div>
-      </div>
     </nav>
   </div>
 </header>
 
+<!-- ================= MAP SECTION ================= -->
+<section class="container">
+  <h2>Live Order Tracking 🚚</h2>
+
+  <div
+    id="map"
+    style="height: 320px; width: 100%; border-radius: 12px; margin: 15px 0;"
+  ></div>
+</section>
+
+<!-- ================= ORDERS ================= -->
 <section class="orders-page container">
   <h1>My Orders</h1>
-  
-  <div class="orders-container" id="orders-container" aria-live="polite">
-    <!-- Active and historical orders will be rendered here dynamically -->
+
+  <div class="orders-container" id="orders-container">
+    <!-- Orders will be rendered here -->
   </div>
 </section>
 
@@ -50,6 +57,54 @@
   <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
 </footer>
 
+<!-- Leaflet JS (MAP) -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Your JS -->
 <script src="js/main.js"></script>
+
+<script>
+  // ================= MAP TRACKING =================
+  function initMapTracking() {
+    const mapContainer = document.getElementById("map");
+    if (!mapContainer) return;
+
+    // Shop location (Mumbai example)
+    const shopLocation = [19.0760, 72.8777];
+
+    const map = L.map("map").setView(shopLocation, 13);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(map);
+
+    // Shop marker
+    L.marker(shopLocation)
+      .addTo(map)
+      .bindPopup("🍴 ChaatBazar Kitchen")
+      .openPopup();
+
+    // Fake delivery person
+    let deliveryLocation = [19.0850, 72.8900];
+
+    const deliveryMarker = L.marker(deliveryLocation)
+      .addTo(map)
+      .bindPopup("🚚 Delivery Partner");
+
+    // Simulated movement
+    setInterval(() => {
+      deliveryLocation = [
+        deliveryLocation[0] + 0.0005,
+        deliveryLocation[1] - 0.0005
+      ];
+
+      deliveryMarker.setLatLng(deliveryLocation);
+    }, 2000);
+  }
+
+  // init map after page load
+  window.addEventListener("load", initMapTracking);
+</script>
+
 </body>
 </html>

@@ -955,3 +955,103 @@ function showSkeletonCartItems(count = 2) {
     cartItemsContainer.appendChild(createSkeletonCartItem());
   }
 }
+// ===== ACCOUNT DROPDOWN =====
+
+const accountBtn = document.getElementById("account-btn");
+const accountDropdown = document.getElementById("account-dropdown");
+
+if (accountBtn) {
+  accountBtn.addEventListener("click", () => {
+
+    if (accountDropdown.style.display === "flex") {
+      accountDropdown.style.display = "none";
+    } else {
+      accountDropdown.style.display = "flex";
+    }
+
+  });
+}
+
+// close dropdown outside click
+document.addEventListener("click", (e) => {
+  if (
+    !e.target.closest(".account-wrapper")
+  ) {
+    if (accountDropdown) {
+      accountDropdown.style.display = "none";
+    }
+  }
+});
+
+// ===== AUTH MODALS =====
+
+const loginModal = document.getElementById("login-modal");
+const signupModal = document.getElementById("signup-modal");
+
+document.getElementById("open-login").onclick = () => {
+  loginModal.style.display = "flex";
+};
+
+document.getElementById("open-signup").onclick = () => {
+  signupModal.style.display = "flex";
+};
+
+function closeLogin() {
+  loginModal.style.display = "none";
+}
+
+function closeSignup() {
+  signupModal.style.display = "none";
+}
+
+// ===== SIGNUP =====
+
+function signupUser() {
+
+  const user = {
+    name: document.getElementById("signup-name").value,
+    age: document.getElementById("signup-age").value,
+    address: document.getElementById("signup-address").value,
+    password: document.getElementById("signup-password").value
+  };
+
+  localStorage.setItem("chaatUser", JSON.stringify(user));
+
+  alert("Account created!");
+  closeSignup();
+}
+
+// ===== LOGIN =====
+
+function loginUser() {
+
+  const savedUser =
+    JSON.parse(localStorage.getItem("chaatUser"));
+
+  const name =
+    document.getElementById("login-name").value;
+
+  const password =
+    document.getElementById("login-password").value;
+
+  if (
+    savedUser &&
+    savedUser.name === name &&
+    savedUser.password === password
+  ) {
+
+    alert("Login successful!");
+
+    localStorage.setItem(
+      "loggedInUser",
+      JSON.stringify(savedUser)
+    );
+
+    closeLogin();
+
+  } else {
+
+    alert("Invalid credentials");
+
+  }
+}
