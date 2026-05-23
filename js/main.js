@@ -258,6 +258,7 @@ function renderCart() {
           updateCartCount();
           renderCart();
           saveCart();
+          showToast(`${item.name} removed from cart`, 'toast-remove', '🗑️');
         });
       }
 
@@ -444,7 +445,8 @@ window.checkout = function() {
   renderCart();
   saveCart();
 
-  alert("Thank you for your order! Your hot street food is on the way. Redirecting to your Orders dashboard...");
+  showToast('Order placed! Redirecting to orders...', 'toast-info', '🎉');
+setTimeout(() => { window.location.href = "orders.html"; }, 1500);
   window.location.href = "orders.html";
 };
 
@@ -492,6 +494,7 @@ function addToCart(id) {
   updateCartCount();
   renderCart();
   saveCart();
+  showToast(`${item.name} added to cart!`, 'toast-success', '🛒');
 
   // Slide open the cart sidebar automatically for a premium UX when adding items on index.html
   if (cartSidebar) {
@@ -864,6 +867,13 @@ function setupActiveNavbar() {
 // ===== Initialization =====
 
 async function init() {
+
+  // Inject toast container
+  if (!document.getElementById('toast-container')) {
+    const toastContainer = document.createElement('div');
+    toastContainer.id = 'toast-container';
+    document.body.appendChild(toastContainer);
+  }
   // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
   setupCartToggle();
   setupFilterButtons();
@@ -954,4 +964,27 @@ function showSkeletonCartItems(count = 2) {
   for (let i = 0; i < count; i++) {
     cartItemsContainer.appendChild(createSkeletonCartItem());
   }
+}
+
+// ===== Toast Notification System =====
+function showToast(message, type = 'toast-success', icon = '✅') {
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${message}</span>`;
+  container.appendChild(toast);
+
+  // Trigger animation
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => toast.classList.add('show'));
+  });
+
+  // Auto dismiss after 3s
+  setTimeout(() => {
+    toast.classList.remove('show');
+    toast.classList.add('hide');
+    setTimeout(() => toast.remove(), 350);
+  }, 3000);
 }
