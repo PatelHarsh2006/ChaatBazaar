@@ -1539,3 +1539,39 @@ mark.highlight {
   box-shadow: 0 6px 20px rgba(191, 54, 12, 0.4);
   transform: translateY(-1px);
 }
+/* ===== Cart Overlay ===== */
+#cart-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1400;
+  cursor: pointer;
+}
+
+#cart-overlay.active {
+  display: block;
+}
+/* ===== Menu Page Layout ===== */
+.menu-page {
+  padding: 3rem 1rem 5rem;
+  background: #fff3e0;
+  min-height: 100vh;
+  max-width: 100%;  
+}
+
+.menu-page h1 {
+  text-align: center;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #bf360c;
+  margin-bottom: 2.5rem;
+}
+
+.menu-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 1rem;
+}

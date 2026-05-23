@@ -92,13 +92,42 @@ function createCard(item, highlightQuery = "") {
     </div>
     <div class="card-footer">
       <span class="price">${formatPrice(item.price)}</span>
-      <button class="add-btn" aria-label="Add ${item.name} to cart">Add</button>
+      <div class="card-qty-control"></div>
     </div>
   `;
 
-  const addBtn = card.querySelector(".add-btn");
-  addBtn.addEventListener("click", () => addToCart(item.id));
+  const qtyControl = card.querySelector(".card-qty-control");
 
+  function renderCardFooter() {
+    const cartItem = cart.find(ci => ci.item.id === item.id);
+    const qty = cartItem ? cartItem.quantity : 0;
+
+    if (qty === 0) {
+      qtyControl.innerHTML = `<button class="add-btn" aria-label="Add ${item.name} to cart">Add</button>`;
+      qtyControl.querySelector(".add-btn").addEventListener("click", () => {
+        addToCart(item.id);
+        renderCardFooter();
+      });
+    } else {
+      qtyControl.innerHTML = `
+        <div class="qty-controls">
+          <button class="qty-decrease" aria-label="Decrease ${item.name}">−</button>
+          <span>${qty}</span>
+          <button class="qty-increase" aria-label="Increase ${item.name}">+</button>
+        </div>
+      `;
+      qtyControl.querySelector(".qty-decrease").addEventListener("click", () => {
+        removeFromCart(item.id);
+        renderCardFooter();
+      });
+      qtyControl.querySelector(".qty-increase").addEventListener("click", () => {
+        addToCart(item.id);
+        renderCardFooter();
+      });
+    }
+  }
+
+  renderCardFooter();
   return card;
 }
 
@@ -474,6 +503,8 @@ window.reorderOrder = function(orderId) {
   if (sidebar) {
     sidebar.setAttribute("aria-hidden", "false");
     sidebar.classList.add("open");
+    const overlay = document.getElementById("cart-overlay");
+    if (overlay) overlay.classList.add("active");
   }
 };
 
@@ -494,10 +525,12 @@ function addToCart(id) {
   saveCart();
 
   // Slide open the cart sidebar automatically for a premium UX when adding items on index.html
-  if (cartSidebar) {
-    cartSidebar.setAttribute("aria-hidden", "false");
-    cartSidebar.classList.add("open");
-  }
+  // if (cartSidebar) {
+  //   cartSidebar.setAttribute("aria-hidden", "false");
+  //   cartSidebar.classList.add("open");
+  //   const overlay = document.getElementById("cart-overlay");
+  //   if (overlay) overlay.classList.add("active");
+  // }
 }
 
 function removeFromCart(id) {
@@ -530,27 +563,65 @@ function setupFilterButtons() {
     });
   });
 }
+function setupNavDropdownFilters() {
+  const menuFilterLinks = document.querySelectorAll(".menu-filter");
+  menuFilterLinks.forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const filter = link.dataset.filter;
+
+      // scroll to #menu section
+      const menuSection = document.getElementById("menu");
+      if (menuSection) menuSection.scrollIntoView({ behavior: "smooth" });
+
+      // apply the filter
+      renderMenu(filter);
+
+      // sync the active state on the .filter-btn buttons
+      const filterButtons = document.querySelectorAll(".filter-btn");
+      filterButtons.forEach(btn => {
+        if (btn.dataset.filter === filter) {
+          btn.classList.add("active");
+          btn.setAttribute("aria-pressed", "true");
+        } else {
+          btn.classList.remove("active");
+          btn.setAttribute("aria-pressed", "false");
+        }
+      });
+    });
+  });
+}
+
 
 function setupCartToggle() {
   const cartOpenBtn = document.getElementById("cart-open-btn");
   const cartCloseBtn = document.getElementById("cart-close");
+  const overlay = document.getElementById("cart-overlay");
   if (!cartOpenBtn || !cartCloseBtn || !cartSidebar) return;
 
   cartOpenBtn.addEventListener("click", (e) => {
     e.preventDefault();
     cartSidebar.setAttribute("aria-hidden", "false");
     cartSidebar.classList.add("open");
+     if (overlay) overlay.classList.add("active");
   });
 
   cartCloseBtn.addEventListener("click", () => {
     cartSidebar.setAttribute("aria-hidden", "true");
     cartSidebar.classList.remove("open");
+    if (overlay) overlay.classList.remove("active");
+  });
+  if (overlay) overlay.addEventListener("click", () => {  // ADD entire block
+    cartSidebar.setAttribute("aria-hidden", "true");
+    cartSidebar.classList.remove("open");
+    overlay.classList.remove("active");
   });
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && cartSidebar.getAttribute("aria-hidden") === "false") {
       cartSidebar.setAttribute("aria-hidden", "true");
       cartSidebar.classList.remove("open");
+      if (overlay) overlay.classList.remove("active"); 
     }
   });
 }
@@ -867,6 +938,7 @@ async function init() {
   // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
   setupCartToggle();
   setupFilterButtons();
+  setupNavDropdownFilters();
   setupOrderNowScroll();
   setupSearchSuggestions();
   setupSearch();
