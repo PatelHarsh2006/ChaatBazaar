@@ -543,18 +543,22 @@ function setupFilterButtons() {
 function setupCartToggle() {
   const cartOpenBtn = document.getElementById("cart-open-btn");
   const cartCloseBtn = document.getElementById("cart-close");
-  if (!cartOpenBtn || !cartCloseBtn || !cartSidebar) return;
+  if (!cartSidebar) return;
 
-  cartOpenBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    cartSidebar.setAttribute("aria-hidden", "false");
-    cartSidebar.classList.add("open");
-  });
+  if (cartOpenBtn) {
+    cartOpenBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      cartSidebar.setAttribute("aria-hidden", "false");
+      cartSidebar.classList.add("open");
+    });
+  }
 
-  cartCloseBtn.addEventListener("click", () => {
-    cartSidebar.setAttribute("aria-hidden", "true");
-    cartSidebar.classList.remove("open");
-  });
+  if (cartCloseBtn) {
+    cartCloseBtn.addEventListener("click", () => {
+      cartSidebar.setAttribute("aria-hidden", "true");
+      cartSidebar.classList.remove("open");
+    });
+  }
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && cartSidebar.getAttribute("aria-hidden") === "false") {

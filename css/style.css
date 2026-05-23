@@ -1800,3 +1800,35 @@ mark.highlight {
     text-align: center;
   }
 }
+
+/* ===== Cart Page Specific Styles ===== */
+.cart-page-wrapper {
+  padding: 8rem 1rem 5rem;
+  background: #fff8f0;
+  min-height: 80vh;
+}
+
+.cart-page-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  box-shadow: 0 15px 40px rgba(255, 87, 34, 0.1);
+  padding: 2rem 3rem;
+  border: 1px solid rgba(255, 87, 34, 0.1);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.cart-page-container #cart-header {
+  border-bottom: 2px solid #fbe9e7;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .cart-page-container {
+    padding: 1.5rem;
+  }
+}
+
