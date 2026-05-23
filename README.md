@@ -73,7 +73,7 @@ ChaatBazaar/
 ├── LICENSE                # MIT License file
 ├── menu.html              # Browse-able items list page
 ├── orders.html            # User order history or current order details page
-└── README.md              # Project documentation file
+└── README.md              # Project documentation
 
 ## 💻 Tech Stack <a name="-tech-stack"></a>
 Built with modern, lightweight web technologies:
