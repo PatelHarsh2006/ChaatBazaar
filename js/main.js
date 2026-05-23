@@ -17,7 +17,7 @@ async function loadMenuData() {
 }
 
 // ===== Globals =====
-const specialsContainer = document.getElementById("specials-cards");
+const specialsContainer = document.getElementById("specials-banner-container");
 const menuContainer = document.getElementById("menu-cards") || document.getElementById("menu-container");
 const cartCount = document.getElementById("cart-count");
 const cartSidebar = document.getElementById("cart-sidebar");
@@ -104,16 +104,25 @@ function createCard(item, highlightQuery = "") {
 
 function renderSpecials() {
   if (!specialsContainer) return;
-  const specials = menuItems.slice(0, 3);
+  
+  // Pick the first item as the special item
+  const specialItem = menuItems.length > 0 ? menuItems[0] : null;
+  if (!specialItem) return;
 
-  showSkeletonCards(specialsContainer, specials.length);
-
-  setTimeout(() => {
-    specialsContainer.innerHTML = "";
-    specials.forEach(item => {
-      specialsContainer.appendChild(createCard(item));
-    });
-  }, 1500);
+  specialsContainer.innerHTML = `
+    <div class="daily-deal-banner" aria-label="Today's Special: ${specialItem.name}">
+      <div class="daily-deal-badge">🔥TODAY'S SPECIAL</div>
+      <div class="daily-deal-image">
+        <img src="${specialItem.image}" alt="${specialItem.name} - Today's Special" loading="lazy" />
+      </div>
+      <div class="daily-deal-content">
+        <h2>${specialItem.name}</h2>
+        <div class="price">${formatPrice(specialItem.price)}</div>
+        <p>${specialItem.description}</p>
+        <button class="btn-special-add" aria-label="Add ${specialItem.name} to cart" onclick="addToCart(${specialItem.id})">ORDER NOW</button>
+      </div>
+    </div>
+  `;
 }
 
 function renderMenu(filter = "All") {
