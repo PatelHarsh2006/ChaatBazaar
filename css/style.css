@@ -224,6 +224,15 @@
       margin-bottom: 2.5rem;
       user-select: none;
     }
+    
+    .menu-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
     .cards {
       display: flex;
       flex-wrap: wrap;
