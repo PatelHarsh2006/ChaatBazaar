@@ -1,23 +1,4 @@
-* {
-  margin: 0; padding: 0; box-sizing: border-box;
-}
-html {
-  scroll-behavior: smooth;
-}
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #fff8f0;
-  color: #3e3e3e;
-  line-height: 1.6;
-  font-size: 16px;
-  overflow-x: hidden;
-}
-a {
-  text-decoration: none;
-  color: inherit;
-}
-img {
-  max-width: 100%;
+
   display: block;
   border-radius: 12px;
 }
