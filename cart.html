@@ -23,6 +23,11 @@
 
 <section class="cart-page">
   <h1>Your Cart</h1>
+  <div class="delivery-info" style="background:#fff3e0;border-left:4px solid #FF7B54;padding:1rem;margin-bottom:1.5rem;border-radius:4px;">
+    <p style="margin:0;color:#5d4037;font-size:0.95rem;">
+      <strong>📍 Location Required:</strong> We'll ask for your location during checkout to verify delivery eligibility. We deliver within 5 km of India Gate, New Delhi.
+    </p>
+  </div>
   <div id="cart-items"></div>
   <p id="total-price"></p>
   <button onclick="checkout()">Checkout</button>
@@ -38,6 +43,8 @@
   <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
 </footer>
 
+<script src="js/accessibility.js"></script>
+<script src="js/geolocation.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

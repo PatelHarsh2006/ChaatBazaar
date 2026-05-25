@@ -212,7 +212,8 @@
 
     /* ===== Specials & Menu Section ===== */
     section.specials,
-    section.menu {
+    section.menu,
+    section.recently-viewed {
       padding: 4rem 1rem 5rem;
       background: #fff3e0;
     }
@@ -1570,4 +1571,180 @@ mark.highlight {
   background: #e64a19;
   box-shadow: 0 8px 25px rgba(230,74,25,0.7);
   transform: translateY(-2px);
+/* ===== Accessibility Styles ===== */
+
+/* Skip link - visible on focus */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #ff5722;
+  color: white;
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  z-index: 10000;
+  border-radius: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Enhanced focus states for keyboard navigation */
+body.keyboard-nav button:focus,
+body.keyboard-nav a:focus,
+body.keyboard-nav input:focus,
+body.keyboard-nav textarea:focus,
+body.keyboard-nav select:focus {
+  outline: 3px solid #ff5722;
+  outline-offset: 2px;
+}
+
+/* Focus states for all interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid #ff5722;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Card focus state */
+.card:focus {
+  outline: 3px solid #ff5722;
+  outline-offset: 2px;
+  box-shadow: 0 0 20px rgba(255, 87, 34, 0.5);
+}
+
+/* Search suggestion focused state */
+.suggestion-item.focused {
+  background: #ffe0d0;
+  color: #3e3e3e;
+}
+
+.suggestion-item:focus-visible {
+  outline: 2px solid #ff5722;
+  outline-offset: 1px;
+}
+
+/* Improved focus for navigation links */
+nav a:focus-visible {
+  box-shadow: 0 0 8px #ff5722;
+}
+
+/* Filter button focus state */
+.filter-btn:focus-visible,
+.menu-filter:focus-visible {
+  outline: 2px solid #ff5722;
+  outline-offset: 2px;
+}
+
+/* Checkbox and radio focus states */
+input[type="checkbox"]:focus-visible,
+input[type="radio"]:focus-visible {
+  outline: 2px solid #ff5722;
+  outline-offset: 2px;
+}
+
+/* Range slider focus state */
+input[type="range"]:focus-visible {
+  outline: 2px solid #ff5722;
+  outline-offset: 4px;
+}
+
+/* Select dropdown focus state */
+select:focus-visible {
+  outline: 2px solid #ff5722;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: more) {
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline-width: 4px;
+  }
+
+  .card:focus {
+    outline-width: 4px;
+    box-shadow: 0 0 30px rgba(255, 87, 34, 0.8);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode support for better contrast */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #1a1a1a;
+    color: #e0e0e0;
+  }
+
+  .card {
+    background: #2d2d2d;
+  }
+
+  .suggestion-item {
+    background: #2d2d2d;
+    color: #e0e0e0;
+  }
+
+  .suggestion-item.focused {
+    background: #bf360c;
+    color: #fff;
+  }
+}
+
+/* Ensure links are underlined for clarity */
+a[href] {
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 87, 34, 0.5);
+}
+
+/* Improve contrast of disabled buttons */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Out of Stock Badge */
+.out-of-stock-badge {
+  background-color: #6c757d !important;  /* Grey color */
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  margin: 10px 0 5px 0;
+  letter-spacing: 0.5px;
+  text-align: center;
+  width: fit-content;
+}
+
+/* Disabled button styling */
+.add-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #cccccc !important;
+  transform: none !important;
+}
+
+/* Hover effect for disabled button */
+.add-btn:disabled:hover {
+  transform: none !important;
+  opacity: 0.6;
 }
