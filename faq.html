@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FAQ - ChaatBazaar</title>
+  <meta name="description" content="Frequently asked questions about ChaatBazaar – ordering, delivery, payments, cancellation, and more." />
+
+  <!-- Same fonts & icons as rest of site -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="favicon.png" type="image/png" />
+
+  <style>
+    /* ── FAQ Hero (mirrors .hero gradient, same palette) ── */
+    .faq-hero {
+      background: linear-gradient(120deg, #ffab91, #ff5722);
+      color: #fff;
+      text-align: center;
+      padding: 5rem 1rem 4rem;
+    }
+    .faq-hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .faq-hero p {
+      font-size: 1.1rem;
+      font-weight: 600;
+      opacity: 0.92;
+      margin: 0;
+    }
+
+    /* ── Page wrapper ── */
+    .faq-page {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 4rem 1rem 5rem;
+    }
+
+    /* ── Category tabs (same pill style as .filter-btn) ── */
+    .faq-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    .faq-tab {
+      background: #fff3e0;
+      border: 2px solid #ff5722;
+      color: #ff5722;
+      padding: 0.6rem 1.8rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .faq-tab.active,
+    .faq-tab:hover {
+      background: #ff5722;
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(255,87,34,0.4);
+    }
+
+    /* ── Category heading ── */
+    .faq-category { margin-bottom: 2.5rem; }
+    .faq-category-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #bf360c;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid #ffe0cc;
+    }
+
+    /* ── Accordion item (matches .card shadow/radius language) ── */
+    .faq-item {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      margin-bottom: 0.9rem;
+      overflow: hidden;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .faq-item:hover {
+      box-shadow: 0 12px 35px rgba(255,87,34,0.12);
+      transform: translateY(-2px);
+    }
+
+    /* ── Question button ── */
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 1.2rem 1.5rem;
+      text-align: left;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #3e2723;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      transition: background 0.2s ease;
+    }
+    .faq-question:hover { background: #fff8f5; }
+
+    .faq-icon {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #ffe0cc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #ff5722;
+      font-weight: 700;
+      transition: transform 0.35s ease, background 0.25s ease, color 0.25s ease;
+    }
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      background: #ff5722;
+      color: #fff;
+    }
+
+    /* ── Answer panel ── */
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 1.5rem;
+      transition: max-height 0.4s ease, padding 0.25s ease;
+      font-size: 0.97rem;
+      color: #5d4037;
+      line-height: 1.75;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 500px;
+      padding: 0 1.5rem 1.3rem;
+    }
+
+    /* ── CTA box (matches .team-member card feel) ── */
+    .faq-cta {
+      margin-top: 3.5rem;
+      background: #fff3e0;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .faq-cta h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #bf360c;
+      margin-bottom: 0.6rem;
+    }
+    .faq-cta p {
+      color: #5d4037;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+    .faq-cta a {
+      display: inline-block;
+      background: #ff5722;
+      color: #fff;
+      padding: 0.9rem 2.5rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      box-shadow: 0 8px 25px rgba(255,87,34,0.55);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .faq-cta a:hover {
+      background: #e64a19;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(230,74,25,0.7);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .faq-tabs { gap: 0.5rem; }
+      .faq-tab  { padding: 0.5rem 1.2rem; font-size: 0.88rem; }
+      .faq-question { font-size: 0.93rem; padding: 1rem 1.1rem; }
+      .faq-answer   { padding: 0 1.1rem; }
+      .faq-item.open .faq-answer { padding: 0 1.1rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER (exact copy from orders.html) ═══════════ -->
+<header>
+  <div class="header-inner container" role="banner">
+    <a href="index.html" class="logo" aria-label="ChaatBazaar Home">ChaatBazaar 🍴</a>
+    <nav role="navigation" aria-label="Primary Navigation">
+      <a href="index.html" class="nav-link">Home</a>
+      <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
+        <a href="menu.html" class="dropdown-toggle nav-link">Menu</a>
+        <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
+          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('All')">All</a>
+          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Snacks')">Snacks</a>
+          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Chaat')">Chaat</a>
+          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Beverages')">Beverages</a>
+        </div>
+      </div>
+      <a href="index.html#about" class="nav-link">About</a>
+      <a href="orders.html" class="nav-link">Orders</a>
+      <a href="faq.html" class="nav-link active">FAQ</a>
+      <a href="cart.html" class="nav-link">Cart</a>
+      <div class="search-bar" role="search">
+        <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" autocomplete="off" />
+        <button aria-label="Search" id="search-btn"></button>
+        <div class="search-suggestions" id="search-suggestions" style="display:none;"></div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="faq-hero" role="region" aria-label="FAQ Hero">
+  <h1>Frequently Asked Questions 🤔</h1>
+  <p>Everything you need to know about ordering, delivery, payments & more.</p>
+</section>
+
+<!-- ═══════════ FAQ CONTENT ═══════════ -->
+<main class="faq-page">
+
+  <!-- Category filter tabs -->
+  <div class="faq-tabs" role="toolbar" aria-label="Filter FAQ categories">
+    <button class="faq-tab active" data-filter="all">All</button>
+    <button class="faq-tab" data-filter="ordering">🛒 Ordering</button>
+    <button class="faq-tab" data-filter="delivery">🚴 Delivery</button>
+    <button class="faq-tab" data-filter="payments">💳 Payments</button>
+    <button class="faq-tab" data-filter="cancellation">❌ Cancellation</button>
+    <button class="faq-tab" data-filter="food">🍽️ Food & Menu</button>
+  </div>
+
+  <!-- ── ORDERING ── -->
+  <div class="faq-category" data-cat="ordering">
+    <h2 class="faq-category-title">🛒 Ordering</h2>
+
+    <div class="faq-item">
+      <button class="faq-question">How do I place an order?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Browse our menu, click <strong>Add</strong> on any item you love, then hit <strong>Checkout</strong> from the cart. Fill in your delivery details and confirm — hot street food is on its way!</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Can I customize my order (e.g., extra spicy)?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Yes! Add a note in the <strong>Special Instructions</strong> field at checkout. Our chefs will do their best to accommodate your preferences.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Is there a minimum order amount?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Yes, the minimum order amount is <strong>₹50</strong>. This helps us ensure quality delivery service every time.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Can I schedule an order in advance?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Currently we only accept real-time orders. Scheduled ordering is coming soon — subscribe to our newsletter for updates!</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Can I add more items after placing an order?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Once an order is placed and the kitchen starts preparing it, changes are not possible. You can always place a new order for additional items.</div>
+    </div>
+  </div>
+
+  <!-- ── DELIVERY ── -->
+  <div class="faq-category" data-cat="delivery">
+    <h2 class="faq-category-title">🚴 Delivery</h2>
+
+    <div class="faq-item">
+      <button class="faq-question">What is the delivery radius?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">We deliver within a <strong>5 km radius</strong> of our kitchen. Enter your pincode at checkout to check if your area is covered.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">How long does delivery take?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Most orders arrive in <strong>20–35 minutes</strong>. This may vary based on distance, traffic, and order volume during peak hours.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Is there a delivery fee?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Delivery is <strong>FREE</strong> for orders above ₹150. A small fee of <strong>₹20</strong> applies for orders below ₹150.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Can I track my order?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Yes! Once confirmed, visit the <a href="orders.html" style="color:#ff5722;font-weight:600;">Orders page</a> for live status: <em>Placed → Preparing → Out for Delivery → Delivered</em>.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">What if my order is delayed?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">If your order exceeds the estimated time by more than 15 minutes, please contact us via the Contact form. We'll update you immediately and may offer a discount on your next order.</div>
+    </div>
+  </div>
+
+  <!-- ── PAYMENTS ── -->
+  <div class="faq-category" data-cat="payments">
+    <h2 class="faq-category-title">💳 Payments</h2>
+
+    <div class="faq-item">
+      <button class="faq-question">What payment methods are accepted?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">We accept <strong>UPI</strong> (GPay, PhonePe, Paytm), credit/debit cards, net banking, and <strong>Cash on Delivery (COD)</strong>. More options are coming soon!</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Is online payment secure?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Absolutely. All transactions are SSL-encrypted and processed through trusted payment gateways. We never store your card details.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Do you offer discount coupons?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Yes! Use code <strong>FIRST20</strong> for 20% off your first order, or <strong>CHAAT10</strong> for 10% off any order above ₹100. Subscribe to our newsletter for more exclusive deals.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Will I get a receipt or invoice?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">A digital receipt is emailed after every successful order. You can also find your full order history on the <a href="orders.html" style="color:#ff5722;font-weight:600;">Orders page</a>.</div>
+    </div>
+  </div>
+
+  <!-- ── CANCELLATION ── -->
+  <div class="faq-category" data-cat="cancellation">
+    <h2 class="faq-category-title">❌ Cancellation & Refunds</h2>
+
+    <div class="faq-item">
+      <button class="faq-question">Can I cancel my order?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">You can cancel within <strong>2 minutes</strong> of placing the order. Once the kitchen begins preparing your food, cancellations are not possible.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">How do I get a refund?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Refunds for eligible cancellations or wrong/missing items are processed within <strong>3–5 business days</strong> to your original payment method.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">What if I received the wrong item?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">We're sorry! Contact us within <strong>30 minutes</strong> of delivery with a photo. We'll either redeliver the correct item or issue a full refund.</div>
+    </div>
+  </div>
+
+  <!-- ── FOOD & MENU ── -->
+  <div class="faq-category" data-cat="food">
+    <h2 class="faq-category-title">🍽️ Food & Menu</h2>
+
+    <div class="faq-item">
+      <button class="faq-question">Are your dishes freshly prepared?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Yes! Every item is prepared fresh <strong>after your order is placed</strong>. We never use pre-packaged or frozen food.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Do you have vegan or gluten-free options?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Yes! Look for the <strong>🌱 Vegan</strong> and <strong>🌾 Gluten-Free</strong> badges on menu cards, or use the dietary filter on the <a href="menu.html" style="color:#ff5722;font-weight:600;">Menu page</a>.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">How spicy is the food?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Each item shows a spice indicator (🌶️ Low / 🌶️🌶️ Medium / 🌶️🌶️🌶️ High). Use the Spice Level filter on the Menu page to find dishes matching your preference.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Do you update the menu seasonally?<span class="faq-icon">+</span></button>
+      <div class="faq-answer">Yes! We refresh our specials regularly based on seasonal ingredients and festive occasions. Check the <strong>Today's Specials</strong> section on the homepage for the latest additions.</div>
+    </div>
+  </div>
+
+  <!-- ── Still have questions CTA ── -->
+  <div class="faq-cta" role="complementary" aria-label="Contact us">
+    <h2>Still have questions?</h2>
+    <p>Our team is happy to help — reach out to us anytime!</p>
+    <a href="index.html#about">Contact Us</a>
+  </div>
+
+</main>
+
+<!-- ═══════════ FOOTER (exact match) ═══════════ -->
+<footer>
+  <div class="social-icons">
+    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+    <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+  </div>
+  <p>&copy; 2026 ChaatBazaar. All rights reserved.</p>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  // ── Accordion ──
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // ── Category tab filter ──
+  document.querySelectorAll('.faq-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.faq-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const filter = tab.dataset.filter;
+      document.querySelectorAll('.faq-category').forEach(cat => {
+        cat.style.display = (filter === 'all' || cat.dataset.cat === filter) ? 'block' : 'none';
+      });
+
+      // Close open items when switching category
+      document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    });
+  });
+</script>
+</body>
+</html>

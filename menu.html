@@ -41,6 +41,15 @@
 
 <section class="menu-page container">
   <h1>Our Menu</h1>
+
+  <!-- Recently Viewed Section -->
+  <section id="recently-viewed" class="recently-viewed" role="region" aria-label="Recently Viewed Items" style="display: none;">
+    <h2 class="section-title">Recently Viewed</h2>
+    <div class="cards" id="recently-viewed-cards">
+      <!-- Recently viewed cards will be injected here -->
+    </div>
+  </section>
+
   <div class="filter-buttons" role="toolbar" aria-label="Filter menu categories">
     <button class="filter-btn active" data-filter="All" aria-pressed="true">All</button>
     <button class="filter-btn" data-filter="Snacks" aria-pressed="false">Snacks</button>
@@ -121,6 +130,11 @@
   <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
 </footer>
 
+<script src="js/accessibility.js"></script>
+<script src="js/sanitization.js"></script>
+<script src="js/cart-manager.js"></script>
+<script src="js/recently-viewed.js"></script>
+<script src="js/geolocation.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
