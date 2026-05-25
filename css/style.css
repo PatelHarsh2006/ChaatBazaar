@@ -2503,4 +2503,18 @@ body.dark .breakdown-row.final {
 .lang-toggle-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 98, 0, 0.35);
+}  
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: #fff;
+  color: #000;
+  padding: 0.5rem 1rem;
+  z-index: 9999;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
 }
