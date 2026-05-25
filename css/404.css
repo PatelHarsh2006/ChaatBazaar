@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  background: linear-gradient(120deg, #ffab91, #ff5722);;
+  background: linear-gradient(120deg, #ffab91, #ff5722);
 }
 
 .content-wrap {
@@ -19,7 +19,7 @@
 
 }
 
-food-trail {
+.food-trail {
   display: flex;
   justify-content: center;
   gap: 20px;
