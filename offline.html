@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline - ChaatBazar 🍴</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="favicon.png" type="image/png" />
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #fffcf5 0%, #fff3e0 100%);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      color: #4e342e;
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .offline-container {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 24px;
+      padding: 40px 30px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(93, 64, 55, 0.08);
+      transform: translateY(0);
+      transition: all 0.3s ease;
+    }
+
+    .offline-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(93, 64, 55, 0.12);
+    }
+
+    .offline-illustration {
+      font-size: 72px;
+      color: #ff7b54;
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 0px rgba(255, 123, 84, 0));
+      }
+      50% {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 15px rgba(255, 123, 84, 0.4));
+      }
+    }
+
+    .offline-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      color: #bf360c;
+    }
+
+    .offline-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #5d4037;
+      margin: 0 0 30px 0;
+    }
+
+    .btn-reconnect {
+      background: linear-gradient(135deg, #ff7b54 0%, #bf360c 100%);
+      color: #ffffff;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(191, 54, 12, 0.2);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      margin-bottom: 25px;
+    }
+
+    .btn-reconnect:hover {
+      background: linear-gradient(135deg, #ff8d6b 0%, #d84315 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(191, 54, 12, 0.3);
+    }
+
+    .btn-reconnect:active {
+      transform: translateY(1px);
+    }
+
+    .cached-nav {
+      border-top: 1px dashed rgba(93, 64, 55, 0.15);
+      padding-top: 20px;
+    }
+
+    .cached-nav-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #8d6e63;
+      margin-bottom: 15px;
+    }
+
+    .cached-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .cached-link {
+      color: #ff7b54;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      background: rgba(255, 123, 84, 0.05);
+      border-radius: 30px;
+      transition: all 0.2s ease;
+    }
+
+    .cached-link:hover {
+      background: rgba(255, 123, 84, 0.12);
+      color: #bf360c;
+    }
+
+    .badge-offline {
+      background: #efebe9;
+      color: #5d4037;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .dot-pulse {
+      width: 6px;
+      height: 6px;
+      background: #8d6e63;
+      border-radius: 50px;
+      animation: pulseDot 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.5); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="offline-container">
+    <div class="offline-illustration" role="img" aria-label="Disconnected signal illustration">
+      <i class="fa-solid fa-wifi-slash"></i>
+    </div>
+    
+    <h1 class="offline-title">Oops! You are Offline</h1>
+    <p class="offline-text">
+      ChaatBazaar is unable to connect to the server right now. Don't worry, your hot samosas and pani puris are waiting, and our app works offline!
+    </p>
+
+    <button id="reconnect-btn" class="btn-reconnect">
+      <i class="fa-solid fa-arrows-rotate"></i> Try Reconnecting
+    </button>
+
+    <div class="cached-nav">
+      <h3 class="cached-nav-title">Browse Saved Pages</h3>
+      <div class="cached-links">
+        <a href="./index.html" class="cached-link"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="./menu.html" class="cached-link"><i class="fa-solid fa-utensils"></i> Menu</a>
+        <a href="./cart.html" class="cached-link"><i class="fa-solid fa-cart-shopping"></i> Cart</a>
+        <a href="./orders.html" class="cached-link"><i class="fa-solid fa-receipt"></i> Orders</a>
+      </div>
+    </div>
+
+    <div class="badge-offline">
+      <div class="dot-pulse"></div> Offline Mode
+    </div>
+  </div>
+
+  <script>
+    const reconnectBtn = document.getElementById('reconnect-btn');
+    
+    reconnectBtn.addEventListener('click', () => {
+      reconnectBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Checking Connection...';
+      
+      // Simple timeout check
+      setTimeout(() => {
+        if (navigator.onLine) {
+          // If internet is back, redirect back to home page
+          window.location.href = './index.html';
+        } else {
+          reconnectBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Try Reconnecting';
+          
+          // Custom beautiful mini alert/notification
+          const toast = document.createElement('div');
+          toast.style.position = 'fixed';
+          toast.style.bottom = '20px';
+          toast.style.left = '50%';
+          toast.style.transform = 'translateX(-50%)';
+          toast.style.background = '#4e342e';
+          toast.style.color = '#ffffff';
+          toast.style.padding = '12px 24px';
+          toast.style.borderRadius = '30px';
+          toast.style.boxShadow = '0 10px 20px rgba(0,0,0,0.2)';
+          toast.style.fontSize = '0.9rem';
+          toast.style.zIndex = '1000';
+          toast.textContent = "Still offline. Please check your internet connection.";
+          
+          document.body.appendChild(toast);
+          
+          setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => toast.remove(), 500);
+          }, 3000);
+        }
+      }, 1000);
+    });
+
+    // Automatically redirect if connection is restored
+    window.addEventListener('online', () => {
+      window.location.href = './index.html';
+    });
+  </script>
+</body>
+</html>

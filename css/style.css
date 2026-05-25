@@ -1718,3 +1718,457 @@ button:disabled {
   transform: none !important;
   opacity: 0.6;
 }
+
+/* ===== PWA Connection Badge & Toast System ===== */
+
+/* 1. Header Connection Badge */
+.connection-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  border: 1px solid transparent;
+}
+
+.connection-badge.online {
+  background: rgba(46, 125, 50, 0.1);
+  color: #e8f5e9; /* Light text for high contrast against orange header background */
+  border-color: rgba(232, 245, 233, 0.2);
+}
+
+.connection-badge.offline {
+  background: rgba(93, 64, 55, 0.15);
+  color: #efebe9;
+  border-color: rgba(239, 235, 233, 0.2);
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  position: relative;
+  display: inline-block;
+}
+
+.online .badge-dot {
+  background: #4caf50;
+  box-shadow: 0 0 0 rgba(76, 175, 80, 0.4);
+  animation: pulseDotGreen 2s infinite;
+}
+
+.offline .badge-dot {
+  background: #a1887f;
+  box-shadow: 0 0 0 rgba(161, 136, 127, 0.4);
+  animation: pulseDotGrey 2s infinite;
+}
+
+@keyframes pulseDotGreen {
+  0% { box-shadow: 0 0 0 0px rgba(76, 175, 80, 0.7); }
+  70% { box-shadow: 0 0 0 6px rgba(76, 175, 80, 0); }
+  100% { box-shadow: 0 0 0 0px rgba(76, 175, 80, 0); }
+}
+
+@keyframes pulseDotGrey {
+  0% { box-shadow: 0 0 0 0px rgba(161, 136, 127, 0.7); }
+  70% { box-shadow: 0 0 0 6px rgba(161, 136, 127, 0); }
+  100% { box-shadow: 0 0 0 0px rgba(161, 136, 127, 0); }
+}
+
+/* 2. Toast Container & Alerts */
+#toast-container {
+  position: fixed;
+  top: 85px; /* Offset below sticky header */
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 380px;
+  width: calc(100% - 40px);
+  pointer-events: none;
+}
+
+.chaat-toast {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-left: 5px solid #ff5722;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 10px 25px rgba(93, 64, 55, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: #3e2723;
+  pointer-events: auto;
+  transform: translateX(120%);
+  animation: slideInToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
+  transition: all 0.3s ease;
+}
+
+.chaat-toast.toast-dismissing {
+  transform: translateX(120%);
+  opacity: 0;
+  margin-top: -70px; /* Collapse space */
+}
+
+@keyframes slideInToast {
+  to { transform: translateX(0); }
+}
+
+.toast-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.toast-message {
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.4;
+  flex-grow: 1;
+}
+
+.toast-close {
+  background: transparent;
+  border: none;
+  color: #8d6e63;
+  font-size: 1.4rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.toast-close:hover {
+  color: #bf360c;
+}
+
+/* Toast Color States */
+.toast-success {
+  border-left-color: #2e7d32;
+}
+.toast-success .toast-icon {
+  color: #2e7d32;
+}
+
+.toast-warning {
+  border-left-color: #f57c00;
+}
+.toast-warning .toast-icon {
+  color: #f57c00;
+}
+
+.toast-error {
+  border-left-color: #c62828;
+}
+.toast-error .toast-icon {
+  color: #c62828;
+}
+
+.toast-info {
+  border-left-color: #0277bd;
+}
+.toast-info .toast-icon {
+  color: #0277bd;
+}
+
+/* 3. Custom PWA Modal Backdrop & Container */
+.chaat-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(62, 39, 35, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInOverlay 0.3s ease forwards;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.chaat-modal {
+  background: #fffcf8;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 24px;
+  box-shadow: 0 25px 50px rgba(93, 64, 55, 0.15);
+  max-width: 440px;
+  width: calc(100% - 40px);
+  padding: 35px 30px;
+  text-align: center;
+  transform: scale(0.9);
+  opacity: 0;
+  animation: scaleInModal 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes scaleInModal {
+  to { transform: scale(1); opacity: 1; }
+}
+
+.chaat-modal-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(255, 87, 34, 0.1);
+  color: #ff5722;
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.chaat-modal-title {
+  color: #bf360c;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+}
+
+.chaat-modal-desc {
+  color: #5d4037;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 25px 0;
+}
+
+.chaat-modal-btn {
+  background: linear-gradient(135deg, #ff7b54 0%, #bf360c 100%);
+  color: white;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 12px 30px;
+  border-radius: 50px;
+  box-shadow: 0 8px 20px rgba(191, 54, 12, 0.2);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  width: 100%;
+}
+
+.chaat-modal-btn:hover {
+  background: linear-gradient(135deg, #ff8d6b 0%, #d84315 100%);
+  transform: translateY(-1px);
+}
+
+/* Connection indicator responsiveness fix */
+@media (max-width: 768px) {
+  #toast-container {
+    top: 20px;
+  }
+}
+
+/* 4. Custom PWA Install Banner styling */
+.pwa-install-banner {
+  background: #fffcf4;
+  border-bottom: 2px solid rgba(255, 87, 34, 0.15);
+  border-left: 5px solid #ff5722;
+  box-shadow: 0 4px 15px rgba(93, 64, 55, 0.05);
+  padding: 12px 0;
+  z-index: 999;
+  width: 100%;
+  animation: slideDownBanner 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideDownBanner {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+.pwa-install-banner.banner-slide-up {
+  animation: slideUpBanner 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUpBanner {
+  to { transform: translateY(-100%); margin-bottom: -60px; opacity: 0; }
+}
+
+.banner-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.banner-content-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.banner-icon-badge {
+  font-size: 2rem;
+  animation: floatIcon 2.5s infinite ease-in-out;
+}
+
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.banner-info-text {
+  display: flex;
+  flex-direction: column;
+  color: #3e2723;
+  text-align: left;
+}
+
+.banner-info-text strong {
+  font-size: 1.05rem;
+  color: #bf360c;
+}
+
+.banner-info-text span {
+  font-size: 0.88rem;
+  color: #5d4037;
+  margin-top: 2px;
+}
+
+.banner-content-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.btn-banner-install {
+  background: linear-gradient(135deg, #ff7b54 0%, #bf360c 100%);
+  color: white;
+  border: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 8px 20px;
+  border-radius: 50px;
+  box-shadow: 0 4px 10px rgba(191, 54, 12, 0.2);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-banner-install:hover {
+  background: linear-gradient(135deg, #ff8d6b 0%, #d84315 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(191, 54, 12, 0.3);
+}
+
+.btn-banner-dismiss {
+  background: transparent;
+  border: none;
+  color: #8d6e63;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: color 0.2s ease;
+}
+
+.btn-banner-dismiss:hover {
+  color: #bf360c;
+}
+
+/* 5. iOS Specific Install Tooltip Styling */
+.pwa-ios-tip {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fffcf6;
+  border: 1px solid rgba(255, 87, 34, 0.15);
+  border-top: 4px solid #ff5722;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 15px 35px rgba(93, 64, 55, 0.15);
+  max-width: 340px;
+  width: calc(100% - 40px);
+  z-index: 9999;
+  color: #3e2723;
+  animation: slideInIosTip 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes slideInIosTip {
+  from { transform: translate(-50%, 120%); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.pwa-ios-tip.ios-tip-dismissing {
+  animation: slideOutIosTip 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideOutIosTip {
+  to { transform: translate(-50%, 120%); opacity: 0; }
+}
+
+.ios-tip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: #bf360c;
+  font-size: 0.95rem;
+}
+
+.ios-close-btn {
+  background: transparent;
+  border: none;
+  color: #8d6e63;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.ios-close-btn:hover {
+  color: #bf360c;
+}
+
+.ios-tip-desc {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin: 0;
+  color: #5d4037;
+  text-align: left;
+}
+
+.ios-tip-desc i {
+  color: #0277bd;
+  margin: 0 2px;
+  font-size: 0.95rem;
+}
+
+/* Responsiveness for banner */
+@media (max-width: 600px) {
+  .pwa-install-banner {
+    padding: 10px 0;
+  }
+  .banner-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  .banner-content-left {
+    flex-direction: column;
+    gap: 5px;
+    text-align: center;
+  }
+  .banner-info-text {
+    text-align: center;
+  }
+}
+

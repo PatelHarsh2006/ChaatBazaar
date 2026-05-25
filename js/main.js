@@ -377,7 +377,9 @@ function renderOrdersList() {
   const container = document.getElementById("orders-container");
   if (!container) return;
 
-  if (orders.length === 0) {
+  const pendingOrders = JSON.parse(localStorage.getItem('chaatPendingOrders')) || [];
+
+  if (orders.length === 0 && pendingOrders.length === 0) {
     container.innerHTML = `
       <div class="empty-orders">
         <h2>No Orders Found</h2>
@@ -390,6 +392,59 @@ function renderOrdersList() {
 
   container.innerHTML = "";
 
+  // 1. Render pending offline queued orders first
+  pendingOrders.forEach(order => {
+    const card = document.createElement("article");
+    card.className = "order-card pending-offline-order";
+    card.style.border = "2px dashed #ff7b54";
+    card.style.background = "#fffbf0";
+    card.style.position = "relative";
+    card.style.boxShadow = "0 8px 20px rgba(255, 123, 84, 0.08)";
+    
+    let itemsHtml = "";
+    order.items.forEach(ci => {
+      itemsHtml += `
+        <div class="order-item-row">
+          <span>${ci.item.name} × ${ci.quantity}</span>
+          <span>${formatPrice(ci.item.price * ci.quantity)}</span>
+        </div>
+      `;
+    });
+
+    card.innerHTML = `
+      <div class="order-card-header">
+        <div class="order-meta-info">
+          <span class="order-id">Order ID: <strong>${order.id}</strong> <span style="color:#d84315;font-weight:600;">(Offline Queue)</span></span>
+          <span class="order-date">${order.date}</span>
+          ${order.deliveryDistance ? `<span class="order-distance">📍 Distance: ${order.deliveryDistance.toFixed(2)} km</span>` : ""}
+        </div>
+        <span class="status-badge" style="background:#ffe0b2;color:#e65100;border:1px solid #ffcc80;"><i class="fa-solid fa-wifi-slash"></i> Queued Offline</span>
+      </div>
+
+      <div class="order-timeline" style="opacity: 0.6; margin-bottom: 1.5rem;">
+        <div class="timeline-step active current">
+          <div class="step-circle" style="background:#ff7b54;color:white;"><i class="fa-solid fa-hourglass-half"></i></div>
+          <span class="step-label" style="color:#d84315;font-weight:600;">Waiting for network...</span>
+        </div>
+      </div>
+
+      <div class="order-items-list">
+        ${itemsHtml}
+      </div>
+
+      <div class="order-card-footer" style="border-top:1px dashed rgba(93,64,55,0.1);padding-top:1rem;margin-top:1rem;">
+        <div class="order-total-price">
+          <span>Total Price:</span>
+          <strong>${formatPrice(order.total)}</strong>
+        </div>
+        <span style="font-size:0.85rem;color:#bf360c;font-weight:600;"><i class="fa-solid fa-arrows-spin fa-spin"></i> Auto-submits on reconnect</span>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+
+  // 2. Render standard committed orders
   orders.forEach(order => {
     const card = document.createElement("article");
     card.className = "order-card";
@@ -480,14 +535,22 @@ window.filterCategory = function(category) {
 
 window.checkout = async function() {
   if (cart.length === 0) {
-    alert("Your cart is empty!");
+    if (window.showChaatToast) {
+      window.showChaatToast("Your cart is empty!", "warning");
+    } else {
+      alert("Your cart is empty!");
+    }
     return;
   }
 
   const validationResult = await validateDeliveryLocation();
 
   if (!validationResult.valid) {
-    alert(validationResult.error);
+    if (window.showChaatToast) {
+      window.showChaatToast(validationResult.error, "error");
+    } else {
+      alert(validationResult.error);
+    }
     return;
   }
 
@@ -510,15 +573,94 @@ window.checkout = async function() {
     restaurantLocation: validationResult.restaurantLocation
   };
 
-  orders.unshift(newOrder);
-  localStorage.setItem('chaatOrders', JSON.stringify(orders));
+  // CHECK CONNECTIVITY FOR OFFLINE RESILIENCE
+  if (!navigator.onLine) {
+    // 1. Save to Offline Queue
+    const pendingOrders = JSON.parse(localStorage.getItem('chaatPendingOrders')) || [];
+    pendingOrders.unshift(newOrder);
+    localStorage.setItem('chaatPendingOrders', JSON.stringify(pendingOrders));
 
-  cartManager.clear();
-  updateCartCount();
-  renderCart();
+    // 2. Clear Cart
+    cartManager.clear();
+    updateCartCount();
+    renderCart();
 
-  alert("Thank you for your order! Your hot street food is on the way. Redirecting to your Orders dashboard...");
-  window.location.href = "orders.html";
+    // 3. Show Beautiful Custom Offline Modal Overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'chaat-modal-overlay';
+    overlay.innerHTML = `
+      <div class="chaat-modal">
+        <div class="chaat-modal-icon"><i class="fa-solid fa-wifi-slash"></i></div>
+        <h2 class="chaat-modal-title">Offline Order Queued!</h2>
+        <p class="chaat-modal-desc">
+          You are currently offline. Your order (ID: <strong>${newOrder.id}</strong>) has been queued locally and will be processed immediately once you reconnect.
+        </p>
+        <button class="chaat-modal-btn" id="close-offline-modal">View Dashboard</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('#close-offline-modal').addEventListener('click', () => {
+      overlay.remove();
+      window.location.href = "orders.html";
+    });
+
+  } else {
+    // Standard Online Checkout Flow
+    orders.unshift(newOrder);
+    localStorage.setItem('chaatOrders', JSON.stringify(orders));
+
+    cartManager.clear();
+    updateCartCount();
+    renderCart();
+
+    if (window.showChaatToast) {
+      window.showChaatToast("Thank you! Your order was placed successfully.", "success");
+      setTimeout(() => {
+        window.location.href = "orders.html";
+      }, 1500);
+    } else {
+      alert("Thank you for your order! Your hot street food is on the way. Redirecting to your Orders dashboard...");
+      window.location.href = "orders.html";
+    }
+  }
+};
+
+// Auto-Sync Offline Orders Queue when back online
+window.syncPendingOrders = function() {
+  const pending = localStorage.getItem('chaatPendingOrders');
+  if (!pending) return;
+
+  try {
+    const pendingOrders = JSON.parse(pending);
+    if (pendingOrders.length === 0) return;
+
+    console.log(`[Sync Engine] Synchronizing ${pendingOrders.length} queued offline order(s)`);
+
+    // Transfer orders from offline queue to active dashboard orders
+    const activeOrders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
+    
+    // Add pending orders to the beginning of active orders (and set status to Pending)
+    pendingOrders.reverse().forEach(order => {
+      order.status = "Pending";
+      order.timestamp = Date.now(); // Reset timestamp for tracking status progress correctly
+      activeOrders.unshift(order);
+      
+      if (window.showChaatToast) {
+        window.showChaatToast(`Queued Order ${order.id} is synced successfully!`, 'success');
+      }
+    });
+
+    localStorage.setItem('chaatOrders', JSON.stringify(activeOrders));
+    localStorage.removeItem('chaatPendingOrders');
+
+    // Update global orders state and refresh view
+    orders = activeOrders;
+    renderOrdersList();
+
+  } catch (error) {
+    console.error('[Sync Engine] Error syncing pending orders:', error);
+  }
 };
 
 window.reorderOrder = function(orderId) {
@@ -936,6 +1078,11 @@ async function init() {
 
   // Run dynamic order rendering and simulated status progress updates
   renderOrdersList();
+  
+  if (navigator.onLine) {
+    window.syncPendingOrders();
+  }
+
   updateOrderStatuses();
   setInterval(updateOrderStatuses, 3000); // Check status progress every 3s
 }
