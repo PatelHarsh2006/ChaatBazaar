@@ -2,7 +2,21 @@ let menuItems = [];
 let currentCategory = "All";
 let orders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
 
-// ===== Fetch Menu Data =====
+// Initialize cart from cart manager (will be set after DOM loads)
+let cart = [];
+
+// Will be initialized in setupCartManager() after document loads
+function setupCartManager() {
+  cart = cartManager.getItems();
+
+  // Subscribe to cart changes to keep cart variable in sync
+  cartManager.subscribe((items) => {
+    cart = [...items];
+  });
+
+  // Validate cart integrity
+  cartManager.validate();
+}
 async function loadMenuData() {
   try {
     const response = await fetch("data/menu.json");
@@ -25,11 +39,7 @@ const cartItemsContainer = document.getElementById("cart-items");
 const cartTotal = document.getElementById("cart-total") || document.getElementById("total-price");
 const checkoutBtn = document.getElementById("checkout-btn");
 
-let cart = JSON.parse(localStorage.getItem('chaatCart')) || [];
-
-function saveCart() {
-  localStorage.setItem('chaatCart', JSON.stringify(cart));
-}
+// Cart is managed by CartManager - initialized in main startup
 
 function formatPrice(price) {
   return `₹${price}`;
@@ -79,6 +89,16 @@ function createCard(item, highlightQuery = "") {
   const highlightedName = highlightText(item.name, highlightQuery);
   const highlightedDesc = highlightText(item.description, highlightQuery);
 
+  //Check if item is available (default to true if field doesn't exist)
+  const isAvailable = item.available !== undefined ? item.available : true;
+
+  //Creates out of stock badge (ONLY if unavailable)
+  const outOfStockBadge = !isAvailable ? '<span class="out-of-stock-badge">Out of Stock ❌</span>' : '';
+
+  //Disables button and change color if out of stock
+  const buttonDisabled = !isAvailable ? 'disabled' : '';
+  const buttonColor = isAvailable ? '#28a745' : '#cccccc';
+
   card.innerHTML = `
     <img src="${item.image}" alt="${item.name}" loading="lazy" />
     <div class="card-content">
@@ -89,15 +109,35 @@ function createCard(item, highlightQuery = "") {
       <h3>${highlightedName}</h3>
       <p>${highlightedDesc}</p>
       <div class="card-tags">${dietaryTags}</div>
+      ${outOfStockBadge}  <!-- ✅ NEW: Badge added here -->
     </div>
     <div class="card-footer">
       <span class="price">${formatPrice(item.price)}</span>
-      <button class="add-btn" aria-label="Add ${item.name} to cart">Add</button>
+      <button class="add-btn" 
+        aria-label="Add ${item.name} to cart" 
+        ${buttonDisabled}
+        style="background-color: ${buttonColor};">
+        Add
+      </button>
     </div>
   `;
 
   const addBtn = card.querySelector(".add-btn");
-  addBtn.addEventListener("click", () => addToCart(item.id));
+  //Only add event listener if item is available
+  if (isAvailable) {
+    addBtn.addEventListener("click", () => addToCart(item.id));
+  } else {
+    // Optional: Add click handler to show alert
+    addBtn.addEventListener("click", () => {
+      alert(`${item.name} is currently out of stock!`);
+    });
+  }
+
+
+  card.addEventListener("click", () => {
+    RecentlyViewed.addItem(item);
+    renderRecentlyViewed();
+  });
 
   return card;
 }
@@ -119,6 +159,25 @@ function renderSpecials() {
 function renderMenu(filter = "All") {
   currentCategory = filter;
   applyAllFilters();
+}
+
+function renderRecentlyViewed() {
+  const recentlyViewedContainer = document.getElementById("recently-viewed-cards");
+  const recentlyViewedSection = document.getElementById("recently-viewed");
+  if (!recentlyViewedContainer || !recentlyViewedSection) return;
+
+  const recentItems = RecentlyViewed.getItems();
+  recentlyViewedContainer.innerHTML = "";
+
+  if (recentItems.length === 0) {
+    recentlyViewedSection.style.display = "none";
+    return;
+  }
+
+  recentlyViewedSection.style.display = "block";
+  recentItems.forEach(item => {
+    recentlyViewedContainer.appendChild(createCard(item));
+  });
 }
 
 // ===== Unified Interactive Filter Engine =====
@@ -356,6 +415,7 @@ function renderOrdersList() {
         <div class="order-meta-info">
           <span class="order-id">Order ID: <strong>${order.id}</strong></span>
           <span class="order-date">${order.date}</span>
+          ${order.deliveryDistance ? `<span class="order-distance">📍 Distance: ${order.deliveryDistance.toFixed(2)} km</span>` : ""}
         </div>
         <span class="status-badge ${statusClass}">${order.status}</span>
       </div>
@@ -418,9 +478,16 @@ window.filterCategory = function(category) {
   });
 };
 
-window.checkout = function() {
+window.checkout = async function() {
   if (cart.length === 0) {
     alert("Your cart is empty!");
+    return;
+  }
+
+  const validationResult = await validateDeliveryLocation();
+
+  if (!validationResult.valid) {
+    alert(validationResult.error);
     return;
   }
 
@@ -433,16 +500,22 @@ window.checkout = function() {
     timestamp: Date.now(),
     items: JSON.parse(JSON.stringify(cart)),
     total: cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0),
-    status: "Pending"
+    status: "Pending",
+    deliveryAddress: {
+      latitude: validationResult.userLocation.latitude,
+      longitude: validationResult.userLocation.longitude,
+      source: validationResult.userLocation.source
+    },
+    deliveryDistance: validationResult.distance,
+    restaurantLocation: validationResult.restaurantLocation
   };
 
   orders.unshift(newOrder);
   localStorage.setItem('chaatOrders', JSON.stringify(orders));
 
-  cart = [];
+  cartManager.clear();
   updateCartCount();
   renderCart();
-  saveCart();
 
   alert("Thank you for your order! Your hot street food is on the way. Redirecting to your Orders dashboard...");
   window.location.href = "orders.html";
@@ -453,20 +526,11 @@ window.reorderOrder = function(orderId) {
   if (!pastOrder) return;
 
   pastOrder.items.forEach(orderItem => {
-    const existingCartItem = cart.find(ci => ci.item.id === orderItem.item.id);
-    if (existingCartItem) {
-      existingCartItem.quantity += orderItem.quantity;
-    } else {
-      cart.push({
-        item: orderItem.item,
-        quantity: orderItem.quantity
-      });
-    }
+    cartManager.addItem(orderItem.item, orderItem.quantity);
   });
 
   updateCartCount();
   renderCart();
-  saveCart();
 
   alert("Items added back to your cart successfully!");
 
@@ -483,17 +547,17 @@ function addToCart(id) {
   const item = menuItems.find(i => i.id === id);
   if (!item) return;
 
-  const cartItem = cart.find(ci => ci.item.id === id);
-  if (cartItem) {
-    cartItem.quantity++;
-  } else {
-    cart.push({ item, quantity: 1 });
+   //Check if item is available
+  const isAvailable = item.available !== undefined ? item.available : true;
+  if (!isAvailable) {
+    alert(`${item.name} is currently out of stock!`);
+    return;
   }
+
+  cartManager.addItem(item, 1);
   updateCartCount();
   renderCart();
-  saveCart();
 
-  // Slide open the cart sidebar automatically for a premium UX when adding items on index.html
   if (cartSidebar) {
     cartSidebar.setAttribute("aria-hidden", "false");
     cartSidebar.classList.add("open");
@@ -501,17 +565,16 @@ function addToCart(id) {
 }
 
 function removeFromCart(id) {
-  const cartIndex = cart.findIndex(ci => ci.item.id === id);
-  if (cartIndex === -1) return;
+  const cartItem = cartManager.getItem(id);
+  if (!cartItem) return;
 
-  if (cart[cartIndex].quantity > 1) {
-    cart[cartIndex].quantity--;
+  if (cartItem.quantity > 1) {
+    cartManager.decreaseQuantity(id);
   } else {
-    cart.splice(cartIndex, 1);
+    cartManager.removeItem(id);
   }
   updateCartCount();
   renderCart();
-  saveCart();
 }
 
 // ===== Event Listeners =====
@@ -759,37 +822,14 @@ function setupContactForm() {
     errorMessage.textContent = "";
     formSuccess.style.display = "none";
 
-    const nameVal    = nameInput.value.trim();
-    const emailVal   = emailInput.value.trim();
-    const messageVal = messageInput.value.trim();
+    const validation = validateAndSanitizeContactForm(nameInput.value, emailInput.value, messageInput.value);
 
-    let valid = true;
-
-    if (nameVal === "") {
-      errorName.textContent = "Name is required.";
-      valid = false;
-    } else if (nameVal.length < 2) {
-      errorName.textContent = "Name must be at least 2 characters.";
-      valid = false;
+    if (!validation.valid) {
+      if (validation.errors.name) errorName.textContent = validation.errors.name;
+      if (validation.errors.email) errorEmail.textContent = validation.errors.email;
+      if (validation.errors.message) errorMessage.textContent = validation.errors.message;
+      return;
     }
-
-    if (emailVal === "") {
-      errorEmail.textContent = "Email is required.";
-      valid = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
-      errorEmail.textContent = "Please enter a valid email address.";
-      valid = false;
-    }
-
-    if (messageVal === "") {
-      errorMessage.textContent = "Message is required.";
-      valid = false;
-    } else if (messageVal.length < 10) {
-      errorMessage.textContent = "Message must be at least 10 characters.";
-      valid = false;
-    }
-
-    if (!valid) return;
 
     formSuccess.style.display = "block";
     setTimeout(() => {
@@ -807,9 +847,10 @@ function setupNewsletterForm() {
   newsletterForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const emailVal = emailInput.value.trim();
-    if (!emailVal || !/\S+@\S+\.\S+/.test(emailVal)) {
-      alert("Please enter a valid email address.");
+    const validation = validateAndSanitizeEmail(emailInput.value);
+
+    if (!validation.valid) {
+      alert(validation.error);
       return;
     }
 
@@ -864,6 +905,9 @@ function setupActiveNavbar() {
 // ===== Initialization =====
 
 async function init() {
+  // Initialize cart manager first to sync cart state
+  setupCartManager();
+
   // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
   setupCartToggle();
   setupFilterButtons();
@@ -885,6 +929,7 @@ async function init() {
   await loadMenuData();
 
   renderSpecials();
+  renderRecentlyViewed();
   applyAllFilters();
   updateCartCount();
   renderCart();
