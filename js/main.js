@@ -1,9 +1,9 @@
 let menuItems = [];
 let currentCategory = "All";
-let orders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
+let orders = JSON.parse(localStorage.getItem("chaatOrders")) || [];
+let cart = [];
 
 // Initialize cart from cart manager (will be set after DOM loads)
-let cart = [];
 let loyaltyPointsApplied = false;
 
 // Will be initialized in setupCartManager() after document loads
@@ -26,7 +26,10 @@ async function loadMenuData() {
     }
     menuItems = await response.json();
   } catch (error) {
-    console.warn("Failed to load menu data via fetch, attempting fallback script:", error);
+    console.warn(
+      "Failed to load menu data via fetch, attempting fallback script:",
+      error,
+    );
     try {
       await new Promise((resolve, reject) => {
         const script = document.createElement("script");
@@ -50,11 +53,15 @@ async function loadMenuData() {
 
 // ===== Globals =====
 const specialsContainer = document.getElementById("specials-cards");
-const menuContainer = document.getElementById("menu-cards") || document.getElementById("menu-container");
+const menuContainer =
+  document.getElementById("menu-cards") ||
+  document.getElementById("menu-container");
 const cartCount = document.getElementById("cart-count");
 const cartSidebar = document.getElementById("cart-sidebar");
 const cartItemsContainer = document.getElementById("cart-items");
-const cartTotal = document.getElementById("cart-total") || document.getElementById("total-price");
+const cartTotal =
+  document.getElementById("cart-total") ||
+  document.getElementById("total-price");
 const checkoutBtn = document.getElementById("checkout-btn");
 
 const couponCodeInput = document.getElementById("coupon-code-input");
@@ -67,14 +74,12 @@ const couponDiscountRow = document.getElementById("coupon-discount-row");
 const couponGrandTotalEl = document.getElementById("coupon-grand-total");
 const appliedCouponLabel = document.getElementById("applied-coupon-label");
 
-const COUPON_STORAGE_KEY = 'chaatCoupon';
+const COUPON_STORAGE_KEY = "chaatCoupon";
 const coupons = {
   WELCOME10: { type: "percent", value: 10 },
-  SAVE50: { type: "flat", value: 50 }
+  SAVE50: { type: "flat", value: 50 },
 };
 let activeCoupon = null;
-
-// Cart is managed by CartManager - initialized in main startup
 
 function formatPrice(price) {
   return `₹${price}`;
@@ -109,22 +114,27 @@ function loadCouponFromStorage() {
 
 function saveCouponToStorage() {
   if (activeCoupon) {
-    localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify({ code: activeCoupon.code, appliedAt: Date.now() }));
+    localStorage.setItem(
+      COUPON_STORAGE_KEY,
+      JSON.stringify({ code: activeCoupon.code, appliedAt: Date.now() }),
+    );
   } else {
     localStorage.removeItem(COUPON_STORAGE_KEY);
   }
 }
 
 function validateCouponCode(input) {
-  const code = String(input || '').trim().toUpperCase();
+  const code = String(input || "")
+    .trim()
+    .toUpperCase();
 
   if (!code) {
-    return { valid: false, message: 'Enter a coupon code.' };
+    return { valid: false, message: "Enter a coupon code." };
   }
 
   const coupon = coupons[code];
   if (!coupon) {
-    return { valid: false, message: 'Invalid or expired coupon.' };
+    return { valid: false, message: "Invalid or expired coupon." };
   }
 
   return { valid: true, code, coupon };
@@ -133,25 +143,28 @@ function validateCouponCode(input) {
 function calculateCouponDiscount(subtotal) {
   if (!activeCoupon) return 0;
 
-  if (activeCoupon.type === 'percent') {
-    return Math.min(Math.round((subtotal * activeCoupon.value) / 100), subtotal);
+  if (activeCoupon.type === "percent") {
+    return Math.min(
+      Math.round((subtotal * activeCoupon.value) / 100),
+      subtotal,
+    );
   }
 
-  if (activeCoupon.type === 'flat') {
+  if (activeCoupon.type === "flat") {
     return Math.min(activeCoupon.value, subtotal);
   }
 
   return 0;
 }
 
-function showCouponMessage(message, type = 'success') {
+function showCouponMessage(message, type = "success") {
   if (couponMessage) {
     couponMessage.textContent = message;
-    couponMessage.classList.toggle('success', type === 'success');
-    couponMessage.classList.toggle('error', type === 'error');
+    couponMessage.classList.toggle("success", type === "success");
+    couponMessage.classList.toggle("error", type === "error");
   }
 
-  showToast(type === 'success' ? `✅ ${message}` : `⚠️ ${message}`);
+  showToast(type === "success" ? `✅ ${message}` : `⚠️ ${message}`);
 }
 
 function updateCartSummary() {
@@ -160,33 +173,40 @@ function updateCartSummary() {
   const total = Math.max(subtotal - discount, 0);
 
   if (couponSubtotalEl) couponSubtotalEl.textContent = formatPrice(subtotal);
-  if (couponDiscountEl) couponDiscountEl.textContent = `- ${formatPrice(discount)}`;
-  if (couponDiscountRow) couponDiscountRow.style.display = discount > 0 ? 'flex' : 'none';
+  if (couponDiscountEl)
+    couponDiscountEl.textContent = `- ${formatPrice(discount)}`;
+  if (couponDiscountRow)
+    couponDiscountRow.style.display = discount > 0 ? "flex" : "none";
   if (couponGrandTotalEl) {
     couponGrandTotalEl.textContent = formatPrice(total);
   } else if (cartTotal) {
     cartTotal.textContent = `Total: ${formatPrice(total)}`;
   }
-  if (appliedCouponLabel) appliedCouponLabel.textContent = activeCoupon ? `Coupon applied: ${activeCoupon.code}` : '';
+  if (appliedCouponLabel)
+    appliedCouponLabel.textContent = activeCoupon
+      ? `Coupon applied: ${activeCoupon.code}`
+      : "";
 
   if (checkoutBtn) checkoutBtn.disabled = cart.length === 0;
 }
 
 function applyCouponCode() {
-  const result = validateCouponCode(couponCodeInput ? couponCodeInput.value : '');
+  const result = validateCouponCode(
+    couponCodeInput ? couponCodeInput.value : "",
+  );
 
   if (!result.valid) {
     activeCoupon = null;
     saveCouponToStorage();
-    showCouponMessage(result.message, 'error');
+    showCouponMessage(result.message, "error");
     updateCartSummary();
     return false;
   }
 
   activeCoupon = { code: result.code, ...result.coupon };
   saveCouponToStorage();
-  showCouponMessage(`${result.code} applied!`, 'success');
-  if (removeCouponBtn) removeCouponBtn.style.display = 'inline-flex';
+  showCouponMessage(`${result.code} applied!`, "success");
+  if (removeCouponBtn) removeCouponBtn.style.display = "inline-flex";
   updateCartSummary();
   return true;
 }
@@ -195,20 +215,20 @@ function removeCoupon() {
   activeCoupon = null;
   saveCouponToStorage();
 
-  if (couponCodeInput) couponCodeInput.value = '';
-  if (removeCouponBtn) removeCouponBtn.style.display = 'none';
-  showCouponMessage('Coupon removed.', 'success');
+  if (couponCodeInput) couponCodeInput.value = "";
+  if (removeCouponBtn) removeCouponBtn.style.display = "none";
+  showCouponMessage("Coupon removed.", "success");
   updateCartSummary();
 }
 
 function setupCouponListeners() {
   if (applyCouponBtn) {
-    applyCouponBtn.addEventListener('click', applyCouponCode);
+    applyCouponBtn.addEventListener("click", applyCouponCode);
   }
 
   if (couponCodeInput) {
-    couponCodeInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
+    couponCodeInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
         event.preventDefault();
         applyCouponCode();
       }
@@ -216,7 +236,7 @@ function setupCouponListeners() {
   }
 
   if (removeCouponBtn) {
-    removeCouponBtn.addEventListener('click', removeCoupon);
+    removeCouponBtn.addEventListener("click", removeCoupon);
   }
 
   if (loadCouponFromStorage() && couponCodeInput) {
@@ -224,7 +244,7 @@ function setupCouponListeners() {
   }
 
   if (activeCoupon && removeCouponBtn) {
-    removeCouponBtn.style.display = 'inline-flex';
+    removeCouponBtn.style.display = "inline-flex";
   }
 
   updateCartSummary();
@@ -253,7 +273,7 @@ function fuzzyMatch(target, query) {
 function highlightText(text, query) {
   if (!text) return "";
   if (!query) return text;
-  const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
   const regex = new RegExp(`(${escapedQuery})`, "gi");
   return text.replace(regex, "<mark class='highlight'>$1</mark>");
 }
@@ -264,11 +284,19 @@ function createCard(item, highlightQuery = "") {
   const card = document.createElement("article");
   card.className = "card";
   card.tabIndex = 0;
-  card.setAttribute("aria-label", `${item.name} - ${item.description}. Price: ${formatPrice(item.price)}.`);
+  card.setAttribute(
+    "aria-label",
+    `${item.name} - ${item.description}. Price: ${formatPrice(item.price)}.`,
+  );
 
   const ratingStars = "⭐".repeat(Math.round(item.rating || 5));
-  const dietaryTags = item.dietary ? item.dietary.map(d => `<span class="tag tag-${d}">${d}</span>`).join(" ") : "";
-  const spiceIcon = item.spice === "High" ? "🌶️🌶️🌶️" : item.spice === "Medium" ? "🌶️🌶️" : "🌶️";
+  const dietaryTags = item.dietary
+    ? item.dietary
+        .map((d) => `<span class="tag tag-${d}">${d}</span>`)
+        .join(" ")
+    : "";
+  const spiceIcon =
+    item.spice === "High" ? "🌶️🌶️🌶️" : item.spice === "Medium" ? "🌶️🌶️" : "🌶️";
 
   const highlightedName = highlightText(item.name, highlightQuery);
   const highlightedDesc = highlightText(item.description, highlightQuery);
@@ -277,17 +305,19 @@ function createCard(item, highlightQuery = "") {
   const isAvailable = item.available !== undefined ? item.available : true;
 
   //Creates out of stock badge (ONLY if unavailable)
-  const outOfStockBadge = !isAvailable ? '<span class="out-of-stock-badge">Out of Stock ❌</span>' : '';
+  const outOfStockBadge = !isAvailable
+    ? '<span class="out-of-stock-badge">Out of Stock ❌</span>'
+    : "";
 
   //Disables button and change color if out of stock
-  const buttonDisabled = !isAvailable ? 'disabled' : '';
-  const buttonColor = isAvailable ? '#28a745' : '#cccccc';
+  const buttonDisabled = !isAvailable ? "disabled" : "";
+  const buttonColor = isAvailable ? "#28a745" : "#cccccc";
 
   card.innerHTML = `
     <img src="${item.image}" alt="${item.name}" loading="lazy" />
     <div class="card-content">
       <div class="card-meta">
-        <span class="rating" title="Rating: ${item.rating || 5.0}">${ratingStars} ${item.rating || '5.0'}</span>
+        <span class="rating" title="Rating: ${item.rating || 5.0}">${ratingStars} ${item.rating || "5.0"}</span>
         <span class="spice" title="Spice level: ${item.spice}">${spiceIcon}</span>
       </div>
       <h3>${highlightedName}</h3>
@@ -317,7 +347,6 @@ function createCard(item, highlightQuery = "") {
     });
   }
 
-
   card.addEventListener("click", () => {
     RecentlyViewed.addItem(item);
     renderRecentlyViewed();
@@ -334,7 +363,7 @@ function renderSpecials() {
 
   setTimeout(() => {
     specialsContainer.innerHTML = "";
-    specials.forEach(item => {
+    specials.forEach((item) => {
       specialsContainer.appendChild(createCard(item));
     });
   }, 1500);
@@ -346,7 +375,9 @@ function renderMenu(filter = "All") {
 }
 
 function renderRecentlyViewed() {
-  const recentlyViewedContainer = document.getElementById("recently-viewed-cards");
+  const recentlyViewedContainer = document.getElementById(
+    "recently-viewed-cards",
+  );
   const recentlyViewedSection = document.getElementById("recently-viewed");
   if (!recentlyViewedContainer || !recentlyViewedSection) return;
 
@@ -359,7 +390,7 @@ function renderRecentlyViewed() {
   }
 
   recentlyViewedSection.style.display = "block";
-  recentItems.forEach(item => {
+  recentItems.forEach((item) => {
     recentlyViewedContainer.appendChild(createCard(item));
   });
 }
@@ -382,7 +413,7 @@ function renderFavorites() {
     return;
   }
 
-  recentItems.forEach(item => {
+  recentItems.forEach((item) => {
     favoritesContainer.appendChild(createCard(item));
   });
 }
@@ -415,33 +446,38 @@ function applyAllFilters() {
     let filtered = menuItems;
 
     if (currentCategory !== "All") {
-      filtered = filtered.filter(item => item.category === currentCategory);
+      filtered = filtered.filter((item) => item.category === currentCategory);
     }
 
     if (query) {
-      filtered = filtered.filter(item =>
-        fuzzyMatch(item.name, query) ||
-        (item.description && fuzzyMatch(item.description, query)) ||
-        (item.category && fuzzyMatch(item.category, query))
+      filtered = filtered.filter(
+        (item) =>
+          fuzzyMatch(item.name, query) ||
+          (item.description && fuzzyMatch(item.description, query)) ||
+          (item.category && fuzzyMatch(item.category, query)),
       );
     }
 
-    filtered = filtered.filter(item => item.price <= maxPrice);
+    filtered = filtered.filter((item) => item.price <= maxPrice);
 
     if (selectedSpice !== "All") {
-      filtered = filtered.filter(item => item.spice === selectedSpice);
+      filtered = filtered.filter((item) => item.spice === selectedSpice);
     }
 
     if (minRating !== "All") {
       const ratingVal = parseFloat(minRating);
-      filtered = filtered.filter(item => (item.rating || 5) >= ratingVal);
+      filtered = filtered.filter((item) => (item.rating || 5) >= ratingVal);
     }
 
     if (veganCheck && veganCheck.checked) {
-      filtered = filtered.filter(item => item.dietary && item.dietary.includes("vegan"));
+      filtered = filtered.filter(
+        (item) => item.dietary && item.dietary.includes("vegan"),
+      );
     }
     if (gfCheck && gfCheck.checked) {
-      filtered = filtered.filter(item => item.dietary && item.dietary.includes("gluten-free"));
+      filtered = filtered.filter(
+        (item) => item.dietary && item.dietary.includes("gluten-free"),
+      );
     }
 
     if (filtered.length === 0) {
@@ -452,7 +488,7 @@ function applyAllFilters() {
       return;
     }
 
-    filtered.forEach(item => {
+    filtered.forEach((item) => {
       menuContainer.appendChild(createCard(item, query));
     });
   }, 800);
@@ -469,8 +505,7 @@ function renderCart() {
     cartItemsContainer.innerHTML = "";
 
     if (cart.length === 0) {
-      cartItemsContainer.innerHTML =
-        `<p style="text-align:center;color:#5d4037;margin-top:2rem;">
+      cartItemsContainer.innerHTML = `<p style="text-align:center;color:#5d4037;margin-top:2rem;">
            Your cart is empty.
          </p>`;
       if (checkoutBtn) checkoutBtn.disabled = true;
@@ -486,7 +521,7 @@ function renderCart() {
       cartItem.setAttribute(
         "aria-label",
         `${item.name}, quantity ${quantity},
-         price ${formatPrice(item.price * quantity)}`
+         price ${formatPrice(item.price * quantity)}`,
       );
 
       cartItem.innerHTML = `
@@ -522,6 +557,7 @@ function renderCart() {
       if (removeBtn) {
         removeBtn.addEventListener("click", () => {
           cartManager.removeItem(item.id);
+          cart = cart.filter((ci) => ci.item.id !== item.id);
           updateCartCount();
           updateFavCount();
           renderCart();
@@ -533,13 +569,13 @@ function renderCart() {
 
     updateCartSummary();
     // Render Loyalty Points Widget at the end of the cart list
-    const points = typeof loyalty !== 'undefined' ? loyalty.getBalance() : 0;
+    const points = typeof loyalty !== "undefined" ? loyalty.getBalance() : 0;
     const loyaltyDiv = document.createElement("div");
     loyaltyDiv.className = "cart-loyalty-widget";
 
     const total = cart.reduce(
       (sum, ci) => sum + ci.item.price * ci.quantity,
-      0
+      0,
     );
     const discountVal = Math.min(points, total);
 
@@ -551,19 +587,23 @@ function renderCart() {
           <span class="loyalty-desc">Balance: <strong>${points}</strong> pts (₹${points})</span>
         </div>
       </div>
-      ${points > 0 ? `
+      ${
+        points > 0
+          ? `
       <div class="loyalty-redeem-action">
         <label class="loyalty-toggle">
-          <input type="checkbox" id="apply-loyalty-checkbox" ${loyaltyPointsApplied ? 'checked' : ''} />
+          <input type="checkbox" id="apply-loyalty-checkbox" ${loyaltyPointsApplied ? "checked" : ""} />
           <span class="toggle-slider"></span>
           <span class="toggle-label">Apply ₹${discountVal} Discount</span>
         </label>
       </div>
-      ` : `
+      `
+          : `
       <div class="loyalty-empty-message">
         <span>Earn 10 points for every ₹100 spent!</span>
       </div>
-      `}
+      `
+      }
     `;
 
     cartItemsContainer.appendChild(loyaltyDiv);
@@ -610,13 +650,15 @@ function renderCart() {
     }
     if (cartTotal) cartTotal.innerHTML = totalHtml;
     if (checkoutBtn) checkoutBtn.disabled = false;
-
   }, 600);
 }
 
 function updateCartCount() {
   if (cartCount) {
-    const totalCount = cart.reduce((sum, cartItem) => sum + cartItem.quantity, 0);
+    const totalCount = cart.reduce(
+      (sum, cartItem) => sum + cartItem.quantity,
+      0,
+    );
     cartCount.textContent = totalCount;
   }
 }
@@ -641,7 +683,7 @@ function updateOrderStatuses() {
   let changed = false;
   const now = Date.now();
 
-  orders.forEach(order => {
+  orders.forEach((order) => {
     if (order.status === "Delivered") return;
 
     // Time elapsed in seconds since order checkout
@@ -663,7 +705,7 @@ function updateOrderStatuses() {
   });
 
   if (changed) {
-    localStorage.setItem('chaatOrders', JSON.stringify(orders));
+    localStorage.setItem("chaatOrders", JSON.stringify(orders));
     renderOrdersList();
   }
 }
@@ -685,18 +727,32 @@ function renderOrdersList() {
 
   container.innerHTML = "";
 
-  orders.forEach(order => {
+  orders.forEach((order) => {
     const card = document.createElement("article");
     card.className = "order-card";
 
-    const isPreparing = order.status === "Preparing" || order.status === "On the Way" || order.status === "Delivered" ? "active" : "";
-    const isOnWay = order.status === "On the Way" || order.status === "Delivered" ? "active" : "";
+    // const isPreparing = order.status === "Preparing" || order.status === "On the Way" || order.status === "Delivered" ? "active" : "";
+    // const isOnWay = order.status === "On the Way" || order.status === "Delivered" ? "active" : "";
+    // const isDelivered = order.status === "Delivered" ? "active" : "";
+
+    // const statusClass = "status-" + order.status.toLowerCase().replace(/\s+/g, "-");
+    const isPreparing =
+      order.status === "Preparing" ||
+      order.status === "On the Way" ||
+      order.status === "Delivered"
+        ? "active"
+        : "";
+    const isOnWay =
+      order.status === "On the Way" || order.status === "Delivered"
+        ? "active"
+        : "";
     const isDelivered = order.status === "Delivered" ? "active" : "";
 
-    const statusClass = "status-" + order.status.toLowerCase().replace(/\s+/g, "-");
+    const statusClass =
+      "status-" + order.status.toLowerCase().replace(/\s+/g, "-");
 
     let itemsHtml = "";
-    order.items.forEach(ci => {
+    order.items.forEach((ci) => {
       itemsHtml += `
         <div class="order-item-row">
           <span>${ci.item.name} × ${ci.quantity}</span>
@@ -716,22 +772,22 @@ function renderOrdersList() {
       </div>
 
       <div class="order-timeline">
-        <div class="timeline-step active ${order.status === 'Pending' ? 'current' : ''}">
+        <div class="timeline-step active ${order.status === "Pending" ? "current" : ""}">
           <div class="step-circle">1</div>
           <span class="step-label">Ordered</span>
         </div>
         <div class="timeline-line ${isPreparing}"></div>
-        <div class="timeline-step ${isPreparing} ${order.status === 'Preparing' ? 'current' : ''}">
+        <div class="timeline-step ${isPreparing} ${order.status === "Preparing" ? "current" : ""}">
           <div class="step-circle">2</div>
           <span class="step-label">Preparing</span>
         </div>
         <div class="timeline-line ${isOnWay}"></div>
-        <div class="timeline-step ${isOnWay} ${order.status === 'On the Way' ? 'current' : ''}">
+        <div class="timeline-step ${isOnWay} ${order.status === "On the Way" ? "current" : ""}">
           <div class="step-circle">3</div>
           <span class="step-label">On the Way</span>
         </div>
         <div class="timeline-line ${isDelivered}"></div>
-        <div class="timeline-step ${isDelivered} ${order.status === 'Delivered' ? 'current' : ''}">
+        <div class="timeline-step ${isDelivered} ${order.status === "Delivered" ? "current" : ""}">
           <div class="step-circle">4</div>
           <span class="step-label">Delivered</span>
         </div>
@@ -742,17 +798,25 @@ function renderOrdersList() {
       </div>
 
       <div class="order-card-footer">
-        ${order.discount && order.discount > 0 ? `
+        ${
+          order.discount && order.discount > 0
+            ? `
         <div class="order-discount-details" style="font-size:0.9rem;color:#777;margin-bottom:0.5rem;text-align:right;width:100%;">
-          <span>Subtotal: ${formatPrice(order.subtotal || (order.total + order.discount))}</span> |
+          <span>Subtotal: ${formatPrice(order.subtotal || order.total + order.discount)}</span> |
           <span style="color:#e64a19;font-weight:600;">Points Redeemed: ${order.pointsRedeemed || order.discount} (-${formatPrice(order.discount)})</span>
         </div>
-        ` : ''}
-        ${order.pointsEarned && order.pointsEarned > 0 ? `
+        `
+            : ""
+        }
+        ${
+          order.pointsEarned && order.pointsEarned > 0
+            ? `
         <div class="order-points-earned" style="font-size:0.9rem;color:#28a745;margin-bottom:0.5rem;text-align:right;width:100%;font-weight:600;">
           <span>🌟 Earned +${order.pointsEarned} Loyalty Points</span>
         </div>
-        ` : ''}
+        `
+            : ""
+        }
         <div class="order-total-price">
           <span>Total Paid:</span>
           <strong>${formatPrice(order.total)}</strong>
@@ -772,8 +836,12 @@ window.filterCategory = function (category) {
   applyAllFilters();
 
   const buttons = document.querySelectorAll(".filter-btn, .filter button");
-  buttons.forEach(btn => {
-    const filterAttr = btn.dataset.filter || (btn.getAttribute("onclick") ? btn.getAttribute("onclick").match(/'([^']+)'/)[1] : "");
+  buttons.forEach((btn) => {
+    const filterAttr =
+      btn.dataset.filter ||
+      (btn.getAttribute("onclick")
+        ? btn.getAttribute("onclick").match(/'([^']+)'/)[1]
+        : "");
     if (filterAttr === category || btn.textContent.trim() === category) {
       btn.classList.add("active");
       btn.setAttribute("aria-pressed", "true");
@@ -792,29 +860,31 @@ window.checkout = async function () {
 
   const validationResult = await validateDeliveryLocation();
 
- if (!validationResult.valid) {
+  if (!validationResult.valid) {
+    // Save delivery failure info
+    localStorage.setItem(
+      "deliveryError",
+      JSON.stringify({
+        error: validationResult.error,
+        distance: validationResult.distance,
+        restaurantLocation: validationResult.restaurantLocation,
+      }),
+    );
 
-  // Save delivery failure info
-  localStorage.setItem(
-    "deliveryError",
-    JSON.stringify({
-      error: validationResult.error,
-      distance: validationResult.distance,
-      restaurantLocation: validationResult.restaurantLocation
-    })
+    // Still allow redirect to orders page
+    return {
+      deliveryAvailable: false,
+    };
+  }
+
+  const subtotal = cart.reduce(
+    (sum, ci) => sum + ci.item.price * ci.quantity,
+    0,
   );
-
-  // Still allow redirect to orders page
-  return {
-    deliveryAvailable: false
-  };
-}
-
-  const subtotal = cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
   let discount = 0;
   let pointsRedeemed = 0;
 
-  if (loyaltyPointsApplied && typeof loyalty !== 'undefined') {
+  if (loyaltyPointsApplied && typeof loyalty !== "undefined") {
     const balance = loyalty.getBalance();
     pointsRedeemed = Math.min(balance, subtotal);
     discount = pointsRedeemed; // 1 point = ₹1 discount
@@ -825,19 +895,22 @@ window.checkout = async function () {
 
   // Award points on final total paid (10 points per ₹100 spent)
   let pointsEarned = 0;
-  if (typeof loyalty !== 'undefined') {
+  if (typeof loyalty !== "undefined") {
     pointsEarned = loyalty.awardPoints(finalTotal);
   }
 
-  const subtotal = getCartSubtotal();
-  const discount = calculateCouponDiscount(subtotal);
+  // const subtotal = getCartSubtotal();
+  // const discount = calculateCouponDiscount(subtotal);
   const totalAmount = Math.max(subtotal - discount, 0);
 
   const newOrder = {
     id: "CB-" + Math.floor(100000 + Math.random() * 900000),
     date: new Date().toLocaleDateString(undefined, {
-      month: 'short', day: 'numeric', year: 'numeric',
-      hour: '2-digit', minute: '2-digit'
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     }),
     timestamp: Date.now(),
     items: JSON.parse(JSON.stringify(cart)),
@@ -850,17 +923,10 @@ window.checkout = async function () {
     pointsEarned: pointsEarned,
     total: finalTotal,
     status: "Pending",
-    deliveryAddress: {
-      latitude: validationResult.userLocation.latitude,
-      longitude: validationResult.userLocation.longitude,
-      source: validationResult.userLocation.source
-    },
-    deliveryDistance: validationResult.distance,
-    restaurantLocation: validationResult.restaurantLocation
   };
 
   orders.unshift(newOrder);
-  localStorage.setItem('chaatOrders', JSON.stringify(orders));
+  localStorage.setItem("chaatOrders", JSON.stringify(orders));
 
   // Reset points applied state
   loyaltyPointsApplied = false;
@@ -871,22 +937,32 @@ window.checkout = async function () {
   renderCart();
 
   // Launch the animation simulation modal if available.
-  if (typeof window.triggerDeliverySimulation === 'function') {
+  if (typeof window.triggerDeliverySimulation === "function") {
     window.triggerDeliverySimulation();
   } else {
-    console.warn('Delivery tracker is not ready yet. Order has been placed.');
+    console.warn("Delivery tracker is not ready yet. Order has been placed.");
   }
   return {
-  deliveryAvailable: true
-};
+    deliveryAvailable: true,
+  };
 };
 
 window.reorderOrder = function (orderId) {
-  const pastOrder = orders.find(o => o.id === orderId);
+  const pastOrder = orders.find((o) => o.id === orderId);
   if (!pastOrder) return;
 
-  pastOrder.items.forEach(orderItem => {
-    cartManager.addItem(orderItem.item, orderItem.quantity);
+  pastOrder.items.forEach((orderItem) => {
+    const existingCartItem = cart.find(
+      (ci) => ci.item.id === orderItem.item.id,
+    );
+    if (existingCartItem) {
+      existingCartItem.quantity += orderItem.quantity;
+    } else {
+      cart.push({
+        item: orderItem.item,
+        quantity: orderItem.quantity,
+      });
+    }
   });
 
   updateCartCount();
@@ -922,7 +998,7 @@ function showToast(message) {
 }
 
 function addToCart(id) {
-  const item = menuItems.find(i => i.id === id);
+  const item = menuItems.find((i) => i.id === id);
   if (!item) return;
 
   //Check if item is available
@@ -932,7 +1008,12 @@ function addToCart(id) {
     return;
   }
 
-  cartManager.addItem(item, 1);
+  const cartItem = cart.find((ci) => ci.item.id === id);
+  if (cartItem) {
+    cartItem.quantity++;
+  } else {
+    cart.push({ item, quantity: 1 });
+  }
   updateCartCount();
   updateFavCount();
   renderCart();
@@ -952,8 +1033,7 @@ function addToCart(id) {
 }
 
 function removeFromCart(id) {
-  const cartIndex = cart.findIndex(ci => ci.item.id === id);
-
+  const cartIndex = cart.findIndex((ci) => ci.item.id === id);
   if (cartIndex === -1) return;
 
   const removedItem = cart[cartIndex].item;
@@ -969,9 +1049,9 @@ function removeFromCart(id) {
 
 function setupFilterButtons() {
   const filterButtons = document.querySelectorAll(".filter-btn");
-  filterButtons.forEach(btn => {
+  filterButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
-      filterButtons.forEach(b => {
+      filterButtons.forEach((b) => {
         b.classList.remove("active");
         b.setAttribute("aria-pressed", "false");
       });
@@ -999,7 +1079,10 @@ function setupCartToggle() {
   });
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && cartSidebar.getAttribute("aria-hidden") === "false") {
+    if (
+      e.key === "Escape" &&
+      cartSidebar.getAttribute("aria-hidden") === "false"
+    ) {
       cartSidebar.setAttribute("aria-hidden", "true");
       cartSidebar.classList.remove("open");
     }
@@ -1032,10 +1115,13 @@ function setupSearchSuggestions() {
       return;
     }
 
-    const matches = menuItems.filter(item =>
-      item.name.toLowerCase().includes(query) ||
-      (item.category && item.category.toLowerCase().includes(query))
-    ).slice(0, 5);
+    const matches = menuItems
+      .filter(
+        (item) =>
+          item.name.toLowerCase().includes(query) ||
+          (item.category && item.category.toLowerCase().includes(query)),
+      )
+      .slice(0, 5);
 
     if (matches.length === 0) {
       const div = document.createElement("div");
@@ -1046,7 +1132,7 @@ function setupSearchSuggestions() {
       return;
     }
 
-    matches.forEach(item => {
+    matches.forEach((item) => {
       const div = document.createElement("div");
       div.className = "suggestion-item";
       div.innerHTML = `
@@ -1074,7 +1160,10 @@ function setupSearchSuggestions() {
   searchInput.addEventListener("focus", showSuggestions);
 
   document.addEventListener("click", (e) => {
-    if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+    if (
+      !searchInput.contains(e.target) &&
+      !suggestionsContainer.contains(e.target)
+    ) {
       suggestionsContainer.style.display = "none";
     }
   });
@@ -1097,7 +1186,8 @@ function setupSearch() {
   searchInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       handleSearchClick();
-      const suggestionsContainer = document.getElementById("search-suggestions");
+      const suggestionsContainer =
+        document.getElementById("search-suggestions");
       if (suggestionsContainer) suggestionsContainer.style.display = "none";
     }
   });
@@ -1171,8 +1261,12 @@ function setupAdvancedFilters() {
       currentCategory = "All";
 
       const buttons = document.querySelectorAll(".filter-btn, .filter button");
-      buttons.forEach(btn => {
-        const filterAttr = btn.dataset.filter || (btn.getAttribute("onclick") ? btn.getAttribute("onclick").match(/'([^']+)'/)[1] : "");
+      buttons.forEach((btn) => {
+        const filterAttr =
+          btn.dataset.filter ||
+          (btn.getAttribute("onclick")
+            ? btn.getAttribute("onclick").match(/'([^']+)'/)[1]
+            : "");
         if (filterAttr === "All" || btn.textContent.trim() === "All") {
           btn.classList.add("active");
           btn.setAttribute("aria-pressed", "true");
@@ -1210,13 +1304,34 @@ function setupContactForm() {
     errorMessage.textContent = "";
     formSuccess.style.display = "none";
 
-    const validation = validateAndSanitizeContactForm(nameInput.value, emailInput.value, messageInput.value);
+    const nameVal = nameInput.value.trim();
+    const emailVal = emailInput.value.trim();
+    const messageVal = messageInput.value.trim();
 
-    if (!validation.valid) {
-      if (validation.errors.name) errorName.textContent = validation.errors.name;
-      if (validation.errors.email) errorEmail.textContent = validation.errors.email;
-      if (validation.errors.message) errorMessage.textContent = validation.errors.message;
-      return;
+    let valid = true;
+
+    if (nameVal === "") {
+      errorName.textContent = "Name is required.";
+      valid = false;
+    } else if (nameVal.length < 2) {
+      errorName.textContent = "Name must be at least 2 characters.";
+      valid = false;
+    }
+
+    if (emailVal === "") {
+      errorEmail.textContent = "Email is required.";
+      valid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      errorEmail.textContent = "Please enter a valid email address.";
+      valid = false;
+    }
+
+    if (messageVal === "") {
+      errorMessage.textContent = "Message is required.";
+      valid = false;
+    } else if (messageVal.length < 10) {
+      errorMessage.textContent = "Message must be at least 10 characters.";
+      valid = false;
     }
 
     formSuccess.style.display = "block";
@@ -1252,9 +1367,9 @@ function setupActiveNavbar() {
   const sections = document.querySelectorAll("section");
 
   // Click active state
-  navLinks.forEach(link => {
+  navLinks.forEach((link) => {
     link.addEventListener("click", () => {
-      navLinks.forEach(nav => nav.classList.remove("active"));
+      navLinks.forEach((nav) => nav.classList.remove("active"));
       link.classList.add("active");
     });
   });
@@ -1292,7 +1407,7 @@ function setupActiveNavbar() {
 
 function setupDropdownFilterLinks() {
   const dropdownFilters = document.querySelectorAll(".menu-filter");
-  dropdownFilters.forEach(link => {
+  dropdownFilters.forEach((link) => {
     link.addEventListener("click", (e) => {
       const category = link.dataset.filter;
       if (category === "Specials") {
@@ -1303,7 +1418,7 @@ function setupDropdownFilterLinks() {
       } else {
         renderMenu(category);
         const filterButtons = document.querySelectorAll(".filter-btn");
-        filterButtons.forEach(btn => {
+        filterButtons.forEach((btn) => {
           if (btn.dataset.filter === category) {
             btn.classList.add("active");
             btn.setAttribute("aria-pressed", "true");
@@ -1321,9 +1436,9 @@ function setupDropdownFilterLinks() {
   });
 }
 
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
+// function saveCart() {
+//   localStorage.setItem("cart", JSON.stringify(cart));
+// }
 
 // ===== Initialization =====
 
@@ -1343,19 +1458,20 @@ async function init() {
   setupNewsletterForm();
   setupActiveNavbar();
   setupDropdownFilterLinks();
+  setupHamburgerMenu();
 
   if (checkoutBtn) {
-  checkoutBtn.addEventListener("click", async (e) => {
-    e.preventDefault();
+    checkoutBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
 
-    const result = await window.checkout();
+      const result = await window.checkout();
 
-    // Always open orders page
-    if (result) {
-      window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
-    }
-  });
-}
+      // Always open orders page
+      if (result) {
+        window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
+      }
+    });
+  }
 
   // Load database items asynchronously without blocking UI interactions
   await loadMenuData();
@@ -1457,4 +1573,48 @@ if (toggleBtn) {
       localStorage.setItem("theme", "light");
     }
   });
+}
+
+function setupHamburgerMenu() {
+  const btn = document.getElementById("hamburger-btn");
+  const nav = document.getElementById("primary-nav");
+  if (!btn || !nav) return;
+
+  const dropdown = nav.querySelector(".dropdown");
+  const dropdownToggle = dropdown
+    ? dropdown.querySelector(".dropdown-toggle")
+    : null;
+
+  function closeMenu() {
+    nav.classList.remove("open");
+    btn.setAttribute("aria-expanded", "false");
+    if (dropdown) dropdown.classList.remove("open");
+  }
+
+  btn.addEventListener("click", () => {
+    const isOpen = nav.classList.toggle("open");
+    btn.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  // Close menu when any nav link/button is clicked on mobile
+  nav.addEventListener("click", (e) => {
+    const clickedItem = e.target.closest("a, button");
+    if (!clickedItem) return;
+
+    if (clickedItem.classList.contains("dropdown-toggle")) return;
+
+    if (window.innerWidth <= 768) {
+      closeMenu();
+    }
+  });
+
+  // Open/close dropdown on mobile tap
+  if (dropdown && dropdownToggle) {
+    dropdownToggle.addEventListener("click", (e) => {
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        dropdown.classList.toggle("open");
+      }
+    });
+  }
 }

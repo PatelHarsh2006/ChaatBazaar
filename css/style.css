@@ -1177,37 +1177,21 @@
   }
     /* ===== Mobile Navbar Fix ===== */
 @media (max-width: 480px) {
-
   .header-inner {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 0.8rem;
+    justify-content: space-between;
+    gap: 0.75rem;
     padding: 1rem;
   }
 
   .logo {
     font-size: 1.5rem;
-    text-align: center;
   }
 
-  nav {
+  /* .primary-nav {
     width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  nav a {
-    padding: 0.4rem 0.7rem;
-    font-size: 0.9rem;
-  }
-
-  .search-bar {
-    margin-left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
+  } */
 
   .search-bar input {
     width: 100%;
@@ -1957,6 +1941,35 @@ mark.highlight {
   box-shadow: 0 6px 20px rgba(191, 54, 12, 0.4);
   transform: translateY(-1px);
 }
+/* ===== Hamburger Menu ===== */
+.hamburger-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  color: white;
+
+  width: 44px;
+  height: 44px;
+
+  border-radius: 12px;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.6rem;
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.hamburger-btn:active {
+  transform: scale(0.95);
+}
 /* ===== Dark Mode Theme ===== */
 .theme-toggle {
   position: relative;
@@ -2232,6 +2245,7 @@ body.dark .skeleton {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #e64a19;
+}  
 /* ===== Accessibility Styles ===== */
 
 /* Skip link - visible on focus */
@@ -2241,176 +2255,68 @@ body.dark .skeleton {
   left: 0;
   background: #ff5722;
   color: white;
-  padding: 0.6rem 1rem;
-  text-decoration: none;
-  z-index: 10000;
-  border-radius: 0 0 8px 0;
-  font-weight: 600;
+  font-size: 2rem;
+  line-height: 1;
+  padding: 0.3rem 0.6rem;
 }
 
-.skip-link:focus {
-  top: 0;
-}
-
-/* Enhanced focus states for keyboard navigation */
-body.keyboard-nav button:focus,
-body.keyboard-nav a:focus,
-body.keyboard-nav input:focus,
-body.keyboard-nav textarea:focus,
-body.keyboard-nav select:focus {
-  outline: 3px solid #ff5722;
-  outline-offset: 2px;
-}
-
-/* Focus states for all interactive elements */
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 3px solid #ff5722;
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-/* Card focus state */
-.card:focus {
-  outline: 3px solid #ff5722;
-  outline-offset: 2px;
-  box-shadow: 0 0 20px rgba(255, 87, 34, 0.5);
-}
-
-/* Search suggestion focused state */
-.suggestion-item.focused {
-  background: #ffe0d0;
-  color: #3e3e3e;
-}
-
-.suggestion-item:focus-visible {
-  outline: 2px solid #ff5722;
-  outline-offset: 1px;
-}
-
-/* Improved focus for navigation links */
-nav a:focus-visible {
-  box-shadow: 0 0 8px #ff5722;
-}
-
-/* Filter button focus state */
-.filter-btn:focus-visible,
-.menu-filter:focus-visible {
-  outline: 2px solid #ff5722;
-  outline-offset: 2px;
-}
-
-/* Checkbox and radio focus states */
-input[type="checkbox"]:focus-visible,
-input[type="radio"]:focus-visible {
-  outline: 2px solid #ff5722;
-  outline-offset: 2px;
-}
-
-/* Range slider focus state */
-input[type="range"]:focus-visible {
-  outline: 2px solid #ff5722;
-  outline-offset: 4px;
-}
-
-/* Select dropdown focus state */
-select:focus-visible {
-  outline: 2px solid #ff5722;
-  outline-offset: 2px;
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: more) {
-  button:focus-visible,
-  a:focus-visible,
-  input:focus-visible,
-  textarea:focus-visible,
-  select:focus-visible {
-    outline-width: 4px;
+/* Mobile nav */
+@media (max-width: 768px) {
+  .header-inner {
+    position: relative;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  .card:focus {
-    outline-width: 4px;
-    box-shadow: 0 0 30px rgba(255, 87, 34, 0.8);
-  }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Dark mode support for better contrast */
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #1a1a1a;
-    color: #e0e0e0;
+  .hamburger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-left: auto;
+    z-index: 2001;
   }
 
-  .card {
-    background: #2d2d2d;
+  .primary-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #ff5722;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 1rem 1.2rem;
+    z-index: 2000;
   }
 
-  .suggestion-item {
-    background: #2d2d2d;
-    color: #e0e0e0;
+  .primary-nav.open {
+    display: flex;
   }
 
-  .suggestion-item.focused {
-    background: #bf360c;
-    color: #fff;
+  .primary-nav a,
+  .primary-nav .dropdown-toggle {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .dropdown {
+    width: 100%;
+  }
+
+  .search-bar {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .search-bar input {
+    width: 100%;
+    max-width: none;
   }
 }
-
-/* Ensure links are underlined for clarity */
-a[href] {
-  text-decoration: underline;
-  text-decoration-color: rgba(255, 87, 34, 0.5);
-}
-
-/* Improve contrast of disabled buttons */
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Out of Stock Badge */
-.out-of-stock-badge {
-  background-color: #6c757d !important;  /* Grey color */
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 12px;
-  font-weight: 600;
-  display: inline-block;
-  margin: 10px 0 5px 0;
-  letter-spacing: 0.5px;
-  text-align: center;
-  width: fit-content;
-}
-
-/* Disabled button styling */
-.add-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background-color: #cccccc !important;
-  transform: none !important;
-}
-
-/* Hover effect for disabled button */
-.add-btn:disabled:hover {
-  transform: none !important;
-  opacity: 0.6;
-}
-}
-
 /* ===== Loyalty Wallet Styles ===== */
 .cart-loyalty-widget {
   background: #ffffff;
