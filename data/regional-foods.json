@@ -1,0 +1,57 @@
+[
+  {
+    "state": "Rajasthan",
+    "food": "Pyaz Kachori",
+    "category": "Rajasthani Chaats",
+    "image": "img/1.avif",
+    "description": "A crispy deep-fried snack stuffed with spicy onion filling.",
+    "popularity": "Trending",
+    "spiceLevel": "Medium",
+    "rating": "4.8",
+    "story": "Pyaz Kachori became popular in Jodhpur and is known for its rich spicy onion stuffing served with chutneys."
+  },
+  {
+    "state": "Maharashtra",
+    "food": "Vada Pav",
+    "category": "Street Snacks",
+    "image": "img/2.avif",
+    "description": "Mumbai’s iconic spicy potato fritter burger loved across India.",
+    "popularity": "Best Seller",
+    "spiceLevel": "High",
+    "rating": "4.9",
+    "story": "Vada Pav originated as an affordable quick meal for Mumbai textile workers during the 1960s."
+  },
+  {
+    "state": "Delhi",
+    "food": "Chole Bhature",
+    "category": "North Indian Street Foods",
+    "image": "img/7.avif",
+    "description": "Fluffy fried bread served with spicy chickpea curry.",
+    "popularity": "Popular",
+    "spiceLevel": "Medium",
+    "rating": "4.7",
+    "story": "Chole Bhature gained popularity in Delhi as a hearty Punjabi street food breakfast."
+  },
+  {
+    "state": "West Bengal",
+    "food": "Puchka",
+    "category": "Bengali Delicacies",
+    "image": "img/8.avif",
+    "description": "Tangy and spicy water-filled crispy puris loved in Bengal.",
+    "popularity": "Trending",
+    "spiceLevel": "High",
+    "rating": "4.8",
+    "story": "Puchka is Bengal’s unique version of pani puri with tamarind-heavy spicy fillings."
+  },
+  {
+    "state": "Gujarat",
+    "food": "Dhokla",
+    "category": "Gujarati Specials",
+    "image": "img/9.avif",
+    "description": "Soft steamed savory snack made from fermented batter.",
+    "popularity": "Healthy Choice",
+    "spiceLevel": "Low",
+    "rating": "4.6",
+    "story": "Dhokla has been a staple Gujarati snack known for its light texture and balanced flavors."
+  }
+]
