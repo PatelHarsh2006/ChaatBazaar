@@ -315,6 +315,7 @@ function renderCart() {
         removeBtn.addEventListener("click", () => {
           cart = cart.filter(ci => ci.item.id !== item.id);
           updateCartCount();
+  updateFavCount();
           renderCart();
           saveCart();
         });
@@ -515,6 +516,7 @@ window.checkout = async function() {
 
   cartManager.clear();
   updateCartCount();
+  updateFavCount();
   renderCart();
 
   // Launch the animation simulation modal if available.
@@ -534,6 +536,7 @@ window.reorderOrder = function(orderId) {
   });
 
   updateCartCount();
+  updateFavCount();
   renderCart();
 
   alert("Items added back to your cart successfully!");
@@ -577,6 +580,7 @@ function addToCart(id) {
 
   cartManager.addItem(item, 1);
   updateCartCount();
+  updateFavCount();
   renderCart();
   saveCart();
   showToast(`🛒 ${item.name} added to cart`);
@@ -608,6 +612,7 @@ function removeFromCart(id) {
   }
 
   updateCartCount();
+  updateFavCount();
   renderCart();
   saveCart();
 
@@ -968,6 +973,7 @@ async function init() {
   renderRecentlyViewed();
   applyAllFilters();
   updateCartCount();
+  updateFavCount();
   renderCart();
 
   // Run dynamic order rendering and simulated status progress updates

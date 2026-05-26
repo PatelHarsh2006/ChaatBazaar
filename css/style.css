@@ -1969,6 +1969,19 @@ body.dark .skeleton {
 }
 
 
+/* ===== Custom Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #fff3e0;
+}
+::-webkit-scrollbar-thumb {
+  background: #ff5722;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #e64a19;
 /* ===== Accessibility Styles ===== */
 
 /* Skip link - visible on focus */
