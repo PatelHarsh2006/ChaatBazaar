@@ -20,7 +20,7 @@
     <nav role="navigation" aria-label="Primary Navigation">
       <a href="#hero" class="nav-link active" tabindex="0">Home</a>
       <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
-        <a href="#menu" class="dropdown-toggle nav-link">Menu</a>
+        <a href="menu.html" class="dropdown-toggle nav-link">Menu</a>
         <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
           <a href="#specials" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Specials">Specials</a>
           <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Snacks">Snacks</a>
@@ -37,6 +37,7 @@
         <button aria-label="Search" id="search-btn"></button>
         <div class="search-suggestions" id="search-suggestions" style="display: none;"></div>
       </div>
+  <button id="theme-toggle" class="theme-toggle">🌙</button>
     </nav>
   </div>
 </header>
@@ -58,6 +59,14 @@
   <h2 class="section-title">Today's Specials</h2>
   <div class="cards" id="specials-cards">
     <!-- Special cards will be injected here -->
+  </div>
+</section>
+
+<!-- Recently Viewed Section -->
+<section id="recently-viewed" class="recently-viewed" role="region" aria-label="Recently Viewed Items" style="display: none;">
+  <h2 class="section-title">Recently Viewed</h2>
+  <div class="cards" id="recently-viewed-cards">
+    <!-- Recently viewed cards will be injected here -->
   </div>
 </section>
 
@@ -134,22 +143,51 @@
 </section>
 
 <!-- About Section -->
+<!-- About Section -->
 <section id="about" class="about" role="region" aria-label="About ChaatBazar">
   <div class="container">
     <h2>About Us</h2>
     <p>At <strong>ChaatBazar</strong>, we bring you the authentic flavors of India's vibrant street food culture, freshly prepared and delivered hot right to your door. Our passion is to share the love of chaat, snacks, and beverages made from time-tested recipes.</p>
+
     <div class="team" aria-label="Meet our team">
+
       <article class="team-member" tabindex="0">
-        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya Sharma - Founder & Head Chef" />
-        <h4>Priya Sharma</h4>
-        <p>Founder & Head Chef - Crafting every dish with love and authenticity.</p>
+        <div class="team-member-inner">
+
+          <div class="team-member-front">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya Sharma - Founder & Head Chef" />
+            <h4>Priya Sharma</h4>
+            <p>Founder & Head Chef - Crafting every dish with love and authenticity.</p>
+          </div>
+
+          <div class="team-member-back">
+            <h4>About Priya</h4>
+            <p>10+ years of culinary expertise specializing in authentic Indian street food and handcrafted signature recipes.</p>
+          </div>
+
+        </div>
       </article>
+
       <article class="team-member" tabindex="0">
-        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Anjali Verma - Customer Support" />
-        <h4>Anjali Verma</h4>
-        <p>Customer Support - Always here to assist you with your orders.</p>
+        <div class="team-member-inner">
+
+          <div class="team-member-front">
+            <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Anjali Verma - Customer Support" />
+            <h4>Anjali Verma</h4>
+            <p>Customer Support - Always here to assist you with your orders.</p>
+          </div>
+
+          <div class="team-member-back">
+            <h4>About Anjali</h4>
+            <p>Ensures smooth customer experience, quick assistance, and seamless order support from start to finish.</p>
+          </div>
+
+        </div>
       </article>
+
     </div>
+  </div>
+</section>
 
     <!-- Contact Form -->
     <h2>Contact Us</h2>
@@ -229,6 +267,7 @@
   <p>© 2026 ChaatBazar. All rights reserved.</p>
 </footer>
 
+<div id="toast-notification" class="toast-notification"></div>
 <script src="js/main.js"></script> 
 </body>
 </html>
