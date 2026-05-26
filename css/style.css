@@ -1539,3 +1539,44 @@ mark.highlight {
   box-shadow: 0 6px 20px rgba(191, 54, 12, 0.4);
   transform: translateY(-1px);
 }
+
+/* ===== Mobile Responsiveness Fix for Orders Dashboard (Issue #122) ===== */
+@media (max-width: 768px) {
+  /* 1. Stack the timeline vertically instead of horizontally */
+  .order-timeline {
+    flex-direction: column;
+    align-items: flex-start; /* Align steps to the left */
+    gap: 1.5rem;             /* Create uniform spacing between steps */
+    margin: 2rem 0 2rem 1.5rem; /* Add indentation from the left edge */
+    padding: 0;
+  }
+
+  /* 2. Reposition the steps to layout cleanly horizontally */
+  .timeline-step {
+    flex-direction: row;     /* Align step circle and label side-by-side */
+    gap: 1rem;
+    width: 100%;
+  }
+
+  /* 3. Re-orient the timeline line to be a vertical track running behind circles */
+  .timeline-line {
+    width: 4px;              /* Make it thin horizontally */
+    height: 1.5rem;          /* Make it run vertically down */
+    margin-top: 0;
+    margin-left: 14px;       /* Center it perfectly underneath the 32px circles */
+    order: 0;                /* Ensures correct rendering flow between steps */
+  }
+
+  /* 4. Ensure the order card footer stacks nicely when space is tight */
+  .order-card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  /* Make the reorder button fill width on smaller viewports */
+  .btn-reorder {
+    width: 100%;
+    text-align: center;
+  }
+}
