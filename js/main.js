@@ -1042,6 +1042,21 @@ function showSkeletonCartItems(count = 2) {
     cartItemsContainer.appendChild(createSkeletonCartItem());
   }
 }
+
+// ===== Dark Mode Toggle =====
+const darkToggleBtn = document.getElementById('dark-mode-toggle');
+if (darkToggleBtn) {
+  // Load saved preference
+  if (localStorage.getItem('darkMode') === 'enabled') {
+    document.body.classList.add('dark');
+    darkToggleBtn.textContent = '☀️';
+  }
+
+  darkToggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    darkToggleBtn.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
 // dark-mode
 const toggleBtn = document.getElementById("theme-toggle");
 
