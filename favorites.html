@@ -57,6 +57,57 @@
   <script src="js/geolocation.js"></script>
   <script src="js/sanitization.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    // Dynamically render favorited cards
+    document.addEventListener("DOMContentLoaded", () => {
+      // Wait for menu database items to load
+      const checkMenuDataInterval = setInterval(() => {
+        if (typeof menuItems !== 'undefined' && menuItems.length > 0) {
+          clearInterval(checkMenuDataInterval);
+          renderFavoritesList();
+        }
+      }, 100);
+
+      function renderFavoritesList() {
+        const container = document.getElementById("favorites-container");
+        if (!container) return;
+
+        if (typeof FavoritesManager === 'undefined') {
+          container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #bf360c; font-weight: 600; margin-top: 2rem;">Favorites Manager not loaded.</p>`;
+          return;
+        }
+
+        const favItems = FavoritesManager.getItems();
+        container.innerHTML = "";
+
+        if (favItems.length === 0) {
+          container.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; color: #5d4037; margin-top: 3rem; width: 100%;">
+              <p style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;">No Favorites Added Yet ❤️</p>
+              <p>Explore our menu and add your favorite street food snacks!</p>
+              <a href="menu.html" class="btn-primary" style="display: inline-block; margin-top: 1.5rem; text-decoration: none;">Browse Menu</a>
+            </div>
+          `;
+          return;
+        }
+
+        favItems.forEach(item => {
+          // Create the standard card
+          const card = createCard(item);
+          container.appendChild(card);
+        });
+      }
+      
+      // Override favorite toggle actions on Favorites page to immediately re-render on removal
+      const originalShowToast = window.showToast;
+      window.showToast = function(msg) {
+        if (originalShowToast) originalShowToast(msg);
+        if (msg.includes("Removed") && msg.includes("Favorites")) {
+          renderFavoritesList();
+        }
+      };
+    });
+  </script>
 </body>
 
 </html>
