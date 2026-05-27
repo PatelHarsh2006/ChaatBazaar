@@ -479,7 +479,114 @@ window.filterCategory = function(category) {
   });
 };
 
-window.checkout = async function() {
+// ===== Delivery Radius Validation =====
+
+const RESTAURANT_COORDS = { lat: 13.0707, lng: 77.7980 }; // Placeholder: Mumbai
+const DELIVERY_RADIUS_KM = 35;;
+
+function haversineDistance(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+    Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function getDeliveryZone(distanceKm) {
+  if (distanceKm <= DELIVERY_RADIUS_KM) {
+    return {
+      eligible: true,
+      zone: "within",
+      message: `✅ Great news! We deliver to your location (${distanceKm.toFixed(1)} km away).`,
+      color: "#2e7d32"
+    };
+  } else if (distanceKm <= 8) {
+    return {
+      eligible: false,
+      zone: "nearby",
+      message: `⚠️ You're ${distanceKm.toFixed(1)} km away — just outside our 5 km delivery range.`,
+      color: "#e65100"
+    };
+  } else {
+    return {
+      eligible: false,
+      zone: "far",
+      message: `❌ Sorry, we don't deliver to your area yet (${distanceKm.toFixed(1)} km away). We currently serve within 5 km only.`,
+      color: "#b71c1c"
+    };
+  }
+}
+
+function showDeliveryStatus({ message, color, loading = false }) {
+  const el = document.getElementById("delivery-status");
+  if (!el) return;
+
+  el.style.cssText = `
+    margin: 1rem 0;
+    padding: 0.85rem 1.1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    background: ${loading ? "#fff3e0" : color + "18"};
+    color: ${loading ? "#e65100" : color};
+    border: 1.5px solid ${loading ? "#e65100" : color};
+    transition: all 0.3s ease;
+  `;
+  el.textContent = message;
+}
+
+function clearDeliveryStatus() {
+  const el = document.getElementById("delivery-status");
+  if (el) el.textContent = "";
+  el.style.cssText = "";
+}
+
+function checkDeliveryEligibility() {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      resolve({
+        eligible: false,
+        message: "❌ Your browser doesn't support location access. Please try a modern browser.",
+        color: "#b71c1c"
+      });
+      return;
+    }
+
+    showDeliveryStatus({ message: "📍 Checking your delivery location...", loading: true });
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        const distance = haversineDistance(
+          latitude, longitude,
+          RESTAURANT_COORDS.lat, RESTAURANT_COORDS.lng
+        );
+        resolve(getDeliveryZone(distance));
+      },
+      (error) => {
+        const messages = {
+          1: "❌ Location access denied. Please allow location permission and try again.",
+          2: "❌ Unable to detect your location. Check your device's GPS settings.",
+          3: "❌ Location request timed out. Please try again."
+        };
+        resolve({
+          eligible: false,
+          message: messages[error.code] || "❌ Location check failed. Please try again.",
+          color: "#b71c1c"
+        });
+      },
+      { timeout: 8000, maximumAge: 60000 }
+    );
+  });
+}
+
+// ===== Checkout (replaces old window.checkout) =====
+
+window.checkout = async function () {
   if (cart.length === 0) {
     alert("Your cart is empty!");
     return;
@@ -495,8 +602,8 @@ window.checkout = async function() {
   const newOrder = {
     id: "CB-" + Math.floor(100000 + Math.random() * 900000),
     date: new Date().toLocaleDateString(undefined, {
-      month: 'short', day: 'numeric', year: 'numeric',
-      hour: '2-digit', minute: '2-digit'
+      month: "short", day: "numeric", year: "numeric",
+      hour: "2-digit", minute: "2-digit"
     }),
     timestamp: Date.now(),
     items: JSON.parse(JSON.stringify(cart)),
@@ -512,7 +619,7 @@ window.checkout = async function() {
   };
 
   orders.unshift(newOrder);
-  localStorage.setItem('chaatOrders', JSON.stringify(orders));
+  localStorage.setItem("chaatOrders", JSON.stringify(orders));
 
   cartManager.clear();
   updateCartCount();
