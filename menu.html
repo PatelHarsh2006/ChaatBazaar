@@ -28,6 +28,7 @@
         </div>
       </div>
       <a href="index.html#about" class="nav-link">About</a>
+      <a href="favorites.html" class="nav-link">Favorites (<span id="fav-count">0</span>)</a>
       <a href="orders.html" class="nav-link">Orders</a>
       <a href="cart.html" class="nav-link">Cart</a>
       <div class="search-bar" role="search">
@@ -41,6 +42,15 @@
 
 <section class="menu-page container">
   <h1>Our Menu</h1>
+
+  <!-- Recently Viewed Section -->
+  <section id="recently-viewed" class="recently-viewed" role="region" aria-label="Recently Viewed Items" style="display: none;">
+    <h2 class="section-title">Recently Viewed</h2>
+    <div class="cards" id="recently-viewed-cards">
+      <!-- Recently viewed cards will be injected here -->
+    </div>
+  </section>
+
   <div class="filter-buttons" role="toolbar" aria-label="Filter menu categories">
     <button class="filter-btn active" data-filter="All" aria-pressed="true">All</button>
     <button class="filter-btn" data-filter="Snacks" aria-pressed="false">Snacks</button>
@@ -121,6 +131,7 @@
   <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
 </footer>
 
+<div id="toast-notification" class="toast-notification"></div>
 <script src="js/main.js"></script>
 </body>
 </html>

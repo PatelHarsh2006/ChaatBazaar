@@ -23,6 +23,7 @@ Demo Link : <a href="https://patelharsh2006.github.io/ChaatBazaar/">Link</a>
 - **Mobile-First Design:** Fully responsive UI for optimal viewing across all devices.
 
 ### 🤝 Contributor Features (Areas for Expansion)
+- ❤️ **Favourites List:** Users can add their favourite dishes to a list and view them later.
 - 🌶️ **Spice Level Customization:** Per order modifications.
 - 🎁 **Loyalty & Referrals:** Points system and referral codes.
 - 📍 **Live Order Tracking:** Simulated tracking UI.
