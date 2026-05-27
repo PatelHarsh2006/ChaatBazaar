@@ -2189,4 +2189,59 @@ button:disabled {
   transform: none !important;
   opacity: 0.6;
 }
+
+/* Custom Favorites Heart Button styling */
+.card {
+  position: relative;
 }
+
+.fav-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s ease;
+  z-index: 100;
+  cursor: pointer;
+  outline: none;
+}
+
+.fav-btn:hover {
+  transform: scale(1.15);
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.fav-btn:active {
+  transform: scale(0.95);
+}
+
+.fav-btn.active {
+  color: #ff3860;
+}
+
+/* Dark mode for Favorites Button */
+body.dark .fav-btn {
+  background: rgba(45, 45, 45, 0.9);
+  color: #dddddd;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+body.dark .fav-btn:hover {
+  background: #3d3d3d;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+
+body.dark .fav-btn.active {
+  color: #ff3860;
+}
+

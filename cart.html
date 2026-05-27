@@ -44,6 +44,41 @@
   <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
 </footer>
 
+<!-- Live Delivery Tracker Modal -->
+<div id="delivery-modal" class="delivery-modal-overlay hidden" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="delivery-modal-title">
+  <div class="delivery-modal-content" tabindex="-1">
+    <h3 id="delivery-modal-title">Live Delivery Tracker</h3>
+    <div class="animation-container">
+      <div class="road-line"></div>
+      <div id="vendor-cart" class="vendor-cart">🚲</div>
+    </div>
+    <div class="progress-track-wrapper">
+      <div class="progress-bar-bg"></div>
+      <div id="active-progress-bar" class="progress-bar-fill"></div>
+      <div class="progress-steps">
+        <div class="step">
+          <div class="icon">🍳</div>
+          <span class="label">Preparing Order</span>
+        </div>
+        <div class="step">
+          <div class="icon">📦</div>
+          <span class="label">Packed</span>
+        </div>
+        <div class="step">
+          <div class="icon">🚲</div>
+          <span class="label">Out for Delivery</span>
+        </div>
+        <div class="step">
+          <div class="icon">✅</div>
+          <span class="label">Delivered</span>
+        </div>
+      </div>
+    </div>
+    <div id="live-status-text" class="status-text"></div>
+    <button id="close-delivery-modal" class="btn-close-modal hidden">Close</button>
+  </div>
+</div>
+
 <div id="toast-notification" class="toast-notification"></div>
 <script src="js/accessibility.js"></script>
 <script src="js/cart-manager.js"></script>

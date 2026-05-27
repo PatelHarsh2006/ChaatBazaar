@@ -48,3 +48,43 @@ const RecentlyViewed = {
     return this.getItems().length > 0;
   }
 };
+
+const FavoritesManager = {
+  storageKey: 'chaatFavorites',
+
+  getItems() {
+    try {
+      const items = localStorage.getItem(this.storageKey);
+      return items ? JSON.parse(items) : [];
+    } catch (error) {
+      console.error('Favorites corrupted, clearing:', error);
+      return [];
+    }
+  },
+
+  toggle(item) {
+    try {
+      let items = this.getItems();
+      const index = items.findIndex(i => i.id === item.id);
+      let isAdded = false;
+      if (index !== -1) {
+        items.splice(index, 1);
+      } else {
+        items.push(item);
+        isAdded = true;
+      }
+      localStorage.setItem(this.storageKey, JSON.stringify(items));
+      return isAdded;
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+      return false;
+    }
+  },
+
+  isFavorite(itemId) {
+    const items = this.getItems();
+    return items.some(i => i.id === itemId);
+  }
+};
+
+window.FavoritesManager = FavoritesManager;

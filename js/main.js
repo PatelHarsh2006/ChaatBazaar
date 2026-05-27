@@ -99,7 +99,11 @@ function createCard(item, highlightQuery = "") {
   const buttonDisabled = !isAvailable ? 'disabled' : '';
   const buttonColor = isAvailable ? '#28a745' : '#cccccc';
 
+  const isFav = typeof FavoritesManager !== 'undefined' ? FavoritesManager.isFavorite(item.id) : false;
+  const favBtnActive = isFav ? ' active' : '';
+
   card.innerHTML = `
+    <button class="fav-btn${favBtnActive}" aria-label="Toggle favorite for ${item.name}">❤️</button>
     <img src="${item.image}" alt="${item.name}" loading="lazy" />
     <div class="card-content">
       <div class="card-meta">
@@ -122,17 +126,34 @@ function createCard(item, highlightQuery = "") {
     </div>
   `;
 
-  const addBtn = card.querySelector(".add-btn");
-  //Only add event listener if item is available
-  if (isAvailable) {
-    addBtn.addEventListener("click", () => addToCart(item.id));
-  } else {
-    // Optional: Add click handler to show alert
-    addBtn.addEventListener("click", () => {
-      alert(`${item.name} is currently out of stock!`);
+  const favBtn = card.querySelector(".fav-btn");
+  if (favBtn) {
+    favBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      if (typeof FavoritesManager !== 'undefined') {
+        const added = FavoritesManager.toggle(item);
+        favBtn.classList.toggle("active", added);
+        updateFavCount();
+        showToast(added ? `❤️ Added ${item.name} to Favorites` : `💔 Removed ${item.name} from Favorites`);
+      }
     });
   }
 
+  const addBtn = card.querySelector(".add-btn");
+  //Only add event listener if item is available
+  if (isAvailable) {
+    addBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      addToCart(item.id);
+    });
+  } else {
+    // Optional: Add click handler to show alert
+    addBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      alert(`${item.name} is currently out of stock!`);
+    });
+  }
 
   card.addEventListener("click", () => {
     RecentlyViewed.addItem(item);
@@ -344,8 +365,8 @@ function updateCartCount() {
 function updateFavCount() {
   const favCount = document.getElementById("fav-count");
   if (favCount) {
-    const recentItems = RecentlyViewed.getItems();
-    favCount.textContent = recentItems.length;
+    const favItems = typeof FavoritesManager !== 'undefined' ? FavoritesManager.getItems() : [];
+    favCount.textContent = favItems.length;
   }
 }
 
