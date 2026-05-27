@@ -5,39 +5,58 @@ const menuItems = [
     category: "Snacks",
     price: 30,
     description: "Crispy golden triangle stuffed with spiced potatoes.",
-    image: "img/8.avif"
+    image: "img/8.avif",
+
+    rating: 4.5,
+    recommendedCount: 32
   },
+
   {
     id: 2,
     name: "Pani Puri",
     category: "Chaat",
     price: 50,
     description: "Hollow crispy puris filled with spicy, tangy water and chickpeas.",
-    image: "img/2.avif"
+    image: "img/2.avif",
+
+    rating: 4.8,
+    recommendedCount: 67
   },
+
   {
     id: 3,
     name: "Masala Chai",
     category: "Beverages",
     price: 20,
     description: "Aromatic tea brewed with spices and milk.",
-    image: "img/7.avif"
+    image: "img/7.avif",
+
+    rating: 4.6,
+    recommendedCount: 41
   },
+
   {
     id: 4,
     name: "Kachori",
     category: "Snacks",
     price: 35,
     description: "Deep-fried pastry filled with spicy lentils.",
-    image: "img/9.avif"
+    image: "img/9.avif",
+
+    rating: 4.3,
+    recommendedCount: 24
   },
+
   {
     id: 5,
     name: "Bhel Puri",
     category: "Chaat",
     price: 45,
     description: "Crunchy puffed rice mixed with tangy tamarind chutney.",
-    image: "img/1.avif"
+    image: "img/1.avif",
+
+    rating: 4.7,
+    recommendedCount: 58
   },
 ];
 
@@ -51,6 +70,12 @@ const cartTotal = document.getElementById("cart-total");
 const checkoutBtn = document.getElementById("checkout-btn");
 
 let cart = JSON.parse(localStorage.getItem('chaatCart')) || [];
+let ratingsData =
+  JSON.parse(localStorage.getItem("chaatRatings")) || {};
+let firstTryData =
+  JSON.parse(
+    localStorage.getItem("firstTryRecommendations")
+  ) || {};
 
 function saveCart() {
   localStorage.setItem('chaatCart', JSON.stringify(cart));
@@ -61,6 +86,41 @@ function formatPrice(price) {
   return `₹${price}`;
 }
 
+function saveRatings() {
+  localStorage.setItem(
+    "chaatRatings",
+    JSON.stringify(ratingsData)
+  );
+}
+function saveFirstTryData() {
+
+  localStorage.setItem(
+    "firstTryRecommendations",
+    JSON.stringify(firstTryData)
+  );
+
+}
+
+function getItemRatings(itemId, defaultRating) {
+
+  const ratings = ratingsData[itemId];
+
+  if (!ratings || ratings.length === 0) {
+    return {
+      average: defaultRating,
+      count: 0
+    };
+  }
+
+  const total =
+    ratings.reduce((sum, r) => sum + r, 0);
+
+  return {
+    average: (total / ratings.length).toFixed(1),
+    count: ratings.length
+  };
+}
+
 // ===== Render Functions =====
 
 function createCard(item) {
@@ -69,11 +129,63 @@ function createCard(item) {
   card.tabIndex = 0;
   card.setAttribute("aria-label", `${item.name} - ${item.description}. Price: ${formatPrice(item.price)}.`);
 
+  const ratingData =
+    getItemRatings(item.id, item.rating);
+
+  const isTrending =
+    ratingData.average >= 4.7 &&
+    ratingData.count >= 3;
+
   card.innerHTML = `
     <img src="${item.image}" alt="${item.name}" loading="lazy" />
     <div class="card-content">
       <h3>${item.name}</h3>
       <p>${item.description}</p>
+
+      <div class="food-meta">
+
+        <div class="food-rating">
+          ⭐ ${ratingData.average}
+          • ${ratingData.count || item.recommendedCount}
+          recommendations
+        </div>
+
+        ${
+          isTrending
+            ? `
+            <span class="trending-badge">
+              🔥 Most Loved
+            </span>
+            `
+            : ""
+        }
+
+        <div class="rating-stars">
+          ${[1,2,3,4,5].map(star => `
+            <span
+              class="star"
+              data-rating="${star}"
+            >
+              ★
+            </span>
+          `).join("")}
+        </div>
+
+         <div class="first-try-section">
+
+          <p class="first-try-count">
+            👥 ${
+              firstTryData[item.id] || 0
+            } people recommend this for first-time visitors
+          </p>
+
+          <button class="first-try-btn">
+            👍 Recommend
+          </button>
+
+        </div>
+
+      </div>
     </div>
     <div class="card-footer">
       <span class="price">${formatPrice(item.price)}</span>
@@ -83,6 +195,79 @@ function createCard(item) {
 
   const addBtn = card.querySelector(".add-btn");
   addBtn.addEventListener("click", () => addToCart(item.id));
+  const stars = card.querySelectorAll(".star");
+
+stars.forEach(star => {
+
+  star.addEventListener("click", () => {
+
+    const value =
+      Number(star.dataset.rating);
+
+        const alreadyRated =
+          localStorage.getItem(
+            `rated-${item.id}`
+          );
+
+        if (alreadyRated) {
+          showToast("You already rated this item!");
+          return;
+        }
+
+        if (!ratingsData[item.id]) {
+          ratingsData[item.id] = [];
+        }
+
+        ratingsData[item.id].push(value);
+
+        saveRatings();
+
+        localStorage.setItem(
+          `rated-${item.id}`,
+          true
+        );
+
+        renderMenu();
+
+      });
+
+    });
+
+    const firstTryBtn =
+    card.querySelector(".first-try-btn");
+
+  firstTryBtn.addEventListener(
+    "click",
+    () => {
+
+      const alreadyRecommended =
+        localStorage.getItem(
+          `recommended-${item.id}`
+        );
+
+      if (alreadyRecommended) {
+
+        showToast(
+          "You already recommended this item!"
+        );
+
+        return;
+      }
+
+      firstTryData[item.id] =
+        (firstTryData[item.id] || 0) + 1;
+
+      saveFirstTryData();
+
+      localStorage.setItem(
+        `recommended-${item.id}`,
+        true
+      );
+
+      renderMenu();
+
+    }
+  );
 
   return card;
 }
@@ -440,6 +625,25 @@ function setupNewsletterForm() {
 }
 
 // ===== Initialization =====
+function showToast(message) {
+
+  const toast =
+    document.createElement("div");
+
+    toast.className = "toast-message";
+
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add("show");
+    }, 100);
+
+    setTimeout(() => {
+      toast.remove();
+    }, 3000);
+  }
 
 function init() {
   renderSpecials();
