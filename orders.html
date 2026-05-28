@@ -8,6 +8,8 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/delivery-tracker.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="icon" href="favicon.png" type="image/png" />
 </head>
 <body>
@@ -27,7 +29,7 @@
         </div>
       </div>
       <a href="index.html#about" class="nav-link">About</a>
-      <a href="favorites.html" class="nav-link">Favorites (<span id="fav-count">0</span>)</a>
+      <a href="favorites.html" class="nav-link">Favorites(<span id="fav-count">0</span>)</a>
       <a href="orders.html" class="nav-link active">Orders</a>
       <a href="cart.html" class="nav-link">Cart</a>
       <div class="search-bar" role="search">
@@ -40,13 +42,121 @@
   </div>
 </header>
 
-<section class="orders-page container">
-  <h1>My Orders</h1>
+<section id="live-tracking-section" class="tracking-section-container">
+  
+  <div class="tracking-layout-wrapper">
+    <!-- Left Sidebar: Active Tracking Status & Information -->
+    <div class="tracking-sidebar-panel" id="active-order-sidebar">
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">Live Tracking</h2>
+        <span class="active-pulse-badge">Live status</span>
+      </div>
+
+      <!-- Compact real-time ETA display card -->
+      <div class="eta-floating-card">
+        <div class="eta-pulse-ring">
+          <span id="eta-mins-val">20</span>
+          <span class="mins-label">MINS</span>
+        </div>
+        <div class="eta-status-info">
+          <p class="eta-heading">Estimated Arrival</p>
+          <p class="eta-status-detail" id="live-status-text">Preparing your warm street feast...</p>
+        </div>
+      </div>
+
+      <!-- Real-Time Interactive Swiggy/Zomato Tracker Stepper Timeline -->
+      <div class="timeline-stepper">
+        <div class="stepper-rail">
+          <div class="stepper-rail-fill" id="active-progress-bar" style="width: 0%;"></div>
+          <div class="stepper-cart-icon" id="vendor-cart" style="transform: translateX(0%);">🚲</div>
+        </div>
+        
+        <div class="stepper-steps-wrapper progress-steps">
+          <div class="stepper-step step active current" data-step="preparing">
+            <span class="step-icon-circle"><span class="icon">🍳</span></span>
+            <span class="step-label">Preparing</span>
+          </div>
+          <div class="stepper-step step" data-step="packed">
+            <span class="step-icon-circle"><span class="icon">📦</span></span>
+            <span class="step-label">Packed</span>
+          </div>
+          <div class="stepper-step step" data-step="out-for-delivery">
+            <span class="step-icon-circle"><span class="icon">🚲</span></span>
+            <span class="step-label">Out for Delivery</span>
+          </div>
+          <div class="stepper-step step" data-step="delivered">
+            <span class="step-icon-circle"><span class="icon">✅</span></span>
+            <span class="step-label">Delivered</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Location Detail Overlay -->
+      <div class="location-details-overlay">
+        <div class="location-icon-marker">📍</div>
+        <div class="location-address-info">
+          <p class="address-title">Delivering To:</p>
+          <p id="user-location-text" class="address-text">Detecting your location...</p>
+        </div>
+      </div>
+
+      <!-- Support floating action indicators -->
+      <div class="active-support-actions">
+        <button class="support-action-btn btn-call" aria-label="Call Delivery Agent" onclick="alert('Calling delivery agent Raju...')">
+          <span class="btn-icon">📞</span> Call Agent
+        </button>
+        <button class="support-action-btn btn-chat" aria-label="Chat with Vendor" onclick="alert('Opening secure chat channel with ChaatBazaar vendor...')">
+          <span class="btn-icon">💬</span> Chat
+        </button>
+        <button class="support-action-btn btn-help" aria-label="Get Live Help" onclick="alert('Connecting to live support desk...')">
+          <span class="btn-icon">ℹ️</span> Help
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Right Side: Leaflet Interactive Map Viewport with Autocomplete Search overlay -->
+    <div class="map-viewport-container">
+      
+      <!-- Floating Location Selection Heads-Up Display Card -->
+      <div class="floating-location-hud glassmorphic-hud">
+        <div class="hud-search-bar">
+          <span class="search-map-icon">🔍</span>
+          <input type="text" id="location-search-input" placeholder="Search another delivery address..." autocomplete="off" aria-label="Search Delivery Location" />
+          <button id="auto-locate-btn" title="Detect device live location" aria-label="Detect Location">🎯</button>
+        </div>
+        <!-- Autocomplete Suggestions List -->
+        <div id="location-search-suggestions" class="hud-search-suggestions" style="display: none;"></div>
+        <!-- Dynamic local error feedback HUD -->
+        <div id="hud-error-banner" class="hud-error-banner" style="display: none;"></div>
+      </div>
+
+      <div id="map">
+        <!-- Leaflet map -->
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- Mobile Bottom sheet toggle trigger/indicator -->
+<div class="mobile-drawer-trigger-bar" id="mobile-drawer-btn">
+  <div class="drawer-notch"></div>
+  <div class="drawer-trigger-content">
+    <span>View Live Tracking Detail</span>
+    <span class="drawer-arrow">▲</span>
+  </div>
+</div>
+
+<main class="container orders-main-history">
+  <h1 class="orders-history-title">My Orders History</h1>
   
   <div class="orders-container" id="orders-container" aria-live="polite">
-    <!-- Active and historical orders will be rendered here dynamically -->
+    <!-- Historical orders will be rendered dynamically -->
   </div>
-</section>
+</main>
 
 <footer>
   <div class="social-icons">
@@ -62,6 +172,11 @@
 <script src="js/sanitization.js"></script>
 <script src="js/cart-manager.js"></script>
 <script src="js/geolocation.js"></script>
+<script src="js/loyalty.js"></script>
 <script src="js/main.js"></script>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="js/live-tracking.js"></script>
+<script src="js/delivery-tracker.js"></script>
 </body>
 </html>

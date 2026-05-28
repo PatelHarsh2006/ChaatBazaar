@@ -1,51 +1,58 @@
+/**
+ * ChaatBazaar Interactive Delivery Tracker Simulation
+ * Connects the active order state to the Leaflet map markers, sidebar progress bars, and ETA timers
+ */
+
 const deliveryTracker = (() => {
   const stageDefinitions = [
     {
       key: 'preparing',
       label: 'Preparing Order 🍳',
-      message: 'Your order is being prepared with love... 🍳',
-      progress: '0%',
-      cartTranslate: '0%'
+      message: 'Vendor is roasting hot spices for your Chaat... 🍳',
+      progress: '12.5%',
+      cartLeft: '12.5%',
+      eta: '20'
     },
     {
       key: 'packed',
       label: 'Packed 📦',
-      message: 'Freshly packaged and ready to leave the stall! 📦',
-      progress: '33%',
-      cartTranslate: '28%'
+      message: 'Packaged freshly in clay pots & ready to ride! 📦',
+      progress: '37.5%',
+      cartLeft: '37.5%',
+      eta: '14'
     },
     {
       key: 'out-for-delivery',
       label: 'Out for Delivery 🚲',
-      message: 'Vendor is pedaling hot chaat straight to you! 🚲',
-      progress: '66%',
-      cartTranslate: '62%'
+      message: 'Raju is pedaling hot street eats straight to you! 🚲',
+      progress: '65%',
+      cartLeft: '62.5%',
+      eta: '6'
     },
     {
       key: 'delivered',
       label: 'Delivered ✅',
-      message: 'Order delivered — enjoy your street food feast! ✅',
+      message: 'Order arrived — dig into your hot street feast! ✅',
       progress: '100%',
-      cartTranslate: '90%'
+      cartLeft: '90%',
+      eta: '0'
     }
   ];
 
-  let modal = null;
-  let cartEl = null;
+  // Dom element references
   let progressBar = null;
-  let statusText = null;
+  let cartEl = null;
+  let statusTextEl = null;
+  let etaMinsEl = null;
   let steps = [];
-  let closeBtn = null;
-  let activeStageIndex = 0;
   let stageTimeouts = [];
 
   const queryTrackerElements = () => {
-    modal = document.getElementById('delivery-modal');
-    cartEl = document.getElementById('vendor-cart');
     progressBar = document.getElementById('active-progress-bar');
-    statusText = document.getElementById('live-status-text');
-    steps = Array.from(document.querySelectorAll('.progress-steps .step'));
-    closeBtn = document.getElementById('close-delivery-modal');
+    cartEl = document.getElementById('vendor-cart');
+    statusTextEl = document.getElementById('live-status-text');
+    etaMinsEl = document.getElementById('eta-mins-val');
+    steps = Array.from(document.querySelectorAll('.stepper-steps-wrapper .stepper-step'));
   };
 
   const delay = (ms) => new Promise((resolve) => {
@@ -53,113 +60,142 @@ const deliveryTracker = (() => {
     stageTimeouts.push(id);
   });
 
-  const clearStageTimers = () => {
-    stageTimeouts.forEach((id) => clearTimeout(id));
+  const clearTimers = () => {
+    stageTimeouts.forEach(id => clearTimeout(id));
     stageTimeouts = [];
   };
 
-  const hideModal = () => {
-    if (!modal) return;
-    modal.classList.add('hidden');
-    modal.setAttribute('aria-hidden', 'true');
-    clearStageTimers();
-  };
+  const updateSidebarTimeline = (stageIndex) => {
+    const stage = stageDefinitions[stageIndex];
+    if (!stage) return;
 
-  const updateStepVisuals = (index) => {
-    steps.forEach((step, stepIndex) => {
-      step.classList.toggle('completed', stepIndex < index);
-      step.classList.toggle('active', stepIndex === index);
-      step.classList.toggle('current', stepIndex === index);
+    // 1. Update progress bar filled width
+    if (progressBar) {
+      progressBar.style.width = stage.progress;
+    }
+
+    // 2. Move cart icon on rail
+    if (cartEl) {
+      cartEl.style.left = stage.cartLeft;
+      // Change icon depending on active stage
+      cartEl.textContent = stageIndex === 3 ? '✅' : stageIndex === 2 ? '🚲' : '🍳';
+    }
+
+    // 3. Update active message and ETA timers
+    if (statusTextEl) {
+      statusTextEl.textContent = stage.message;
+    }
+    if (etaMinsEl) {
+      etaMinsEl.textContent = stage.eta;
+    }
+
+    // 4. Highlight timeline steps
+    steps.forEach((step, idx) => {
+      step.classList.toggle('completed', idx < stageIndex);
+      step.classList.toggle('active', idx <= stageIndex);
+      step.classList.toggle('current', idx === stageIndex);
     });
   };
 
-  const updateStage = (stageIndex) => {
-    if (!stageDefinitions[stageIndex] || !progressBar || !cartEl || !statusText) return;
+  // --- Map Animation Pin Interpolator ---
+  // Interpolates delivery rider position along the route polyline based on active stage
+  function updateMapRiderPosition(stageIndex) {
+    if (!window.liveMap) return;
 
-    const stage = stageDefinitions[stageIndex];
-    activeStageIndex = stageIndex;
+    const restLat = window.RESTAURANT_LOCATION?.latitude || 28.6129;
+    const restLng = window.RESTAURANT_LOCATION?.longitude || 77.2295;
 
-    const progressValue = stage.progress;
-    const cartPosition = stage.cartTranslate;
+    // Get selected user drop-off coordinates, fallback to original if none set
+    let userLat = restLat + 0.015;
+    let userLng = restLng + 0.015;
 
-    progressBar.style.width = progressValue;
-    cartEl.style.transform = `translateX(${cartPosition})`;
-    statusText.textContent = stage.message;
-    statusText.classList.toggle('success', stageIndex === stageDefinitions.length - 1);
-    statusText.setAttribute('aria-live', 'polite');
-    statusText.setAttribute('aria-atomic', 'true');
-    statusText.setAttribute('aria-label', stage.message);
-
-    updateStepVisuals(stageIndex);
-
-    if (stageIndex === stageDefinitions.length - 1) {
-      if (closeBtn) {
-        closeBtn.classList.remove('hidden');
-        closeBtn.textContent = 'View Order Status';
-      }
+    if (window.userMarker) {
+      const uLatLng = window.userMarker.getLatLng();
+      userLat = uLatLng.lat;
+      userLng = uLatLng.lng;
     }
-  };
 
-  const resetTracker = () => {
-    if (!modal || !progressBar || !cartEl || !statusText) return;
+    // Interpolation ratios per stage
+    // 0: Preparing -> Rider at Restaurant (0% progress)
+    // 1: Packed -> Rider leaving Restaurant (15% progress)
+    // 2: Out for Delivery -> Rider halfway (60% progress)
+    // 3: Delivered -> Rider at user home (100% progress)
+    let ratio = 0;
+    if (stageIndex === 1) ratio = 0.15;
+    if (stageIndex === 2) ratio = 0.60;
+    if (stageIndex === 3) ratio = 1.0;
 
-    clearStageTimers();
-    activeStageIndex = 0;
-    progressBar.style.width = '0%';
-    cartEl.style.transform = 'translateX(0%)';
-    statusText.textContent = stageDefinitions[0].message;
-    statusText.classList.remove('success');
-    updateStepVisuals(0);
+    const riderLat = restLat + (userLat - restLat) * ratio;
+    const riderLng = restLng + (userLng - restLng) * ratio;
 
-    if (closeBtn) {
-      closeBtn.classList.add('hidden');
-      closeBtn.textContent = 'View Order Status';
+    // Custom Diver avatar (glowing rider pin)
+    const riderIcon = L.divIcon({
+      html: `<div style="font-size: 2.2rem; filter: drop-shadow(0 4px 12px rgba(255,87,34,0.45)); transform: scale(${stageIndex === 3 ? 0.9 : 1.15});">🛵</div>`,
+      iconSize: [40, 40],
+      iconAnchor: [20, 20],
+      className: 'leaflet-div-icon'
+    });
+
+    if (window.driverMarker) {
+      // Reposition rider marker smoothly
+      window.driverMarker.setLatLng([riderLat, riderLng]);
+    } else {
+      window.driverMarker = L.marker([riderLat, riderLng], { icon: riderIcon })
+        .addTo(window.liveMap)
+        .bindPopup("<strong>Rider Raju (🛵)</strong><br>Speeding street food to you!");
     }
-  };
 
-  const openModal = () => {
-    if (!modal) return;
-    modal.classList.remove('hidden');
-    modal.setAttribute('aria-hidden', 'false');
-    modal.querySelector('.delivery-modal-content')?.focus();
-  };
+    // Pan map to follow rider slightly during Out for Delivery stage
+    if (stageIndex === 2) {
+      window.liveMap.panTo([riderLat, riderLng]);
+    }
+  }
 
-  const startSimulation = async () => {
-    if (!modal || !cartEl || !progressBar || !statusText || steps.length === 0) return;
+  const runTrackingSimulation = async () => {
+    queryTrackerElements();
+    clearTimers();
 
-    clearStageTimers();
-    resetTracker();
-    openModal();
+    console.log("Beginning order tracking simulation...");
 
-    for (let index = 0; index < stageDefinitions.length; index += 1) {
-      updateStage(index);
-      if (index === stageDefinitions.length - 1) {
+    for (let i = 0; i < stageDefinitions.length; i++) {
+      // Apply updates to sidebar
+      updateSidebarTimeline(i);
+      
+      // Update dynamic rider marker position on Leaflet
+      updateMapRiderPosition(i);
+
+      if (i === stageDefinitions.length - 1) {
         break;
       }
-      await delay(index === 0 ? 2400 : index === 1 ? 2600 : 2800);
-    }
-  };
 
-  const bindEvents = () => {
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        hideModal();
-        window.location.href = 'orders.html';
-      });
+      // Timing delays between mock delivery events (fast tracking simulation)
+      await delay(i === 0 ? 5000 : i === 1 ? 6000 : 7000);
     }
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
-        hideModal();
-      }
-    });
   };
 
   const initialize = () => {
     queryTrackerElements();
-    bindEvents();
-    resetTracker();
-    window.triggerDeliverySimulation = startSimulation;
+    window.triggerDeliverySimulation = runTrackingSimulation;
+
+    // Hook to auto-trigger tracking simulator if a fresh order has just been placed (e.g. within last 60 seconds)
+    const orders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
+    if (orders.length > 0) {
+      const latestOrder = orders[0];
+      const timeSincePlacement = Date.now() - latestOrder.timestamp;
+      
+      // If order was placed within last 60 seconds, auto-launch active simulation!
+      if (timeSincePlacement < 60000 && latestOrder.status !== 'Delivered') {
+        setTimeout(() => {
+          runTrackingSimulation();
+        }, 1200); // Small buffer to let map load completely
+      } else {
+        // Safe default: set layout to complete/delivered state
+        updateSidebarTimeline(3);
+      }
+    } else {
+      // No orders placed: set tracker state to default/idle
+      updateSidebarTimeline(0);
+    }
   };
 
   return {
@@ -167,12 +203,10 @@ const deliveryTracker = (() => {
   };
 })();
 
-window.triggerDeliverySimulation = window.triggerDeliverySimulation || function () {
-  console.warn('Delivery tracker initializing shortly.');
-};
-
+// Self startup listener
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', deliveryTracker.init);
 } else {
-  deliveryTracker.init();
+  // Let Leaflet load first if executed dynamically
+  setTimeout(deliveryTracker.init, 500);
 }

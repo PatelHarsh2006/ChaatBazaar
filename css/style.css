@@ -1,4 +1,19 @@
 
+@font-face {
+  font-family: 'Poppins';
+  src: url('../fonts/Poppins-Light.ttf') format('truetype');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('../fonts/Poppins-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('../fonts/Poppins-Regular.ttf') format('truetype');
+  font-weight: 500;
+}
     * {
       margin: 0; padding: 0; box-sizing: border-box;
     }
@@ -232,48 +247,49 @@
 
     /* ===== Hero Section ===== */
     .hero {
-      background: linear-gradient(120deg, #ffab91, #ff5722);
-      color: white;
+      background: rgb(255, 228, 205);
       padding: 5rem 1rem 6rem;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 3rem;
+      gap: 4.5rem;
       flex-wrap: wrap;
+      height: 90vh;
     }
     .hero-content {
       flex: 1 1 400px;
-      max-width: 600px;
+      max-width: 640px;
     }
     .hero-content h1 {
-      font-size: 3.5rem;
+      color: #ff5722;
+      font-size: 3rem;
       font-weight: 700;
-      margin-bottom: 1rem;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      margin-bottom: 2rem;
       user-select: none;
+      line-height: 3.7rem;
     }
     .hero-content p {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       margin-bottom: 2rem;
       font-weight: 600;
       user-select: text;
       line-height: 1.4;
     }
     .btn-primary {
-      background: #fff;
-      color: #ff5722;
+      background: #e64a19;
+      color: white;
       font-weight: 700;
       padding: 1rem 2.5rem;
       border-radius: 50px;
-      box-shadow: 0 8px 25px rgb(255 87 34 / 0.6);
+      box-shadow: 0 8px 25px rgb(255 87 34 / 0.4);
       border: none;
       transition: background 0.3s ease, color 0.3s ease;
       user-select: none;
     }
     .btn-primary:hover {
-      background: #e64a19;
-      color: white;
-      box-shadow: 0 10px 30px rgb(230 74 25 / 0.8);
+      background: #ff6333;
+      color: #fff;
+      box-shadow: 0 10px 30px rgb(230 74 25 / 0.6);
     }
     .hero-image {
       flex: 1 1 400px;
@@ -344,6 +360,7 @@
     }
     .card img {
       border-radius: 15px;
+      width: 250px;
       height: 170px;
       object-fit: cover;
       margin-bottom: 1rem;
@@ -667,6 +684,26 @@
   max-width: 85%;
   line-height: 1.5;
 }
+
+    /* ===== Contact Section ===== */
+    section.contact {
+      padding: 5rem 1rem 7rem;
+      background: white;
+      color: #3e3e3e;
+      user-select: text;
+    }
+    section.contact .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    section.contact h2 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #bf360c;
+      margin-bottom: 3rem;
+      text-align: center;
+      user-select: none;
+    }
 
     /* ===== Contact Form ===== */
     form.contact-form {
@@ -1186,17 +1223,20 @@
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100%;
-  max-width: 250px;
-  background: rgba(255, 255, 255, 0.95);
+  width: calc(100% + 20px);
+  min-width: 350px;
+  max-width: 90vw;
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(10px);
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  margin-top: 0.5rem;
+  border-radius: 16px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+  margin-top: 0.8rem;
   z-index: 1001;
   overflow: hidden;
-  border: 1px solid rgba(255, 87, 34, 0.2);
+  border: 1px solid rgba(255, 87, 34, 0.15);
   animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 @keyframes slideDown {
@@ -1205,13 +1245,15 @@
 }
 
 .suggestion-item {
-  padding: 0.8rem 1.2rem;
+  padding: 1rem 1.4rem;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 87, 34, 0.1);
-  transition: background 0.2s ease, padding-left 0.2s ease;
+  gap: 1.5rem;
+  border-bottom: 1px solid rgba(255, 87, 34, 0.08);
+  transition: background 0.2s ease, transform 0.2s ease;
+  min-height: 50px;
 }
 
 .suggestion-item:last-child {
@@ -1219,8 +1261,12 @@
 }
 
 .suggestion-item:hover {
-  background: rgba(255, 87, 34, 0.1);
-  padding-left: 1.5rem;
+  background: rgba(255, 87, 34, 0.08);
+  transform: translateX(4px);
+}
+
+.suggestion-item:active {
+  background: rgba(255, 87, 34, 0.15);
 }
 
 .suggestion-item.no-matches {
@@ -1230,22 +1276,29 @@
   justify-content: center;
   cursor: default;
   background: transparent !important;
-  padding: 1rem;
+  padding: 1.5rem;
 }
 
 .suggestion-name {
   font-weight: 600;
-  color: #3e2723;
-  font-size: 0.95rem;
+  color: #2c1810;
+  font-size: 1rem;
+  line-height: 1.4;
+  flex: 1;
+  min-width: 150px;
 }
 
 .suggestion-category {
-  font-size: 0.75rem;
-  background: rgba(255, 87, 34, 0.2);
+  font-size: 0.8rem;
+  background: rgba(255, 87, 34, 0.15);
   color: #bf360c;
-  padding: 0.2rem 0.5rem;
-  border-radius: 20px;
+  padding: 0.35rem 0.75rem;
+  border-radius: 24px;
   font-weight: 700;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
 /* ===== Advanced Filters UI ===== */
@@ -1425,12 +1478,11 @@
 
 /* ===== Highlights & Food Metadata Styles ===== */
 mark.highlight {
-  background: linear-gradient(120deg, #ffe082 0%, #ffd54f 100%);
+  background: #ffd54f;
   color: #3e2723;
-  padding: 0.1rem 0.3rem;
-  border-radius: 4px;
-  font-weight: inherit;
-  box-shadow: 0 2px 8px rgba(255, 213, 79, 0.4);
+  padding: 0.05rem 0.15rem;
+  border-radius: 3px;
+  font-weight: 700;
 }
 
 .card-meta {
@@ -1916,6 +1968,13 @@ body.dark #checkout-btn {
 }
 
 /* Forms */
+body.dark section.contact {
+  background: #252525;
+  color: #eee;
+}
+body.dark section.contact h2 {
+  color: #ff5722;
+}
 body.dark form.contact-form {
   background: #2b2b2b;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
@@ -1925,6 +1984,9 @@ body.dark form.contact-form textarea {
   background: #1e1e1e;
   color: #f5f5f5;
   border-color: #444;
+}
+body.dark form.contact-form label {
+  color: #ffab91;
 }
 body.dark .btn-submit {
   background: #ff5722;
@@ -2158,4 +2220,174 @@ button:disabled {
 .add-btn:disabled:hover {
   transform: none !important;
   opacity: 0.6;
+}
+}
+
+/* ===== Loyalty Wallet Styles ===== */
+.cart-loyalty-widget {
+  background: #ffffff;
+  border: 1px dashed #ff9800;
+  border-radius: 16px;
+  padding: 1.2rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+body.dark .cart-loyalty-widget {
+  background: #2a2a2a;
+  border-color: #f57c00;
+  color: #fff;
+}
+
+.loyalty-widget-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.loyalty-icon {
+  font-size: 1.6rem;
+  filter: drop-shadow(0 2px 5px rgba(255, 152, 0, 0.4));
+  animation: pulse-gold 2s infinite ease-in-out;
+}
+
+@keyframes pulse-gold {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.loyalty-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.loyalty-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #bf360c;
+}
+
+body.dark .loyalty-title {
+  color: #ff7a45;
+}
+
+.loyalty-desc {
+  font-size: 0.85rem;
+  color: #5d4037;
+}
+
+body.dark .loyalty-desc {
+  color: #ccc;
+}
+
+.loyalty-redeem-action {
+  border-top: 1px solid #ffe0b2;
+  padding-top: 0.8rem;
+}
+
+body.dark .loyalty-redeem-action {
+  border-top-color: #444;
+}
+
+/* Switch Toggle Styling */
+.loyalty-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #bf360c;
+  gap: 0.6rem;
+}
+
+body.dark .loyalty-toggle {
+  color: #ff7a45;
+}
+
+.loyalty-toggle input {
+  display: none;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 44px;
+  height: 22px;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: .3s;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.loyalty-toggle input:checked + .toggle-slider {
+  background-color: #4caf50;
+}
+
+.loyalty-toggle input:checked + .toggle-slider:before {
+  transform: translateX(22px);
+}
+
+.loyalty-empty-message {
+  font-size: 0.8rem;
+  color: #795548;
+  font-style: italic;
+  margin-top: 0.4rem;
+}
+
+body.dark .loyalty-empty-message {
+  color: #aaa;
+}
+
+/* Cart Total Breakdown */
+.cart-total-breakdown {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.5rem 0;
+}
+
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #5d4037;
+}
+
+body.dark .breakdown-row {
+  color: #ccc;
+}
+
+.breakdown-row.discount {
+  color: #e64a19;
+}
+
+.breakdown-row.final {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #bf360c;
+  border-top: 1px solid #ffcc80;
+  padding-top: 0.5rem;
+  margin-top: 0.2rem;
+}
+
+body.dark .breakdown-row.final {
+  color: #ff7a45;
+  border-top-color: #555;
 }
