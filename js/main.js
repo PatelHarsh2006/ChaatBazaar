@@ -4,6 +4,7 @@ let orders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
 
 // Initialize cart from cart manager (will be set after DOM loads)
 let cart = [];
+let loyaltyPointsApplied = false;
 
 // Will be initialized in setupCartManager() after document loads
 function setupCartManager() {
@@ -25,8 +26,25 @@ async function loadMenuData() {
     }
     menuItems = await response.json();
   } catch (error) {
-    console.error("Failed to load menu data:", error);
-    menuItems = [];
+    console.warn("Failed to load menu data via fetch, attempting fallback script:", error);
+    try {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "data/menu-fallback.js";
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+      if (window.MENU_FALLBACK) {
+        menuItems = window.MENU_FALLBACK;
+        console.log("Successfully loaded menu data from fallback script.");
+      } else {
+        throw new Error("window.MENU_FALLBACK is not defined.");
+      }
+    } catch (fallbackError) {
+      console.error("Failed to load fallback menu data:", fallbackError);
+      menuItems = [];
+    }
   }
 }
 
@@ -180,6 +198,29 @@ function renderRecentlyViewed() {
   });
 }
 
+function renderFavorites() {
+  const favoritesContainer = document.getElementById("favorites-container");
+  if (!favoritesContainer) return;
+
+  const recentItems = RecentlyViewed.getItems();
+  favoritesContainer.innerHTML = "";
+
+  if (recentItems.length === 0) {
+    favoritesContainer.innerHTML = `
+      <div class="empty-favorites" style="text-align:center;width:100%;padding:3rem 1rem;">
+        <h2 style="color:var(--text-color);margin-bottom:1rem;">No Favorite Items Yet</h2>
+        <p style="color:var(--text-muted);margin-bottom:2rem;">Explore our menu and click on items to add them to your favorites!</p>
+        <a href="menu.html" class="btn-primary" style="display:inline-block;text-decoration:none;padding:0.8rem 1.8rem;border-radius:30px;">Go to Menu</a>
+      </div>
+    `;
+    return;
+  }
+
+  recentItems.forEach(item => {
+    favoritesContainer.appendChild(createCard(item));
+  });
+}
+
 // ===== Unified Interactive Filter Engine =====
 
 function applyAllFilters() {
@@ -315,7 +356,7 @@ function renderCart() {
         removeBtn.addEventListener("click", () => {
           cart = cart.filter(ci => ci.item.id !== item.id);
           updateCartCount();
-  updateFavCount();
+          updateFavCount();
           renderCart();
           saveCart();
         });
@@ -324,11 +365,83 @@ function renderCart() {
       cartItemsContainer.appendChild(cartItem);
     });
 
+    // Render Loyalty Points Widget at the end of the cart list
+    const points = typeof loyalty !== 'undefined' ? loyalty.getBalance() : 0;
+    const loyaltyDiv = document.createElement("div");
+    loyaltyDiv.className = "cart-loyalty-widget";
+
     const total = cart.reduce(
       (sum, ci) => sum + ci.item.price * ci.quantity,
       0
     );
-    if (cartTotal) cartTotal.textContent = `Total: ${formatPrice(total)}`;
+    const discountVal = Math.min(points, total);
+
+    loyaltyDiv.innerHTML = `
+      <div class="loyalty-widget-header">
+        <span class="loyalty-icon">🌟</span>
+        <div class="loyalty-info">
+          <span class="loyalty-title">Loyalty Wallet</span>
+          <span class="loyalty-desc">Balance: <strong>${points}</strong> pts (₹${points})</span>
+        </div>
+      </div>
+      ${points > 0 ? `
+      <div class="loyalty-redeem-action">
+        <label class="loyalty-toggle">
+          <input type="checkbox" id="apply-loyalty-checkbox" ${loyaltyPointsApplied ? 'checked' : ''} />
+          <span class="toggle-slider"></span>
+          <span class="toggle-label">Apply ₹${discountVal} Discount</span>
+        </label>
+      </div>
+      ` : `
+      <div class="loyalty-empty-message">
+        <span>Earn 10 points for every ₹100 spent!</span>
+      </div>
+      `}
+    `;
+
+    cartItemsContainer.appendChild(loyaltyDiv);
+
+    const checkbox = loyaltyDiv.querySelector("#apply-loyalty-checkbox");
+    if (checkbox) {
+      checkbox.addEventListener("change", (e) => {
+        loyaltyPointsApplied = e.target.checked;
+
+        // Update total price display directly
+        const freshDiscount = Math.min(points, total);
+        let totalHtml = "";
+        if (loyaltyPointsApplied && points > 0) {
+          const finalTotal = total - freshDiscount;
+          totalHtml = `
+            <div class="cart-total-breakdown">
+              <div class="breakdown-row"><span>Subtotal:</span> <span>${formatPrice(total)}</span></div>
+              <div class="breakdown-row discount"><span>Loyalty Discount:</span> <span>-${formatPrice(freshDiscount)}</span></div>
+              <div class="breakdown-row final"><span>Total:</span> <span>${formatPrice(finalTotal)}</span></div>
+            </div>
+          `;
+        } else {
+          totalHtml = `Total: ${formatPrice(total)}`;
+        }
+
+        if (cartTotal) {
+          cartTotal.innerHTML = totalHtml;
+        }
+      });
+    }
+
+    let totalHtml = "";
+    if (loyaltyPointsApplied && points > 0) {
+      const finalTotal = total - discountVal;
+      totalHtml = `
+        <div class="cart-total-breakdown">
+          <div class="breakdown-row"><span>Subtotal:</span> <span>${formatPrice(total)}</span></div>
+          <div class="breakdown-row discount"><span>Loyalty Discount:</span> <span>-${formatPrice(discountVal)}</span></div>
+          <div class="breakdown-row final"><span>Total:</span> <span>${formatPrice(finalTotal)}</span></div>
+        </div>
+      `;
+    } else {
+      totalHtml = `Total: ${formatPrice(total)}`;
+    }
+    if (cartTotal) cartTotal.innerHTML = totalHtml;
     if (checkoutBtn) checkoutBtn.disabled = false;
 
   }, 600);
@@ -408,13 +521,13 @@ function renderOrdersList() {
   orders.forEach(order => {
     const card = document.createElement("article");
     card.className = "order-card";
-    
+
     const isPreparing = order.status === "Preparing" || order.status === "On the Way" || order.status === "Delivered" ? "active" : "";
     const isOnWay = order.status === "On the Way" || order.status === "Delivered" ? "active" : "";
     const isDelivered = order.status === "Delivered" ? "active" : "";
 
     const statusClass = "status-" + order.status.toLowerCase().replace(/\s+/g, "-");
-    
+
     let itemsHtml = "";
     order.items.forEach(ci => {
       itemsHtml += `
@@ -462,6 +575,17 @@ function renderOrdersList() {
       </div>
 
       <div class="order-card-footer">
+        ${order.discount && order.discount > 0 ? `
+        <div class="order-discount-details" style="font-size:0.9rem;color:#777;margin-bottom:0.5rem;text-align:right;width:100%;">
+          <span>Subtotal: ${formatPrice(order.subtotal || (order.total + order.discount))}</span> |
+          <span style="color:#e64a19;font-weight:600;">Points Redeemed: ${order.pointsRedeemed || order.discount} (-${formatPrice(order.discount)})</span>
+        </div>
+        ` : ''}
+        ${order.pointsEarned && order.pointsEarned > 0 ? `
+        <div class="order-points-earned" style="font-size:0.9rem;color:#28a745;margin-bottom:0.5rem;text-align:right;width:100%;font-weight:600;">
+          <span>🌟 Earned +${order.pointsEarned} Loyalty Points</span>
+        </div>
+        ` : ''}
         <div class="order-total-price">
           <span>Total Paid:</span>
           <strong>${formatPrice(order.total)}</strong>
@@ -476,7 +600,7 @@ function renderOrdersList() {
 
 // ===== Global Window Handlers for Multi-page support =====
 
-window.filterCategory = function(category) {
+window.filterCategory = function (category) {
   currentCategory = category;
   applyAllFilters();
 
@@ -493,17 +617,36 @@ window.filterCategory = function(category) {
   });
 };
 
-window.checkout = async function() {
+window.checkout = async function () {
   if (cart.length === 0) {
     alert("Your cart is empty!");
-    return;
+    return false;
   }
 
   const validationResult = await validateDeliveryLocation();
 
   if (!validationResult.valid) {
     alert(validationResult.error);
-    return;
+    return false;
+  }
+
+  const subtotal = cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
+  let discount = 0;
+  let pointsRedeemed = 0;
+
+  if (loyaltyPointsApplied && typeof loyalty !== 'undefined') {
+    const balance = loyalty.getBalance();
+    pointsRedeemed = Math.min(balance, subtotal);
+    discount = pointsRedeemed; // 1 point = ₹1 discount
+    loyalty.redeemPoints(pointsRedeemed);
+  }
+
+  const finalTotal = subtotal - discount;
+
+  // Award points on final total paid (10 points per ₹100 spent)
+  let pointsEarned = 0;
+  if (typeof loyalty !== 'undefined') {
+    pointsEarned = loyalty.awardPoints(finalTotal);
   }
 
   const newOrder = {
@@ -514,7 +657,11 @@ window.checkout = async function() {
     }),
     timestamp: Date.now(),
     items: JSON.parse(JSON.stringify(cart)),
-    total: cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0),
+    subtotal: subtotal,
+    discount: discount,
+    pointsRedeemed: pointsRedeemed,
+    pointsEarned: pointsEarned,
+    total: finalTotal,
     status: "Pending",
     deliveryAddress: {
       latitude: validationResult.userLocation.latitude,
@@ -528,6 +675,9 @@ window.checkout = async function() {
   orders.unshift(newOrder);
   localStorage.setItem('chaatOrders', JSON.stringify(orders));
 
+  // Reset points applied state
+  loyaltyPointsApplied = false;
+
   cartManager.clear();
   updateCartCount();
   updateFavCount();
@@ -539,9 +689,10 @@ window.checkout = async function() {
   } else {
     console.warn('Delivery tracker is not ready yet. Order has been placed.');
   }
+  return true;
 };
 
-window.reorderOrder = function(orderId) {
+window.reorderOrder = function (orderId) {
   const pastOrder = orders.find(o => o.id === orderId);
   if (!pastOrder) return;
 
@@ -585,7 +736,7 @@ function addToCart(id) {
   const item = menuItems.find(i => i.id === id);
   if (!item) return;
 
-   //Check if item is available
+  //Check if item is available
   const isAvailable = item.available !== undefined ? item.available : true;
   if (!isAvailable) {
     alert(`${item.name} is currently out of stock!`);
@@ -599,12 +750,12 @@ function addToCart(id) {
   saveCart();
   showToast(`🛒 ${item.name} added to cart`);
   if (cartCount) {
-  cartCount.classList.add("cart-bounce");
+    cartCount.classList.add("cart-bounce");
 
-  setTimeout(() => {
-    cartCount.classList.remove("cart-bounce");
-  }, 400);
-}
+    setTimeout(() => {
+      cartCount.classList.remove("cart-bounce");
+    }, 400);
+  }
 
   if (cartSidebar) {
     cartSidebar.setAttribute("aria-hidden", "false");
@@ -861,19 +1012,19 @@ function setupContactForm() {
   const formSuccess = document.getElementById("form-success");
   if (!form || !formSuccess) return;
 
-  const nameInput    = form.querySelector("#name");
-  const emailInput   = form.querySelector("#email");
+  const nameInput = form.querySelector("#name");
+  const emailInput = form.querySelector("#email");
   const messageInput = form.querySelector("#message");
 
-  const errorName    = form.querySelector("#error-name");
-  const errorEmail   = form.querySelector("#error-email");
+  const errorName = form.querySelector("#error-name");
+  const errorEmail = form.querySelector("#error-email");
   const errorMessage = form.querySelector("#error-message");
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    errorName.textContent    = "";
-    errorEmail.textContent   = "";
+    errorName.textContent = "";
+    errorEmail.textContent = "";
     errorMessage.textContent = "";
     formSuccess.style.display = "none";
 
@@ -957,10 +1108,35 @@ function setupActiveNavbar() {
   });
 }
 
-function updateFavCount() {
-  // Prevent ReferenceError
-  // You can later implement actual favorite count logic here
-  return;
+function setupDropdownFilterLinks() {
+  const dropdownFilters = document.querySelectorAll(".menu-filter");
+  dropdownFilters.forEach(link => {
+    link.addEventListener("click", (e) => {
+      const category = link.dataset.filter;
+      if (category === "Specials") {
+        const specialsSection = document.getElementById("specials");
+        if (specialsSection) {
+          specialsSection.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        renderMenu(category);
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        filterButtons.forEach(btn => {
+          if (btn.dataset.filter === category) {
+            btn.classList.add("active");
+            btn.setAttribute("aria-pressed", "true");
+          } else {
+            btn.classList.remove("active");
+            btn.setAttribute("aria-pressed", "false");
+          }
+        });
+        const menuSection = document.getElementById("menu");
+        if (menuSection) {
+          menuSection.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    });
+  });
 }
 
 function saveCart() {
@@ -983,11 +1159,16 @@ async function init() {
   setupContactForm();
   setupNewsletterForm();
   setupActiveNavbar();
+  setupDropdownFilterLinks();
 
   if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", () => {
-   window.location.href = "orders.html";
-});
+    checkoutBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const success = await window.checkout();
+      if (success) {
+        window.location.href = "orders.html";
+      }
+    });
   }
 
   // Load database items asynchronously without blocking UI interactions
@@ -995,6 +1176,7 @@ async function init() {
 
   renderSpecials();
   renderRecentlyViewed();
+  renderFavorites();
   applyAllFilters();
   updateCartCount();
   updateFavCount();
