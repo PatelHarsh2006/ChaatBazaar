@@ -44,15 +44,29 @@
 
 <section id="live-tracking-section" class="tracking-section-container">
   
-  <div class="tracking-layout-wrapper">
-    <!-- Left Sidebar: Active Tracking Status & Information -->
+  <!-- Delivery Coverage Card -->
+  <div id="delivery-coverage-box" class="delivery-coverage-card" style="display:none;">
+    <div class="coverage-icon-wrapper">
+      <span class="coverage-icon">📍</span>
+    </div>
+    <div class="coverage-content">
+      <h3 class="coverage-title">Choose Delivery Location</h3>
+      <p class="coverage-desc">Search within our live delivery coverage area to enjoy hot ChaatBazaar treats. Delivery is available within a 5km radius.</p>
+    </div>
+    <div class="coverage-action">
+      <button class="btn-explore-coverage" onclick="document.getElementById('delivery-coverage-box').style.display='none'; document.getElementById('location-search-input').focus();">Search Locations</button>
+    </div>
+  </div>
+
+  <div class="tracking-layout-wrapper sidebar-hidden" id="tracking-wrapper">
+    <!-- Sidebar -->
     <div class="tracking-sidebar-panel" id="active-order-sidebar">
       <div class="sidebar-header">
         <h2 class="sidebar-title">Live Tracking</h2>
         <span class="active-pulse-badge">Live status</span>
       </div>
 
-      <!-- Compact real-time ETA display card -->
+      <!-- ETA Card -->
       <div class="eta-floating-card">
         <div class="eta-pulse-ring">
           <span id="eta-mins-val">20</span>
@@ -68,7 +82,7 @@
       <div class="timeline-stepper">
         <div class="stepper-rail">
           <div class="stepper-rail-fill" id="active-progress-bar" style="width: 0%;"></div>
-          <div class="stepper-cart-icon" id="vendor-cart" style="transform: translateX(0%);">🚲</div>
+          <div class="stepper-cart-icon" id="vendor-cart" style="transform: translateX(0%);">🛍️</div>
         </div>
         
         <div class="stepper-steps-wrapper progress-steps">
@@ -81,7 +95,7 @@
             <span class="step-label">Packed</span>
           </div>
           <div class="stepper-step step" data-step="out-for-delivery">
-            <span class="step-icon-circle"><span class="icon">🚲</span></span>
+            <span class="step-icon-circle"><span class="icon">🛍️</span></span>
             <span class="step-label">Out for Delivery</span>
           </div>
           <div class="stepper-step step" data-step="delivered">
@@ -100,7 +114,7 @@
         </div>
       </div>
 
-      <!-- Support floating action indicators -->
+      <!-- Support buttons -->
       <div class="active-support-actions">
         <button class="support-action-btn btn-call" aria-label="Call Delivery Agent" onclick="alert('Calling delivery agent Raju...')">
           <span class="btn-icon">📞</span> Call Agent
@@ -115,24 +129,33 @@
 
     </div>
 
-    <!-- Right Side: Leaflet Interactive Map Viewport with Autocomplete Search overlay -->
+    <!-- Map Viewport -->
     <div class="map-viewport-container">
       
-      <!-- Floating Location Selection Heads-Up Display Card -->
-      <div class="floating-location-hud glassmorphic-hud">
+      <!-- Search overlay -->
+      <div class="floating-location-hud premium-hud">
         <div class="hud-search-bar">
           <span class="search-map-icon">🔍</span>
-          <input type="text" id="location-search-input" placeholder="Search another delivery address..." autocomplete="off" aria-label="Search Delivery Location" />
-          <button id="auto-locate-btn" title="Detect device live location" aria-label="Detect Location">🎯</button>
+          <input type="text" id="location-search-input" placeholder="Search delivery address..." autocomplete="off" aria-label="Search Delivery Location" />
         </div>
         <!-- Autocomplete Suggestions List -->
-        <div id="location-search-suggestions" class="hud-search-suggestions" style="display: none;"></div>
-        <!-- Dynamic local error feedback HUD -->
-        <div id="hud-error-banner" class="hud-error-banner" style="display: none;"></div>
+        <div id="location-search-suggestions" class="hud-search-suggestions premium-suggestions" style="display: none;"></div>
+        <!-- Error banner -->
+        <div id="hud-error-banner" class="hud-info-banner" style="display: none;"></div>
       </div>
+
+      <!-- Current Location Button -->
+      <button id="floating-gps-btn" class="floating-gps-action" title="Current Location" aria-label="Current Location">
+        <span class="gps-icon">📍</span>
+      </button>
 
       <div id="map">
         <!-- Leaflet map -->
+      </div>
+
+      <!-- Confirm Location Button -->
+      <div class="confirm-location-container" id="confirm-location-btn-container" style="display: none;">
+        <button class="btn-primary confirm-loc-btn" id="confirm-location-btn">Confirm Delivery Location</button>
       </div>
 
     </div>
@@ -178,5 +201,19 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="js/live-tracking.js"></script>
 <script src="js/delivery-tracker.js"></script>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+const deliveryAvailable =
+  params.get("delivery") === "true";
+
+if (!deliveryAvailable) {
+  document.getElementById("delivery-coverage-box").style.display = "flex";
+}
+
+</script>
+
 </body>
 </html>

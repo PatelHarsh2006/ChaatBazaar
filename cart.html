@@ -30,7 +30,24 @@
     </p>
   </div>
   <div id="cart-items"></div>
-  <p id="total-price"></p>
+
+  <section class="coupon-section">
+    <h2>Have a promo code?</h2>
+    <div class="coupon-input-row">
+      <input id="coupon-code-input" type="text" placeholder="Enter promo code (e.g. WELCOME10)" aria-label="Coupon code">
+      <button id="apply-coupon-btn" type="button">Apply</button>
+    </div>
+    <button id="remove-coupon-btn" type="button" class="secondary-btn" style="display:none;margin-top:0.75rem;">Remove coupon</button>
+    <p id="coupon-message" class="coupon-message" aria-live="polite"></p>
+    <p id="applied-coupon-label" class="coupon-applied-label"></p>
+  </section>
+
+  <section class="price-breakdown">
+    <p>Subtotal: <strong id="coupon-subtotal">₹0</strong></p>
+    <p id="coupon-discount-row" style="display:none;">Discount: <strong id="coupon-discount">-₹0</strong></p>
+    <p class="grand-total">Total: <strong id="coupon-grand-total">₹0</strong></p>
+  </section>
+
   <button id="checkout-btn">Checkout</button>
 </section>
 
