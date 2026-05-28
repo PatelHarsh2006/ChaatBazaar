@@ -1,4 +1,4 @@
-[
+window.MENU_FALLBACK = [
   {
     "id": "samosa-001",
     "name": "Aloo Samosa",
@@ -8,8 +8,10 @@
     "category": "Snacks",
     "rating": 4.8,
     "spice": "Medium",
-    "dietary": ["vegan"],
-    "available" : false
+    "dietary": [
+      "vegan"
+    ],
+    "available": false
   },
   {
     "id": "kachori-002",
@@ -20,7 +22,9 @@
     "category": "Snacks",
     "rating": 4.7,
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -32,7 +36,9 @@
     "category": "Chaat",
     "rating": 4.9,
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -44,7 +50,9 @@
     "category": "Chaat",
     "rating": 4.6,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -80,7 +88,9 @@
     "category": "Snacks",
     "rating": 4.9,
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -92,7 +102,9 @@
     "category": "Snacks",
     "rating": 4.7,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -104,7 +116,9 @@
     "category": "Chaat",
     "rating": 4.8,
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -128,7 +142,9 @@
     "category": "Snacks",
     "rating": 4.8,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -140,7 +156,9 @@
     "category": "Chaat",
     "rating": 4.9,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -152,7 +170,9 @@
     "category": "Snacks",
     "rating": 4.7,
     "spice": "Low",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -164,7 +184,10 @@
     "category": "Chaat",
     "rating": 4.8,
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true
   },
   {
@@ -176,7 +199,9 @@
     "category": "Beverages",
     "rating": 4.6,
     "spice": "Low",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -188,7 +213,9 @@
     "category": "Snacks",
     "rating": 4.9,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -200,7 +227,9 @@
     "category": "Chaat",
     "rating": 4.7,
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -224,7 +253,9 @@
     "category": "Chaat",
     "rating": 4.9,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -236,10 +267,12 @@
     "category": "Beverages",
     "rating": 4.7,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true
   },
-
   {
     "id": "rajasthan-001",
     "name": "Dal Baati Churma",
@@ -249,7 +282,9 @@
     "category": "Snacks",
     "rating": 4.9,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Rajasthan",
     "featured": true
@@ -263,7 +298,9 @@
     "category": "Snacks",
     "rating": 4.8,
     "spice": "Low",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Rajasthan",
     "featured": true
@@ -291,7 +328,9 @@
     "category": "Snacks",
     "rating": 4.7,
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Rajasthan",
     "featured": false
@@ -319,7 +358,10 @@
     "category": "Chaat",
     "rating": 4.5,
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Rajasthan",
     "featured": false
@@ -333,7 +375,9 @@
     "category": "Snacks",
     "rating": 4.9,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Sikkim",
     "featured": true
@@ -347,7 +391,9 @@
     "category": "Chaat",
     "rating": 4.8,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Sikkim",
     "featured": true
@@ -361,7 +407,10 @@
     "category": "Chaat",
     "rating": 4.5,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Sikkim",
     "featured": false
@@ -375,7 +424,10 @@
     "category": "Snacks",
     "rating": 4.6,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Sikkim",
     "featured": false
@@ -431,7 +483,10 @@
     "category": "Snacks",
     "rating": 4.7,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Tamil Nadu",
     "featured": true
@@ -459,7 +514,10 @@
     "category": "Snacks",
     "rating": 4.5,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Tamil Nadu",
     "featured": false
@@ -487,7 +545,10 @@
     "category": "Snacks",
     "rating": 4.6,
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Tamil Nadu",
     "featured": false
@@ -515,7 +576,10 @@
     "category": "Snacks",
     "rating": 4.7,
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Telangana",
     "featured": true
@@ -529,7 +593,10 @@
     "category": "Snacks",
     "rating": 4.5,
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Telangana",
     "featured": false
@@ -655,7 +722,10 @@
     "category": "Snacks",
     "rating": 4.5,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Tripura",
     "featured": false
@@ -683,7 +753,9 @@
     "category": "Snacks",
     "rating": 4.7,
     "spice": "Low",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Uttar Pradesh",
     "featured": true
@@ -697,7 +769,9 @@
     "category": "Snacks",
     "rating": 4.7,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Uttar Pradesh",
     "featured": false
@@ -725,7 +799,9 @@
     "category": "Chaat",
     "rating": 4.6,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Uttar Pradesh",
     "featured": false
@@ -753,7 +829,10 @@
     "category": "Chaat",
     "rating": 4.7,
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Uttarakhand",
     "featured": true
@@ -767,7 +846,10 @@
     "category": "Snacks",
     "rating": 4.8,
     "spice": "High",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Uttarakhand",
     "featured": true
@@ -781,7 +863,10 @@
     "category": "Chaat",
     "rating": 4.5,
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Uttarakhand",
     "featured": false
@@ -809,7 +894,10 @@
     "category": "Chaat",
     "rating": 4.4,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Uttarakhand",
     "featured": false
@@ -879,7 +967,9 @@
     "category": "Snacks",
     "rating": 4.7,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "West Bengal",
     "featured": false
@@ -907,9 +997,11 @@
     "category": "Chaat",
     "rating": 4.7,
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "West Bengal",
     "featured": false
   }
-]
+];
