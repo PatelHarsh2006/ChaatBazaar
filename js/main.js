@@ -64,7 +64,6 @@ const cartTotal =
   document.getElementById("total-price");
 const checkoutBtn = document.getElementById("checkout-btn");
 
-<<<<<<< HEAD
 const couponCodeInput = document.getElementById("coupon-code-input");
 const applyCouponBtn = document.getElementById("apply-coupon-btn");
 const removeCouponBtn = document.getElementById("remove-coupon-btn");
@@ -81,11 +80,9 @@ const coupons = {
   SAVE50: { type: "flat", value: 50 },
 };
 let activeCoupon = null;
-=======
 function saveCart() {
   localStorage.setItem("chaatCart", JSON.stringify(cart));
 }
->>>>>>> 4b406c1 (Fix script loading issues and restore hamburger menu functionality)
 
 function formatPrice(price) {
   return `₹${price}`;
