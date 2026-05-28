@@ -1562,7 +1562,7 @@ mark.highlight {
 .card-footer .add-btn:hover {
   background: #1b5e20;
   box-shadow: 0 6px 15px rgba(27, 94, 32, 0.5);
-  transform: translateY(-1px);
+  transform: translateY(-1px) scale(1.02);
 }
 
 /* ===== Orders Dashboard Layout ===== */
@@ -1829,7 +1829,7 @@ mark.highlight {
 .btn-reorder:hover {
   background: #bf360c;
   box-shadow: 0 6px 20px rgba(191, 54, 12, 0.4);
-  transform: translateY(-1px);
+  transform: translateY(-1px) scale(1.02);
 }
 /* ===== Dark Mode Theme ===== */
 .theme-toggle {
@@ -2204,4 +2204,132 @@ button:disabled {
   transform: none !important;
   opacity: 0.6;
 }
+
+/* ===== Modern Realistic Cart Button ===== */
+
+.cart-nav-btn {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+
+padding: 10px 18px;
+
+background: rgba(255, 255, 255, 0.12);
+color: white !important;
+
+border: 1px solid rgba(255, 255, 255, 0.18);
+
+border-radius: 12px;
+
+font-weight: 600;
+font-size: 15px;
+
+text-decoration: none;
+
+backdrop-filter: blur(6px);
+
+transition:
+background 0.25s ease,
+transform 0.2s ease,
+box-shadow 0.25s ease;
+
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+/* Smooth hover */
+
+.cart-nav-btn:hover {
+background: rgba(255, 255, 255, 0.2);
+
+transform: translateY(-1px);
+
+box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+/* Click effect */
+
+.cart-nav-btn:active {
+transform: scale(0.98);
+}
+
+/* SVG icon */
+
+.cart-nav-btn svg {
+flex-shrink: 0;
+transition: transform 0.25s ease;
+}
+
+.cart-nav-btn:hover svg {
+transform: scale(1.08);
+}
+
+/* Dark mode */
+
+body.dark .cart-nav-btn {
+background: rgba(255, 255, 255, 0.08);
+border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark .cart-nav-btn:hover {
+background: rgba(255, 255, 255, 0.14);
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+.cart-nav-btn {
+padding: 8px 14px;
+font-size: 14px;
+}
+}
+
+/* Smooth realistic hover */
+
+.cart-nav-btn:hover {
+background: #e64a19;
+
+box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+
+transform: translateY(-1px) scale(1.02);
+}
+
+/* Smooth click effect */
+
+.cart-nav-btn:active {
+transform: translateY(0);
+box-shadow: 0 2px 6px rgba(255, 87, 34, 0.25);
+}
+
+/* SVG icon */
+
+.cart-nav-btn svg {
+flex-shrink: 0;
+transition: transform 0.25s ease;
+}
+
+.cart-nav-btn:hover svg {
+transform: scale(1.05);
+}
+
+/* Dark mode */
+
+body.dark .cart-nav-btn {
+background: #ff5722;
+color: white !important;
+}
+
+body.dark .cart-nav-btn:hover {
+background: #ff7043;
+}
+
+/* Mobile responsive */
+
+@media (max-width: 768px) {
+.cart-nav-btn {
+padding: 8px 14px;
+font-size: 14px;
+gap: 6px;
+}
+}
+
 }
