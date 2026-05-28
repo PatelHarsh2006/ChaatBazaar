@@ -969,12 +969,48 @@ function saveCart() {
 
 // ===== Initialization =====
 
+// ===== Dark Mode Toggle =====
+
+function setupThemeToggle() {
+  const themeToggle = document.getElementById("theme-toggle");
+
+  if (!themeToggle) return;
+
+  // Load saved theme from localStorage
+  const savedTheme = localStorage.getItem("chaatTheme");
+
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark-mode");
+    themeToggle.textContent = "☀️";
+  }
+
+  // Toggle Theme
+  themeToggle.addEventListener("click", () => {
+
+    document.body.classList.toggle("dark-mode");
+
+    const isDarkMode =
+      document.body.classList.contains("dark-mode");
+
+    // Save Theme
+    localStorage.setItem(
+      "chaatTheme",
+      isDarkMode ? "dark" : "light"
+    );
+
+    // Change Icon
+    themeToggle.textContent =
+      isDarkMode ? "☀️" : "🌙";
+  });
+}
+
 async function init() {
   // Initialize cart manager first to sync cart state
   setupCartManager();
 
   // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
   setupCartToggle();
+  setupThemeToggle();
   setupFilterButtons();
   setupOrderNowScroll();
   setupSearchSuggestions();

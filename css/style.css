@@ -34,61 +34,68 @@
       padding: 0 1rem;
     }
 
-    /* ===== Toast Notification ===== */
+/* ===== Toast Notification ===== */
 
 .toast-notification {
   position: fixed;
-  top: 90px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-20px);
 
-  background: linear-gradient(135deg, #ff7a00, #ff9a3c);
+  bottom: 24px;
+  right: 24px;
+
+  background: #2e7d32; /* Same green as Add button */
   color: #fff;
 
-  padding: 14px 24px;
+  padding: 14px 22px;
   border-radius: 14px;
 
   font-size: 15px;
   font-weight: 600;
 
-  min-width: 280px;
+  min-width: 260px;
   text-align: center;
 
-  box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.2);
 
   opacity: 0;
+
+  transform:
+    translateY(20px)
+    scale(0.95);
+
   transition: all 0.35s ease;
 
   z-index: 9999;
   pointer-events: none;
 
-  border: 1px solid rgba(255,255,255,0.2);
-  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.15);
 }
+
+/* ===== Show Animation ===== */
 
 .toast-notification.show {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+
+  transform:
+    translateY(0)
+    scale(1);
 }
 
 /* ===== Mobile Responsive ===== */
 
 @media (max-width: 600px) {
-  .toast-notification {
-    width: calc(100% - 32px);
-    min-width: unset;
 
+  .toast-notification {
     left: 16px;
     right: 16px;
 
-    transform: translateY(-20px);
+    bottom: 16px;
+
+    width: auto;
+    min-width: unset;
 
     font-size: 14px;
     padding: 12px 16px;
-  }
-
-  .toast-notification.show {
-    transform: translateY(0);
   }
 }
 
@@ -113,6 +120,7 @@
 }
 
     /* ===== Header ===== */
+    
     header {
       position: sticky;
       top: 0;
@@ -143,7 +151,7 @@
       font-weight: 600;
     }
     nav a {
-      color: white;
+      color: black;
       padding: 0.5rem 1rem;
       border-radius: 8px;
       transition: background 0.3s ease;
@@ -153,6 +161,172 @@
       background: #e64a19;
       box-shadow: 0 0 8px rgb(230 74 25 / 0.8);
     }
+
+    /* ===== Theme Toggle ===== */
+
+#theme-toggle {
+  width: 44px;
+  height: 44px;
+
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+
+  background: rgba(255,255,255,0.12);
+  color: white;
+
+  font-size: 1.1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+
+  backdrop-filter: blur(8px);
+}
+
+#theme-toggle:hover {
+  transform: scale(1.08);
+  background: rgba(255,255,255,0.22);
+}
+
+/* ===== Smooth Theme Transition ===== */
+
+body,
+header,
+.card,
+.team-member,
+.testimonial,
+section,
+footer,
+input,
+textarea,
+select,
+nav a,
+#cart-sidebar {
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* ===== Dark Mode ===== */
+
+body.dark-mode {
+  background: #121212;
+  color: #f5f5f5;
+}
+
+/* Header */
+body.dark-mode header {
+  background: #1f1f1f;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.5);
+}
+
+/* Main Sections */
+body.dark-mode section.specials,
+body.dark-mode section.menu,
+body.dark-mode section.about,
+body.dark-mode section.testimonials {
+  background: #181818;
+}
+
+/* Cards */
+body.dark-mode .card,
+body.dark-mode .team-member,
+body.dark-mode .testimonial,
+body.dark-mode .advanced-filters,
+body.dark-mode .cart-item,
+body.dark-mode .order-card,
+body.dark-mode .empty-orders {
+  background: #222;
+  color: #f5f5f5;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+}
+
+/* Text Colors */
+body.dark-mode .section-title,
+body.dark-mode .about h2,
+body.dark-mode .card h3,
+body.dark-mode .team-member h4,
+body.dark-mode .orders-page h1,
+body.dark-mode .order-id {
+  color: #ffb74d;
+}
+
+body.dark-mode .card-content p,
+body.dark-mode .about p,
+body.dark-mode .testimonial p,
+body.dark-mode .team-member p,
+body.dark-mode .order-date,
+body.dark-mode .order-item-row {
+  color: #d0d0d0;
+}
+
+/* Navbar Links */
+body.dark-mode nav a:hover,
+body.dark-mode nav a.active {
+  background: #333;
+}
+
+/* Search */
+body.dark-mode .search-bar input {
+  background: #2a2a2a;
+  color: white;
+}
+
+body.dark-mode .search-bar input::placeholder {
+  color: #bbbbbb;
+}
+
+/* Inputs */
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  background: #2a2a2a;
+  color: white;
+  border-color: #444;
+}
+
+/* Cart Sidebar */
+body.dark-mode #cart-sidebar {
+  background: #1e1e1e;
+}
+
+/* Footer */
+body.dark-mode footer {
+  background: #0d0d0d;
+}
+
+/* Newsletter */
+body.dark-mode section.newsletter {
+  background: #1f1f1f;
+}
+
+/* Buttons */
+body.dark-mode .filter-btn {
+  background: #222;
+  color: #ffb74d;
+  border-color: #ffb74d;
+}
+
+body.dark-mode .filter-btn.active,
+body.dark-mode .filter-btn:hover {
+  background: #ff5722;
+  color: white;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  #theme-toggle {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}
 
     /* ===== Dropdown Nav ===== */
     .dropdown {
@@ -2013,195 +2187,56 @@ body.dark .skeleton {
   );
 }
 
+/* ===== Fix Header Visibility ===== */
 
-/* ===== Custom Scrollbar ===== */
-::-webkit-scrollbar {
-  width: 8px;
+header {
+  background: linear-gradient(90deg, #ff5a1f, #ff6b2d);
 }
-::-webkit-scrollbar-track {
-  background: #fff3e0;
-}
-::-webkit-scrollbar-thumb {
-  background: #ff5722;
-  border-radius: 999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #e64a19;
-/* ===== Accessibility Styles ===== */
 
-/* Skip link - visible on focus */
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  background: #ff5722;
-  color: white;
-  padding: 0.6rem 1rem;
-  text-decoration: none;
-  z-index: 10000;
-  border-radius: 0 0 8px 0;
+/* Navbar Links */
+/* ===== Light Mode Navbar ===== */
+
+header nav a {
+  color: #ffffff;
   font-weight: 600;
 }
 
-.skip-link:focus {
-  top: 0;
+/* ===== Dark Mode Navbar ===== */
+
+body.dark-mode header nav a {
+  color: #f5f5f5;
+}
+/* Search Bar */
+.search-bar input {
+  background: rgba(255,255,255,0.92);
+  color: #333;
 }
 
-/* Enhanced focus states for keyboard navigation */
-body.keyboard-nav button:focus,
-body.keyboard-nav a:focus,
-body.keyboard-nav input:focus,
-body.keyboard-nav textarea:focus,
-body.keyboard-nav select:focus {
-  outline: 3px solid #ff5722;
-  outline-offset: 2px;
-}
-
-/* Focus states for all interactive elements */
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 3px solid #ff5722;
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-/* Card focus state */
-.card:focus {
-  outline: 3px solid #ff5722;
-  outline-offset: 2px;
-  box-shadow: 0 0 20px rgba(255, 87, 34, 0.5);
-}
-
-/* Search suggestion focused state */
-.suggestion-item.focused {
-  background: #ffe0d0;
-  color: #3e3e3e;
-}
-
-.suggestion-item:focus-visible {
-  outline: 2px solid #ff5722;
-  outline-offset: 1px;
-}
-
-/* Improved focus for navigation links */
-nav a:focus-visible {
-  box-shadow: 0 0 8px #ff5722;
-}
-
-/* Filter button focus state */
-.filter-btn:focus-visible,
-.menu-filter:focus-visible {
-  outline: 2px solid #ff5722;
-  outline-offset: 2px;
-}
-
-/* Checkbox and radio focus states */
-input[type="checkbox"]:focus-visible,
-input[type="radio"]:focus-visible {
-  outline: 2px solid #ff5722;
-  outline-offset: 2px;
-}
-
-/* Range slider focus state */
-input[type="range"]:focus-visible {
-  outline: 2px solid #ff5722;
-  outline-offset: 4px;
-}
-
-/* Select dropdown focus state */
-select:focus-visible {
-  outline: 2px solid #ff5722;
-  outline-offset: 2px;
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: more) {
-  button:focus-visible,
-  a:focus-visible,
-  input:focus-visible,
-  textarea:focus-visible,
-  select:focus-visible {
-    outline-width: 4px;
-  }
-
-  .card:focus {
-    outline-width: 4px;
-    box-shadow: 0 0 30px rgba(255, 87, 34, 0.8);
-  }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Dark mode support for better contrast */
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #1a1a1a;
-    color: #e0e0e0;
-  }
-
-  .card {
-    background: #2d2d2d;
-  }
-
-  .suggestion-item {
-    background: #2d2d2d;
-    color: #e0e0e0;
-  }
-
-  .suggestion-item.focused {
-    background: #bf360c;
-    color: #fff;
-  }
-}
-
-/* Ensure links are underlined for clarity */
-a[href] {
-  text-decoration: underline;
-  text-decoration-color: rgba(255, 87, 34, 0.5);
-}
-
-/* Improve contrast of disabled buttons */
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Out of Stock Badge */
-.out-of-stock-badge {
-  background-color: #6c757d !important;  /* Grey color */
+/* Theme Toggle Default */
+#theme-toggle {
+  background: rgba(255,255,255,0.15);
   color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 12px;
-  font-weight: 600;
-  display: inline-block;
-  margin: 10px 0 5px 0;
-  letter-spacing: 0.5px;
-  text-align: center;
-  width: fit-content;
 }
 
-/* Disabled button styling */
-.add-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background-color: #cccccc !important;
-  transform: none !important;
+/* ===== Hero Text Visibility ===== */
+
+.hero-content h1,
+.hero-content p {
+  color: white;
 }
 
-/* Hover effect for disabled button */
-.add-btn:disabled:hover {
-  transform: none !important;
-  opacity: 0.6;
+/* ===== Dark Mode Proper Fix ===== */
+
+body.dark-mode header {
+  background: #1f1f1f;
+}
+
+body.dark-mode nav a {
+  color: #f5f5f5;
+}
+
+body.dark-mode .hero-content h1,
+body.dark-mode .hero-content p {
+  color: white;
 }
 }
