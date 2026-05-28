@@ -4,7 +4,7 @@ window.MENU_FALLBACK = [
     "name": "Aloo Samosa",
     "description": "Crispy triangular pastry filled with spiced potato and peas",
     "price": 20,
-    "image": "img/1.avif",
+    "image": "img/Samosa.png",
     "category": "Snacks",
     "rating": 4.8,
     "spice": "Medium",
