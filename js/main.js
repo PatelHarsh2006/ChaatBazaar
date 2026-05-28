@@ -510,12 +510,20 @@ function renderCart() {
 
       const decreaseBtn = cartItem.querySelector(".qty-decrease");
       if (decreaseBtn) {
-        decreaseBtn.addEventListener("click", () => removeFromCart(item.id));
+        decreaseBtn.addEventListener("click", () => {
+          cartManager.decreaseQuantity(item.id);
+          updateCartCount();
+          renderCart();
+        });
       }
 
       const increaseBtn = cartItem.querySelector(".qty-increase");
       if (increaseBtn) {
-        increaseBtn.addEventListener("click", () => addToCart(item.id));
+        increaseBtn.addEventListener("click", () => {
+          cartManager.increaseQuantity(item.id);
+          updateCartCount();
+          renderCart();
+        });
       }
 
       const removeBtn = cartItem.querySelector(".cart-item-remove");
@@ -867,7 +875,6 @@ window.checkout = async function () {
 
   cartManager.clear();
   updateCartCount();
-  updateFavCount();
   renderCart();
 
   // Launch the animation simulation modal if available.
@@ -890,7 +897,6 @@ window.reorderOrder = function (orderId) {
   });
 
   updateCartCount();
-  updateFavCount();
   renderCart();
 
   alert("Items added back to your cart successfully!");
@@ -934,7 +940,6 @@ function addToCart(id) {
 
   cartManager.addItem(item, 1);
   updateCartCount();
-  updateFavCount();
   renderCart();
   showToast(`🛒 ${item.name} added to cart`);
   if (cartCount) {
@@ -952,18 +957,15 @@ function addToCart(id) {
 }
 
 function removeFromCart(id) {
-  const cartIndex = cart.findIndex(ci => ci.item.id === id);
-
-  if (cartIndex === -1) return;
-
-  const removedItem = cart[cartIndex].item;
+  const cartItem = cartManager.getItem(id);
+  if (!cartItem) return;
+  const removedItemName = cartItem.item.name;
 
   cartManager.decreaseQuantity(id);
   updateCartCount();
-  updateFavCount();
   renderCart();
 
-  showToast(`🗑️ ${removedItem.name} removed from cart`);
+  showToast(`🗑️ ${removedItemName} removed from cart`);
 }
 // ===== Event Listeners =====
 
@@ -1365,7 +1367,6 @@ async function init() {
   renderFavorites();
   applyAllFilters();
   updateCartCount();
-  updateFavCount();
   renderCart();
 
   // Run dynamic order rendering and simulated status progress updates
