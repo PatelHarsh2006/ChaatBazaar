@@ -15,8 +15,19 @@
 
 <header>
   <div class="header-inner container" role="banner">
-    <a href="index.html" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
-    <nav role="navigation" aria-label="Primary Navigation">
+  <a href="index.html" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
+
+  <button
+    class="hamburger-btn"
+    id="hamburger-btn"
+    aria-label="Toggle navigation"
+    aria-controls="primary-nav"
+    aria-expanded="false"
+  >
+    ☰
+  </button>
+
+  <nav id="primary-nav" class="primary-nav" role="navigation" aria-label="Primary Navigation">
       <a href="index.html" class="nav-link">Home</a>
       <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
         <a href="menu.html" class="dropdown-toggle nav-link active">Menu</a>
