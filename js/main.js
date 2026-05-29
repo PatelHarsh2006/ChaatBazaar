@@ -284,7 +284,7 @@ function setupFilterButtons() {
         b.classList.remove("active");
         b.setAttribute("aria-pressed", "false");
       });
-      btn.classList.add("active");
+      btn.classList.addactive();
       btn.setAttribute("aria-pressed", "true");
       renderMenu(btn.dataset.filter);
     });
