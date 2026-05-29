@@ -408,14 +408,431 @@ if (window.deliveryRadiusCircle) {
     initMap(lat, lng);
   };
 
-  // Initial Load (GPS or fallback)
-  performGPSDetection();
+  // Check if there is an active order in localStorage
+  const activeOrders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
+  let hasActiveOrder = false;
 
-  // Confirm Location Button Flow
+  if (activeOrders.length > 0) {
+    const latestOrder = activeOrders[0];
+    const elapsedSeconds = (Date.now() - latestOrder.timestamp) / 1000;
+    
+    if (latestOrder.status !== "Delivered") {
+      if (elapsedSeconds >= 45) {
+        latestOrder.status = "Delivered";
+        localStorage.setItem('chaatOrders', JSON.stringify(activeOrders));
+        if (typeof window.renderOrdersList === "function") {
+          window.renderOrdersList();
+        }
+      } else {
+        hasActiveOrder = true;
+        
+        const userLat = latestOrder.deliveryAddress.latitude;
+        const userLng = latestOrder.deliveryAddress.longitude;
+        
+        console.log("Restoring active order state for Order:", latestOrder.id);
+        
+        // Compute correct starting stage for the simulation based on elapsed time
+        let startStage = 0;
+        if (elapsedSeconds >= 25) {
+          startStage = 2; // Out for Delivery
+        } else if (elapsedSeconds >= 10) {
+          startStage = 1; // Packed
+        }
+        
+        // Initialize map at user coordinates
+        initMap(userLat, userLng);
+        
+        // Show tracking sidebar and hide confirm container
+        const wrapper = document.getElementById("tracking-wrapper");
+        if (wrapper) {
+          wrapper.classList.remove("sidebar-hidden");
+        }
+        const confirmContainer = document.getElementById("confirm-location-btn-container");
+        if (confirmContainer) {
+          confirmContainer.style.display = "none";
+        }
+        
+        // Fill the address text display
+        if (userLocationText) {
+          const distanceKm = calculateDistance(
+            window.RESTAURANT_LOCATION?.latitude || FALLBACK_LAT,
+            window.RESTAURANT_LOCATION?.longitude || FALLBACK_LNG,
+            userLat,
+            userLng
+          );
+          userLocationText.innerHTML = `📍 Distance: <strong>${distanceKm.toFixed(2)} km</strong><br><span style="font-size: 0.8rem; color: var(--text-muted);">${userLat.toFixed(4)}, ${userLng.toFixed(4)}</span>`;
+        }
+        
+        // Fill in input field
+        if (searchInput) {
+          searchInput.value = latestOrder.deliveryAddress.name || "Device GPS Location";
+        }
+        
+        // Run the delivery simulation from the restored stage
+        setTimeout(() => {
+          if (typeof window.triggerDeliverySimulation === "function") {
+            window.triggerDeliverySimulation(startStage);
+          }
+        }, 800);
+      }
+    }
+  }
+
+  // Only perform GPS detection if there is no active tracking session
+  if (!hasActiveOrder) {
+    performGPSDetection();
+  }
+
+  // Confirm Location Button Flow - Now opens checkout modal instead of starting tracking directly
   const confirmLocBtn = document.getElementById("confirm-location-btn");
+  const checkoutModal = document.getElementById("checkout-modal");
+  const closeCheckoutBtn = document.getElementById("checkout-close-btn");
+  const placeOrderBtn = document.getElementById("place-order-cta");
+  const couponInput = document.getElementById("checkout-coupon-input");
+  const couponApplyBtn = document.getElementById("checkout-coupon-apply");
+  const couponFeedback = document.getElementById("checkout-coupon-feedback");
+
+  let currentCoupon = null;
+
+  function renderCheckoutItems() {
+    const listContainer = document.getElementById("checkout-items-list");
+    if (!listContainer) return;
+    
+    const items = window.cartManager ? window.cartManager.getItems() : [];
+    listContainer.innerHTML = "";
+    
+    if (items.length === 0) {
+      listContainer.innerHTML = `<p style="text-align:center;color:var(--text-muted);font-weight:600;padding:1rem;">Your cart is empty.</p>`;
+      return;
+    }
+    
+    items.forEach(({ item, quantity }) => {
+      const row = document.createElement("div");
+      row.className = "checkout-item-row";
+      row.innerHTML = `
+        <span>${item.name} <span class="checkout-item-qty">x${quantity}</span></span>
+        <span>₹${item.price * quantity}</span>
+      `;
+      listContainer.appendChild(row);
+    });
+  }
+
+  function recalculateCheckoutTotals() {
+    const subtotal = window.cartManager ? window.cartManager.getTotalPrice() : 0;
+    let deliveryFee = 40;
+    const platformFee = 10;
+    const tax = Math.round(subtotal * 0.05); // 5% GST
+    
+    let couponDiscount = 0;
+    if (currentCoupon) {
+      if (currentCoupon.type === "freedel") {
+        deliveryFee = 0;
+        couponDiscount = 40;
+      } else {
+        couponDiscount = currentCoupon.discount;
+      }
+    }
+    
+    const grandTotal = Math.max(subtotal + deliveryFee + platformFee + tax - (currentCoupon?.type === "freedel" ? 0 : couponDiscount), 0);
+    
+    document.getElementById("checkout-subtotal").textContent = `₹${subtotal}`;
+    document.getElementById("checkout-delivery-fee").textContent = `₹${deliveryFee}`;
+    document.getElementById("checkout-platform-fee").textContent = `₹${platformFee}`;
+    document.getElementById("checkout-tax").textContent = `₹${tax}`;
+    
+    const discountRow = document.getElementById("checkout-discount-row");
+    const discountVal = document.getElementById("checkout-discount");
+    if (currentCoupon && currentCoupon.type !== "freedel") {
+      discountRow.style.display = "flex";
+      discountVal.textContent = `-₹${couponDiscount}`;
+    } else {
+      discountRow.style.display = "none";
+    }
+    
+    document.getElementById("checkout-grand-total").textContent = `₹${grandTotal}`;
+  }
+
+  function validateCheckoutForm() {
+    let isValid = true;
+    
+    // 1. Name validation
+    const nameInput = document.getElementById("checkout-name");
+    const nameError = document.getElementById("name-error");
+    if (!nameInput.value.trim()) {
+      nameInput.classList.add("invalid");
+      nameError.textContent = "Full Name is required.";
+      isValid = false;
+    } else {
+      nameInput.classList.remove("invalid");
+      nameError.textContent = "";
+    }
+    
+    // 2. Phone validation
+    const phoneInput = document.getElementById("checkout-phone");
+    const phoneError = document.getElementById("phone-error");
+    const phoneVal = phoneInput.value.trim();
+    const phonePattern = /^\d{10}$/;
+    if (!phoneVal) {
+      phoneInput.classList.add("invalid");
+      phoneError.textContent = "Phone Number is required.";
+      isValid = false;
+    } else if (!phonePattern.test(phoneVal)) {
+      phoneInput.classList.add("invalid");
+      phoneError.textContent = "Phone number must be exactly 10 digits.";
+      isValid = false;
+    } else {
+      phoneInput.classList.remove("invalid");
+      phoneError.textContent = "";
+    }
+    
+    // 3. Address validation
+    const addressInput = document.getElementById("checkout-address");
+    const addressError = document.getElementById("address-error");
+    if (!addressInput.value.trim()) {
+      addressInput.classList.add("invalid");
+      addressError.textContent = "Delivery Address is required.";
+      isValid = false;
+    } else {
+      addressInput.classList.remove("invalid");
+      addressError.textContent = "";
+    }
+    
+    // 4. Payment Method validation
+    const selectedPayment = document.querySelector('input[name="payment-method"]:checked');
+    const paymentError = document.getElementById("payment-error");
+    if (!selectedPayment) {
+      paymentError.textContent = "Please select a payment method.";
+      isValid = false;
+    } else {
+      paymentError.textContent = "";
+    }
+    
+    return isValid;
+  }
+
+  // Clear validation styling when inputs are corrected
+  const formInputs = [
+    document.getElementById("checkout-name"),
+    document.getElementById("checkout-phone"),
+    document.getElementById("checkout-address")
+  ];
+  formInputs.forEach(input => {
+    if (input) {
+      input.addEventListener("input", () => {
+        input.classList.remove("invalid");
+        const errorSpan = document.getElementById(`${input.id.replace("checkout-", "")}-error`);
+        if (errorSpan) errorSpan.textContent = "";
+      });
+    }
+  });
+
+  const paymentRadios = document.querySelectorAll('input[name="payment-method"]');
+  paymentRadios.forEach(radio => {
+    radio.addEventListener("change", () => {
+      const paymentError = document.getElementById("payment-error");
+      if (paymentError) paymentError.textContent = "";
+    });
+  });
+
+  // Restrict phone to numbers only
+  const phoneInputField = document.getElementById("checkout-phone");
+  if (phoneInputField) {
+    phoneInputField.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace(/\D/g, "");
+    });
+  }
+
+  // Coupon application logic
+  if (couponApplyBtn) {
+    couponApplyBtn.addEventListener("click", () => {
+      const code = couponInput.value.trim().toUpperCase();
+      const subtotal = window.cartManager ? window.cartManager.getTotalPrice() : 0;
+      
+      if (!code) {
+        couponFeedback.className = "coupon-feedback error";
+        couponFeedback.textContent = "Please enter a coupon code.";
+        return;
+      }
+      
+      if (code === "SAVE50") {
+        if (subtotal < 100) {
+          couponFeedback.className = "coupon-feedback error";
+          couponFeedback.textContent = "SAVE50 is only valid on orders of ₹100 or more.";
+          currentCoupon = null;
+        } else {
+          couponFeedback.className = "coupon-feedback success";
+          couponFeedback.textContent = "SAVE50 applied! ₹50 off.";
+          currentCoupon = { code, discount: 50, type: "flat" };
+        }
+      } else if (code === "FREEDEL") {
+        couponFeedback.className = "coupon-feedback success";
+        couponFeedback.textContent = "FREEDEL applied! Free Delivery.";
+        currentCoupon = { code, discount: 40, type: "freedel" };
+      } else if (code === "CHAAT20") {
+        const discount = Math.round(subtotal * 0.2);
+        const maxDiscount = Math.min(discount, 100);
+        couponFeedback.className = "coupon-feedback success";
+        couponFeedback.textContent = `CHAAT20 applied! 20% off (₹${maxDiscount}).`;
+        currentCoupon = { code, discount: maxDiscount, type: "percent" };
+      } else {
+        couponFeedback.className = "coupon-feedback error";
+        couponFeedback.textContent = "Invalid or expired coupon.";
+        currentCoupon = null;
+      }
+      
+      recalculateCheckoutTotals();
+    });
+  }
+
   if (confirmLocBtn) {
     confirmLocBtn.addEventListener("click", () => {
-      document.getElementById("confirm-location-btn-container").style.display = "none";
+      if (window.cartManager && window.cartManager.isEmpty()) {
+        alert("Your cart is empty! Please add some tasty street treats to your cart first.");
+        return;
+      }
+
+      // Auto-fill address from search input
+      const addressVal = document.getElementById("location-search-input")?.value || "";
+      const checkoutAddressInput = document.getElementById("checkout-address");
+      if (checkoutAddressInput && addressVal && addressVal !== "Device Live GPS Location") {
+        checkoutAddressInput.value = addressVal;
+      } else if (checkoutAddressInput) {
+        checkoutAddressInput.value = "Device GPS Location";
+      }
+
+      // Reset coupon feedback
+      if (couponInput) couponInput.value = "";
+      if (couponFeedback) {
+        couponFeedback.textContent = "";
+        couponFeedback.className = "coupon-feedback";
+      }
+      currentCoupon = null;
+
+      // Render summary and show modal
+      renderCheckoutItems();
+      recalculateCheckoutTotals();
+      
+      if (checkoutModal) {
+        checkoutModal.style.display = "flex";
+      }
+    });
+  }
+
+  // Close modal
+  if (closeCheckoutBtn && checkoutModal) {
+    closeCheckoutBtn.addEventListener("click", () => {
+      checkoutModal.style.display = "none";
+    });
+
+    window.addEventListener("click", (e) => {
+      if (e.target === checkoutModal) {
+        checkoutModal.style.display = "none";
+      }
+    });
+  }
+
+  // Change Address Action
+  const changeAddressBtn = document.getElementById("change-address-btn");
+  if (changeAddressBtn) {
+    changeAddressBtn.addEventListener("click", () => {
+      if (checkoutModal) {
+        checkoutModal.style.display = "none";
+      }
+      
+      const confirmLocBtnContainer = document.getElementById("confirm-location-btn-container");
+      if (confirmLocBtnContainer) {
+        confirmLocBtnContainer.style.display = "flex";
+      }
+      
+      const searchInput = document.getElementById("location-search-input");
+      if (searchInput) {
+        searchInput.focus();
+        searchInput.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
+  }
+
+  // Place Order Action
+  if (placeOrderBtn) {
+    placeOrderBtn.addEventListener("click", () => {
+      if (!validateCheckoutForm()) {
+        return;
+      }
+
+      // Collect coordinates
+      let userLat = FALLBACK_LAT;
+      let userLng = FALLBACK_LNG;
+      if (window.userMarker) {
+        const latLng = window.userMarker.getLatLng();
+        userLat = latLng.lat;
+        userLng = latLng.lng;
+      }
+
+      const distance = calculateDistance(
+        window.RESTAURANT_LOCATION?.latitude || FALLBACK_LAT,
+        window.RESTAURANT_LOCATION?.longitude || FALLBACK_LNG,
+        userLat,
+        userLng
+      );
+
+      const customerDetails = {
+        name: document.getElementById("checkout-name").value.trim(),
+        phone: document.getElementById("checkout-phone").value.trim(),
+        address: document.getElementById("checkout-address").value.trim(),
+        paymentMethod: document.querySelector('input[name="payment-method"]:checked').value,
+        lat: userLat,
+        lng: userLng,
+        source: "map",
+        distance: distance
+      };
+
+      const subtotal = window.cartManager ? window.cartManager.getTotalPrice() : 0;
+      let deliveryFee = 40;
+      const platformFee = 10;
+      const tax = Math.round(subtotal * 0.05);
+      let couponDiscount = 0;
+
+      if (currentCoupon) {
+        if (currentCoupon.type === "freedel") {
+          deliveryFee = 0;
+          couponDiscount = 40;
+        } else {
+          couponDiscount = currentCoupon.discount;
+        }
+      }
+
+      const grandTotal = Math.max(subtotal + deliveryFee + platformFee + tax - (currentCoupon?.type === "freedel" ? 0 : couponDiscount), 0);
+
+      const pricingInfo = {
+        subtotal: subtotal,
+        discount: couponDiscount,
+        deliveryFee: deliveryFee,
+        platformFee: platformFee,
+        tax: tax,
+        total: grandTotal,
+        couponCode: currentCoupon ? currentCoupon.code : null,
+        pointsRedeemed: 0
+      };
+
+      // Call global main.js place order logic
+      if (typeof window.placeOrderFromCheckout === "function") {
+        window.placeOrderFromCheckout(customerDetails, pricingInfo);
+      } else {
+        console.error("placeOrderFromCheckout is not defined globally!");
+      }
+
+      // Hide modal
+      if (checkoutModal) {
+        checkoutModal.style.display = "none";
+      }
+
+      // Hide confirm button
+      const confirmLocBtnContainer = document.getElementById("confirm-location-btn-container");
+      if (confirmLocBtnContainer) {
+        confirmLocBtnContainer.style.display = "none";
+      }
+
+      // Activate active order sidebar layout
       const wrapper = document.getElementById("tracking-wrapper");
       if (wrapper) {
         wrapper.classList.remove("sidebar-hidden");
@@ -423,17 +840,22 @@ if (window.deliveryRadiusCircle) {
         setTimeout(() => {
           if (window.liveMap) {
             window.liveMap.invalidateSize();
-            // Optionally, pan to bounds again
-            if (window.routeCoordinates) {
-              window.liveMap.flyToBounds(L.latLngBounds(window.routeCoordinates), {
-                padding: [60, 60],
-                maxZoom: 15,
-                duration: 1.0
-              });
-            }
+            const restLat = window.RESTAURANT_LOCATION?.latitude || FALLBACK_LAT;
+            const restLng = window.RESTAURANT_LOCATION?.longitude || FALLBACK_LNG;
+            const routeCoordinates = [
+              [restLat, restLng],
+              [userLat, userLng]
+            ];
+            window.liveMap.flyToBounds(L.latLngBounds(routeCoordinates), {
+              padding: [60, 60],
+              maxZoom: 15,
+              duration: 1.0
+            });
           }
         }, 400);
       }
+
+      // Trigger delivery simulation progress steps
       if (typeof window.triggerDeliverySimulation === "function") {
         window.triggerDeliverySimulation();
       }

@@ -100,13 +100,13 @@ const deliveryTracker = (() => {
   // --- Map Animation Pin Interpolator ---
   // (Removed per request to maintain human-made non-mechanical aesthetic)
 
-  const runTrackingSimulation = async () => {
+  const runTrackingSimulation = async (startStage = 0) => {
     queryTrackerElements();
     clearTimers();
 
-    console.log("Beginning order tracking simulation...");
+    console.log("Beginning order tracking simulation at stage " + startStage + "...");
 
-    for (let i = 0; i < stageDefinitions.length; i++) {
+    for (let i = startStage; i < stageDefinitions.length; i++) {
       // Apply updates to sidebar
       updateSidebarTimeline(i);
 
@@ -114,14 +114,74 @@ const deliveryTracker = (() => {
         break;
       }
 
-      // Delay between stages
-      await delay(i === 0 ? 5000 : i === 1 ? 6000 : 7000);
+      // Determine target elapsed time for the stage to end
+      let targetElapsed = 0;
+      if (i === 0) {
+        targetElapsed = 10;
+      } else if (i === 1) {
+        targetElapsed = 25;
+      } else if (i === 2) {
+        targetElapsed = 45;
+      }
+
+      // Compute remaining delay based on order timestamp to stay perfectly in sync
+      const localOrders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
+      const latestOrder = localOrders[0];
+      let delayMs = 5000;
+      if (latestOrder && latestOrder.timestamp) {
+        const currentElapsed = (Date.now() - latestOrder.timestamp) / 1000;
+        delayMs = Math.max((targetElapsed - currentElapsed) * 1000, 0);
+      } else {
+        // Fallback static delays if order timestamp is missing
+        delayMs = i === 0 ? 10000 : i === 1 ? 15000 : 20000;
+      }
+
+      console.log(`Stage ${i} (${stageDefinitions[i].key}) active. Delaying for ${delayMs}ms...`);
+      await delay(delayMs);
+    }
+
+    console.log("Order simulation complete. Closing sidebar...");
+    const wrapper = document.getElementById("tracking-wrapper");
+    if (wrapper) {
+      wrapper.classList.add("sidebar-hidden");
+    }
+
+    setTimeout(() => {
+      if (window.liveMap) {
+        window.liveMap.invalidateSize();
+      }
+    }, 400);
+
+    try {
+      const localOrders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
+      if (localOrders.length > 0) {
+        const activeOrder = localOrders.find(o => o.status !== "Delivered");
+        if (activeOrder) {
+          activeOrder.status = "Delivered";
+          localStorage.setItem('chaatOrders', JSON.stringify(localOrders));
+        } else if (localOrders[0].status !== "Delivered") {
+          localOrders[0].status = "Delivered";
+          localStorage.setItem('chaatOrders', JSON.stringify(localOrders));
+        }
+      }
+    } catch (e) {
+      console.error("Error updating local storage order status on delivery:", e);
+    }
+
+    if (typeof window.renderOrdersList === "function") {
+      window.renderOrdersList();
+    }
+
+    if (typeof window.showToast === "function") {
+      window.showToast("🎉 Order delivered! Enjoy your warm street feast!");
+    } else {
+      console.log("Order delivered!");
     }
   };
 
   const initialize = () => {
     queryTrackerElements();
-    window.triggerDeliverySimulation = runTrackingSimulation;
+    window.triggerDeliverySimulation = (startStage = 0) => runTrackingSimulation(startStage);
 
     // Default to idle state until user confirms location
     updateSidebarTimeline(0);

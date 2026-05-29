@@ -623,7 +623,7 @@ function updateCartCount() {
 
 function updateFavCount() {
   const favCount = document.getElementById("fav-count");
-  if (favCount) {
+  if (favCount && typeof RecentlyViewed !== 'undefined') {
     const recentItems = RecentlyViewed.getItems();
     favCount.textContent = recentItems.length;
   }
@@ -672,7 +672,13 @@ function renderOrdersList() {
   const container = document.getElementById("orders-container");
   if (!container) return;
 
-  if (orders.length === 0) {
+  // reload orders from localStorage to stay sync
+  orders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
+
+  // Keep only delivered orders in the history section below
+  const completedOrders = orders.filter(order => order.status === "Delivered");
+
+  if (completedOrders.length === 0) {
     container.innerHTML = `
       <div class="empty-orders">
         <h2>No Orders Found</h2>
@@ -685,9 +691,14 @@ function renderOrdersList() {
 
   container.innerHTML = "";
 
-  orders.forEach(order => {
+  completedOrders.forEach((order, idx) => {
     const card = document.createElement("article");
     card.className = "order-card";
+    
+    // auto expand the latest order
+    if (idx === 0) {
+      card.classList.add("expanded");
+    }
 
     const isPreparing = order.status === "Preparing" || order.status === "On the Way" || order.status === "Delivered" ? "active" : "";
     const isOnWay = order.status === "On the Way" || order.status === "Delivered" ? "active" : "";
@@ -706,60 +717,86 @@ function renderOrdersList() {
     });
 
     card.innerHTML = `
-      <div class="order-card-header">
+      <div class="order-card-header" style="cursor: pointer;">
         <div class="order-meta-info">
           <span class="order-id">Order ID: <strong>${order.id}</strong></span>
           <span class="order-date">${order.date}</span>
           ${order.deliveryDistance ? `<span class="order-distance">📍 Distance: ${order.deliveryDistance.toFixed(2)} km</span>` : ""}
         </div>
-        <span class="status-badge ${statusClass}">${order.status}</span>
-      </div>
-
-      <div class="order-timeline">
-        <div class="timeline-step active ${order.status === 'Pending' ? 'current' : ''}">
-          <div class="step-circle">1</div>
-          <span class="step-label">Ordered</span>
-        </div>
-        <div class="timeline-line ${isPreparing}"></div>
-        <div class="timeline-step ${isPreparing} ${order.status === 'Preparing' ? 'current' : ''}">
-          <div class="step-circle">2</div>
-          <span class="step-label">Preparing</span>
-        </div>
-        <div class="timeline-line ${isOnWay}"></div>
-        <div class="timeline-step ${isOnWay} ${order.status === 'On the Way' ? 'current' : ''}">
-          <div class="step-circle">3</div>
-          <span class="step-label">On the Way</span>
-        </div>
-        <div class="timeline-line ${isDelivered}"></div>
-        <div class="timeline-step ${isDelivered} ${order.status === 'Delivered' ? 'current' : ''}">
-          <div class="step-circle">4</div>
-          <span class="step-label">Delivered</span>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <span class="status-badge ${statusClass}">${order.status}</span>
+          <button class="btn-toggle-details" aria-label="Toggle details" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-size:1.1rem; padding:0; display:flex; align-items:center; transition: transform 0.3s ease;">▼</button>
         </div>
       </div>
 
-      <div class="order-items-list">
-        ${itemsHtml}
-      </div>
+      <div class="order-card-details">
+        <div class="order-timeline">
+          <div class="timeline-step active ${order.status === 'Pending' ? 'current' : ''}">
+            <div class="step-circle">1</div>
+            <span class="step-label">Ordered</span>
+          </div>
+          <div class="timeline-line ${isPreparing}"></div>
+          <div class="timeline-step ${isPreparing} ${order.status === 'Preparing' ? 'current' : ''}">
+            <div class="step-circle">2</div>
+            <span class="step-label">Preparing</span>
+          </div>
+          <div class="timeline-line ${isOnWay}"></div>
+          <div class="timeline-step ${isOnWay} ${order.status === 'On the Way' ? 'current' : ''}">
+            <div class="step-circle">3</div>
+            <span class="step-label">On the Way</span>
+          </div>
+          <div class="timeline-line ${isDelivered}"></div>
+          <div class="timeline-step ${isDelivered} ${order.status === 'Delivered' ? 'current' : ''}">
+            <div class="step-circle">4</div>
+            <span class="step-label">Delivered</span>
+          </div>
+        </div>
 
-      <div class="order-card-footer">
-        ${order.discount && order.discount > 0 ? `
-        <div class="order-discount-details" style="font-size:0.9rem;color:#777;margin-bottom:0.5rem;text-align:right;width:100%;">
-          <span>Subtotal: ${formatPrice(order.subtotal || (order.total + order.discount))}</span> |
-          <span style="color:#e64a19;font-weight:600;">Points Redeemed: ${order.pointsRedeemed || order.discount} (-${formatPrice(order.discount)})</span>
+        <div class="order-details-grid">
+          <div class="details-column">
+            <h4>Delivery Details</h4>
+            <p><strong>Customer:</strong> ${order.customerName || 'Guest Customer'}</p>
+            ${order.customerPhone ? `<p><strong>Phone:</strong> ${order.customerPhone}</p>` : ''}
+            <p><strong>Address:</strong> ${order.deliveryAddress?.name || (order.deliveryAddress?.latitude ? `${order.deliveryAddress.latitude.toFixed(4)}, ${order.deliveryAddress.longitude.toFixed(4)}` : 'N/A')}</p>
+          </div>
+          <div class="details-column">
+            <h4>Payment & Store</h4>
+            <p><strong>Method:</strong> ${order.paymentMethod || 'UPI'}</p>
+            <p><strong>Store:</strong> ChaatBazaar Stall - India Gate</p>
+            ${order.coupon ? `<p><strong>Coupon:</strong> <span class="tag tag-vegan" style="font-size:0.75rem; padding:0.15rem 0.4rem;">${order.coupon}</span></p>` : ''}
+          </div>
         </div>
-        ` : ''}
-        ${order.pointsEarned && order.pointsEarned > 0 ? `
-        <div class="order-points-earned" style="font-size:0.9rem;color:#28a745;margin-bottom:0.5rem;text-align:right;width:100%;font-weight:600;">
-          <span>🌟 Earned +${order.pointsEarned} Loyalty Points</span>
+
+        <div class="order-items-list">
+          <h4 style="margin: 0 0 0.5rem 0; font-size: 0.9rem; font-weight: 700; color: var(--text-dark);">Items Ordered</h4>
+          ${itemsHtml}
         </div>
-        ` : ''}
-        <div class="order-total-price">
-          <span>Total Paid:</span>
-          <strong>${formatPrice(order.total)}</strong>
+
+        <div class="order-card-footer">
+          ${order.discount && order.discount > 0 ? `
+          <div class="order-discount-details" style="font-size:0.9rem;color:#777;margin-bottom:0.5rem;text-align:right;width:100%;">
+            <span>Subtotal: ${formatPrice(order.subtotal || (order.total + order.discount))}</span> |
+            <span style="color:#e64a19;font-weight:600;">Discount: -${formatPrice(order.discount)}</span>
+          </div>
+          ` : ''}
+          ${order.pointsEarned && order.pointsEarned > 0 ? `
+          <div class="order-points-earned" style="font-size:0.9rem;color:#28a745;margin-bottom:0.5rem;text-align:right;width:100%;font-weight:600;">
+            <span>🌟 Earned +${order.pointsEarned} Loyalty Points</span>
+          </div>
+          ` : ''}
+          <div class="order-total-price">
+            <span>Total Paid:</span>
+            <strong>${formatPrice(order.total)}</strong>
+          </div>
+          <button class="btn-reorder" onclick="event.stopPropagation(); reorderOrder('${order.id}')">Reorder Items</button>
         </div>
-        <button class="btn-reorder" onclick="reorderOrder('${order.id}')">Reorder Items</button>
       </div>
     `;
+
+    const header = card.querySelector(".order-card-header");
+    header.addEventListener("click", () => {
+      card.classList.toggle("expanded");
+    });
 
     container.appendChild(card);
   });
@@ -810,18 +847,18 @@ window.checkout = async function () {
   };
 }
 
-  const subtotal = cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
-  let discount = 0;
+  const subtotalVal = cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
+  let discountVal = 0;
   let pointsRedeemed = 0;
 
   if (loyaltyPointsApplied && typeof loyalty !== 'undefined') {
     const balance = loyalty.getBalance();
-    pointsRedeemed = Math.min(balance, subtotal);
-    discount = pointsRedeemed; // 1 point = ₹1 discount
+    pointsRedeemed = Math.min(balance, subtotalVal);
+    discountVal = pointsRedeemed; // 1 point = ₹1 discount
     loyalty.redeemPoints(pointsRedeemed);
   }
 
-  const finalTotal = subtotal - discount;
+  const finalTotal = subtotalVal - discountVal;
 
   // Award points on final total paid (10 points per ₹100 spent)
   let pointsEarned = 0;
@@ -829,9 +866,9 @@ window.checkout = async function () {
     pointsEarned = loyalty.awardPoints(finalTotal);
   }
 
-  const subtotal = getCartSubtotal();
-  const discount = calculateCouponDiscount(subtotal);
-  const totalAmount = Math.max(subtotal - discount, 0);
+  const couponSubtotal = getCartSubtotal();
+  const couponDiscount = calculateCouponDiscount(couponSubtotal);
+  const totalAmount = Math.max(couponSubtotal - couponDiscount, 0);
 
   const newOrder = {
     id: "CB-" + Math.floor(100000 + Math.random() * 900000),
@@ -842,10 +879,9 @@ window.checkout = async function () {
     timestamp: Date.now(),
     items: JSON.parse(JSON.stringify(cart)),
     total: totalAmount,
-    discount,
+    discount: couponDiscount,
     coupon: activeCoupon?.code || null,
-    subtotal: subtotal,
-    discount: discount,
+    subtotal: couponSubtotal,
     pointsRedeemed: pointsRedeemed,
     pointsEarned: pointsEarned,
     total: finalTotal,
@@ -879,6 +915,70 @@ window.checkout = async function () {
   return {
   deliveryAvailable: true
 };
+};
+
+window.placeOrderFromCheckout = function (customerDetails, pricingInfo) {
+  const subtotal = pricingInfo.subtotal;
+  const discount = pricingInfo.discount || 0;
+  const pointsRedeemed = pricingInfo.pointsRedeemed || 0;
+  const finalTotal = pricingInfo.total;
+
+  if (pointsRedeemed > 0 && typeof loyalty !== 'undefined') {
+    loyalty.redeemPoints(pointsRedeemed);
+  }
+
+  let pointsEarned = 0;
+  if (typeof loyalty !== 'undefined') {
+    pointsEarned = loyalty.awardPoints(finalTotal);
+  }
+
+  const newOrder = {
+    id: "CB-" + Math.floor(100000 + Math.random() * 900000),
+    date: new Date().toLocaleDateString(undefined, {
+      month: 'short', day: 'numeric', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    }),
+    timestamp: Date.now(),
+    items: JSON.parse(JSON.stringify(cart)),
+    total: finalTotal,
+    discount: discount,
+    coupon: pricingInfo.couponCode || null,
+    subtotal: subtotal,
+    pointsRedeemed: pointsRedeemed,
+    pointsEarned: pointsEarned,
+    status: "Pending",
+    customerName: customerDetails.name,
+    customerPhone: customerDetails.phone,
+    paymentMethod: customerDetails.paymentMethod,
+    deliveryAddress: {
+      name: customerDetails.address,
+      latitude: customerDetails.lat,
+      longitude: customerDetails.lng,
+      source: customerDetails.source || "manual"
+    },
+    deliveryDistance: customerDetails.distance,
+    restaurantLocation: window.RESTAURANT_LOCATION
+  };
+
+  orders.unshift(newOrder);
+  localStorage.setItem('chaatOrders', JSON.stringify(orders));
+
+  loyaltyPointsApplied = false;
+
+  cartManager.clear();
+  if (typeof removeCoupon === 'function') {
+    removeCoupon();
+  } else {
+    localStorage.removeItem('chaatCoupon');
+    activeCoupon = null;
+  }
+
+  updateCartCount();
+  updateFavCount();
+  renderCart();
+  renderOrdersList();
+
+  return newOrder;
 };
 
 window.reorderOrder = function (orderId) {
@@ -1348,12 +1448,13 @@ async function init() {
   checkoutBtn.addEventListener("click", async (e) => {
     e.preventDefault();
 
-    const result = await window.checkout();
-
-    // Always open orders page
-    if (result) {
-      window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
+    if (cartManager.isEmpty()) {
+      alert("Your cart is empty!");
+      return;
     }
+
+    // Redirect to orders page so user can choose location on the map first
+    window.location.href = "orders.html";
   });
 }
 

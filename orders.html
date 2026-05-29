@@ -201,9 +201,133 @@
   <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
 </footer>
 
+<!-- Premium Checkout Modal/Bottom-Sheet Overlay -->
+<div id="checkout-modal" class="checkout-modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="checkout-modal-title">
+  <div class="checkout-modal-container">
+    <div class="checkout-modal-header">
+      <h2 id="checkout-modal-title">Checkout Details</h2>
+      <button class="checkout-modal-close" id="checkout-close-btn" aria-label="Close checkout">&times;</button>
+    </div>
+    
+    <div class="checkout-modal-body">
+      <!-- Details Form -->
+      <form id="checkout-form" class="checkout-details-form" novalidate>
+        <div class="form-section">
+          <h3>Customer Details</h3>
+          <div class="form-group">
+            <label for="checkout-name">Full Name *</label>
+            <input type="text" id="checkout-name" placeholder="Enter your full name" required autocomplete="name" />
+            <span class="error-msg" id="name-error"></span>
+          </div>
+          <div class="form-group">
+            <label for="checkout-phone">Phone Number *</label>
+            <input type="tel" id="checkout-phone" placeholder="10-digit mobile number" required autocomplete="tel" maxLength="10" />
+            <span class="error-msg" id="phone-error"></span>
+          </div>
+          <div class="form-group address-group">
+            <div class="address-label-row">
+              <label for="checkout-address">Delivery Address *</label>
+              <button type="button" id="change-address-btn" class="btn-change-address">Change</button>
+            </div>
+            <textarea id="checkout-address" placeholder="Delivery address" required autocomplete="street-address" rows="2" readonly></textarea>
+            <span class="error-msg" id="address-error"></span>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Payment Method *</h3>
+          <div class="payment-methods-grid">
+            <label class="payment-card">
+              <input type="radio" name="payment-method" value="UPI" required />
+              <span class="payment-card-content">
+                <span class="payment-icon">📱</span>
+                <span class="payment-details">
+                  <span class="payment-title">UPI</span>
+                  <span class="payment-desc">Google Pay, PhonePe, UPI</span>
+                </span>
+              </span>
+            </label>
+            <label class="payment-card">
+              <input type="radio" name="payment-method" value="Card" required />
+              <span class="payment-card-content">
+                <span class="payment-icon">💳</span>
+                <span class="payment-details">
+                  <span class="payment-title">Credit / Debit Card</span>
+                  <span class="payment-desc">Visa, Mastercard, RuPay</span>
+                </span>
+              </span>
+            </label>
+            <label class="payment-card">
+              <input type="radio" name="payment-method" value="Cash on Delivery" required />
+              <span class="payment-card-content">
+                <span class="payment-icon">💵</span>
+                <span class="payment-details">
+                  <span class="payment-title">Cash on Delivery</span>
+                  <span class="payment-desc">Pay cash / scan QR code on delivery</span>
+                </span>
+              </span>
+            </label>
+          </div>
+          <span class="error-msg" id="payment-error"></span>
+        </div>
+      </form>
+
+      <!-- Order Summary & Coupons -->
+      <div class="checkout-summary-section">
+        <h3>Order Summary</h3>
+        <div id="checkout-items-list" class="checkout-items-list">
+          <!-- Populated dynamically -->
+        </div>
+
+        <div class="checkout-coupon-container">
+          <label for="checkout-coupon-input">Apply Coupon</label>
+          <div class="coupon-input-wrapper">
+            <input type="text" id="checkout-coupon-input" placeholder="e.g. SAVE50, FREEDEL" autocomplete="off" />
+            <button type="button" id="checkout-coupon-apply" class="btn-coupon-apply">Apply</button>
+          </div>
+          <span class="coupon-feedback" id="checkout-coupon-feedback"></span>
+        </div>
+
+        <div class="checkout-price-breakdown">
+          <div class="breakdown-item">
+            <span>Subtotal</span>
+            <span id="checkout-subtotal">₹0</span>
+          </div>
+          <div class="breakdown-item text-discount" id="checkout-discount-row" style="display: none;">
+            <span>Coupon Discount</span>
+            <span id="checkout-discount">-₹0</span>
+          </div>
+          <div class="breakdown-item">
+            <span>Delivery Fee</span>
+            <span id="checkout-delivery-fee">₹40</span>
+          </div>
+          <div class="breakdown-item">
+            <span>Platform Fee</span>
+            <span id="checkout-platform-fee">₹10</span>
+          </div>
+          <div class="breakdown-item">
+            <span>GST & Restaurant Charges</span>
+            <span id="checkout-tax">₹0</span>
+          </div>
+          <hr class="breakdown-divider" />
+          <div class="breakdown-item grand-total">
+            <span>Total Amount</span>
+            <span id="checkout-grand-total">₹0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="checkout-modal-footer">
+      <button type="button" id="place-order-cta" class="btn-primary btn-place-order">Place Order</button>
+    </div>
+  </div>
+</div>
+
 <script src="js/accessibility.js"></script>
 <script src="js/sanitization.js"></script>
 <script src="js/cart-manager.js"></script>
+<script src="js/recently-viewed.js"></script>
 <script src="js/geolocation.js"></script>
 <script src="js/loyalty.js"></script>
 <script src="js/main.js"></script>
