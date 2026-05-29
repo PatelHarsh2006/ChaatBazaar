@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,75 +10,77 @@
   <link rel="stylesheet" href="css/delivery-tracker.css">
   <link rel="icon" href="favicon.png" type="image/png" />
 </head>
+
 <body>
 
-<header>
-  <div class="logo">ChaatBazar 🍴</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="menu.html">Menu</a>
-    <a href="cart.html">Cart</a>
-    <a href="index.html#about">About</a>
-    <a href="orders.html">Orders</a>
-    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
-      <span class="theme-toggle-track">
-        <span class="theme-toggle-icon sun-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+  <header>
+    <div class="logo">ChaatBazar 🍴</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="cart.html">Cart</a>
+      <a href="index.html#about">About</a>
+      <a href="orders.html">Orders</a>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-icon sun-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </span>
+          <span class="theme-toggle-icon moon-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </span>
+          <span class="theme-toggle-thumb"></span>
         </span>
-        <span class="theme-toggle-icon moon-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-        </span>
-        <span class="theme-toggle-thumb"></span>
-      </span>
-    </button>
-  </nav>
-</header>
 
-<section class="cart-page">
-  <h1>Your Cart</h1>
-  <div class="delivery-info" style="background:#fff3e0;border-left:4px solid #FF7B54;padding:1rem;margin-bottom:1.5rem;border-radius:4px;">
-    <p style="margin:0;color:#5d4037;font-size:0.95rem;">
-      <strong>📍 Location Required:</strong> We'll ask for your location during checkout to verify delivery eligibility. We deliver within 5 km of India Gate, New Delhi.
-    </p>
-  </div>
-  <div id="cart-items"></div>
 
-  <section class="coupon-section">
-    <h2>Have a promo code?</h2>
-    <div class="coupon-input-row">
-      <input id="coupon-code-input" type="text" placeholder="Enter promo code (e.g. WELCOME10)" aria-label="Coupon code">
-      <button id="apply-coupon-btn" type="button">Apply</button>
+  <section class="cart-page">
+    <h1>Your Cart</h1>
+    <div class="delivery-info"
+      style="background:#fff3e0;border-left:4px solid #FF7B54;padding:1rem;margin-bottom:1.5rem;border-radius:4px;">
+      <p style="margin:0;color:#5d4037;font-size:0.95rem;">
+        <strong>📍 Location Required:</strong> We'll ask for your location during checkout to verify delivery
+        eligibility. We deliver within 5 km of India Gate, New Delhi.
+      </p>
     </div>
-    <button id="remove-coupon-btn" type="button" class="secondary-btn" style="display:none;margin-top:0.75rem;">Remove coupon</button>
-    <p id="coupon-message" class="coupon-message" aria-live="polite"></p>
-    <p id="applied-coupon-label" class="coupon-applied-label"></p>
+    <div id="cart-items"></div>
+
+    <section class="coupon-section">
+      <h2>Have a promo code?</h2>
+      <div class="coupon-input-row">
+        <input id="coupon-code-input" type="text" placeholder="Enter promo code (e.g. WELCOME10)"
+          aria-label="Coupon code">
+        <button id="apply-coupon-btn" type="button">Apply</button>
+      </div>
+      <button id="remove-coupon-btn" type="button" class="secondary-btn" style="display:none;margin-top:0.75rem;">Remove
+        coupon</button>
+      <p id="coupon-message" class="coupon-message" aria-live="polite"></p>
+      <p id="applied-coupon-label" class="coupon-applied-label"></p>
+    </section>
+
+    <section class="price-breakdown">
+      <p>Subtotal: <strong id="coupon-subtotal">₹0</strong></p>
+      <p id="coupon-discount-row" style="display:none;">Discount: <strong id="coupon-discount">-₹0</strong></p>
+      <p class="grand-total">Total: <strong id="coupon-grand-total">₹0</strong></p>
+    </section>
+
+    <button id="checkout-btn">Checkout</button>
   </section>
 
-  <section class="price-breakdown">
-    <p>Subtotal: <strong id="coupon-subtotal">₹0</strong></p>
-    <p id="coupon-discount-row" style="display:none;">Discount: <strong id="coupon-discount">-₹0</strong></p>
-    <p class="grand-total">Total: <strong id="coupon-grand-total">₹0</strong></p>
-  </section>
 
-  <button id="checkout-btn">Checkout</button>
-</section>
-
-<footer>
-  <div class="social-icons">
-    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
-    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
-    <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-  </div>
-  <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
-</footer>
-
-<div id="toast-notification" class="toast-notification"></div>
-<script src="js/accessibility.js"></script>
-<script src="js/cart-manager.js"></script>
-<script src="js/geolocation.js"></script>
-<script src="js/loyalty.js"></script>
-<script src="js/main.js"></script>
-<script src="js/delivery-tracker.js"></script>
 </body>
+
 </html>

@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ChaatBazar 🍴 | Authentic Indian Street Food Delivered Hot</title>
+  <link rel="stylesheet" href="css/auth.css">
   
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -12,6 +13,7 @@
   <link rel="icon" href="favicon.png" type="image/png" />
 </head>
 <body>
+
 
 <!-- Header & Navigation -->
 <header>
@@ -32,6 +34,7 @@
       <a href="#about" class="nav-link">About</a>
       <a href="orders.html" class="nav-link">Orders</a>
       <a href="#cart-sidebar" class="nav-link" id="cart-open-btn" aria-label="Open Cart">Cart (<span id="cart-count">0</span>)</a>
+
       <div class="search-bar" role="search">
         <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" autocomplete="off" />
         <button aria-label="Search" id="search-btn"></button>
@@ -48,6 +51,11 @@
           <span class="theme-toggle-thumb"></span>
         </span>
       </button>
+
+      <!-- Dynamic auth slot: replaced by js/auth.js based on session state -->
+      <div id="authNavItem" class="auth-nav-item">
+        <a href="login.html" class="login-btn-nav">Login</a>
+      </div>
     </nav>
   </div>
 </header>
@@ -289,5 +297,6 @@
 <script src="js/translations.js"></script>
 <script src="js/i18n.js"></script>
 <script src="js/main.js"></script>
+<script src="js/auth.js"></script>
 </body>
 </html>
