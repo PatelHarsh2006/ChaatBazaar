@@ -125,19 +125,21 @@ function applyTranslations() {
 
   const cartHeader = document.getElementById('cart-header');
   if (cartHeader) {
-    const closeBtn = document.getElementById('cart-close');
+    const cartTitle = t('cart_title');
+    const closeBtn = cartHeader.querySelector('#cart-close');
+
     if (closeBtn) {
       const titleNode = Array.from(cartHeader.childNodes).find(
         node => node.nodeType === Node.TEXT_NODE && node.textContent.trim()
       );
 
       if (titleNode) {
-        titleNode.textContent = `${t('cart_title')} `;
+        titleNode.textContent = `${cartTitle} `;
       } else {
-        cartHeader.insertBefore(document.createTextNode(`${t('cart_title')} `), closeBtn);
+        cartHeader.insertBefore(document.createTextNode(`${cartTitle} `), closeBtn);
       }
     } else {
-      cartHeader.textContent = t('cart_title');
+      cartHeader.textContent = cartTitle;
     }
   }
 
