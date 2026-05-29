@@ -449,18 +449,22 @@ if (window.deliveryRadiusCircle) {
       couponDiscount = Math.min(Math.round(subtotal * 0.20), 100);
     }
 
-    const subtotalAfterCoupon = Math.max(subtotal - couponDiscount, 0);
-
-    // Loyalty points discount calculation
-    let loyaltyDiscount = 0;
-    let pointsRedeemed = 0;
-    if (loyaltyApplied && typeof loyalty !== 'undefined') {
-      const balance = loyalty.getBalance();
-      pointsRedeemed = Math.min(balance, subtotalAfterCoupon);
-      loyaltyDiscount = pointsRedeemed;
-    }
-
-    const grandTotal = Math.max(subtotalAfterCoupon - loyaltyDiscount + deliveryFee + platformFee + gst, 0);
+    const loyaltyBalance =
+      loyaltyApplied && typeof loyalty !== 'undefined' ? loyalty.getBalance() : 0;
+    const checkoutTotals = calculateCheckoutTotals({
+      subtotal,
+      couponDiscount,
+      loyaltyPointsApplied: loyaltyApplied,
+      loyaltyBalance,
+      deliveryFee,
+      platformFee,
+      gst,
+    });
+    couponDiscount = checkoutTotals.couponDiscount;
+    const subtotalAfterCoupon = checkoutTotals.afterCouponTotal;
+    const loyaltyDiscount = checkoutTotals.loyaltyDiscount;
+    const pointsRedeemed = checkoutTotals.loyaltyDiscount;
+    const grandTotal = checkoutTotals.total;
 
     // Render summary items
     const listContainer = document.getElementById("checkout-items-list");
@@ -765,17 +769,21 @@ if (window.deliveryRadiusCircle) {
         couponDiscount = Math.min(Math.round(subtotal * 0.20), 100);
       }
 
-      let subtotalAfterCoupon = Math.max(subtotal - couponDiscount, 0);
-
-      let loyaltyDiscount = 0;
-      let pointsRedeemed = 0;
-      if (loyaltyApplied && typeof loyalty !== 'undefined') {
-        const balance = loyalty.getBalance();
-        pointsRedeemed = Math.min(balance, subtotalAfterCoupon);
-        loyaltyDiscount = pointsRedeemed;
-      }
-
-      const grandTotal = Math.max(subtotalAfterCoupon - loyaltyDiscount + deliveryFee + platformFee + gst, 0);
+      const loyaltyBalance =
+        loyaltyApplied && typeof loyalty !== 'undefined' ? loyalty.getBalance() : 0;
+      const checkoutTotals = calculateCheckoutTotals({
+        subtotal,
+        couponDiscount,
+        loyaltyPointsApplied: loyaltyApplied,
+        loyaltyBalance,
+        deliveryFee,
+        platformFee,
+        gst,
+      });
+      couponDiscount = checkoutTotals.couponDiscount;
+      const pointsRedeemed = checkoutTotals.loyaltyDiscount;
+      const loyaltyDiscount = checkoutTotals.loyaltyDiscount;
+      const grandTotal = checkoutTotals.total;
 
       const pricingInfo = {
         subtotal: subtotal,

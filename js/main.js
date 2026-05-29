@@ -70,9 +70,233 @@ const cartTotal =
 
 const checkoutBtn = document.getElementById("checkout-btn");
 
+const couponCodeInput = document.getElementById("coupon-code-input");
+const applyCouponBtn = document.getElementById("apply-coupon-btn");
+const removeCouponBtn = document.getElementById("remove-coupon-btn");
+const couponMessage = document.getElementById("coupon-message");
+const couponSubtotalEl = document.getElementById("coupon-subtotal");
+const couponDiscountEl = document.getElementById("coupon-discount");
+const couponDiscountRow = document.getElementById("coupon-discount-row");
+const couponGrandTotalEl = document.getElementById("coupon-grand-total");
+const appliedCouponLabel = document.getElementById("applied-coupon-label");
+
+const COUPON_STORAGE_KEY = "chaatCoupon";
+const coupons = {
+  WELCOME10: { type: "percent", value: 10 },
+  SAVE50: { type: "flat", value: 50 },
+};
+let activeCoupon = null;
+
 // ===== Helpers =====
 function formatPrice(price) {
   return `₹${price}`;
+}
+
+function getCartSubtotal() {
+  return cart.reduce(
+    (sum, cartItem) => sum + cartItem.item.price * cartItem.quantity,
+    0
+  );
+}
+
+function loadCouponFromStorage() {
+  const stored = localStorage.getItem(COUPON_STORAGE_KEY);
+  if (!stored) return null;
+
+  try {
+    const data = JSON.parse(stored);
+    if (!data || !data.code) return null;
+
+    const code = String(data.code).trim().toUpperCase();
+    const coupon = coupons[code];
+    if (!coupon) {
+      localStorage.removeItem(COUPON_STORAGE_KEY);
+      return null;
+    }
+
+    activeCoupon = { code, ...coupon };
+    return activeCoupon;
+  } catch (error) {
+    localStorage.removeItem(COUPON_STORAGE_KEY);
+    return null;
+  }
+}
+
+function saveCouponToStorage() {
+  if (activeCoupon) {
+    localStorage.setItem(
+      COUPON_STORAGE_KEY,
+      JSON.stringify({ code: activeCoupon.code, appliedAt: Date.now() })
+    );
+  } else {
+    localStorage.removeItem(COUPON_STORAGE_KEY);
+  }
+}
+
+function validateCouponCode(input) {
+  const code = String(input || "").trim().toUpperCase();
+
+  if (!code) {
+    return { valid: false, message: "Enter a coupon code." };
+  }
+
+  const coupon = coupons[code];
+  if (!coupon) {
+    return { valid: false, message: "Invalid or expired coupon." };
+  }
+
+  return { valid: true, code, coupon };
+}
+
+function calculateCouponDiscount(subtotal) {
+  if (!activeCoupon) return 0;
+
+  if (activeCoupon.type === "percent") {
+    return Math.min(Math.round((subtotal * activeCoupon.value) / 100), subtotal);
+  }
+
+  if (activeCoupon.type === "flat") {
+    return Math.min(activeCoupon.value, subtotal);
+  }
+
+  return 0;
+}
+
+function getCheckoutTotalsForCart() {
+  const subtotal = getCartSubtotal();
+  const couponDiscount = calculateCouponDiscount(subtotal);
+  const loyaltyBalance =
+    typeof loyalty !== "undefined" ? loyalty.getBalance() : 0;
+
+  return calculateCheckoutTotals({
+    subtotal,
+    couponDiscount,
+    loyaltyPointsApplied,
+    loyaltyBalance,
+  });
+}
+
+function renderCartTotalBreakdown(checkoutTotals) {
+  if (!cartTotal) return;
+
+  const hasDiscount =
+    checkoutTotals.couponDiscount > 0 || checkoutTotals.loyaltyDiscount > 0;
+
+  if (!hasDiscount) {
+    cartTotal.textContent = `Total: ${formatPrice(checkoutTotals.total)}`;
+    return;
+  }
+
+  const discountRows = [];
+  if (checkoutTotals.couponDiscount > 0) {
+    discountRows.push(
+      `<div class="breakdown-row discount"><span>Coupon Discount:</span> <span>-${formatPrice(checkoutTotals.couponDiscount)}</span></div>`
+    );
+  }
+  if (checkoutTotals.loyaltyDiscount > 0) {
+    discountRows.push(
+      `<div class="breakdown-row discount"><span>Loyalty Discount:</span> <span>-${formatPrice(checkoutTotals.loyaltyDiscount)}</span></div>`
+    );
+  }
+
+  cartTotal.innerHTML = `
+    <div class="cart-total-breakdown">
+      <div class="breakdown-row"><span>Subtotal:</span> <span>${formatPrice(checkoutTotals.subtotal)}</span></div>
+      ${discountRows.join("")}
+      <div class="breakdown-row final"><span>Total:</span> <span>${formatPrice(checkoutTotals.total)}</span></div>
+    </div>
+  `;
+}
+
+function updateCartSummary() {
+  const checkoutTotals = getCheckoutTotalsForCart();
+
+  if (couponSubtotalEl) couponSubtotalEl.textContent = formatPrice(checkoutTotals.subtotal);
+  if (couponDiscountEl) {
+    couponDiscountEl.textContent = `- ${formatPrice(checkoutTotals.couponDiscount)}`;
+  }
+  if (couponDiscountRow) {
+    couponDiscountRow.style.display =
+      checkoutTotals.couponDiscount > 0 ? "flex" : "none";
+  }
+  if (couponGrandTotalEl) {
+    couponGrandTotalEl.textContent = formatPrice(checkoutTotals.total);
+  }
+  if (appliedCouponLabel) {
+    appliedCouponLabel.textContent = activeCoupon
+      ? `Coupon applied: ${activeCoupon.code}`
+      : "";
+  }
+
+  renderCartTotalBreakdown(checkoutTotals);
+
+  if (checkoutBtn) checkoutBtn.disabled = cart.length === 0;
+}
+
+function showCouponMessage(message, type = "success") {
+  if (couponMessage) {
+    couponMessage.textContent = message;
+    couponMessage.classList.toggle("success", type === "success");
+    couponMessage.classList.toggle("error", type === "error");
+  }
+
+  showToast(type === "success" ? `✅ ${message}` : `⚠️ ${message}`);
+}
+
+function applyCouponCode() {
+  const result = validateCouponCode(couponCodeInput ? couponCodeInput.value : "");
+
+  if (!result.valid) {
+    activeCoupon = null;
+    saveCouponToStorage();
+    showCouponMessage(result.message, "error");
+    updateCartSummary();
+    return false;
+  }
+
+  activeCoupon = { code: result.code, ...result.coupon };
+  saveCouponToStorage();
+  showCouponMessage(`${result.code} applied!`, "success");
+  if (removeCouponBtn) removeCouponBtn.style.display = "inline-flex";
+  updateCartSummary();
+  return true;
+}
+
+function removeCoupon() {
+  activeCoupon = null;
+  saveCouponToStorage();
+
+  if (couponCodeInput) couponCodeInput.value = "";
+  if (removeCouponBtn) removeCouponBtn.style.display = "none";
+  showCouponMessage("Coupon removed.", "success");
+  updateCartSummary();
+}
+
+function setupCouponListeners() {
+  if (applyCouponBtn) {
+    applyCouponBtn.addEventListener("click", applyCouponCode);
+  }
+
+  if (couponCodeInput) {
+    couponCodeInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        applyCouponCode();
+      }
+    });
+  }
+
+  if (removeCouponBtn) {
+    removeCouponBtn.addEventListener("click", removeCoupon);
+  }
+
+  if (loadCouponFromStorage() && couponCodeInput) {
+    couponCodeInput.value = activeCoupon.code;
+  }
+
+  if (activeCoupon && removeCouponBtn) {
+    removeCouponBtn.style.display = "inline-flex";
+  }
 }
 
 function fuzzyMatch(target, query) {
@@ -497,6 +721,7 @@ function renderCart() {
           "Total: ₹0";
       }
 
+      updateCartSummary();
       return;
     }
 
@@ -595,24 +820,51 @@ alt="${item.name}" />
       );
     });
 
-    updateCartSummary();
     // Render Loyalty Points Widget at the end of the cart list
     const points = typeof loyalty !== 'undefined' ? loyalty.getBalance() : 0;
     const loyaltyDiv = document.createElement("div");
     loyaltyDiv.className = "cart-loyalty-widget";
 
-    const total = cart.reduce(
-      (sum, ci) =>
-        sum +
-        ci.item.price * ci.quantity,
-      0
+    const checkoutTotals = getCheckoutTotalsForCart();
+    const availableLoyaltyDiscount = Math.min(
+      points,
+      checkoutTotals.afterCouponTotal
     );
 
-    if (cartTotal) {
-      cartTotal.textContent = `Total: ${formatPrice(
-        total
-      )}`;
+    loyaltyDiv.innerHTML = `
+      <div class="loyalty-widget-header">
+        <span class="loyalty-icon">🌟</span>
+        <div class="loyalty-info">
+          <span class="loyalty-title">Loyalty Wallet</span>
+          <span class="loyalty-desc">Balance: <strong>${points}</strong> pts (₹${points})</span>
+        </div>
+      </div>
+      ${points > 0 ? `
+      <div class="loyalty-redeem-action">
+        <label class="loyalty-toggle">
+          <input type="checkbox" id="apply-loyalty-checkbox" ${loyaltyPointsApplied ? "checked" : ""} />
+          <span class="toggle-slider"></span>
+          <span class="toggle-label">Apply ₹${availableLoyaltyDiscount} Discount</span>
+        </label>
+      </div>
+      ` : `
+      <div class="loyalty-empty-message">
+        <span>Earn 10 points for every ₹100 spent!</span>
+      </div>
+      `}
+    `;
+
+    cartItemsContainer.appendChild(loyaltyDiv);
+
+    const checkbox = loyaltyDiv.querySelector("#apply-loyalty-checkbox");
+    if (checkbox) {
+      checkbox.addEventListener("change", (event) => {
+        loyaltyPointsApplied = event.target.checked;
+        updateCartSummary();
+      });
     }
+
+    updateCartSummary();
 
     if (checkoutBtn) {
       checkoutBtn.disabled = false;
@@ -735,26 +987,36 @@ function removeFromCart(id) {
   return true;
 };
 
-window.placeOrderFromCheckout = function (customerDetails, pricingInfo) {
+window.placeOrderFromCheckout = function (customerDetails, pricingInfo = {}) {
   if (cart.length === 0) {
     alert("Your cart is empty!");
     return null;
   }
 
+  const subtotal = pricingInfo.subtotal ?? getCartSubtotal();
+  const requestedPointsRedeemed = pricingInfo.pointsRedeemed ?? 0;
+  const checkoutTotals = calculateCheckoutTotals({
+    subtotal,
+    couponDiscount: pricingInfo.couponDiscount ?? 0,
+    loyaltyPointsApplied: requestedPointsRedeemed > 0,
+    loyaltyBalance: requestedPointsRedeemed,
+    deliveryFee: pricingInfo.deliveryFee ?? 0,
+    platformFee: pricingInfo.platformFee ?? 0,
+    gst: pricingInfo.gst ?? 0,
+  });
+
+  const pointsRedeemed = checkoutTotals.loyaltyDiscount;
+
   // Award loyalty points on final total paid (10 points per ₹100 spent)
   let pointsEarned = 0;
   if (typeof loyalty !== 'undefined') {
-    pointsEarned = loyalty.awardPoints(pricingInfo.grandTotal);
+    pointsEarned = loyalty.awardPoints(checkoutTotals.total);
   }
 
   // Redeem loyalty points if applied
-  let pointsRedeemed = pricingInfo.pointsRedeemed || 0;
   if (pointsRedeemed > 0 && typeof loyalty !== 'undefined') {
     loyalty.redeemPoints(pointsRedeemed);
   }
-
-  const finalTotal = pricingInfo.grandTotal;
-  const totalDiscount = pricingInfo.couponDiscount + pointsRedeemed;
 
   // Get selected coordinates from live-tracking.js if available
   const deliveryCoords = window.selectedDeliveryCoords || {
@@ -771,12 +1033,18 @@ window.placeOrderFromCheckout = function (customerDetails, pricingInfo) {
     }),
     timestamp: Date.now(),
     items: JSON.parse(JSON.stringify(cart)),
-    total: finalTotal,
-    discount: totalDiscount,
+    total: checkoutTotals.total,
+    // Keep aggregate fields for existing persisted orders and invoice code.
+    discount: checkoutTotals.totalDiscount,
+    couponDiscount: checkoutTotals.couponDiscount,
+    loyaltyDiscount: checkoutTotals.loyaltyDiscount,
+    deliveryFee: checkoutTotals.deliveryFee,
+    platformFee: checkoutTotals.platformFee,
+    gst: checkoutTotals.gst,
     coupon: pricingInfo.couponCode || null,
-    subtotal: pricingInfo.subtotal,
-    pointsRedeemed: pointsRedeemed,
-    pointsEarned: pointsEarned,
+    subtotal: checkoutTotals.subtotal,
+    pointsRedeemed,
+    pointsEarned,
     status: "Pending",
     customerDetails: {
       name: customerDetails.name,
@@ -1227,6 +1495,19 @@ async function init() {
   setupCartManager();
 
   setupCartToggle();
+
+  setupCouponListeners();
+
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+      window.location.href = "orders.html";
+    });
+  }
 
   setupSearch();
 
