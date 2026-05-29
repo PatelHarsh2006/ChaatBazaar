@@ -126,7 +126,19 @@ function applyTranslations() {
   const cartHeader = document.getElementById('cart-header');
   if (cartHeader) {
     const closeBtn = document.getElementById('cart-close');
-    cartHeader.innerHTML = `${t('cart_title')} ${closeBtn ? closeBtn.outerHTML : ''}`;
+    if (closeBtn) {
+      const titleNode = Array.from(cartHeader.childNodes).find(
+        node => node.nodeType === Node.TEXT_NODE && node.textContent.trim()
+      );
+
+      if (titleNode) {
+        titleNode.textContent = `${t('cart_title')} `;
+      } else {
+        cartHeader.insertBefore(document.createTextNode(`${t('cart_title')} `), closeBtn);
+      }
+    } else {
+      cartHeader.textContent = t('cart_title');
+    }
   }
 
   const checkoutBtn = document.getElementById('checkout-btn');
