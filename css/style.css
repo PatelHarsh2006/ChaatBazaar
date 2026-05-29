@@ -1,5 +1,4 @@
-
-    * {
+* {
       margin: 0; padding: 0; box-sizing: border-box;
     }
     html {
@@ -247,13 +246,6 @@
       transform: translateY(-8px);
       box-shadow: 0 15px 35px rgb(0 0 0 / 0.2);
     }
-    .add-btn{
-      background-color: green;
-      padding: 3px 8px;
-      border-radius: 15px;
-      color: white;
-      border: none;
-    }
     .card img {
       border-radius: 15px;
       height: 170px;
@@ -282,6 +274,77 @@
       text-align: center;
       user-select: text;
     }
+    
+    /* ===== Quantity Button Styles ===== */
+    .action-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px; 
+    }
+    
+    .add-btn {
+      background: #ff5722;
+      color: white;
+      border-radius: 40px;
+      padding: 0.5rem 1.8rem;
+      border: none;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 6px 15px rgb(255 87 34 / 0.6);
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+    
+    .add-btn:hover {
+      background: #e64a19;
+      box-shadow: 0 8px 20px rgb(230 74 25 / 0.8);
+    }
+
+    .card-qty-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #ff5722; 
+      border-radius: 25px; 
+      padding: 0.2rem;
+      width: 100px; 
+      box-shadow: 0 6px 15px rgb(255 87 34 / 0.6);
+      transition: background 0.3s ease;
+    }
+    
+    .card-qty-controls:hover {
+        background: #e64a19;
+        box-shadow: 0 8px 20px rgb(230 74 25 / 0.8);
+    }
+  
+    .card-qty-btn {
+      background-color: transparent;
+      color: #ffffff;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    .card-qty-btn:hover {
+      opacity: 0.8;
+    }
+  
+    .card-qty {
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 1.1rem;
+      text-align: center;
+      flex-grow: 1;
+    }
+    /* ============================== */
+
     .btn-add {
       background: #ff5722;
       color: white;
