@@ -270,8 +270,8 @@ function createCard(item, highlightQuery = "") {
   const dietaryTags = item.dietary ? item.dietary.map(d => `<span class="tag tag-${d}">${d}</span>`).join(" ") : "";
   const spiceIcon = item.spice === "High" ? "🌶️🌶️🌶️" : item.spice === "Medium" ? "🌶️🌶️" : "🌶️";
 
-  const highlightedName = highlightText(item.name, highlightQuery);
-  const highlightedDesc = highlightText(item.description, highlightQuery);
+  const highlightedName = highlightText(escapeHTML(item.name), highlightQuery);
+  const highlightedDesc = highlightText(escapeHTML(item.description), highlightQuery);
 
   //Check if item is available (default to true if field doesn't exist)
   const isAvailable = item.available !== undefined ? item.available : true;
@@ -284,7 +284,7 @@ function createCard(item, highlightQuery = "") {
   const buttonColor = isAvailable ? '#28a745' : '#cccccc';
 
   card.innerHTML = `
-    <img src="${item.image}" alt="${item.name}" loading="lazy" />
+    <img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}" loading="lazy" />
     <div class="card-content">
       <div class="card-meta">
         <span class="rating" title="Rating: ${item.rating || 5.0}">${ratingStars} ${item.rating || '5.0'}</span>
@@ -293,12 +293,12 @@ function createCard(item, highlightQuery = "") {
       <h3>${highlightedName}</h3>
       <p>${highlightedDesc}</p>
       <div class="card-tags">${dietaryTags}</div>
-      ${outOfStockBadge}  <!-- ✅ NEW: Badge added here -->
+      ${outOfStockBadge}
     </div>
     <div class="card-footer">
       <span class="price">${formatPrice(item.price)}</span>
       <button class="add-btn" 
-        aria-label="Add ${item.name} to cart" 
+        aria-label="Add ${escapeHTML(item.name)} to cart" 
         ${buttonDisabled}
         style="background-color: ${buttonColor};">
         Add
@@ -490,14 +490,14 @@ function renderCart() {
       );
 
       cartItem.innerHTML = `
-        <img src="${item.image}" alt="${item.name}" loading="lazy" />
+        <img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}" loading="lazy" />
         <div class="cart-item-info">
-          <h4>${item.name}</h4>
+          <h4>${escapeHTML(item.name)}</h4>
           <p>${formatPrice(item.price)} each</p>
           <div class="qty-controls">
-            <button aria-label="Decrease ${item.name}" class="qty-decrease">−</button>
+            <button aria-label="Decrease ${escapeHTML(item.name)}" class="qty-decrease">−</button>
             <span>${quantity}</span>
-            <button aria-label="Increase ${item.name}" class="qty-increase">+</button>
+            <button aria-label="Increase ${escapeHTML(item.name)}" class="qty-increase">+</button>
           </div>
         </div>
         <div style="text-align:right;">
@@ -699,7 +699,7 @@ function renderOrdersList() {
     order.items.forEach(ci => {
       itemsHtml += `
         <div class="order-item-row">
-          <span>${ci.item.name} × ${ci.quantity}</span>
+          <span>${escapeHTML(ci.item.name)} × ${ci.quantity}</span>
           <span>${formatPrice(ci.item.price * ci.quantity)}</span>
         </div>
       `;
@@ -1050,8 +1050,8 @@ function setupSearchSuggestions() {
       const div = document.createElement("div");
       div.className = "suggestion-item";
       div.innerHTML = `
-        <span class="suggestion-name">${highlightText(item.name, query)}</span>
-        <span class="suggestion-category">${item.category}</span>
+        <span class="suggestion-name">${highlightText(escapeHTML(item.name), query)}</span>
+        <span class="suggestion-category">${escapeHTML(item.category)}</span>
       `;
       div.addEventListener("click", () => {
         searchInput.value = item.name;
