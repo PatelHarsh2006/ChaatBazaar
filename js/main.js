@@ -281,7 +281,7 @@ function createCard(item, highlightQuery = "") {
 
   //Disables button and change color if out of stock
   const buttonDisabled = !isAvailable ? 'disabled' : '';
-  const buttonColor = isAvailable ? '#28a745' : '#cccccc';
+
 
   card.innerHTML = `
     <img src="${item.image}" alt="${item.name}" loading="lazy" />
@@ -299,8 +299,7 @@ function createCard(item, highlightQuery = "") {
       <span class="price">${formatPrice(item.price)}</span>
       <button class="add-btn" 
         aria-label="Add ${item.name} to cart" 
-        ${buttonDisabled}
-        style="background-color: ${buttonColor};">
+        ${buttonDisabled}>
         Add
       </button>
     </div>
