@@ -48,6 +48,18 @@ body.dark {
   height: var(--map-height);
   width: 100%;
   position: relative;
+  transition: grid-template-columns 0.4s ease;
+}
+
+.tracking-layout-wrapper.sidebar-hidden {
+  grid-template-columns: 0px 1fr;
+}
+
+.tracking-layout-wrapper.sidebar-hidden .tracking-sidebar-panel {
+  padding-left: 0;
+  padding-right: 0;
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* Left Sidebar Panel */
@@ -59,21 +71,20 @@ body.dark {
   flex-direction: column;
   gap: 1.5rem;
   overflow-y: auto;
+  overflow-x: hidden;
   height: 100%;
   box-shadow: 10px 0 30px rgba(0, 0, 0, 0.02);
   z-index: 10;
+  transition: padding 0.4s ease, opacity 0.4s ease;
 }
 
-/* Scrollbar styles for the sidebar panel */
+/* for the sidebar panel */
+.tracking-sidebar-panel {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 .tracking-sidebar-panel::-webkit-scrollbar {
-  width: 6px;
-}
-.tracking-sidebar-panel::-webkit-scrollbar-track {
-  background: transparent;
-}
-.tracking-sidebar-panel::-webkit-scrollbar-thumb {
-  background: var(--glass-border);
-  border-radius: 99px;
+  display: none;
 }
 
 .sidebar-header {
@@ -393,7 +404,7 @@ body.dark {
   z-index: 1;
 }
 
-/* Floating Glassmorphic HUD overlay */
+/* Search Overlay */
 .floating-location-hud {
   position: absolute;
   top: 1.25rem;
@@ -441,33 +452,145 @@ body.dark {
   outline: none;
 }
 
-#auto-locate-btn {
+/* Delivery Coverage Card */
+.delivery-coverage-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-lg);
+  padding: 2rem;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  z-index: 1000;
+  box-shadow: var(--hud-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.coverage-icon-wrapper {
   background: var(--primary-orange-glow);
-  border: 1px solid rgba(255, 87, 34, 0.2);
-  color: var(--primary-orange);
-  width: 36px;
-  height: 36px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 8px 16px rgba(255, 87, 34, 0.15);
+}
+
+.coverage-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.coverage-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.btn-explore-coverage {
+  background: linear-gradient(135deg, var(--primary-orange-light) 0%, var(--primary-orange) 100%);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 99px;
   cursor: pointer;
-  font-size: 1rem;
+  box-shadow: 0 4px 12px var(--primary-orange-glow);
   transition: var(--transition-smooth);
 }
 
-#auto-locate-btn:hover {
-  background: var(--primary-orange);
-  color: #fff;
-  transform: scale(1.08);
+.btn-explore-coverage:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 87, 34, 0.4);
 }
 
-/* Nominatim Suggestions dropdown */
+/* Floating GPS Button */
+.floating-gps-action {
+  position: absolute;
+  bottom: 6rem;
+  right: 1.5rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--hud-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+  z-index: 100;
+  transition: var(--transition-smooth);
+  color: var(--text-dark);
+}
+
+.floating-gps-action:hover {
+  background: var(--bg-cream);
+  transform: translateY(-3px) scale(1.05);
+  color: var(--primary-orange);
+}
+
+.floating-gps-action.pulsing-gps {
+  animation: pulse-ring-orange 1.5s infinite;
+}
+
+/* Confirm Location Button */
+.confirm-location-container {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+}
+
+.confirm-loc-btn {
+  font-size: 1.1rem;
+  padding: 0.9rem 2.5rem;
+  box-shadow: 0 10px 25px rgba(255, 87, 34, 0.4);
+  animation: slideUpFade 0.4s ease forwards;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Search Suggestions */
 .hud-search-suggestions {
   background: transparent;
   border-top: 1px solid var(--glass-border);
   margin-top: 0.25rem;
   max-height: 240px;
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hud-search-suggestions::-webkit-scrollbar {
+  display: none;
 }
 
 .hud-search-suggestions .suggestion-item {
@@ -504,20 +627,21 @@ body.dark {
   pointer-events: none;
 }
 
-/* Localized Error Banner inside HUD */
-.hud-error-banner {
-  background: rgba(216, 67, 21, 0.08);
-  border: 1px dashed rgba(216, 67, 21, 0.3);
-  color: #c62828;
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 0.65rem 0.85rem;
+/* Error Banner */
+.hud-info-banner {
+  background: var(--glass-bg);
+  border: 1px solid rgba(255, 138, 101, 0.25);
+  color: var(--text-dark);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
   border-radius: 8px;
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
   line-height: 1.4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Leaflet Custom Marker & Path Styling overrides */
+/* Map Styling Overrides */
 .leaflet-div-icon {
   background: transparent !important;
   border: none !important;

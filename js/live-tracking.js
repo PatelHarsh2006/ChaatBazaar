@@ -1,10 +1,10 @@
 /**
- * ChaatBazaar Premium Live Map and Location Controller
- * Integrates Leaflet, OpenStreetMap Geolocation, Nominatim Search & Mobile Gestures
+ * Map and Location Controller
+ * Handles map rendering, geolocation, and location search.
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("Premium live tracking initializing...");
+  console.log("Live tracking initializing...");
 
   const mapContainer = document.getElementById("map");
   if (!mapContainer) {
@@ -12,19 +12,20 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // --- Global Map Variables ---
+  // Global Map Variables 
   window.liveMap = null;
   window.userMarker = null;
   window.restaurantMarker = null;
   window.routePolyline = null;
+  window.deliveryRadiusCircle = null;
 
-  // Curated fallback coordinate (India Gate, Delhi) from geolocation.js
+  // Fallback coordinate from geolocation.js
   const FALLBACK_LAT = window.RESTAURANT_LOCATION?.latitude || 28.6129;
   const FALLBACK_LNG = window.RESTAURANT_LOCATION?.longitude || 77.2295;
 
-  // --- Element Selectors ---
+  // Element Selectors 
   const userLocationText = document.getElementById("user-location-text");
-  const autoLocateBtn = document.getElementById("auto-locate-btn");
+  const autoLocateBtn = document.getElementById("floating-gps-btn");
   const searchInput = document.getElementById("location-search-input");
   const suggestionsContainer = document.getElementById("location-search-suggestions");
   const errorBanner = document.getElementById("hud-error-banner");
@@ -34,20 +35,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const activeOrderSidebar = document.getElementById("active-order-sidebar");
   const drawerArrow = mobileDrawerBtn?.querySelector(".drawer-arrow");
 
-  // --- Map Initialization ---
+  // Map Initialization 
   function initMap(lat, lng) {
     if (window.liveMap) {
       window.liveMap.setView([lat, lng], 14);
+      updateMapRoute(lat, lng);
       return;
     }
 
     // Load Leaflet map
     window.liveMap = L.map("map", {
-      zoomControl: true,
+      zoomControl: false,
       scrollWheelZoom: true
     }).setView([lat, lng], 14);
 
-    // Load CartoDB Positron theme tiles (Minimalist, elegant light-theme tiles)
+    // Add zoom control to bottom right
+    L.control.zoom({
+      position: 'bottomright'
+    }).addTo(window.liveMap);
+
+    // Load map tiles
     L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: 'abcd',
@@ -63,18 +70,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 400);
   }
 
-  // --- Dynamic Route and Pin Visualizer ---
+  // Route and Marker Updates
   function updateMapRoute(userLat, userLng) {
     if (!window.liveMap) return;
 
     const restLat = window.RESTAURANT_LOCATION?.latitude || FALLBACK_LAT;
     const restLng = window.RESTAURANT_LOCATION?.longitude || FALLBACK_LNG;
 
-    // 1. Plot Restaurant/Vendor Pin (Steaming Pot Icon)
+    // 1. Add Restaurant Marker
     const restaurantIcon = L.divIcon({
-      html: `<div style="font-size: 2.2rem; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15));">🍴</div>`,
-      iconSize: [40, 40],
-      iconAnchor: [20, 20],
+      html: `<div style="font-size: 1.8rem; background: #fff; width: 44px; height: 44px; border-radius: 50%; box-shadow: 0 6px 16px rgba(255, 87, 34, 0.2); display: flex; align-items: center; justify-content: center; border: 2px solid #ff5722;">🏪</div>`,
+      iconSize: [44, 44],
+      iconAnchor: [22, 22],
       className: 'leaflet-div-icon'
     });
 
@@ -86,11 +93,33 @@ document.addEventListener("DOMContentLoaded", () => {
         .bindPopup("<strong>ChaatBazaar Stall</strong><br>India Gate, Delhi");
     }
 
-    // 2. Plot User Delivery Pin (Dynamic Home Icon)
+    // Delivery radius circle (5km)
+
+if (window.deliveryRadiusCircle) {
+  window.deliveryRadiusCircle.setLatLng([restLat, restLng]);
+} else {
+
+  window.deliveryRadiusCircle = L.circle([restLat, restLng], {
+    radius: 5000, // 5km in meters
+
+    color: '#ff5722',
+    fillColor: '#ff5722',
+
+    fillOpacity: 0.12,
+
+    weight: 2,
+
+    dashArray: '6, 6'
+  })
+    .addTo(window.liveMap)
+    .bindPopup("Delivery available within 5km radius");
+}
+
+    // 2. Plot User Delivery Pin (Dynamic pulsing dot)
     const userIcon = L.divIcon({
-      html: `<div style="font-size: 2.2rem; filter: drop-shadow(0 4px 10px rgba(255,87,34,0.35)); animation: bounce-marker 2s infinite ease-in-out;">🏠</div>`,
-      iconSize: [40, 40],
-      iconAnchor: [20, 20],
+      html: `<div style="width: 20px; height: 20px; background: #ff5722; border: 3px solid #fff; border-radius: 50%; box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.25); animation: pulse-ring-orange 2s infinite ease-in-out;"></div>`,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
       className: 'leaflet-div-icon'
     });
 
@@ -113,9 +142,9 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       window.routePolyline = L.polyline(routeCoordinates, {
         color: '#ff5722',
-        weight: 4,
-        opacity: 0.8,
-        dashArray: '8, 8',
+        weight: 3,
+        opacity: 0.9,
+        dashArray: '5, 8',
         lineCap: 'round',
         lineJoin: 'round'
       }).addTo(window.liveMap);
@@ -123,9 +152,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 4. Fit route bounds within map frame smoothly
     const bounds = L.latLngBounds(routeCoordinates);
-    window.liveMap.fitBounds(bounds, {
+    window.liveMap.flyToBounds(bounds, {
       padding: [60, 60],
-      maxZoom: 15
+      maxZoom: 15,
+      duration: 1.5
     });
 
     // 5. Calculate delivery distance and validate zone
@@ -136,15 +166,24 @@ document.addEventListener("DOMContentLoaded", () => {
       userLocationText.innerHTML = `📍 Distance: <strong>${distanceKm.toFixed(2)} km</strong><br><span style="font-size: 0.8rem; color: var(--text-muted);">${userLat.toFixed(4)}, ${userLng.toFixed(4)}</span>`;
     }
 
-    // Display localized HUD notification warning if drop-off coordinates are out of zone
+    // Show error if location is out of zone
+    const confirmBtnContainer = document.getElementById("confirm-location-btn-container");
     if (errorBanner) {
       if (!inRange) {
         errorBanner.style.display = "block";
-        errorBanner.innerHTML = `⚠️ <strong>Out of Delivery Zone!</strong> User is ${distanceKm.toFixed(2)} km away. We deliver up to 5 km from India Gate. Please search closer!`;
+        errorBanner.innerHTML = `ℹ️ <strong>Coverage Info:</strong> Selected location is ${distanceKm.toFixed(2)} km away. Delivery is available within 5km. Please explore closer locations.`;
+        if (confirmBtnContainer) confirmBtnContainer.style.display = "none";
       } else {
         errorBanner.style.display = "none";
+        if (confirmBtnContainer) confirmBtnContainer.style.display = "flex";
       }
+    } else if (inRange && confirmBtnContainer) {
+      confirmBtnContainer.style.display = "flex";
     }
+
+    // Hide initial coverage prompt if any
+    const coverageBox = document.getElementById("delivery-coverage-box");
+    if (coverageBox) coverageBox.style.display = "none";
   }
 
   // --- Calculate distance helper from geolocation.js ---
@@ -165,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return distance <= radius;
   }
 
-  // --- Device GPS Locator Hook ---
+  // --- GPS Locator ---
   function performGPSDetection() {
     if (!navigator.geolocation) {
       displayHUDError("GPS is not supported by your browser.");
@@ -192,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
         autoLocateBtn?.classList.remove("pulsing-gps");
         console.error("GPS lock failed:", error);
         
-        // Safe graceful default location load
+        // Fallback to default location
         displayHUDError("GPS permission denied. Loaded India Gate center point.");
         initMap(FALLBACK_LAT, FALLBACK_LNG);
       },
@@ -215,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
     autoLocateBtn.addEventListener("click", performGPSDetection);
   }
 
-  // --- Nominatim Geocoding Autocomplete (300ms debounced input) ---
+  // --- Autocomplete Search ---
   let debounceTimeout = null;
 
   if (searchInput) {
@@ -223,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
       clearTimeout(debounceTimeout);
       const query = searchInput.value.trim();
 
-      if (query.length < 3) {
+      if (query.length < 1) {
         if (suggestionsContainer) suggestionsContainer.style.display = "none";
         return;
       }
@@ -234,7 +273,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     searchInput.addEventListener("focus", () => {
-      if (suggestionsContainer && suggestionsContainer.children.length > 0 && searchInput.value.trim().length >= 3) {
+      if (searchInput.value === "Device Live GPS Location") {
+        searchInput.value = "";
+      }
+      if (suggestionsContainer && suggestionsContainer.children.length > 0 && searchInput.value.trim().length >= 1) {
         suggestionsContainer.style.display = "block";
       }
     });
@@ -246,29 +288,65 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const popularLocations = [
+    { name: "Connaught Place", lat: 28.6304, lon: 77.2177, subtitle: "New Delhi, Delhi" },
+    { name: "Khan Market", lat: 28.6003, lon: 77.2274, subtitle: "New Delhi, Delhi" },
+    { name: "Parliament House", lat: 28.6172, lon: 77.2081, subtitle: "Sansad Marg, New Delhi" },
+    { name: "Pragati Maidan", lat: 28.6143, lon: 77.2396, subtitle: "New Delhi, Delhi" },
+    { name: "Jantar Mantar", lat: 28.6271, lon: 77.2166, subtitle: "New Delhi, Delhi" },
+    { name: "Supreme Court of India", lat: 28.6221, lon: 77.2395, subtitle: "New Delhi, Delhi" },
+    { name: "India Gate", lat: 28.6129, lon: 77.2295, subtitle: "New Delhi, Delhi" }
+  ];
+
   async function fetchLocationSuggestions(query) {
     if (!suggestionsContainer) return;
 
     try {
-      // Prioritize locations within Delhi NCR bounding box (viewbox)
-      const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(query)}&viewbox=77.0,28.4,77.4,28.8&bounded=1&countrycodes=in`;
-      
-      const response = await fetch(url, {
-        headers: { "Accept-Language": "en" }
-      });
-
-      if (!response.ok) throw new Error("Nominatim API connection error");
-      const data = await response.json();
-
       suggestionsContainer.innerHTML = "";
+      const lowerQuery = query.toLowerCase();
+      
+      // 1. Check local predefined locations
+      let validLocations = popularLocations.filter(loc => 
+        loc.name.toLowerCase().includes(lowerQuery) || loc.subtitle.toLowerCase().includes(lowerQuery)
+      ).map(loc => ({
+        display_name: `${loc.name}, ${loc.subtitle}`,
+        lat: loc.lat,
+        lon: loc.lon
+      }));
 
-      if (data.length === 0) {
-        suggestionsContainer.innerHTML = `<div class="no-matches">No street matches in Delhi-NCR</div>`;
+      // 2. Fallback to API
+      if (query.length >= 3) {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&limit=10&q=${encodeURIComponent(query)}&viewbox=77.0,28.4,77.4,28.8&bounded=1&countrycodes=in`;
+        const response = await fetch(url, { headers: { "Accept-Language": "en" } });
+        
+        if (response.ok) {
+          const data = await response.json();
+          const apiLocations = data.filter(item => {
+            const itemLat = parseFloat(item.lat);
+            const itemLng = parseFloat(item.lon);
+            const distance = calculateDistance(FALLBACK_LAT, FALLBACK_LNG, itemLat, itemLng);
+            return isWithinDeliveryRadius(distance);
+          });
+
+          // Merge without duplicates
+          apiLocations.forEach(apiLoc => {
+            const cleanTitle = apiLoc.display_name.split(',')[0].toLowerCase();
+            if (!validLocations.some(v => v.display_name.toLowerCase().includes(cleanTitle))) {
+              validLocations.push(apiLoc);
+            }
+          });
+        }
+      }
+
+      validLocations = validLocations.slice(0, 5);
+
+      if (validLocations.length === 0) {
+        suggestionsContainer.innerHTML = `<div class="no-matches">No locations found within 5km radius</div>`;
         suggestionsContainer.style.display = "block";
         return;
       }
 
-      data.forEach(item => {
+      validLocations.forEach(item => {
         const itemRow = document.createElement("div");
         itemRow.className = "suggestion-item";
         
@@ -307,7 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --- Mobile Drawer Controller & Tap Gestures ---
+  // Mobile Drawer Controller
   if (mobileDrawerBtn && activeOrderSidebar) {
     mobileDrawerBtn.addEventListener("click", () => {
       const isOpen = activeOrderSidebar.classList.toggle("open");
@@ -316,7 +394,7 @@ document.addEventListener("DOMContentLoaded", () => {
         drawerArrow.textContent = isOpen ? "▼" : "▲";
       }
 
-      // Smooth Leaflet size adjustments to prevent grey grids during bottom sheet sliding transitions
+      // Resize map after sliding to prevent glitches
       setTimeout(() => {
         if (window.liveMap) {
           window.liveMap.invalidateSize({ animate: true });
@@ -330,7 +408,35 @@ document.addEventListener("DOMContentLoaded", () => {
     initMap(lat, lng);
   };
 
-  // --- Default Initial Load ---
-  // Performs quick GPS trace or loads standard fallbacks
+  // Initial Load (GPS or fallback)
   performGPSDetection();
+
+  // Confirm Location Button Flow
+  const confirmLocBtn = document.getElementById("confirm-location-btn");
+  if (confirmLocBtn) {
+    confirmLocBtn.addEventListener("click", () => {
+      document.getElementById("confirm-location-btn-container").style.display = "none";
+      const wrapper = document.getElementById("tracking-wrapper");
+      if (wrapper) {
+        wrapper.classList.remove("sidebar-hidden");
+        // Allow CSS transition to begin before invalidating map size
+        setTimeout(() => {
+          if (window.liveMap) {
+            window.liveMap.invalidateSize();
+            // Optionally, pan to bounds again
+            if (window.routeCoordinates) {
+              window.liveMap.flyToBounds(L.latLngBounds(window.routeCoordinates), {
+                padding: [60, 60],
+                maxZoom: 15,
+                duration: 1.0
+              });
+            }
+          }
+        }, 400);
+      }
+      if (typeof window.triggerDeliverySimulation === "function") {
+        window.triggerDeliverySimulation();
+      }
+    });
+  }
 });
