@@ -1,3 +1,233 @@
+<<<<<<< HEAD
+/* ===== auth.css ===== */
+
+.auth-body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #fff8f0;
+}
+
+.auth-page {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ===== Left Brand Panel ===== */
+.auth-brand {
+  flex: 1 1 45%;
+  background: linear-gradient(145deg, #ff5722, #bf360c);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 3rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+.auth-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  margin-bottom: 3rem;
+  display: block;
+}
+.auth-tagline {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.2rem;
+}
+.auth-sub {
+  font-size: 1.05rem;
+  opacity: 0.85;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  max-width: 380px;
+}
+.auth-brand-art {
+  font-size: 4rem;
+  letter-spacing: 0.5rem;
+}
+
+/* ===== Right Form Panel ===== */
+.auth-form-panel {
+  flex: 1 1 55%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  overflow-y: auto;
+}
+
+.auth-card {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.1);
+  padding: 2.5rem 2.5rem 2rem;
+  width: 100%;
+  max-width: 440px;
+}
+
+/* ===== Tabs ===== */
+.auth-tabs {
+  display: flex;
+  background: #fff3e0;
+  border-radius: 50px;
+  padding: 4px;
+  margin-bottom: 2rem;
+}
+.auth-tab {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: none;
+  background: transparent;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #bf360c;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+  font-family: inherit;
+}
+.auth-tab.active {
+  background: #ff5722;
+  color: white;
+  box-shadow: 0 4px 14px rgb(255 87 34 / 0.5);
+}
+
+/* ===== Inner Forms ===== */
+.auth-inner-form {
+  display: none;
+}
+.auth-inner-form.active {
+  display: block;
+}
+
+/* ===== Fields ===== */
+.auth-field {
+  margin-bottom: 1.2rem;
+}
+.auth-field label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #bf360c;
+  margin-bottom: 0.4rem;
+}
+.auth-field input {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 2px solid #ffcc99;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+  background: #fffaf7;
+  box-sizing: border-box;
+}
+.auth-field input:focus {
+  border-color: #ff5722;
+  outline: none;
+  background: white;
+}
+
+/* Password with toggle */
+.pw-wrapper {
+  position: relative;
+}
+.pw-wrapper input {
+  padding-right: 3rem;
+}
+.toggle-pw {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0;
+  line-height: 1;
+}
+
+/* ===== Error ===== */
+.auth-error {
+  font-size: 0.85rem;
+  color: #c0392b;
+  min-height: 1.1rem;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+}
+
+/* ===== Submit ===== */
+.auth-submit-btn {
+  width: 100%;
+  background: #ff5722;
+  color: white;
+  border: none;
+  padding: 0.9rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgb(255 87 34 / 0.5);
+  transition: background 0.3s ease, transform 0.15s ease;
+  margin-bottom: 1rem;
+}
+.auth-submit-btn:hover {
+  background: #e64a19;
+  transform: translateY(-1px);
+}
+
+/* ===== Switch link ===== */
+.auth-switch {
+  text-align: center;
+  font-size: 0.88rem;
+  color: #5d4037;
+}
+.auth-switch-btn {
+  background: none;
+  border: none;
+  color: #ff5722;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .auth-page {
+    flex-direction: column;
+  }
+  .auth-brand {
+    position: static;
+    height: auto;
+    padding: 2.5rem 1.5rem;
+    flex: none;
+  }
+  .auth-tagline {
+    font-size: 1.8rem;
+  }
+  .auth-brand-art {
+    display: none;
+  }
+  .auth-form-panel {
+    padding: 2rem 1rem;
+    align-items: flex-start;
+  }
+  .auth-card {
+    padding: 2rem 1.5rem;
+  }
+}
+=======
 /* css/auth.css - ChaatBazar Authentication Styles */
 
 /* Auth Pages Layout */
@@ -422,3 +652,4 @@
         text-align: left;
     }
 }
+>>>>>>> origin/main

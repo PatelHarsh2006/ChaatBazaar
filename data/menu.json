@@ -1,4 +1,5 @@
-[
+
+  [
   {
     "id": "samosa-001",
     "name": "Aloo Samosa",
@@ -10,7 +11,7 @@
     "spice": "Medium",
     "dietary": ["vegan"],
     "available" : false
-  },
+  }, 
   {
     "id": "kachori-002",
     "name": "Pyaaz Ki Kachori",
