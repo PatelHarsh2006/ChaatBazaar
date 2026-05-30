@@ -81,7 +81,11 @@ function formatPrice(price) {
 }
 
 function getCartSubtotal() {
-  return cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
+  return cart.reduce((sum, ci) => {
+    const menuItem = menuItems.find(i => i.id === ci.item.id);
+    const trustedPrice = menuItem ? menuItem.price : ci.item.price;
+    return sum + trustedPrice * ci.quantity;
+  }, 0);
 }
 
 function loadCouponFromStorage() {
@@ -480,20 +484,22 @@ function renderCart() {
     }
 
     cart.forEach(({ item, quantity }) => {
+      const menuItem = menuItems.find(i => i.id === item.id);
+      const trustedPrice = menuItem ? menuItem.price : item.price;
       const cartItem = document.createElement("div");
       cartItem.className = "cart-item";
       cartItem.tabIndex = 0;
       cartItem.setAttribute(
         "aria-label",
         `${item.name}, quantity ${quantity},
-         price ${formatPrice(item.price * quantity)}`
+         price ${formatPrice(trustedPrice * quantity)}`
       );
 
       cartItem.innerHTML = `
         <img src="${item.image}" alt="${item.name}" loading="lazy" />
         <div class="cart-item-info">
           <h4>${item.name}</h4>
-          <p>${formatPrice(item.price)} each</p>
+          <p>${formatPrice(trustedPrice)} each</p>
           <div class="qty-controls">
             <button aria-label="Decrease ${item.name}" class="qty-decrease">−</button>
             <span>${quantity}</span>
@@ -502,7 +508,7 @@ function renderCart() {
         </div>
         <div style="text-align:right;">
           <p style="font-weight:700;color:#bf360c;">
-            ${formatPrice(item.price * quantity)}
+            ${formatPrice(trustedPrice * quantity)}
           </p>
           <button class="cart-item-remove">Remove</button>
         </div>
@@ -537,10 +543,10 @@ function renderCart() {
     const loyaltyDiv = document.createElement("div");
     loyaltyDiv.className = "cart-loyalty-widget";
 
-    const total = cart.reduce(
-      (sum, ci) => sum + ci.item.price * ci.quantity,
-      0
-    );
+    const total = cart.reduce((sum, ci) => {
+      const m = menuItems.find(i => i.id === ci.item.id);
+      return sum + (m ? m.price : ci.item.price) * ci.quantity;
+    }, 0);
     const discountVal = Math.min(points, total);
 
     loyaltyDiv.innerHTML = `
@@ -697,10 +703,12 @@ function renderOrdersList() {
 
     let itemsHtml = "";
     order.items.forEach(ci => {
+      const m = menuItems.find(i => i.id === ci.item.id);
+      const trustedPrice = m ? m.price : ci.item.price;
       itemsHtml += `
         <div class="order-item-row">
           <span>${ci.item.name} × ${ci.quantity}</span>
-          <span>${formatPrice(ci.item.price * ci.quantity)}</span>
+          <span>${formatPrice(trustedPrice * ci.quantity)}</span>
         </div>
       `;
     });
@@ -844,7 +852,13 @@ window.checkout = async function () {
       hour: '2-digit', minute: '2-digit'
     }),
     timestamp: Date.now(),
-    items: JSON.parse(JSON.stringify(cart)),
+    items: cart.map(ci => {
+      const menuItem = menuItems.find(i => i.id === ci.item.id);
+      return {
+        item: { ...ci.item, price: menuItem ? menuItem.price : ci.item.price },
+        quantity: ci.quantity
+      };
+    }),
     total: finalTotal,
     discount: totalDiscount,
     coupon: activeCoupon?.code || null,
