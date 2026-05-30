@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Orders - ChaatBazar</title>
-  
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="stylesheet" href="css/delivery-tracker.css">
+  <link rel="stylesheet" href="css/invoice-print.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="icon" href="img/logo.png" type="image/png" />
 </head>
+
 <body>
 
 <header>
   <div class="header-inner container" role="banner">
-    <a href="index.html" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
+    <a href="index.html" class="logo" aria-label="ChaatBazaar Home"><img src="img/logo.png" alt="ChaatBazaar Logo" class="navbar-logo-img" />ChaatBazaar</a>
     <nav role="navigation" aria-label="Primary Navigation">
       <a href="index.html" class="nav-link">Home</a>
       <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
@@ -26,36 +31,405 @@
           <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Beverages')">Beverages</a>
         </div>
       </div>
-      <a href="index.html#about" class="nav-link">About</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="favorites.html" class="nav-link">Favorites(<span id="fav-count">0</span>)</a>
       <a href="orders.html" class="nav-link active">Orders</a>
       
 <a href="faq.html" class="nav-link">FAQ</a>
       <a href="cart.html" class="nav-link">Cart</a>
+      <a href="cart.html" class="nav-link cart-btn-modern" id="cart-open-btn" aria-label="Cart">
+        <span class="cart-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="cart-svg-icon"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span id="cart-count" class="cart-badge">0</span>
+        </span>
+        <span class="cart-text">Cart</span>
+      </a>
       <div class="search-bar" role="search">
         <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" autocomplete="off" />
-        <button aria-label="Search" id="search-btn"></button>
+        <button aria-label="Search" id="search-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="search-svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
         <div class="search-suggestions" id="search-suggestions" style="display: none;"></div>
+      </div>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-icon sun-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          </span>
+          <span class="theme-toggle-icon moon-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </span>
+          <span class="theme-toggle-thumb"></span>
+        </span>
+      </button>
+
+      <!-- Dynamic auth slot: replaced by js/auth.js based on session state -->
+      <div id="authNavItem" class="auth-nav-item">
+        <a href="login.html" class="login-btn-nav">Login</a>
       </div>
     </nav>
   </div>
 </header>
 
-<section class="orders-page container">
-  <h1>My Orders</h1>
+  <section id="live-tracking-section" class="tracking-section-container">
+
+    <!-- Delivery Coverage Card -->
+    <div id="delivery-coverage-box" class="delivery-coverage-card" style="display:none;">
+      <div class="coverage-icon-wrapper">
+        <span class="coverage-icon">📍</span>
+      </div>
+      <div class="coverage-content">
+        <h3 class="coverage-title">Choose Delivery Location</h3>
+        <p class="coverage-desc">Search within our live delivery coverage area to enjoy hot ChaatBazaar treats. Delivery
+          is available within a 5km radius.</p>
+      </div>
+      <div class="coverage-action">
+        <button class="btn-explore-coverage"
+          onclick="document.getElementById('delivery-coverage-box').style.display='none'; document.getElementById('location-search-input').focus();">Search
+          Locations</button>
+      </div>
+    </div>
+
+    <div class="tracking-layout-wrapper sidebar-hidden" id="tracking-wrapper">
+      <!-- Sidebar -->
+      <div class="tracking-sidebar-panel" id="active-order-sidebar">
+        <div class="sidebar-header">
+          <h2 class="sidebar-title">Live Tracking</h2>
+          <span class="active-pulse-badge">Live status</span>
+        </div>
+
+        <!-- ETA Card -->
+        <div class="eta-floating-card">
+          <div class="eta-pulse-ring">
+            <span id="eta-mins-val">20</span>
+            <span class="mins-label">MINS</span>
+          </div>
+          <div class="eta-status-info">
+            <p class="eta-heading">Estimated Arrival</p>
+            <p class="eta-status-detail" id="live-status-text">Preparing your warm street feast...</p>
+          </div>
+        </div>
+
+        <!-- Real-Time Interactive Swiggy/Zomato Tracker Stepper Timeline -->
+        <div class="timeline-stepper">
+          <div class="stepper-rail">
+            <div class="stepper-rail-fill" id="active-progress-bar" style="width: 0%;"></div>
+            <div class="stepper-cart-icon" id="vendor-cart" style="transform: translateX(0%);">🛍️</div>
+          </div>
+
+          <div class="stepper-steps-wrapper progress-steps">
+            <div class="stepper-step step active current" data-step="preparing">
+              <span class="step-icon-circle"><span class="icon">🍳</span></span>
+              <span class="step-label">Preparing</span>
+            </div>
+            <div class="stepper-step step" data-step="packed">
+              <span class="step-icon-circle"><span class="icon">📦</span></span>
+              <span class="step-label">Packed</span>
+            </div>
+            <div class="stepper-step step" data-step="out-for-delivery">
+              <span class="step-icon-circle"><span class="icon">🛍️</span></span>
+              <span class="step-label">Out for Delivery</span>
+            </div>
+            <div class="stepper-step step" data-step="delivered">
+              <span class="step-icon-circle"><span class="icon">✅</span></span>
+              <span class="step-label">Delivered</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Location Detail Overlay -->
+        <div class="location-details-overlay">
+          <div class="location-icon-marker">📍</div>
+          <div class="location-address-info">
+            <p class="address-title">Delivering To:</p>
+            <p id="user-location-text" class="address-text">Detecting your location...</p>
+          </div>
+        </div>
+
+        <!-- Support buttons -->
+        <div class="active-support-actions">
+          <button class="support-action-btn btn-call" aria-label="Call Delivery Agent"
+            onclick="alert('Calling delivery agent Raju...')">
+            <span class="btn-icon">📞</span> Call Agent
+          </button>
+          <button class="support-action-btn btn-chat" aria-label="Chat with Vendor"
+            onclick="alert('Opening secure chat channel with ChaatBazaar vendor...')">
+            <span class="btn-icon">💬</span> Chat
+          </button>
+          <button class="support-action-btn btn-help" aria-label="Get Live Help"
+            onclick="alert('Connecting to live support desk...')">
+            <span class="btn-icon">ℹ️</span> Help
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Map Viewport -->
+      <div class="map-viewport-container">
+
+        <!-- Search overlay -->
+        <div class="floating-location-hud premium-hud">
+          <div class="hud-search-bar">
+            <span class="search-map-icon">🔍</span>
+            <input type="text" id="location-search-input" placeholder="Search delivery address..." autocomplete="off"
+              aria-label="Search Delivery Location" />
+          </div>
+          <!-- Autocomplete Suggestions List -->
+          <div id="location-search-suggestions" class="hud-search-suggestions premium-suggestions"
+            style="display: none;"></div>
+          <!-- Error banner -->
+          <div id="hud-error-banner" class="hud-info-banner" style="display: none;"></div>
+        </div>
+
+        <!-- Current Location Button -->
+        <button id="floating-gps-btn" class="floating-gps-action" title="Current Location"
+          aria-label="Current Location">
+          <span class="gps-icon">📍</span>
+        </button>
+
+        <div id="map">
+          <!-- Leaflet map -->
+        </div>
+
+        <!-- Confirm Location Button -->
+        <div class="confirm-location-container" id="confirm-location-btn-container" style="display: none;">
+          <button class="btn-primary confirm-loc-btn" id="confirm-location-btn">Confirm Delivery Location</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Mobile Bottom sheet toggle trigger/indicator -->
+  <div class="mobile-drawer-trigger-bar" id="mobile-drawer-btn">
+    <div class="drawer-notch"></div>
+    <div class="drawer-trigger-content">
+      <span>View Live Tracking Detail</span>
+      <span class="drawer-arrow">▲</span>
+    </div>
+  </div>
+
+<main class="container orders-main-history">
+  <h1 class="orders-history-title">My Orders History</h1>
   
   <div class="orders-container" id="orders-container" aria-live="polite">
-    <!-- Active and historical orders will be rendered here dynamically -->
+    <!-- Historical orders will be rendered dynamically -->
   </div>
-</section>
+</main>
 
 <footer>
-  <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
+  <div class="footer-container">
+    <div class="footer-column brand-col">
+      <div class="footer-brand"><img src="img/logo.png" alt="ChaatBazaar Logo" class="footer-logo-img" />ChaatBazaar</div>
+      <p class="footer-desc">Your ultimate destination for authentic and mouth-watering Indian street food - from crispy golgappas to hot samosas. Hassle-free delivery right to your doorstep.</p>
+    </div>
+    
+    <div class="footer-column">
+      <h3>ChaatBazar</h3>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="orders.html">Orders</a></li>
+        <li><a href="favorites.html">Favorites</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-column">
+      <h3>For Partners</h3>
+      <ul class="footer-links">
+        <li><a href="#">Partners With Us</a></li>
+        <li><a href="#">Apps For You</a></li>
+        <li><a href="#">Franchise Consulting</a></li>
+        <li><a href="#">Advertise With Us</a></li>
+        <li><a href="#">Sell On ChaatBazar</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-column">
+      <h3>Learn More</h3>
+      <ul class="footer-links">
+        <li><a href="#">Privacy & Security</a></li>
+        <li><a href="#">Terms & Conditions</a></li>
+        <li><a href="#">Help & Support</a></li>
+        <li><a href="#">Report a Fraud</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-column">
+      <div class="footer-social-wrapper">
+        <h3>Connect Us</h3>
+        <div class="footer-social-icons">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        </div>
+      </div>
+      <h3>Contact Us</h3>
+      <ul class="footer-contact-info">
+        <li><strong>Email:</strong> support@chaatbazar.com</li>
+        <li><strong>Phone:</strong> +91 98765 43210</li>
+        <li><strong>Headquarter:</strong> Bhavnagar, Gujarat, 364001</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
+  </div>
 </footer>
 
-<script src="js/accessibility.js"></script>
-<script src="js/sanitization.js"></script>
-<script src="js/cart-manager.js"></script>
-<script src="js/geolocation.js"></script>
-<script src="js/main.js"></script>
+
+  <!-- Premium Checkout Modal Overlay & Bottom Sheet -->
+  <div id="checkout-modal-overlay" class="checkout-modal-overlay" style="display: none;">
+    <div id="checkout-modal-container" class="checkout-modal-container">
+      <div class="checkout-modal-header">
+        <h3>Confirm & Complete Order 🛍️</h3>
+        <button id="checkout-modal-close" class="checkout-modal-close-btn" aria-label="Close Checkout">&times;</button>
+      </div>
+      <div class="checkout-modal-body">
+        
+        <!-- Left Column: Customer Form Details -->
+        <form id="checkout-form" class="checkout-form-column" novalidate>
+          <h4 class="checkout-section-title">Delivery Details</h4>
+          
+          <div class="checkout-field-group">
+            <label for="checkout-name">Full Name <span class="required">*</span></label>
+            <div class="input-icon-wrapper">
+              <span class="field-icon">👤</span>
+              <input type="text" id="checkout-name" placeholder="Enter your name" required />
+            </div>
+            <div class="field-error-msg" id="err-checkout-name">Name is required</div>
+          </div>
+
+          <div class="checkout-field-group">
+            <label for="checkout-phone">Mobile Phone (10 Digits) <span class="required">*</span></label>
+            <div class="input-icon-wrapper">
+              <span class="field-icon">📞</span>
+              <input type="tel" id="checkout-phone" placeholder="Enter 10-digit mobile number" maxlength="10" required />
+            </div>
+            <div class="field-error-msg" id="err-checkout-phone">Enter a valid 10-digit mobile number</div>
+          </div>
+
+          <div class="checkout-field-group">
+            <label for="checkout-address">Delivery Address <span class="required">*</span></label>
+            <div class="input-icon-wrapper">
+              <span class="field-icon">📍</span>
+              <textarea id="checkout-address" placeholder="Verify your delivery address" rows="2" required></textarea>
+            </div>
+            <div class="field-error-msg" id="err-checkout-address">Delivery address is required</div>
+          </div>
+
+          <h4 class="checkout-section-title" style="margin-top: 1.25rem;">Payment Method</h4>
+          <div class="payment-methods-grid">
+            <div class="payment-card active" data-method="UPI">
+              <span class="payment-icon">📱</span>
+              <span class="payment-label">UPI / NetBanking</span>
+            </div>
+            <div class="payment-card" data-method="Card">
+              <span class="payment-icon">💳</span>
+              <span class="payment-label">Credit / Debit Card</span>
+            </div>
+            <div class="payment-card" data-method="COD">
+              <span class="payment-icon">💵</span>
+              <span class="payment-label">Cash on Delivery</span>
+            </div>
+          </div>
+          <input type="hidden" id="checkout-payment-method" value="UPI" />
+
+          <div id="checkout-validation-error" class="checkout-error-banner" style="display: none;"></div>
+        </form>
+
+        <!-- Right Column: Order Summary & Pricing -->
+        <div class="checkout-summary-column">
+          <h4 class="checkout-section-title">Order Summary</h4>
+          <div id="checkout-items-list" class="checkout-items-list">
+            <!-- Dynamically populated cart items -->
+          </div>
+
+          <!-- Coupon Promo section -->
+          <h4 class="checkout-section-title" style="margin-top: 1.25rem;">Have a promo code?</h4>
+          <div class="checkout-coupon-row">
+            <input type="text" id="checkout-coupon-input" placeholder="Promo code (SAVE50, FREEDEL, CHAAT20)" />
+            <button type="button" id="checkout-coupon-btn">Apply</button>
+          </div>
+          <div id="checkout-coupon-msg" class="checkout-coupon-msg"></div>
+
+          <!-- Loyalty Section -->
+          <div id="checkout-loyalty-widget" class="checkout-loyalty-widget">
+            <!-- Dynamically populated loyalty points balance & toggle -->
+          </div>
+
+          <div class="checkout-pricing-breakdown">
+            <div class="price-row">
+              <span>Items Subtotal</span>
+              <span id="checkout-subtotal-val">₹0</span>
+            </div>
+            <div class="price-row" id="checkout-delivery-row">
+              <span>Delivery Fee</span>
+              <span id="checkout-delivery-val">₹40</span>
+            </div>
+            <div class="price-row">
+              <span>Platform Fee</span>
+              <span id="checkout-platform-val">₹10</span>
+            </div>
+            <div class="price-row">
+              <span>GST / Tax (5%)</span>
+              <span id="checkout-gst-val">₹0</span>
+            </div>
+            <div class="price-row discount-row" id="checkout-coupon-discount-row" style="display: none;">
+              <span>Coupon Discount</span>
+              <span id="checkout-discount-val">-₹0</span>
+            </div>
+            <div class="price-row discount-row" id="checkout-loyalty-discount-row" style="display: none;">
+              <span>Loyalty Points Discount</span>
+              <span id="checkout-loyalty-discount-val">-₹0</span>
+            </div>
+            <div class="price-row grand-total-row">
+              <span>Grand Total</span>
+              <span id="checkout-grand-total-val">₹0</span>
+            </div>
+          </div>
+
+          <button type="button" id="checkout-place-order-btn" class="btn-primary checkout-place-order-btn">Proceed to Live Tracking 🚀</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-notification" class="toast-notification"></div>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="js/cart-manager.js"></script>
+  <script src="js/recently-viewed.js"></script>
+  <script src="js/geolocation.js"></script>
+  <script src="js/sanitization.js"></script>
+  <script src="js/loyalty.js"></script>
+  <script src="js/translations.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/live-tracking.js"></script>
+  <script src="js/delivery-tracker.js"></script>
+  <script src="js/geolocation.js"></script>
+  <script src="js/sanitization.js"></script>
+  <script src="js/loyalty.js"></script>
+  <script src="js/translations.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/live-tracking.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const deliveryAvailable = params.get("delivery") === "true";
+    if (!deliveryAvailable) {
+      const covBox = document.getElementById("delivery-coverage-box");
+      if (covBox) covBox.style.display = "flex";
+    }
+  </script>
 </body>
 </html>
