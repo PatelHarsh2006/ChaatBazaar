@@ -2,12 +2,13 @@
 // Shared across all pages — injects avatar or Login link into #nav-profile-slot
 
 (function () {
-  const session = localStorage.getItem('cb_session');
+  const session = localStorage.getItem('cb_session') || localStorage.getItem('session');
   const slot = document.getElementById('nav-profile-slot');
   if (!slot) return;
 
   if (session) {
-    const users = JSON.parse(localStorage.getItem('cb_users') || '{}');
+    const raw = localStorage.getItem('cb_users') || localStorage.getItem('users') || '{}';
+    const users = JSON.parse(raw || '{}');
     const user = users[session] || {};
     const name = user.name || 'User';
     const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();

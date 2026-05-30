@@ -1,14 +1,25 @@
 // ===== auth.js =====
-const USERS_KEY   = 'cb_users';
-const SESSION_KEY = 'cb_session';
+const USERS_KEY         = 'cb_users';
+const SESSION_KEY       = 'cb_session';
+const LEGACY_USERS_KEY  = 'users';
+const LEGACY_SESSION_KEY = 'session';
 
-// Redirect if already logged in
-if (localStorage.getItem(SESSION_KEY)) {
-  window.location.href = 'profile.html';
+function getSessionEmail() {
+  return localStorage.getItem(SESSION_KEY) || localStorage.getItem(LEGACY_SESSION_KEY);
 }
 
 function getUsers() {
-  return JSON.parse(localStorage.getItem(USERS_KEY) || '{}');
+  const raw = localStorage.getItem(USERS_KEY) || localStorage.getItem(LEGACY_USERS_KEY) || '{}';
+  const users = JSON.parse(raw || '{}');
+  if (!localStorage.getItem(USERS_KEY) && localStorage.getItem(LEGACY_USERS_KEY)) {
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  }
+  return users;
+}
+
+// Redirect if already logged in
+if (getSessionEmail()) {
+  window.location.href = 'profile.html';
 }
 
 // ---- Tab switching ----
@@ -62,6 +73,7 @@ formLogin.addEventListener('submit', (e) => {
   }
   errorEl.textContent = '';
   localStorage.setItem(SESSION_KEY, email);
+  localStorage.setItem(LEGACY_SESSION_KEY, email);
 
   const redirect = new URLSearchParams(window.location.search).get('redirect') || 'index.html';
   window.location.href = redirect;
@@ -94,7 +106,9 @@ formSignup.addEventListener('submit', (e) => {
 
   users[email] = { name, email, phone, password };
   localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  localStorage.setItem(LEGACY_USERS_KEY, JSON.stringify(users));
   localStorage.setItem(SESSION_KEY, email);
+  localStorage.setItem(LEGACY_SESSION_KEY, email);
   errorEl.textContent = '';
   window.location.href = 'profile.html';
 });

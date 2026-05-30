@@ -1,14 +1,33 @@
 // ===== profile.js =====
-const SESSION_KEY = 'cb_session';
-const USERS_KEY   = 'cb_users';
+const SESSION_KEY        = 'cb_session';
+const USERS_KEY          = 'cb_users';
+const LEGACY_SESSION_KEY = 'session';
+const LEGACY_USERS_KEY   = 'users';
+
+function getSessionEmail() {
+  return localStorage.getItem(SESSION_KEY) || localStorage.getItem(LEGACY_SESSION_KEY);
+}
+
+function getUsers() {
+  const raw = localStorage.getItem(USERS_KEY) || localStorage.getItem(LEGACY_USERS_KEY) || '{}';
+  const users = JSON.parse(raw || '{}');
+  if (!localStorage.getItem(USERS_KEY) && localStorage.getItem(LEGACY_USERS_KEY)) {
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  }
+  return users;
+}
 
 // Guard — redirect if not logged in
-const sessionEmail = localStorage.getItem(SESSION_KEY);
+const sessionEmail = getSessionEmail();
 if (!sessionEmail) {
   window.location.href = 'auth.html?redirect=profile.html';
 }
 
-const users = JSON.parse(localStorage.getItem(USERS_KEY) || '{}');
+if (sessionEmail && !localStorage.getItem(SESSION_KEY)) {
+  localStorage.setItem(SESSION_KEY, sessionEmail);
+}
+
+const users = getUsers();
 const currentUser = users[sessionEmail] || {};
 
 const ADDR_KEY   = `cb_addresses_${sessionEmail}`;
@@ -150,7 +169,13 @@ document.getElementById('add-address-form').addEventListener('submit', (e) => {
 // PANEL: Order History
 // ==============================
 function loadOrdersPanel() {
-  const orders   = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
+  let orders = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
+  if (orders.length === 0) {
+    const legacyOrders = JSON.parse(localStorage.getItem('chaatOrders') || '[]');
+    if (legacyOrders.length) {
+      orders = legacyOrders;
+    }
+  }
   const list     = document.getElementById('orders-list');
   const emptyMsg = document.getElementById('orders-empty');
 
