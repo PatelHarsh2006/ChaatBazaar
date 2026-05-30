@@ -14,7 +14,7 @@
 ## Demo
 (Optional: GitHub Pages link)
 
-# Contributing to ChaatBazar
+# Contributing to ChaatBazaar
 
 Thank you for your interest in contributing! Please follow these steps:
 

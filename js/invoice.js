@@ -63,7 +63,7 @@ window.invoiceGenerator = (() => {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(22);
       doc.setTextColor(230, 74, 25); // Brand Orange
-      doc.text("CHAATBAZAR", leftMargin, y);
+      doc.text("ChaatBazaar", leftMargin, y);
 
       doc.setFont("helvetica", "normal");
       doc.setFontSize(9);
@@ -103,11 +103,11 @@ window.invoiceGenerator = (() => {
       
       // Vendor address
       doc.text([
-        "ChaatBazar Central Kitchen",
+        "ChaatBazaar Central Kitchen",
         "India Gate Counter #4",
         "New Delhi, 110001",
         "Phone: +91 98765 43210",
-        "Email: support@chaatbazar.com"
+        "Email: support@ChaatBazaar.com"
       ], leftMargin, y + 5);
 
       // Customer delivery info
@@ -218,14 +218,14 @@ window.invoiceGenerator = (() => {
       doc.setFont("helvetica", "italic");
       doc.setFontSize(10);
       doc.setTextColor(120, 120, 120);
-      doc.text("Thank you for choosing ChaatBazar! Come back soon.", 105, y, { align: "center" });
+      doc.text("Thank you for choosing ChaatBazaar! Come back soon.", 105, y, { align: "center" });
 
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
       doc.text("This receipt was generated client-side and acts as a valid proof of purchase.", 105, y + 5, { align: "center" });
 
       // Save PDF File
-      doc.save(`ChaatBazar_Invoice_${order.id}.pdf`);
+      doc.save(`ChaatBazaar_Invoice_${order.id}.pdf`);
 
     } catch (err) {
       console.error("Failed to generate PDF invoice:", err);
@@ -271,7 +271,7 @@ window.invoiceGenerator = (() => {
     printContainer.innerHTML = `
       <div class="print-receipt-box">
         <div class="receipt-header">
-          <h1>CHAATBAZAR</h1>
+          <h1>ChaatBazaar</h1>
           <p class="subtitle">Authentic Indian Street Food Delivered Hot!</p>
           <hr/>
           <h2>INVOICE / RECEIPT</h2>
@@ -284,7 +284,7 @@ window.invoiceGenerator = (() => {
             <strong>Status:</strong> Completed / Paid
           </div>
           <div style="margin-top: 10px;">
-            <strong>From:</strong> ChaatBazar Central Kitchen, India Gate, New Delhi<br/>
+            <strong>From:</strong> ChaatBazaar Central Kitchen, India Gate, New Delhi<br/>
             <strong>Delivery:</strong> ${order.deliveryAddress ? `GPS Coordinates (${order.deliveryAddress.latitude.toFixed(4)}, ${order.deliveryAddress.longitude.toFixed(4)})` : 'Self-Counter Pickup'}
           </div>
         </div>
@@ -334,7 +334,7 @@ window.invoiceGenerator = (() => {
         ` : ''}
 
         <div class="receipt-footer" style="text-align: center; margin-top: 40px; font-style: italic; color: #666; font-size: 0.9rem;">
-          <p>Thank you for choosing ChaatBazar! Visit us again soon.</p>
+          <p>Thank you for choosing ChaatBazaar! Visit us again soon.</p>
           <p style="font-size: 0.75rem;">This client-side document represents a valid print proof of purchase.</p>
         </div>
       </div>

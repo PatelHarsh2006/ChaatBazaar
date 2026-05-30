@@ -17,7 +17,7 @@ const translations = {
     dietary_prefs: "Dietary Preferences", dietary_vegan: "🌱 Vegan", dietary_gf: "🌾 Gluten-Free",
     reset_filters: "Reset All Filters", no_items: "No items found matching your filters.",
     about_title: "About Us",
-    about_desc: "At ChaatBazar, we bring you the authentic flavors of India's vibrant street food culture.",
+    about_desc: "At ChaatBazaar, we bring you the authentic flavors of India's vibrant street food culture.",
     priya_role: "Founder & Head Chef - Crafting every dish with love and authenticity.",
     anjali_role: "Customer Support - Always here to assist you with your orders.",
     contact_title: "Contact Us", label_name: "Name", label_email: "Email", label_message: "Message",
@@ -28,7 +28,7 @@ const translations = {
     newsletter_placeholder: "Enter your email", newsletter_btn: "Subscribe",
     cart_title: "Your Cart", cart_empty: "Your cart is empty.",
     cart_checkout: "Checkout", cart_remove: "Remove",
-    footer_copy: "© 2026 ChaatBazar. All rights reserved.",
+    footer_copy: "© 2026 ChaatBazaar. All rights reserved.",
     lang_toggle: "हिंदी"
   },
   hi: {
@@ -49,7 +49,7 @@ const translations = {
     dietary_prefs: "आहार प्राथमिकताएं", dietary_vegan: "🌱 शाकाहारी", dietary_gf: "🌾 ग्लूटेन-मुक्त",
     reset_filters: "सभी फ़िल्टर रीसेट करें", no_items: "आपके फ़िल्टर से कोई आइटम नहीं मिला।",
     about_title: "हमारे बारे में",
-    about_desc: "ChaatBazar में, हम आपके लिए भारत की जीवंत स्ट्रीट फूड संस्कृति के असली स्वाद लेकर आते हैं।",
+    about_desc: "ChaatBazaar में, हम आपके लिए भारत की जीवंत स्ट्रीट फूड संस्कृति के असली स्वाद लेकर आते हैं।",
     priya_role: "संस्थापक और प्रमुख शेफ - हर व्यंजन को प्यार और प्रामाणिकता से बनाती हैं।",
     anjali_role: "ग्राहक सहायता - आपके ऑर्डर में हमेशा मदद के लिए तैयार।",
     contact_title: "संपर्क करें", label_name: "नाम", label_email: "ईमेल", label_message: "संदेश",
@@ -60,7 +60,7 @@ const translations = {
     newsletter_placeholder: "अपना ईमेल दर्ज करें", newsletter_btn: "सदस्यता लें",
     cart_title: "आपकी कार्ट", cart_empty: "आपकी कार्ट खाली है।",
     cart_checkout: "चेकआउट", cart_remove: "हटाएं",
-    footer_copy: "© 2026 ChaatBazar. सर्वाधिकार सुरक्षित।",
+    footer_copy: "© 2026 ChaatBazaar. सर्वाधिकार सुरक्षित।",
     lang_toggle: "English"
   }
 };

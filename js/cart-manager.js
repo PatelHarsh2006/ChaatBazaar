@@ -1,5 +1,5 @@
 // ===============================
-// CHAATBAZAR CART MANAGER (FIXED)
+// ChaatBazaar CART MANAGER (FIXED)
 // ===============================
 
 const CART_STORAGE_KEY = "chaatCart";
