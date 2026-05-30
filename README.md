@@ -23,6 +23,7 @@ Demo Link : <a href="https://patelharsh2006.github.io/ChaatBazaar/">Link</a>
 - **Mobile-First Design:** Fully responsive UI for optimal viewing across all devices.
 
 ### 🤝 Contributor Features (Areas for Expansion)
+- ❤️ **Favourites List:** Users can add their favourite dishes to a list and view them later.
 - 🌶️ **Spice Level Customization:** Per order modifications.
 - 🎁 **Loyalty & Referrals:** Points system and referral codes.
 - 📍 **Live Order Tracking:** Simulated tracking UI.
@@ -37,7 +38,7 @@ Demo Link : <a href="https://patelharsh2006.github.io/ChaatBazaar/">Link</a>
 
 | Home Page | Menu View |
 | --- | --- |
-| <img src="https://github.com/user-attachments/assets/2f689e55-c27d-44e7-a489-a2f3cd6d273b" alt="Home Page" width="100%" /> | <img width="3034" height="1408" alt="Gemini_Generated_Image_l3ea2al3ea2al3ea" src="https://github.com/user-attachments/assets/7033986c-c2b1-4616-b7b3-e7a4a497faa6" /> |
+|<img src="https://github.com/user-attachments/assets/bf0f2fc4-3971-4e59-9a1e-740289a63ca2" alt="Home Page" width="100%" /> | <img width="3034" height="1408" alt="Gemini_Generated_Image_l3ea2al3ea2al3ea" src="https://github.com/user-attachments/assets/7033986c-c2b1-4616-b7b3-e7a4a497faa6" /> |
 
 <img src="https://capsule-render.vercel.app/api?type=rect&height=4&color=FF7B54" width="100%">
 
