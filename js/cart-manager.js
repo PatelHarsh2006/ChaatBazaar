@@ -29,8 +29,21 @@ class CartManager {
       // Dispatch custom event for cross-tab/cross-component sync
       window.dispatchEvent(new CustomEvent(CART_SYNC_EVENT, { detail: this.items }));
     } catch (error) {
-      console.error('Error saving cart to storage:', error);
+      if (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+        console.error('Storage quota exceeded:', error);
+        this.handleStorageQuotaExceeded();
+      } else {
+        console.error('Error saving cart to storage:', error);
+      }
     }
+  }
+
+  // Handle storage quota exceeded
+  handleStorageQuotaExceeded() {
+    const message = 'Storage limit exceeded. Your cart may not be saved. Please clear browser cache and try again.';
+    console.warn(message);
+    // Dispatch event for UI to show notification
+    window.dispatchEvent(new CustomEvent('storageQuotaExceeded', { detail: message }));
   }
 
   // Setup storage event listener for cross-tab sync
