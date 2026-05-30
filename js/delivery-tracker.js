@@ -1,6 +1,6 @@
 /**
- * ChaatBazaar Interactive Delivery Tracker Simulation
- * Connects the active order state to the Leaflet map markers, sidebar progress bars, and ETA timers
+ * Delivery Tracker
+ * Connects order state to the map markers, sidebar progress, and ETA.
  */
 
 const deliveryTracker = (() => {
@@ -10,7 +10,7 @@ const deliveryTracker = (() => {
       label: 'Preparing Order 🍳',
       message: 'Vendor is roasting hot spices for your Chaat... 🍳',
       progress: '12.5%',
-      cartLeft: '12.5%',
+      cartTop: '-5%',
       eta: '20'
     },
     {
@@ -18,15 +18,15 @@ const deliveryTracker = (() => {
       label: 'Packed 📦',
       message: 'Packaged freshly in clay pots & ready to ride! 📦',
       progress: '37.5%',
-      cartLeft: '37.5%',
+      cartTop: '26%',
       eta: '14'
     },
     {
       key: 'out-for-delivery',
-      label: 'Out for Delivery 🚲',
-      message: 'Raju is pedaling hot street eats straight to you! 🚲',
+      label: 'Out for Delivery 🛍️',
+      message: 'Your hot street eats are on the way! 🛍️',
       progress: '65%',
-      cartLeft: '62.5%',
+      cartTop: '58%',
       eta: '6'
     },
     {
@@ -34,7 +34,7 @@ const deliveryTracker = (() => {
       label: 'Delivered ✅',
       message: 'Order arrived — dig into your hot street feast! ✅',
       progress: '100%',
-      cartLeft: '90%',
+      cartTop: '90%',
       eta: '0'
     }
   ];
@@ -76,9 +76,9 @@ const deliveryTracker = (() => {
 
     // 2. Move cart icon on rail
     if (cartEl) {
-      cartEl.style.left = stage.cartLeft;
+      cartEl.style.top = stage.cartTop;
       // Change icon depending on active stage
-      cartEl.textContent = stageIndex === 3 ? '✅' : stageIndex === 2 ? '🚲' : '🍳';
+      cartEl.textContent = stageIndex === 3 ? '✅' : stageIndex === 2 ? '🛍️' : '🍳';
     }
 
     // 3. Update active message and ETA timers
@@ -98,58 +98,7 @@ const deliveryTracker = (() => {
   };
 
   // --- Map Animation Pin Interpolator ---
-  // Interpolates delivery rider position along the route polyline based on active stage
-  function updateMapRiderPosition(stageIndex) {
-    if (!window.liveMap) return;
-
-    const restLat = window.RESTAURANT_LOCATION?.latitude || 28.6129;
-    const restLng = window.RESTAURANT_LOCATION?.longitude || 77.2295;
-
-    // Get selected user drop-off coordinates, fallback to original if none set
-    let userLat = restLat + 0.015;
-    let userLng = restLng + 0.015;
-
-    if (window.userMarker) {
-      const uLatLng = window.userMarker.getLatLng();
-      userLat = uLatLng.lat;
-      userLng = uLatLng.lng;
-    }
-
-    // Interpolation ratios per stage
-    // 0: Preparing -> Rider at Restaurant (0% progress)
-    // 1: Packed -> Rider leaving Restaurant (15% progress)
-    // 2: Out for Delivery -> Rider halfway (60% progress)
-    // 3: Delivered -> Rider at user home (100% progress)
-    let ratio = 0;
-    if (stageIndex === 1) ratio = 0.15;
-    if (stageIndex === 2) ratio = 0.60;
-    if (stageIndex === 3) ratio = 1.0;
-
-    const riderLat = restLat + (userLat - restLat) * ratio;
-    const riderLng = restLng + (userLng - restLng) * ratio;
-
-    // Custom Diver avatar (glowing rider pin)
-    const riderIcon = L.divIcon({
-      html: `<div style="font-size: 2.2rem; filter: drop-shadow(0 4px 12px rgba(255,87,34,0.45)); transform: scale(${stageIndex === 3 ? 0.9 : 1.15});">🛵</div>`,
-      iconSize: [40, 40],
-      iconAnchor: [20, 20],
-      className: 'leaflet-div-icon'
-    });
-
-    if (window.driverMarker) {
-      // Reposition rider marker smoothly
-      window.driverMarker.setLatLng([riderLat, riderLng]);
-    } else {
-      window.driverMarker = L.marker([riderLat, riderLng], { icon: riderIcon })
-        .addTo(window.liveMap)
-        .bindPopup("<strong>Rider Raju (🛵)</strong><br>Speeding street food to you!");
-    }
-
-    // Pan map to follow rider slightly during Out for Delivery stage
-    if (stageIndex === 2) {
-      window.liveMap.panTo([riderLat, riderLng]);
-    }
-  }
+  // (Removed per request to maintain human-made non-mechanical aesthetic)
 
   const runTrackingSimulation = async () => {
     queryTrackerElements();
@@ -160,15 +109,12 @@ const deliveryTracker = (() => {
     for (let i = 0; i < stageDefinitions.length; i++) {
       // Apply updates to sidebar
       updateSidebarTimeline(i);
-      
-      // Update dynamic rider marker position on Leaflet
-      updateMapRiderPosition(i);
 
       if (i === stageDefinitions.length - 1) {
         break;
       }
 
-      // Timing delays between mock delivery events (fast tracking simulation)
+      // Delay between stages
       await delay(i === 0 ? 5000 : i === 1 ? 6000 : 7000);
     }
   };
@@ -177,25 +123,8 @@ const deliveryTracker = (() => {
     queryTrackerElements();
     window.triggerDeliverySimulation = runTrackingSimulation;
 
-    // Hook to auto-trigger tracking simulator if a fresh order has just been placed (e.g. within last 60 seconds)
-    const orders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
-    if (orders.length > 0) {
-      const latestOrder = orders[0];
-      const timeSincePlacement = Date.now() - latestOrder.timestamp;
-      
-      // If order was placed within last 60 seconds, auto-launch active simulation!
-      if (timeSincePlacement < 60000 && latestOrder.status !== 'Delivered') {
-        setTimeout(() => {
-          runTrackingSimulation();
-        }, 1200); // Small buffer to let map load completely
-      } else {
-        // Safe default: set layout to complete/delivered state
-        updateSidebarTimeline(3);
-      }
-    } else {
-      // No orders placed: set tracker state to default/idle
-      updateSidebarTimeline(0);
-    }
+    // Default to idle state until user confirms location
+    updateSidebarTimeline(0);
   };
 
   return {

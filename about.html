@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - ChaatBazar</title>
+  
+  <!-- Google Fonts & Stylesheets -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="favicon.png" type="image/png" />
+  
+  <style>
+    /* Premium styling overrides for the standalone about page */
+    .about-page {
+      padding-top: 5rem;
+      padding-bottom: 6rem;
+    }
+    .about-page h1 {
+      font-size: 2.5rem;
+      color: #bf360c;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+    .about-desc-large {
+      font-size: 1.15rem;
+      color: #5d4037;
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 3.5rem;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner container" role="banner">
+    <a href="index.html" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
+    <nav role="navigation" aria-label="Primary Navigation">
+      <a href="index.html" class="nav-link">Home</a>
+      <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
+        <a href="menu.html" class="dropdown-toggle nav-link">Menu</a>
+        <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
+          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('All')">All</a>
+          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Snacks')">Snacks</a>
+          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Chaat')">Chaat</a>
+          <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Beverages')">Beverages</a>
+        </div>
+      </div>
+      <a href="about.html" class="nav-link active">About</a>
+      <a href="favorites.html" class="nav-link">Favorites (<span id="fav-count">0</span>)</a>
+      <a href="orders.html" class="nav-link">Orders</a>
+      <a href="cart.html" class="nav-link cart-btn-modern" id="cart-open-btn" aria-label="Cart">
+        <span class="cart-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="cart-svg-icon"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span id="cart-count" class="cart-badge">0</span>
+        </span>
+        <span class="cart-text">Cart</span>
+      </a>
+      <div class="search-bar" role="search">
+        <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" autocomplete="off" />
+        <button aria-label="Search" id="search-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="search-svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+        <div class="search-suggestions" id="search-suggestions" style="display: none;"></div>
+      </div>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-icon sun-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          </span>
+          <span class="theme-toggle-icon moon-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </span>
+          <span class="theme-toggle-thumb"></span>
+        </span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main class="about-page container">
+  <h1>About Us</h1>
+  <p class="about-desc-large">At <strong>ChaatBazar</strong>, we bring you the authentic flavors of India's vibrant street food culture, freshly prepared and delivered hot right to your door. Our passion is to share the love of chaat, snacks, and beverages made from time-tested recipes.</p>
+
+  <section class="about" role="region" aria-label="Our Team">
+    <div class="container">
+      <div class="team" aria-label="Meet our team">
+
+        <article class="team-member" tabindex="0">
+          <div class="team-member-inner">
+            <div class="team-member-front">
+              <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya Sharma - Founder & Head Chef" />
+              <h4>Priya Sharma</h4>
+              <p>Founder & Head Chef - Crafting every dish with love and authenticity.</p>
+            </div>
+            <div class="team-member-back">
+              <h4>About Priya</h4>
+              <p>10+ years of culinary expertise specializing in authentic Indian street food and handcrafted signature recipes.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="team-member" tabindex="0">
+          <div class="team-member-inner">
+            <div class="team-member-front">
+              <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Anjali Verma - Customer Support" />
+              <h4>Anjali Verma</h4>
+              <p>Customer Support - Always here to assist you with your orders.</p>
+            </div>
+            <div class="team-member-back">
+              <h4>About Anjali</h4>
+              <p>Ensures smooth customer experience, quick assistance, and seamless order support from start to finish.</p>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="social-icons">
+    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+    <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+  </div>
+  <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
+</footer>
+
+<div id="toast-notification" class="toast-notification"></div>
+<script src="js/cart-manager.js"></script>
+<script src="js/recently-viewed.js"></script>
+<script src="js/delivery-tracker.js"></script>
+<script src="js/geolocation.js"></script>
+<script src="js/sanitization.js"></script>
+<script src="js/loyalty.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
