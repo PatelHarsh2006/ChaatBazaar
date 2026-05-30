@@ -912,32 +912,7 @@
       font-size: 0.9rem;
       margin-bottom: 0.5rem;
     }
-    .qty-controls {
-      display: flex;
-      gap: 0.4rem;
-      align-items: center;
-      font-weight: 700;
-      user-select: none;
-    }
-    .qty-controls button {
-      background: #ff5722;
-      color: white;
-      border: none;
-      padding: 0.3rem 0.7rem;
-      font-size: 1.1rem;
-      border-radius: 5px;
-      transition: background 0.3s ease;
-      cursor: pointer;
-    }
-    .qty-controls button:hover {
-      background: #e64a19;
-    }
-    .qty-controls span {
-      min-width: 24px;
-      text-align: center;
-      font-size: 1rem;
-      user-select: none;
-    }
+
     .cart-item-remove {
       background: transparent;
       border: none;
