@@ -1639,6 +1639,39 @@ function showSkeletonCartItems(count = 2) {
   cartItemsContainer.innerHTML = "";
   for (let i = 0; i < count; i++) cartItemsContainer.appendChild(createSkeletonCartItem());
 }
+
+// ===== Dark Mode Theme Toggle is handled in js/auth.js =====
+
+// ===== Order Status Optimization =====
+function updateOrderStatuses() {
+  let changed = false;
+
+  const now = Date.now();
+
+  orders.forEach((order) => {
+    if (order.status === "Delivered")
+      return;
+
+    const elapsedSeconds =
+      (now - order.timestamp) / 1000;
+
+    let targetStatus = "Pending";
+
+    if (elapsedSeconds >= 45) {
+      targetStatus = "Delivered";
+    } else if (elapsedSeconds >= 25) {
+      targetStatus = "On the Way";
+    } else if (elapsedSeconds >= 10) {
+      targetStatus = "Preparing";
+    }
+
+    if (
+      order.status !== targetStatus
+    ) {
+      order.status = targetStatus;
+
+      changed = true;
+    }
  
 // ===== Dark Mode =====
 const toggleBtn = document.getElementById("theme-toggle");

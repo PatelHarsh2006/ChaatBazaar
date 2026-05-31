@@ -409,6 +409,25 @@
     }
   }
 
+  function prefillCheckoutForm() {
+    const loggedInUser = getSessionUser();
+    if (!loggedInUser) return;
+
+    const nameInput = document.getElementById("checkout-name");
+    const phoneInput = document.getElementById("checkout-phone");
+    const addressInput = document.getElementById("checkout-address");
+
+    if (nameInput && !nameInput.value.trim()) {
+      nameInput.value = loggedInUser.name || "";
+    }
+    if (phoneInput && !phoneInput.value.trim()) {
+      phoneInput.value = loggedInUser.phone || "";
+    }
+    if (addressInput && (!addressInput.value.trim() || addressInput.value === "Device Live GPS Location")) {
+      addressInput.value = loggedInUser.location || "";
+    }
+  }
+
   function redirectIfAuthenticationStateMismatchesPage() {
     const pageType = document.body.dataset.pageType || "";
     const loggedInUser = getSessionUser();
@@ -437,6 +456,13 @@
     handleSignupPage();
     populateProfilePage();
     populateDashboardPage();
+    
+    // Auto-fill checkout fields for logged-in users
+    prefillCheckoutForm();
+    const confirmLocBtn = document.getElementById("confirm-location-btn");
+    if (confirmLocBtn) {
+      confirmLocBtn.addEventListener("click", prefillCheckoutForm);
+    }
   }
 
   document.addEventListener("DOMContentLoaded", init);
