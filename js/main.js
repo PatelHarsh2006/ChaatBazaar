@@ -42,6 +42,10 @@ const NAVBAR_HTML = `
         <a class="nav-link nav-ghost" data-nav="login" href="login.html">Login</a>
         <a class="nav-link nav-cta" data-nav="signup" href="signup.html">Sign Up</a>
       </div>
+
+      <button class="nav-link nav-ghost nav-theme" id="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">
+        🌙
+      </button>
     </div>
   </div>
 `;
@@ -54,6 +58,7 @@ function renderNavbar() {
   setActiveNavLink(headerInner);
   setupNavToggle(headerInner);
   updateAuthActions(headerInner);
+  setupThemeToggle(headerInner);
 }
 
 function setActiveNavLink(container) {
@@ -141,6 +146,35 @@ function updateAuthActions(container) {
       window.location.href = "index.html";
     });
   }
+}
+
+function setupThemeToggle(container) {
+  const toggleBtn = container.querySelector("#theme-toggle");
+  if (!toggleBtn || toggleBtn.dataset.bound === "true") return;
+
+  const applyTheme = (theme) => {
+    const isDark = theme === "dark";
+    document.body.classList.toggle("dark", isDark);
+    toggleBtn.setAttribute("aria-pressed", String(isDark));
+    toggleBtn.setAttribute(
+      "aria-label",
+      isDark ? "Switch to light mode" : "Switch to dark mode",
+    );
+    toggleBtn.textContent = isDark ? "☀️" : "🌙";
+  };
+
+  toggleBtn.dataset.bound = "true";
+  const savedTheme =
+    localStorage.getItem("theme") === "dark" ? "dark" : "light";
+  applyTheme(savedTheme);
+
+  toggleBtn.addEventListener("click", () => {
+    const nextTheme = document.body.classList.contains("dark")
+      ? "light"
+      : "dark";
+    localStorage.setItem("theme", nextTheme);
+    applyTheme(nextTheme);
+  });
 }
 
 function bootstrapNavbar() {

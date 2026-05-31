@@ -166,6 +166,14 @@
       border: 1px solid rgba(255, 122, 0, 0.35);
     }
 
+    .nav-theme {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
     .nav-cta {
       background: linear-gradient(135deg, #ff7a00, #ffb36b);
       color: #fff;
@@ -189,6 +197,29 @@
       color: #fff;
       font-size: 0.75rem;
       font-weight: 700;
+    }
+
+    body.dark .site-header {
+      background: rgba(30, 30, 30, 0.92);
+      border-bottom-color: rgba(255, 122, 0, 0.25);
+    }
+
+    body.dark .nav-link {
+      color: #f5f5f5;
+    }
+
+    body.dark .nav-link:hover {
+      background: rgba(255, 122, 0, 0.2);
+      color: #ffd0b0;
+    }
+
+    body.dark .nav-ghost {
+      border-color: rgba(255, 122, 0, 0.45);
+    }
+
+    body.dark .nav-pill {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffd9c2;
     }
 
     @media (max-width: 1100px) {
