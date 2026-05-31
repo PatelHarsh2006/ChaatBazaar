@@ -56,6 +56,68 @@
 
 <body>
 
+<!-- mobile navigation -->
+<div class="mobile-nav-drawer" id="mobile-nav-drawer">
+  <div class="drawer-header">
+    <span class="drawer-logo">ChaatBazar 🍴</span>
+    <button class="drawer-close-btn" id="mobile-drawer-close-btn">&times;</button>
+  </div>
+  <div class="drawer-body">
+    <a href="index.html" class="drawer-link"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="menu.html" class="drawer-link"><i class="fa-solid fa-utensils"></i> Menu</a>
+    <a href="recommendations.html" class="drawer-link"><i class="fa-solid fa-wand-magic-sparkles"></i> Smart Combos</a>
+    <a href="favorites.html" class="drawer-link"><i class="fa-solid fa-heart"></i> Favorites</a>
+    <a href="orders.html" class="drawer-link"><i class="fa-solid fa-receipt"></i> Orders</a>
+    <a href="about.html" class="drawer-link"><i class="fa-solid fa-info-circle"></i> About Us</a>
+    <hr class="drawer-divider" />
+    <div class="drawer-theme-row">
+      <span>Dark Mode</span>
+      <button id="mobile-theme-toggle" class="mobile-theme-toggle">🌙</button>
+    </div>
+    <div class="drawer-auth-slot" id="mobile-auth-slot">
+      <a href="login.html" class="drawer-login-btn">Login / Sign Up</a>
+    </div>
+  </div>
+</div>
+<div class="drawer-overlay" id="mobile-drawer-overlay"></div>
+
+<!-- mobile header -->
+<div class="mobile-top-header">
+  <button class="mobile-hamburger-btn" id="mobile-hamburger-btn" aria-label="Open Menu">☰</button>
+  <a href="index.html" class="mobile-logo-centered">ChaatBazar 🍴</a>
+  <a href="cart.html" class="mobile-cart-icon-btn active" id="mobile-cart-btn" aria-label="Open Cart">
+    <i class="fa-solid fa-shopping-cart"></i>
+    <span class="mobile-cart-count cart-badge">0</span>
+  </a>
+</div>
+
+<!-- mobile bottom navigation-->
+<nav class="mobile-bottom-nav">
+  <a href="index.html" class="mobile-nav-item" id="mobile-nav-home">
+    <i class="fa-solid fa-house"></i>
+    <span>Home</span>
+  </a>
+  <a href="menu.html" class="mobile-nav-item" id="mobile-nav-menu">
+    <i class="fa-solid fa-utensils"></i>
+    <span>Menu</span>
+  </a>
+  <a href="orders.html" class="mobile-nav-item" id="mobile-nav-orders">
+    <i class="fa-solid fa-receipt"></i>
+    <span>Orders</span>
+  </a>
+  <a href="cart.html" class="mobile-nav-item active" id="mobile-nav-cart">
+    <div class="mobile-nav-cart-wrapper">
+      <i class="fa-solid fa-shopping-cart"></i>
+      <span class="mobile-cart-count cart-badge">0</span>
+    </div>
+    <span>Cart</span>
+  </a>
+  <a href="favorites.html" class="mobile-nav-item" id="mobile-nav-favorites">
+    <i class="fa-solid fa-heart"></i>
+    <span>Favorites</span>
+  </a>
+</nav>
+
 <header>
   <div class="header-inner container" role="banner">
     <a href="index.html" class="logo" aria-label="ChaatBazaar Home"><img src="img/logo.png" alt="ChaatBazaar Logo" class="navbar-logo-img" />ChaatBazaar</a>

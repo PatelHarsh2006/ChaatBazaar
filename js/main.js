@@ -668,9 +668,17 @@ alt="${item.name}" />
 }
  
 function updateCartCount() {
+  const totalCount = cart.reduce((sum, cartItem) => sum + cartItem.quantity, 0);
   if (cartCount) {
-    const totalCount = cart.reduce((sum, cartItem) => sum + cartItem.quantity, 0);
     cartCount.textContent = totalCount;
+  }
+  // Sync all mobile cart badges
+  document.querySelectorAll(".mobile-cart-count").forEach(badge => {
+    badge.textContent = totalCount;
+  });
+  // Dynamically update the mobile floating cart bar
+  if (typeof updateMobileFloatingCart === 'function') {
+    updateMobileFloatingCart();
   }
 }
  
@@ -1205,7 +1213,7 @@ function setupSearchSuggestions() {
     if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
       suggestionsContainer.style.display = "none";
     }
-  );
+ } );
 }
  
 function setupSearch() {
@@ -1478,6 +1486,89 @@ function applyUrlFilterParam() {
   const menuContainer = document.getElementById('menu-container');
   if (menuContainer) menuContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+// ===== Mobile UX Helper Functions =====
+
+function updateMobileFloatingCart() {
+  const floatingCart = document.getElementById("mobile-floating-cart");
+  if (!floatingCart) return;
+
+  const totalCount = cart.reduce((sum, cartItem) => sum + cartItem.quantity, 0);
+  const totalPrice = cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
+
+  // Do not show the floating cart on the cart page itself!
+  if (totalCount > 0 && !window.location.pathname.includes("cart.html")) {
+    floatingCart.classList.add("visible");
+    const countEl = document.getElementById("mobile-floating-cart-count");
+    const totalEl = document.getElementById("mobile-floating-cart-total");
+    if (countEl) countEl.textContent = `${totalCount} Item${totalCount > 1 ? 's' : ''}`;
+    if (totalEl) totalEl.textContent = `₹${totalPrice}`;
+  } else {
+    floatingCart.classList.remove("visible");
+  }
+}
+
+function setupMobileDrawer() {
+  const hamburgerBtn = document.getElementById("mobile-hamburger-btn");
+  const closeBtn = document.getElementById("mobile-drawer-close-btn");
+  const overlay = document.getElementById("mobile-drawer-overlay");
+  const drawer = document.getElementById("mobile-nav-drawer");
+
+  if (hamburgerBtn && drawer && overlay) {
+    hamburgerBtn.addEventListener("click", () => {
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+    });
+  }
+
+  const closeDrawer = () => {
+    if (drawer) drawer.classList.remove("open");
+    if (overlay) overlay.classList.remove("open");
+  };
+
+  if (closeBtn) closeBtn.addEventListener("click", closeDrawer);
+  if (overlay) overlay.addEventListener("click", closeDrawer);
+
+  // Sync Mobile theme toggle
+  const mobileThemeToggle = document.getElementById("mobile-theme-toggle");
+  const desktopThemeToggle = document.getElementById("theme-toggle");
+  if (mobileThemeToggle && desktopThemeToggle) {
+    mobileThemeToggle.addEventListener("click", () => {
+      desktopThemeToggle.click();
+      const isDark = document.body.classList.contains("dark");
+      mobileThemeToggle.textContent = isDark ? "☀️" : "🌙";
+    });
+    
+    // Initial sync
+    const isDark = document.body.classList.contains("dark");
+    mobileThemeToggle.textContent = isDark ? "☀️" : "🌙";
+  }
+}
+
+function setupMobileBottomNavActiveState() {
+  const path = window.location.pathname;
+  document.querySelectorAll(".mobile-nav-item").forEach(item => {
+    item.classList.remove("active");
+  });
+
+  if (path.includes("menu.html")) {
+    const el = document.getElementById("mobile-nav-menu");
+    if (el) el.classList.add("active");
+  } else if (path.includes("orders.html")) {
+    const el = document.getElementById("mobile-nav-orders");
+    if (el) el.classList.add("active");
+  } else if (path.includes("cart.html")) {
+    const el = document.getElementById("mobile-nav-cart");
+    if (el) el.classList.add("active");
+  } else if (path.includes("favorites.html")) {
+    const el = document.getElementById("mobile-nav-favorites");
+    if (el) el.classList.add("active");
+  } else {
+    // default to home on index.html
+    const el = document.getElementById("mobile-nav-home");
+    if (el) el.classList.add("active");
+  }
+}
  
 // ===== Initialization =====
  
@@ -1500,72 +1591,12 @@ async function init() {
   if (checkoutBtn) {
     checkoutBtn.addEventListener("click", async (e) => {
       e.preventDefault();
-      const result = await window.checkout();
-      if (result) {
-        window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
-      }
-    });
-    );
-
-    recognition.onresult = (
-      event
-    ) => {
-      const transcript =
-        event.results[0][0].transcript;
-
-      searchInput.value = transcript;
-
-      applyAllFilters();
-
-      voiceBtn.innerHTML = "🎤";
-
-  // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
-  setupCartToggle();
-  setupFilterButtons();
-  setupCouponListeners();
-  setupOrderNowScroll();
-  setupSearchSuggestions();
-  setupSearch();
-  setupAdvancedFilters();
-  setupContactForm();
-  setupNewsletterForm();
-  setupActiveNavbar();
-  setupDropdownFilterLinks();
-
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
       if (cart.length === 0) {
         alert("Your cart is empty!");
         return;
       }
       window.location.href = "orders.html";
     });
-  }
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
-
-    recognition.onerror = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-
-      alert(
-        "Voice recognition failed."
-      );
-    };
-
-    recognition.onend = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
   }
  
   // Load menu data, then render

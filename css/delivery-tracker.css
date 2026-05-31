@@ -1546,3 +1546,188 @@ body.dark .checkout-coupon-row input {
     padding: 1.25rem;
   }
 }
+
+/* ==========================================================================
+   MOBILE SCREEN UX REDESIGN: max-width: 768px
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* --- Bottom Sheet Checkout Modal --- */
+  .checkout-modal-container {
+    max-height: 88vh !important;
+    border-radius: 20px 20px 0 0 !important;
+  }
+  .checkout-modal-body {
+    padding: 16px !important;
+    padding-bottom: 80px !important; /* space for sticky place-order btn */
+  }
+  .checkout-place-order-btn {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 16px !important;
+    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.1) !important;
+    z-index: 1050 !important;
+    background: #ff5722 !important;
+  }
+  .checkout-coupon-row {
+    display: flex !important;
+    gap: 8px !important;
+    margin-bottom: 8px !important;
+  }
+  .checkout-coupon-row input {
+    flex: 1 !important;
+    padding: 10px 14px !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(255, 87, 34, 0.15) !important;
+    font-size: 0.88rem !important;
+  }
+  .checkout-coupon-row button {
+    padding: 10px 16px !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    background: #ff5722 !important;
+    color: #fff !important;
+    border: none !important;
+  }
+  .payment-methods-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+  .payment-card {
+    padding: 10px 14px !important;
+    border-radius: 12px !important;
+  }
+
+  /* --- Live Tracking Experience Split Stack --- */
+  .tracking-layout-wrapper {
+    grid-template-columns: 1fr !important;
+    height: calc(100vh - 56px - 60px) !important;
+  }
+  .tracking-sidebar-panel {
+    position: fixed !important;
+    bottom: 60px !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 52vh !important;
+    z-index: 1020 !important;
+    border-radius: 20px 20px 0 0 !important;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.12) !important;
+    background: #ffffff !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    padding: 16px !important;
+    border-right: none !important;
+    border-top: 1px solid rgba(255, 87, 34, 0.08) !important;
+  }
+  .tracking-sidebar-panel.open {
+    transform: translateY(0) !important;
+  }
+  .mobile-drawer-trigger-bar {
+    display: flex !important;
+  }
+  .map-viewport-container {
+    height: 100% !important;
+    width: 100% !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1 !important;
+  }
+  .floating-location-hud {
+    top: 10px !important;
+    left: 10px !important;
+    right: 10px !important;
+    max-width: none !important;
+  }
+  .floating-gps-action {
+    bottom: 120px !important;
+    right: 12px !important;
+  }
+  .confirm-location-container {
+    bottom: 110px !important;
+    width: calc(100% - 24px) !important;
+  }
+  .confirm-loc-btn {
+    width: 100% !important;
+  }
+
+  /* --- Swiggy/Zomato-style Live Progress stepper --- */
+  .timeline-stepper {
+    position: relative !important;
+    padding: 10px 0 !important;
+  }
+  .stepper-rail {
+    left: 14px !important;
+  }
+  .stepper-cart-icon {
+    left: -12px !important;
+  }
+  .stepper-steps-wrapper {
+    gap: 20px !important;
+  }
+  .stepper-step {
+    gap: 16px !important;
+  }
+  .stepper-step .step-label {
+    font-size: 0.88rem !important;
+  }
+
+  /* --- Order Timeline (Orders History Page Card vertical layout) --- */
+  .order-timeline {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    position: relative !important;
+    padding-left: 36px !important;
+  }
+  .order-timeline::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 11px !important;
+    top: 10px !important;
+    bottom: 10px !important;
+    width: 2px !important;
+    background: rgba(255, 87, 34, 0.1) !important;
+    z-index: 1;
+  }
+  .timeline-line {
+    display: none !important;
+  }
+  .timeline-step {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    position: relative !important;
+    z-index: 2 !important;
+  }
+  .timeline-step .step-circle {
+    margin: 0 !important;
+  }
+  .timeline-step .step-label {
+    font-size: 0.85rem !important;
+  }
+
+  /* --- Order history cards adjustments --- */
+  .order-card {
+    padding: 16px !important;
+  }
+  .order-card-header {
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+  .order-meta-info {
+    flex-direction: column !important;
+    gap: 3px !important;
+  }
+  .order-card-footer {
+    flex-direction: column !important;
+    gap: 10px !important;
+    align-items: flex-start !important;
+  }
+  .btn-reorder {
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
