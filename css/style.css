@@ -2965,7 +2965,7 @@ button:disabled {
   transform: none !important;
   opacity: 0.6;
 }
-}
+
 
 /* ===== Loyalty Wallet Styles ===== */
 .cart-loyalty-widget {
@@ -3238,4 +3238,115 @@ body.dark .breakdown-row.final {
     display: block;
     padding: 0.5rem 0;
   }
+}
+
+
+
+.price-wrapper {
+  position: relative;
+  padding: 14px 12px 12px;
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  overflow: visible; /* 🔥 IMPORTANT FIX */
+}
+
+/* Ribbon */
+.discount-ribbon::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: rgba(255,255,255,0.35);
+  transform: skewX(-20deg);
+  animation: shine 2.5s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+/* Price row */
+.price {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ORIGINAL PRICE (REAL STRIKE STYLE) */
+.original-price {
+  color: #9e9e9e;
+  font-size: 0.95rem;
+  position: relative;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: #ff3d00;
+  opacity: 0.85;
+}
+
+/* ANIMATED STRIKE EFFECT */
+.original-price::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, #ff3d00, transparent);
+  animation: strikeAnim 0.6s ease-out;
+}
+
+@keyframes strikeAnim {
+  from {
+    width: 0%;
+    opacity: 0;
+  }
+  to {
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+/* CURRENT PRICE (BIG & PREMIUM) */
+.current-price {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #1b5e20;
+}
+
+/* DISCOUNT BADGE (SWIGGY STYLE ORANGE RIBBON) */
+.discount-badge {
+  background: linear-gradient(135deg, #ff6f00, #ff8f00);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(255, 111, 0, 0.3);
+  animation: popIn 0.4s ease;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* “YOU SAVE” STYLE (optional premium tag) */
+.you-save {
+  font-size: 0.75rem;
+  color: #ff3d00;
+  font-weight: 600;
 }
