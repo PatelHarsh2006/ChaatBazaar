@@ -41,82 +41,18 @@
 <!-- ================= HEADER ================= -->
 
 <header>
-
-  <div
-    class="header-inner container"
-    role="banner"
-  >
-
-    <a
-      href="index.html"
-      class="logo"
-      aria-label="ChaatBazar Home"
-    >
-      ChaatBazar 🍴
-    </a>
-
-    <nav
-      role="navigation"
-      aria-label="Primary Navigation"
-    >
-
-      <a
-        href="#hero"
-        class="nav-link active"
-      >
-        Home
-      </a>
-
-      <!-- DROPDOWN -->
-
-      <div
-        class="dropdown"
-        tabindex="0"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-
-        <a
-          href="menu.html"
-          class="dropdown-toggle nav-link"
-        >
-          Menu
-        </a>
-
-        <div
-          class="dropdown-menu"
-          role="menu"
-          aria-label="Menu Categories"
-        >
-
-          <a
-            href="menu.html"
-            role="menuitem"
-          >
-            All
-          </a>
-
-          <a
-            href="menu.html"
-            role="menuitem"
-          >
-            Snacks
-          </a>
-
-          <a
-            href="menu.html"
-            role="menuitem"
-          >
-            Chaat
-          </a>
-
-          <a
-            href="menu.html"
-            role="menuitem"
-          >
-            Beverages
-          </a>
-
+  <div class="header-inner container" role="banner">
+    <a href="#" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
+    <nav role="navigation" aria-label="Primary Navigation">
+      <a href="#hero" class="nav-link active" tabindex="0">Home</a>
+      <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
+        <a href="menu.html" class="dropdown-toggle nav-link">Menu</a>
+        <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
+          <a href="menu.html?filter=Specials#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Specials">Specials</a>
+          <a href="menu.html?filter=All#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="All">All</a>
+          <a href="menu.html?filter=Snacks#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Snacks">Snacks</a>
+          <a href="menu.html?filter=Chaat#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Chaat">Chaat</a>
+          <a href="menu.html?filter=Beverages#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Beverages">Beverages</a>
         </div>
 
       </div>
