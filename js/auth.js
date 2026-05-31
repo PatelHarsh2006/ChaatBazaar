@@ -1,7 +1,6 @@
 (function () {
   const USERS_KEY = "users";
   const SESSION_KEY = "loggedInUser";
-  const THEME_KEY = "theme";
 
   function readJSON(key, fallback) {
     try {
@@ -34,20 +33,24 @@
   }
 
   function normalizeEmail(email) {
-    return String(email || "").trim().toLowerCase();
+    return String(email || "")
+      .trim()
+      .toLowerCase();
   }
 
   function escapeHTML(value) {
     return String(value || "").replace(/[&<>"'`\/]/g, function (character) {
-      return {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;",
-        "`": "&#96;",
-        "/": "&#47;"
-      }[character] || character;
+      return (
+        {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+          "`": "&#96;",
+          "/": "&#47;",
+        }[character] || character
+      );
     });
   }
 
@@ -86,148 +89,6 @@
     setFormMessage(formId, "", "");
   }
 
-  function getThemePreference() {
-    return localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light";
-  }
-
-  function updateThemeToggleState(theme) {
-    const themeToggle = document.getElementById("theme-toggle");
-    if (!themeToggle) return;
-
-    const isDark = theme === "dark";
-    themeToggle.setAttribute("aria-pressed", String(isDark));
-    themeToggle.setAttribute(
-      "aria-label",
-      isDark ? "Switch to light theme" : "Switch to dark theme"
-    );
-  }
-
-  function applyTheme(theme) {
-    const normalizedTheme = theme === "dark" ? "dark" : "light";
-    document.body.classList.toggle("dark", normalizedTheme === "dark");
-    updateThemeToggleState(normalizedTheme);
-  }
-
-  function setupThemeToggle() {
-    applyTheme(getThemePreference());
-
-    const themeToggle = document.getElementById("theme-toggle");
-    if (!themeToggle) return;
-
-    themeToggle.addEventListener("click", function () {
-      const nextTheme = document.body.classList.contains("dark") ? "light" : "dark";
-      localStorage.setItem(THEME_KEY, nextTheme);
-      applyTheme(nextTheme);
-    });
-  }
-
-  function closeProfileDropdown(options) {
-    const profileMenu = document.querySelector("[data-profile-menu]");
-    const profileToggle = document.getElementById("profileToggle");
-
-    if (!profileMenu || !profileToggle) return;
-
-    profileMenu.classList.remove("open");
-    profileToggle.setAttribute("aria-expanded", "false");
-
-    if (options && options.focusToggle) {
-      profileToggle.focus();
-    }
-  }
-
-  function setupProfileDropdown() {
-    const profileMenu = document.querySelector("[data-profile-menu]");
-    const profileToggle = document.getElementById("profileToggle");
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    if (!profileMenu || !profileToggle) return;
-
-    const openProfileDropdown = function () {
-      profileMenu.classList.add("open");
-      profileToggle.setAttribute("aria-expanded", "true");
-    };
-
-    const handleDocumentClick = function (event) {
-      if (!profileMenu.contains(event.target)) {
-        closeProfileDropdown();
-      }
-    };
-
-    const handleEscapeKey = function (event) {
-      if (event.key === "Escape") {
-        closeProfileDropdown({ focusToggle: true });
-      }
-    };
-
-    profileToggle.addEventListener("click", function (event) {
-      event.stopPropagation();
-
-      if (profileMenu.classList.contains("open")) {
-        closeProfileDropdown();
-      } else {
-        openProfileDropdown();
-      }
-    });
-
-    document.addEventListener("click", handleDocumentClick);
-    document.addEventListener("keydown", handleEscapeKey);
-
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", function () {
-        clearSessionUser();
-        window.location.href = "index.html";
-      });
-    }
-  }
-
-  // Navbar session rendering.
-  // Why: every page needs the same logged-out/login and logged-in/profile state.
-  function renderAuthNav() {
-    const authNavItem = document.getElementById("authNavItem");
-    if (!authNavItem) return;
-
-    const loggedInUser = getSessionUser();
-    if (!loggedInUser || !loggedInUser.name) {
-      authNavItem.innerHTML = '<a href="login.html" class="login-btn-nav" aria-label="Go to login page">Login</a>';
-      return;
-    }
-
-    const safeName = escapeHTML(String(loggedInUser.name).trim());
-    const safeEmail = escapeHTML(String(loggedInUser.email || "").trim());
-
-    authNavItem.innerHTML = `
-      <div class="profile-menu" data-profile-menu>
-        <button
-          type="button"
-          class="profile-toggle"
-          id="profileToggle"
-          aria-haspopup="true"
-          aria-expanded="false"
-          aria-label="Open profile menu"
-        >
-          <span class="profile-avatar" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 12c2.76 0 5-2.46 5-5.5S14.76 1 12 1 7 3.46 7 6.5 9.24 12 12 12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-              <path d="M4 23c0-4.42 3.58-8 8-8s8 3.58 8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-          </span>
-          <span class="sr-only">Open profile menu for ${safeName}</span>
-        </button>
-        <div class="profile-dropdown" id="profileDropdown" role="menu" aria-label="Account menu">
-          <div class="profile-dropdown-header">
-            <span class="profile-dropdown-name">${safeName}</span>
-            <span class="profile-dropdown-email">${safeEmail}</span>
-          </div>
-          <a href="profile.html" role="menuitem">Profile</a>
-          <a href="dashboard.html" role="menuitem">Dashboard</a>
-          <button type="button" class="profile-dropdown-logout" id="logoutBtn">Logout</button>
-        </div>
-      </div>
-    `;
-
-    setupProfileDropdown();
-  }
-
   function handleLoginPage() {
     const loginForm = document.getElementById("login-form");
     if (!loginForm) return;
@@ -250,22 +111,35 @@
       }
 
       if (password.length < 6) {
-        setFieldError("login-password", "Password must be at least 6 characters.");
+        setFieldError(
+          "login-password",
+          "Password must be at least 6 characters.",
+        );
         hasError = true;
       }
 
       if (hasError) {
-        setFormMessage("login-form", "Please fix the highlighted fields.", "error");
+        setFormMessage(
+          "login-form",
+          "Please fix the highlighted fields.",
+          "error",
+        );
         return;
       }
 
       const users = getUsers();
       const matchedUser = users.find(
-        (user) => normalizeEmail(user.email) === email && String(user.password || "") === password
+        (user) =>
+          normalizeEmail(user.email) === email &&
+          String(user.password || "") === password,
       );
 
       if (!matchedUser) {
-        setFormMessage("login-form", "Invalid email or password. Please try again.", "error");
+        setFormMessage(
+          "login-form",
+          "Invalid email or password. Please try again.",
+          "error",
+        );
         return;
       }
 
@@ -274,10 +148,14 @@
         email: matchedUser.email,
         phone: matchedUser.phone,
         location: matchedUser.location,
-        loginAt: new Date().toISOString()
+        loginAt: new Date().toISOString(),
       });
 
-      setFormMessage("login-form", "Login successful. Redirecting...", "success");
+      setFormMessage(
+        "login-form",
+        "Login successful. Redirecting...",
+        "success",
+      );
       window.location.href = "index.html";
     });
   }
@@ -302,8 +180,14 @@
       const location = String(locationInput ? locationInput.value : "").trim();
 
       clearFormErrors(
-        ["signup-name", "signup-email", "signup-password", "signup-phone", "signup-location"],
-        "signup-form"
+        [
+          "signup-name",
+          "signup-email",
+          "signup-password",
+          "signup-phone",
+          "signup-location",
+        ],
+        "signup-form",
       );
 
       let hasError = false;
@@ -319,12 +203,18 @@
       }
 
       if (password.length < 6) {
-        setFieldError("signup-password", "Password must be at least 6 characters.");
+        setFieldError(
+          "signup-password",
+          "Password must be at least 6 characters.",
+        );
         hasError = true;
       }
 
       if (!validatePhone(phone)) {
-        setFieldError("signup-phone", "Phone number must contain exactly 10 digits.");
+        setFieldError(
+          "signup-phone",
+          "Phone number must contain exactly 10 digits.",
+        );
         hasError = true;
       }
 
@@ -334,14 +224,23 @@
       }
 
       const users = getUsers();
-      const emailAlreadyExists = users.some((user) => normalizeEmail(user.email) === email);
+      const emailAlreadyExists = users.some(
+        (user) => normalizeEmail(user.email) === email,
+      );
       if (emailAlreadyExists) {
-        setFieldError("signup-email", "This email is already registered. Please log in.");
+        setFieldError(
+          "signup-email",
+          "This email is already registered. Please log in.",
+        );
         hasError = true;
       }
 
       if (hasError) {
-        setFormMessage("signup-form", "Please fix the highlighted fields.", "error");
+        setFormMessage(
+          "signup-form",
+          "Please fix the highlighted fields.",
+          "error",
+        );
         return;
       }
 
@@ -351,7 +250,7 @@
         password,
         phone,
         location,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
 
       users.push(newUser);
@@ -363,10 +262,14 @@
         email: newUser.email,
         phone: newUser.phone,
         location: newUser.location,
-        loginAt: new Date().toISOString()
+        loginAt: new Date().toISOString(),
       });
 
-      setFormMessage("signup-form", "Account created successfully. Redirecting...", "success");
+      setFormMessage(
+        "signup-form",
+        "Account created successfully. Redirecting...",
+        "success",
+      );
       window.location.href = "index.html";
     });
   }
@@ -381,7 +284,7 @@
       "profile-name-value": loggedInUser.name || "",
       "profile-email-value": loggedInUser.email || "",
       "profile-phone-value": loggedInUser.phone || "",
-      "profile-location-value": loggedInUser.location || ""
+      "profile-location-value": loggedInUser.location || "",
     };
 
     Object.keys(profileMap).forEach((elementId) => {
@@ -393,7 +296,11 @@
 
     const profileInitial = document.getElementById("profile-avatar-initial");
     if (profileInitial) {
-      profileInitial.textContent = String(loggedInUser.name || "U").trim().charAt(0).toUpperCase() || "U";
+      profileInitial.textContent =
+        String(loggedInUser.name || "U")
+          .trim()
+          .charAt(0)
+          .toUpperCase() || "U";
     }
   }
 
@@ -431,8 +338,6 @@
       return;
     }
 
-    setupThemeToggle();
-    renderAuthNav();
     handleLoginPage();
     handleSignupPage();
     populateProfilePage();

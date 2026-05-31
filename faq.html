@@ -51,51 +51,6 @@
     .faq-tab {
       background: #fff3e0;
       border: 2px solid #ff5722;
-      color: #ff5722;
-      padding: 0.6rem 1.8rem;
-      border-radius: 50px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      font-family: 'Poppins', sans-serif;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .faq-tab.active,
-    .faq-tab:hover {
-      background: #ff5722;
-      color: #fff;
-      box-shadow: 0 6px 20px rgba(255,87,34,0.4);
-    }
-
-    /* ── Category heading ── */
-    .faq-category { margin-bottom: 2.5rem; }
-    .faq-category-title {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #bf360c;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      margin-bottom: 1rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 2px solid #ffe0cc;
-    }
-
-    /* ── Accordion item (matches .card shadow/radius language) ── */
-    .faq-item {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-      margin-bottom: 0.9rem;
-      overflow: hidden;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-    }
-    .faq-item:hover {
-      box-shadow: 0 12px 35px rgba(255,87,34,0.12);
-      transform: translateY(-2px);
-    }
-
-    /* ── Question button ── */
-    .faq-question {
       width: 100%;
       background: none;
       border: none;
@@ -199,51 +154,8 @@
 </head>
 <body>
 
-<!-- ═══════════ HEADER (exact copy from orders.html) ═══════════ -->
-<header>
-  <div class="header-inner container" role="banner">
-    <a href="index.html" class="logo" aria-label="ChaatBazaar Home"><img src="img/logo.png" alt="ChaatBazaar Logo" class="navbar-logo-img" />ChaatBazaar</a>
-    <nav role="navigation" aria-label="Primary Navigation">
-      <a href="index.html" class="nav-link">Home</a>
-      <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
-        <a href="menu.html" class="dropdown-toggle nav-link">Menu</a>
-        <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
-          <a href="menu.html?filter=All#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="All">All</a>
-          <a href="menu.html?filter=Snacks#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Snacks">Snacks</a>
-          <a href="menu.html?filter=Chaat#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Chaat">Chaat</a>
-          <a href="menu.html?filter=Beverages#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Beverages">Beverages</a>
-        </div>
-      </div>
-      <a href="about.html" class="nav-link">About</a>
-      <a href="orders.html">Orders</a>
-      <a href="faq.html" class="nav-link active">FAQ</a>
-      <a href="cart.html" class="nav-link cart-btn-modern" id="cart-open-btn" aria-label="Cart">
-        <span class="cart-icon-wrapper">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="cart-svg-icon"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-          <span id="cart-count" class="cart-badge">0</span>
-        </span>
-        <span class="cart-text">Cart</span>
-      </a>
-      <div class="search-bar" role="search">
-        <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" autocomplete="off" />
-        <button aria-label="Search" id="search-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="search-svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </button>
-        <div class="search-suggestions" id="search-suggestions" style="display:none;"></div>
-      </div>
-      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
-        <span class="theme-toggle-track">
-          <span class="theme-toggle-icon sun-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-          </span>
-          <span class="theme-toggle-icon moon-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-          </span>
-          <span class="theme-toggle-thumb"></span>
-        </span>
-      </button>
-    </nav>
-  </div>
+<header class="site-header">
+  <div class="header-inner container" role="banner"></div>
 </header>
 
 <!-- ═══════════ HERO ═══════════ -->
