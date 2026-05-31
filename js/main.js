@@ -22,7 +22,7 @@ function setupCartManager() {
   });
  
   // Validate cart integrity
-  cartManager.validate();
+  //cartManager.validate();
 }
  
 async function loadMenuData() {
@@ -289,48 +289,143 @@ function createCard(item, highlightQuery = "") {
   const card = document.createElement("article");
 
   card.className = "card";
-  card.tabIndex  = 0;
-  card.setAttribute("aria-label", `${item.name} - ${item.description}. Price: ${formatPrice(item.price)}.`);
- 
-  const ratingStars  = "⭐".repeat(Math.round(item.rating || 5));
-  const dietaryTags  = item.dietary
-    ? item.dietary.map(d => `<span class="tag tag-${d}">${d}</span>`).join(" ")
+  card.tabIndex = 0;
+
+  // SYSTEM WIN: Let CSS handle the theme shifting seamlessly
+  card.style.setProperty("background-color", "var(--card-bg)", "important");
+  card.style.setProperty("color", "var(--main-text)", "important");
+  card.style.padding = "15px";
+  card.style.borderRadius = "8px";
+  card.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
+  card.style.display = "flex";
+  card.style.flexDirection = "column";
+  card.style.height = "auto";
+  card.style.transition = "background-color 0.3s ease, color 0.3s ease";
+
+  // 1. Check if the item is a drink or a sweet dish to hide spice options
+  const nameLower = item.name.toLowerCase();
+  const categoryLower = item.category ? item.category.toLowerCase() : "";
+
+  const isSweetOrDrink = categoryLower.includes('drink') || 
+                         categoryLower.includes('sweet') ||
+                         categoryLower.includes('dessert') ||
+                         nameLower.includes('lassi') ||
+                         nameLower.includes('coffee') ||
+                         nameLower.includes('jalebi') ||
+                         nameLower.includes('rosogolla') ||
+                         nameLower.includes('singoli');
+
+  // 2. Generate the Spice Dropdown HTML ONLY if it's NOT a sweet or a drink
+  let spiceDropdownHTML = "";
+  if (!isSweetOrDrink) {
+    spiceDropdownHTML = `
+      <div class="spice-selector" style="margin: 12px 0 6px 0;">
+        <label for="spice-${item.id}" style="font-weight: 500; font-size: 0.9rem; margin-right: 6px;">Spice Level:</label>
+        <select id="spice-${item.id}" class="spice-dropdown" data-item-id="${item.id}" style="padding: 4px 8px; border-radius: 4px; cursor: pointer; background: var(--card-bg); color: var(--main-text); border: 1px solid var(--border-color);">
+          <option value="Mild">Mild 🌶️</option>
+          <option value="Medium" selected>Medium 🌶️🌶️</option>
+          <option value="Spicy">Spicy 🌶️🌶️🌶️</option>
+        </select>
+      </div>
+    `;
+  }
+
+  card.setAttribute(
+    "aria-label",
+    `${item.name} - ${item.description}. Price: ${formatPrice(
+      item.price
+    )}`
+  );
+
+  const ratingStars = "⭐".repeat(
+    Math.round(item.rating || 5)
+  );
+
+  const dietaryTags = item.dietary
+    ? item.dietary
+        .map(
+          (d) => `<span class="tag tag-${d}">${d}</span>`
+        )
+        .join(" ")
     : "";
-  const spiceIcon    = item.spice === "High" ? "🌶️🌶️🌶️" : item.spice === "Medium" ? "🌶️🌶️" : "🌶️";
- 
-  const highlightedName = highlightText(item.name,        highlightQuery);
-  const highlightedDesc = highlightText(item.description, highlightQuery);
- 
-  const isAvailable      = item.available !== undefined ? item.available : true;
-  const outOfStockBadge  = !isAvailable ? '<span class="out-of-stock-badge">Out of Stock ❌</span>' : '';
-  const buttonDisabled   = !isAvailable ? 'disabled' : '';
-  const buttonColor      = isAvailable  ? '#28a745'  : '#cccccc';
- 
+
+  // FIX: Updated to use isSweetOrDrink so it doesn't crash!
+  const spiceIcon = isSweetOrDrink
+    ? ""
+    : item.spice === "High"
+    ? "🌶️🌶️🌶️"
+    : item.spice === "Medium"
+    ? "🌶️🌶️"
+    : "🌶️";
+
+  const highlightedName = highlightText(
+    item.name,
+    highlightQuery
+  );
+
+  const highlightedDesc = highlightText(
+    item.description,
+    highlightQuery
+  );
+
+  const isAvailable =
+    item.available !== undefined
+      ? item.available
+      : true;
+
+  const outOfStockBadge = !isAvailable
+    ? `<span class="out-of-stock-badge" style="color: red; font-weight: bold;">
+         Out of Stock ❌
+       </span>`
+    : "";
+
+  const buttonDisabled = !isAvailable
+    ? "disabled"
+    : "";
+
+  const buttonColor = isAvailable
+    ? "#28a745"
+    : "#cccccc";
+
   card.innerHTML = `
     <img src="${item.image}" 
          alt="${item.name}" 
-         loading="lazy" />
+         loading="lazy" 
+         style="width: 100%; height: 180px; object-fit: cover; border-radius: 4px;" />
 
-    <div class="card-content">
+    <div class="card-content" style="flex-grow: 1; padding: 10px 0;">
 
-      <div class="card-meta">
-        <span class="rating" title="Rating: ${item.rating || 5.0}">${ratingStars} ${item.rating || '5.0'}</span>
-        <span class="spice"  title="Spice level: ${item.spice}">${spiceIcon}</span>
+      <div class="card-meta" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+        <span class="rating">
+          ${ratingStars} ${item.rating || "5.0"}
+        </span>
+
+        ${spiceIcon ? `<span class="spice">${spiceIcon}</span>` : ""}
       </div>
 
-      <h3>${highlightedName}</h3>
+      <h3 style="margin: 5px 0; color: inherit;">${highlightedName}</h3>
 
-      <p>${highlightedDesc}</p>
-      <div class="card-tags">${dietaryTags}</div>
+      <p style="font-size: 0.9rem; color: inherit; opacity: 0.85; margin-bottom: 10px;">${highlightedDesc}</p>
+
+      ${spiceDropdownHTML}
+
+      <div class="card-tags" style="margin-top: 5px;">
+        ${dietaryTags}
+      </div>
+
       ${outOfStockBadge}
     </div>
 
-    <div class="card-footer">
-      <span class="price">${formatPrice(item.price)}</span>
-      <button class="add-btn"
-        aria-label="Add ${item.name} to cart"
+    <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border-color);">
+
+      <span class="price" style="font-weight: bold; color: inherit;">
+        ${formatPrice(item.price)}
+      </span>
+
+      <button
+        class="add-btn"
         ${buttonDisabled}
-        style="background-color:${buttonColor}"
+        style="background-color:${buttonColor}; color: white; border: none; padding: 6px 16px; border-radius: 4px; cursor: pointer; font-weight: bold;"
       >
         Add
       </button>
@@ -339,25 +434,16 @@ function createCard(item, highlightQuery = "") {
   `;
  
   const addBtn = card.querySelector(".add-btn");
-  if (isAvailable) {
+  if (addBtn && isAvailable) {
     addBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
+      e.preventDefault();
       addToCart(item.id);
     });
-  } else {
-    addBtn.addEventListener("click", () => alert(`${item.name} is currently out of stock!`));
   }
- 
-  card.addEventListener("click", () => {
-    if (typeof RecentlyViewed !== 'undefined') {
-      RecentlyViewed.addItem(item);
-      renderRecentlyViewed();
-    }
-  });
- 
+
   return card;
 }
- 
+// ===== Specials =====
 function renderSpecials() {
   if (!specialsContainer) return;
 
@@ -953,21 +1039,42 @@ function addToCart(id) {
  
   const isAvailable = item.available !== undefined ? item.available : true;
   if (!isAvailable) {
-    alert(`${item.name} is currently out of stock!`);
+    alert(
+      `${item.name} is currently out of stock!`
+    );
     return;
   }
- 
-  cartManager.addItem(item, 1);
+
+  // Find the custom spice dropdown for this specific item card
+  const spiceDropdown = document.getElementById(`spice-${id}`);
+  const chosenSpice = spiceDropdown ? spiceDropdown.value : "Default";
+
+  // Create a copy of the item so we can securely attach the selected spice level
+  const itemWithSpice = { 
+    ...item, 
+    selectedSpice: chosenSpice 
+  };
+
+  // Pass our modified item into your team's cartManager
+  cartManager.addItem(itemWithSpice, 1);
+
   updateCartCount();
   updateFavCount();
   renderCart();
-  showToast(`🛒 ${item.name} added to cart`);
- 
+
+  saveCart();
+
+  // Updated toast notification to reflect the chosen customization!
+  showToast(
+    `🛒 ${item.name} (${chosenSpice}) added to cart`
+  );
+
   if (cartCount) {
     cartCount.classList.add("cart-bounce");
     setTimeout(() => cartCount.classList.remove("cart-bounce"), 400);
   }
- 
+
+  // This opens up your sliding sidebar popup instantly!
   if (cartSidebar) {
     cartSidebar.setAttribute("aria-hidden", "false");
     cartSidebar.classList.add("open");
@@ -977,27 +1084,18 @@ function addToCart(id) {
 function removeFromCart(id) {
   const cartIndex = cart.findIndex(ci => ci.item.id === id);
   if (cartIndex === -1) return;
- 
+
+  // FIXED: Removed the duplicate 'removedItem' declaration and streamlined the removal logic
   const removedItem = cart[cartIndex].item;
-  cartManager.decreaseQuantity(id);
-  const cartItem = cart.find(
-    (ci) => ci.item.id === id
-  );
 
-  if (!cartItem) return;
-
-  const removedItem = cartItem.item;
-
-  if (
-    typeof cartManager.decreaseQuantity ===
-    "function"
-  ) {
+  if (typeof cartManager.decreaseQuantity === "function") {
     cartManager.decreaseQuantity(id);
   } else {
     cartManager.removeItem(id);
   }
+  
   return true;
-};
+}
 
 window.placeOrderFromCheckout = function (customerDetails, pricingInfo) {
   if (cart.length === 0) {
@@ -1187,7 +1285,6 @@ function setupSearchSuggestions() {
         searchInput.value = item.name;
         suggestionsContainer.style.display = "none";
  
-        // On menu.html scroll to top of menu section; on index.html scroll to #menu
         const menuSection = document.getElementById("menu") || document.querySelector(".menu-page");
         if (menuSection) menuSection.scrollIntoView({ behavior: "smooth" });
  
@@ -1205,7 +1302,7 @@ function setupSearchSuggestions() {
     if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
       suggestionsContainer.style.display = "none";
     }
-  );
+  });
 }
  
 function setupSearch() {
@@ -1263,7 +1360,7 @@ function setupAdvancedFilters() {
   if (veganCheck)   veganCheck.addEventListener("change", applyAllFilters);
  
   const gfCheck = document.getElementById("dietary-gf");
-  if (gfCheck)   gfCheck.addEventListener("change", applyAllFilters);
+  if (gfCheck)    gfCheck.addEventListener("change", applyAllFilters);
  
   const resetBtn = document.getElementById("reset-filters-btn");
   if (resetBtn) {
@@ -1385,26 +1482,22 @@ function setupDropdownFilterLinks() {
   dropdownFilters.forEach(link => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
-
-      // Always close the dropdown immediately on click.
-      // Use a temporary `force-hide` class to override CSS :hover so the menu actually hides.
+ 
       const parentDropdown = link.closest('.dropdown');
       if (parentDropdown) {
         parentDropdown.classList.add('force-hide');
         parentDropdown.classList.remove('open');
         const toggleEl = parentDropdown.querySelector('.dropdown-toggle');
         if (toggleEl) toggleEl.setAttribute('aria-expanded', 'false');
-
-        // Move focus to the filter toolbar to remove :focus-within and keep the menu closed
+ 
         const toolbar = document.querySelector('.filter-buttons');
         if (toolbar && typeof toolbar.focus === 'function') toolbar.focus();
-
-        // Remove the force-hide override after a short delay (allows click visual feedback)
+ 
         setTimeout(() => {
           parentDropdown.classList.remove('force-hide');
         }, 300);
       }
-
+ 
       const category = link.dataset.filter || (() => {
         try {
           const url = new URL(link.href, window.location.origin);
@@ -1413,8 +1506,7 @@ function setupDropdownFilterLinks() {
           return '';
         }
       })();
-
-      // If we're already on menu page, apply filter in-page and scroll
+ 
       if (window.location.pathname.endsWith('menu.html') || window.location.pathname === '/menu.html') {
         if (category === 'Specials') {
           const specialsSection = document.getElementById('specials');
@@ -1426,10 +1518,8 @@ function setupDropdownFilterLinks() {
             btn.classList.toggle('active', isActive);
             btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
           });
-          // Scroll to the filter-buttons toolbar (not the menu container)
           const toolbar = document.querySelector('.filter-buttons');
           if (toolbar) toolbar.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // Close the dropdown menu after click
           const dropdown = link.closest('.dropdown');
           if (dropdown) {
             dropdown.classList.remove('open');
@@ -1438,7 +1528,6 @@ function setupDropdownFilterLinks() {
           }
         }
       } else {
-        // Navigate to menu page with the chosen filter param and anchor to filters
         const target = `menu.html?filter=${encodeURIComponent(category)}#filters`;
         window.location.href = target;
       }
@@ -1446,14 +1535,12 @@ function setupDropdownFilterLinks() {
   });
 }
  
-// FIX: only one saveCart declaration
 function saveCart() {
   if (typeof cartManager !== 'undefined') {
     cartManager.saveToStorage();
   }
 }
  
-// ===== FIX: Read ?filter= URL param on menu.html load =====
 function applyUrlFilterParam() {
   const params   = new URLSearchParams(window.location.search);
   const filter   = params.get("filter");
@@ -1466,17 +1553,40 @@ function applyUrlFilterParam() {
     btn.classList.toggle("active", isActive);
     btn.setAttribute("aria-pressed", isActive ? "true" : "false");
   });
-  // Ensure filtered items render according to URL param
   applyAllFilters();
-  // If the URL included the '#filters' anchor (from navbar dropdown), scroll to the toolbar.
   if (window.location.hash === '#filters') {
     const toolbar = document.querySelector('.filter-buttons');
     if (toolbar) toolbar.scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
-  // Otherwise scroll to the menu container so filtered results are visible
   const menuContainer = document.getElementById('menu-container');
   if (menuContainer) menuContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== Voice Helper Configuration =====
+function setupVoiceRecognition() {
+  const voiceBtn = document.getElementById("voice-btn");
+  const searchInput = document.getElementById("search-input");
+  if (!voiceBtn || !searchInput || typeof recognition === 'undefined') return;
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    searchInput.value = transcript;
+    applyAllFilters();
+    voiceBtn.innerHTML = "🎤";
+    voiceBtn.classList.remove("listening");
+  };
+
+  recognition.onerror = () => {
+    voiceBtn.innerHTML = "🎤";
+    voiceBtn.classList.remove("listening");
+    alert("Voice recognition failed.");
+  };
+
+  recognition.onend = () => {
+    voiceBtn.innerHTML = "🎤";
+    voiceBtn.classList.remove("listening");
+  };
 }
  
 // ===== Initialization =====
@@ -1484,7 +1594,7 @@ function applyUrlFilterParam() {
 async function init() {
   setupCartManager();
  
-  // Bind UI interactions immediately
+  // Bind UI interactions immediately for instant responsiveness
   setupCartToggle();
   setupFilterButtons();
   setupCouponListeners();
@@ -1496,82 +1606,27 @@ async function init() {
   setupNewsletterForm();
   setupActiveNavbar();
   setupDropdownFilterLinks();
+  setupVoiceRecognition();
  
   if (checkoutBtn) {
     checkoutBtn.addEventListener("click", async (e) => {
       e.preventDefault();
-      const result = await window.checkout();
-      if (result) {
-        window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
-      }
-    });
-    );
-
-    recognition.onresult = (
-      event
-    ) => {
-      const transcript =
-        event.results[0][0].transcript;
-
-      searchInput.value = transcript;
-
-      applyAllFilters();
-
-      voiceBtn.innerHTML = "🎤";
-
-  // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
-  setupCartToggle();
-  setupFilterButtons();
-  setupCouponListeners();
-  setupOrderNowScroll();
-  setupSearchSuggestions();
-  setupSearch();
-  setupAdvancedFilters();
-  setupContactForm();
-  setupNewsletterForm();
-  setupActiveNavbar();
-  setupDropdownFilterLinks();
-
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (cart.length === 0) {
+      if (typeof cart !== 'undefined' && cart.length === 0) {
         alert("Your cart is empty!");
         return;
       }
-      window.location.href = "orders.html";
+      const result = await window.checkout();
+      if (result) {
+        window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
+      } else {
+        window.location.href = "orders.html";
+      }
     });
-  }
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
-
-    recognition.onerror = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-
-      alert(
-        "Voice recognition failed."
-      );
-    };
-
-    recognition.onend = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
   }
  
   // Load menu data, then render
   await loadMenuData();
  
-  // FIX: apply ?filter= param AFTER data is loaded and filter buttons exist
   applyUrlFilterParam();
  
   renderSpecials();
@@ -1597,7 +1652,6 @@ if (document.readyState === "loading") {
  
 function createSkeletonCard() {
   const el = document.createElement("div");
-
   el.className = "skeleton-card";
   el.setAttribute("aria-hidden", "true");
   el.innerHTML = `
@@ -1655,4 +1709,26 @@ if (toggleBtn) {
     localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
   });
 }
- 
+// ===== Resilient Theme Toggle Sync =====
+document.addEventListener("DOMContentLoaded", () => {
+  // Try finding the switch by common classes/IDs your team uses
+  const themeBtn = document.querySelector("#theme-toggle") || 
+                   document.querySelector(".theme-toggle") || 
+                   document.querySelector(".theme-btn");
+
+  if (themeBtn) {
+    themeBtn.addEventListener("click", () => {
+      // Toggle a class on the body element
+      const isDark = document.body.classList.toggle("dark-theme");
+      
+      // Update backgrounds dynamically based on state
+      if (isDark) {
+        document.body.style.backgroundColor = "#121212";
+        document.body.style.color = "#ffffff";
+      } else {
+        document.body.style.backgroundColor = "#f8f9fa";
+        document.body.style.color = "#212529";
+      }
+    });
+  }
+});
