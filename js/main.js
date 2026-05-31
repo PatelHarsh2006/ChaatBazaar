@@ -122,6 +122,45 @@ function createCard(item, highlightQuery = "") {
   card.className = "card";
   card.tabIndex = 0;
 
+  // SYSTEM WIN: Let CSS handle the theme shifting seamlessly
+  card.style.setProperty("background-color", "var(--card-bg)", "important");
+  card.style.setProperty("color", "var(--main-text)", "important");
+  card.style.padding = "15px";
+  card.style.borderRadius = "8px";
+  card.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
+  card.style.display = "flex";
+  card.style.flexDirection = "column";
+  card.style.height = "auto";
+  card.style.transition = "background-color 0.3s ease, color 0.3s ease";
+
+  // 1. Check if the item is a drink or a sweet dish to hide spice options
+  const nameLower = item.name.toLowerCase();
+  const categoryLower = item.category ? item.category.toLowerCase() : "";
+
+  const isSweetOrDrink = categoryLower.includes('drink') || 
+                         categoryLower.includes('sweet') ||
+                         categoryLower.includes('dessert') ||
+                         nameLower.includes('lassi') ||
+                         nameLower.includes('coffee') ||
+                         nameLower.includes('jalebi') ||
+                         nameLower.includes('rosogolla') ||
+                         nameLower.includes('singoli');
+
+  // 2. Generate the Spice Dropdown HTML ONLY if it's NOT a sweet or a drink
+  let spiceDropdownHTML = "";
+  if (!isSweetOrDrink) {
+    spiceDropdownHTML = `
+      <div class="spice-selector" style="margin: 12px 0 6px 0;">
+        <label for="spice-${item.id}" style="font-weight: 500; font-size: 0.9rem; margin-right: 6px;">Spice Level:</label>
+        <select id="spice-${item.id}" class="spice-dropdown" data-item-id="${item.id}" style="padding: 4px 8px; border-radius: 4px; cursor: pointer; background: var(--card-bg); color: var(--main-text); border: 1px solid var(--border-color);">
+          <option value="Mild">Mild 🌶️</option>
+          <option value="Medium" selected>Medium 🌶️🌶️</option>
+          <option value="Spicy">Spicy 🌶️🌶️🌶️</option>
+        </select>
+      </div>
+    `;
+  }
+
   card.setAttribute(
     "aria-label",
     `${item.name} - ${item.description}. Price: ${formatPrice(
@@ -141,12 +180,14 @@ function createCard(item, highlightQuery = "") {
         .join(" ")
     : "";
 
-  const spiceIcon =
-    item.spice === "High"
-      ? "🌶️🌶️🌶️"
-      : item.spice === "Medium"
-      ? "🌶️🌶️"
-      : "🌶️";
+  // FIX: Updated to use isSweetOrDrink so it doesn't crash!
+  const spiceIcon = isSweetOrDrink
+    ? ""
+    : item.spice === "High"
+    ? "🌶️🌶️🌶️"
+    : item.spice === "Medium"
+    ? "🌶️🌶️"
+    : "🌶️";
 
   const highlightedName = highlightText(
     item.name,
@@ -164,7 +205,7 @@ function createCard(item, highlightQuery = "") {
       : true;
 
   const outOfStockBadge = !isAvailable
-    ? `<span class="out-of-stock-badge">
+    ? `<span class="out-of-stock-badge" style="color: red; font-weight: bold;">
          Out of Stock ❌
        </span>`
     : "";
@@ -180,25 +221,26 @@ function createCard(item, highlightQuery = "") {
   card.innerHTML = `
     <img src="${item.image}" 
          alt="${item.name}" 
-         loading="lazy" />
+         loading="lazy" 
+         style="width: 100%; height: 180px; object-fit: cover; border-radius: 4px;" />
 
-    <div class="card-content">
+    <div class="card-content" style="flex-grow: 1; padding: 10px 0;">
 
-      <div class="card-meta">
+      <div class="card-meta" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
         <span class="rating">
           ${ratingStars} ${item.rating || "5.0"}
         </span>
 
-        <span class="spice">
-          ${spiceIcon}
-        </span>
+        ${spiceIcon ? `<span class="spice">${spiceIcon}</span>` : ""}
       </div>
 
-      <h3>${highlightedName}</h3>
+      <h3 style="margin: 5px 0; color: inherit;">${highlightedName}</h3>
 
-      <p>${highlightedDesc}</p>
+      <p style="font-size: 0.9rem; color: inherit; opacity: 0.85; margin-bottom: 10px;">${highlightedDesc}</p>
 
-      <div class="card-tags">
+      ${spiceDropdownHTML}
+
+      <div class="card-tags" style="margin-top: 5px;">
         ${dietaryTags}
       </div>
 
@@ -206,16 +248,16 @@ function createCard(item, highlightQuery = "") {
 
     </div>
 
-    <div class="card-footer">
+    <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border-color);">
 
-      <span class="price">
+      <span class="price" style="font-weight: bold; color: inherit;">
         ${formatPrice(item.price)}
       </span>
 
       <button
         class="add-btn"
         ${buttonDisabled}
-        style="background-color:${buttonColor}"
+        style="background-color:${buttonColor}; color: white; border: none; padding: 6px 16px; border-radius: 4px; cursor: pointer; font-weight: bold;"
       >
         Add
       </button>
@@ -224,30 +266,15 @@ function createCard(item, highlightQuery = "") {
   `;
 
   const addBtn = card.querySelector(".add-btn");
-
-  if (isAvailable) {
+  if (addBtn && isAvailable) {
     addBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
+      e.preventDefault();
       addToCart(item.id);
-    });
-  } else {
-    addBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      alert(`${item.name} is currently out of stock!`);
     });
   }
 
-  // Recently Viewed
-  card.addEventListener("click", () => {
-    if (window.RecentlyViewed) {
-      RecentlyViewed.addItem(item);
-      renderRecentlyViewed();
-    }
-  });
-
   return card;
 }
-
 // ===== Specials =====
 function renderSpecials() {
   if (!specialsContainer) return;
@@ -676,11 +703,21 @@ function addToCart(id) {
     alert(
       `${item.name} is currently out of stock!`
     );
-
     return;
   }
 
-  cartManager.addItem(item, 1);
+  // Find the custom spice dropdown for this specific item card
+  const spiceDropdown = document.getElementById(`spice-${id}`);
+  const chosenSpice = spiceDropdown ? spiceDropdown.value : "Default";
+
+  // Create a copy of the item so we can securely attach the selected spice level
+  const itemWithSpice = { 
+    ...item, 
+    selectedSpice: chosenSpice 
+  };
+
+  // Pass our modified item into your team's cartManager
+  cartManager.addItem(itemWithSpice, 1);
 
   updateCartCount();
 
@@ -688,8 +725,9 @@ function addToCart(id) {
 
   saveCart();
 
+  // Updated toast notification to reflect the chosen customization!
   showToast(
-    `🛒 ${item.name} added to cart`
+    `🛒 ${item.name} (${chosenSpice}) added to cart`
   );
 
   if (cartCount) {
@@ -704,6 +742,7 @@ function addToCart(id) {
     }, 400);
   }
 
+  // This opens up your sliding sidebar popup instantly!
   if (cartSidebar) {
     cartSidebar.classList.add("open");
 
@@ -1275,3 +1314,26 @@ if (
 } else {
   init();
 }
+// ===== Resilient Theme Toggle Sync =====
+document.addEventListener("DOMContentLoaded", () => {
+  // Try finding the switch by common classes/IDs your team uses
+  const themeBtn = document.querySelector("#theme-toggle") || 
+                   document.querySelector(".theme-toggle") || 
+                   document.querySelector(".theme-btn");
+
+  if (themeBtn) {
+    themeBtn.addEventListener("click", () => {
+      // Toggle a class on the body element
+      const isDark = document.body.classList.toggle("dark-theme");
+      
+      // Update backgrounds dynamically based on state
+      if (isDark) {
+        document.body.style.backgroundColor = "#121212";
+        document.body.style.color = "#ffffff";
+      } else {
+        document.body.style.backgroundColor = "#f8f9fa";
+        document.body.style.color = "#212529";
+      }
+    });
+  }
+});

@@ -3046,5 +3046,26 @@ button:disabled {
   align-items: center;
   gap: 10px;
 }
+
+/* ===== Dynamic Theme Variables ===== */
+:root {
+  --body-bg: #f8f9fa;
+  --card-bg: #ffffff;
+  --main-text: #333333;
+  --border-color: #eeeeee;
+}
+
+body.dark-theme {
+  --body-bg: #121212;
+  --card-bg: #242424; /* Smooth charcoal card that is easy on the eyes */
+  --main-text: #f8f9fa;
+  --border-color: #333333;
+}
+
+/* Apply the master background color to the body */
+body {
+  background-color: var(--body-bg) !important;
+  color: var(--main-text);
+  transition: background-color 0.3s ease;
 }
 
