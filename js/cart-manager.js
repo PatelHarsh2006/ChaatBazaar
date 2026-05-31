@@ -1,125 +1,106 @@
-// ===== Unified Cart State Management =====
+// ===============================
+// CHAATBAZAR CART MANAGER (FIXED)
+// ===============================
 
-const CART_STORAGE_KEY = 'chaatCart';
-const CART_SYNC_EVENT = 'cartStateChanged';
+const CART_STORAGE_KEY = "chaatCart";
+const CART_SYNC_EVENT = "cartStateChanged";
 
 class CartManager {
   constructor() {
     this.items = this.loadFromStorage();
     this.listeners = [];
-    this.setupStorageSync();
+    this.setupSync();
   }
 
-  // Load cart from localStorage
+  // =====================
+  // LOAD
+  // =====================
   loadFromStorage() {
     try {
-      const stored = localStorage.getItem(CART_STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch (error) {
-      console.error('Error loading cart from storage:', error);
+      const data = localStorage.getItem(CART_STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    } catch (err) {
+      console.error("Cart load error:", err);
       return [];
     }
   }
 
-  // Save cart to localStorage and notify listeners
+  // =====================
+  // SAVE
+  // =====================
   saveToStorage() {
-    try {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(this.items));
-      this.notifyListeners();
-      // Dispatch custom event for cross-tab/cross-component sync
-      window.dispatchEvent(new CustomEvent(CART_SYNC_EVENT, { detail: this.items }));
-    } catch (error) {
-      if (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
-        console.error('Storage quota exceeded:', error);
-        this.handleStorageQuotaExceeded();
-      } else {
-        console.error('Error saving cart to storage:', error);
-      }
-    }
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(this.items));
+    this.notify();
+    window.dispatchEvent(new CustomEvent(CART_SYNC_EVENT));
   }
 
-  // Handle storage quota exceeded
-  handleStorageQuotaExceeded() {
-    const message = 'Storage limit exceeded. Your cart may not be saved. Please clear browser cache and try again.';
-    console.warn(message);
-    // Dispatch event for UI to show notification
-    window.dispatchEvent(new CustomEvent('storageQuotaExceeded', { detail: message }));
-  }
-
-  // Setup storage event listener for cross-tab sync
-  setupStorageSync() {
-    window.addEventListener('storage', (event) => {
-      if (event.key === CART_STORAGE_KEY && event.newValue) {
-        try {
-          this.items = JSON.parse(event.newValue);
-          this.notifyListeners();
-        } catch (error) {
-          console.error('Error syncing cart from storage event:', error);
-        }
+  // =====================
+  // SYNC ACROSS TABS
+  // =====================
+  setupSync() {
+    window.addEventListener("storage", (e) => {
+      if (e.key === CART_STORAGE_KEY) {
+        this.items = e.newValue ? JSON.parse(e.newValue) : [];
+        this.notify();
       }
     });
 
-    // Listen for custom cart events
-    window.addEventListener(CART_SYNC_EVENT, (event) => {
-      this.notifyListeners();
+    window.addEventListener(CART_SYNC_EVENT, () => {
+      this.notify();
     });
   }
 
-  // Subscribe to cart changes
-  subscribe(callback) {
-    if (typeof callback === 'function') {
-      this.listeners.push(callback);
-    }
-    return () => {
-      this.listeners = this.listeners.filter(listener => listener !== callback);
-    };
+  // =====================
+  // LISTENERS
+  // =====================
+  subscribe(cb) {
+    this.listeners.push(cb);
+    return () =>
+      (this.listeners = this.listeners.filter((fn) => fn !== cb));
   }
 
-  // Notify all listeners of cart changes
-  notifyListeners() {
-    this.listeners.forEach(callback => {
-      try {
-        callback(this.items);
-      } catch (error) {
-        console.error('Error in cart listener:', error);
-      }
-    });
+  notify() {
+    this.listeners.forEach((cb) => cb(this.items));
   }
 
-  // Get current cart items
-  getItems() {
-    return [...this.items];
-  }
+  // =====================
+  // NORMALIZE ITEM (CRITICAL FIX)
+  // =====================
+normalize(item) {
+  return {
+    id: item.id || item.name + "-" + item.price,
+    name: item.name,
+    price: Number(item.price),
 
-  // Get cart item by ID
-  getItem(itemId) {
-    return this.items.find(cartItem => cartItem.item.id === itemId);
-  }
+    // ✅ SAFE IMAGE FIX (does NOT affect menu)
+    image:
+      item.image ||
+      item.img ||
+      item.thumbnail ||
+      (item.items && item.items[0]?.image) ||
+      null,
 
-  // Get total number of items
-  getTotalCount() {
-    return this.items.reduce((sum, cartItem) => sum + cartItem.quantity, 0);
-  }
+    parentFood: item.parentFood || null
+  };
+}
+  // =====================
+  // ADD ITEM (FIXED)
+  // =====================
+  addItem(item, qty = 1) {
+    if (!item) return false;
 
-  // Get total price
-  getTotalPrice() {
-    return this.items.reduce((sum, cartItem) => sum + (cartItem.item.price * cartItem.quantity), 0);
-  }
+    const newItem = this.normalize(item);
 
-  // Add item to cart
-  addItem(item, quantity = 1) {
-    if (!item || !item.id) {
-      console.error('Invalid item:', item);
-      return false;
-    }
+    const existing = this.items.find(
+      (i) => i.item.id === newItem.id
+    );
 
-    const existingItem = this.getItem(item.id);
-    if (existingItem) {
-      existingItem.quantity += quantity;
+    if (existing) {
+      existing.quantity += qty;
     } else {
       this.items.push({
-        item: { ...item },
-        quantity
+        item: newItem,
+        quantity: qty
       });
     }
 
@@ -127,188 +108,78 @@ class CartManager {
     return true;
   }
 
-  // Remove item from cart
-  removeItem(itemId) {
-    const index = this.items.findIndex(cartItem => cartItem.item.id === itemId);
-    if (index !== -1) {
-      this.items.splice(index, 1);
-      this.saveToStorage();
-      return true;
-    }
-    return false;
+  // =====================
+  // GET ITEM (SAFE)
+  // =====================
+  getItem(id) {
+    return this.items.find((i) => i.item.id === id);
   }
 
-  // Update item quantity
-  updateQuantity(itemId, quantity) {
-    const cartItem = this.getItem(itemId);
-    if (!cartItem) return false;
-
-    if (quantity <= 0) {
-      return this.removeItem(itemId);
-    }
-
-    cartItem.quantity = quantity;
+  // =====================
+  // REMOVE (FIXED)
+  // =====================
+  removeItem(id) {
+    this.items = this.items.filter((i) => i.item.id !== id);
     this.saveToStorage();
-    return true;
   }
 
-  // Increase item quantity
-  increaseQuantity(itemId) {
-    const cartItem = this.getItem(itemId);
-    if (cartItem) {
-      cartItem.quantity++;
-      this.saveToStorage();
-      return true;
-    }
-    return false;
+  // =====================
+  // QUANTITY
+  // =====================
+  increaseQuantity(id) {
+    const item = this.getItem(id);
+    if (item) item.quantity++;
+    this.saveToStorage();
   }
 
-  // Decrease item quantity
-  decreaseQuantity(itemId) {
-    const cartItem = this.getItem(itemId);
-    if (!cartItem) return false;
+  decreaseQuantity(id) {
+    const item = this.getItem(id);
+    if (!item) return;
 
-    if (cartItem.quantity > 1) {
-      cartItem.quantity--;
+    item.quantity--;
+
+    if (item.quantity <= 0) {
+      this.removeItem(id);
     } else {
-      return this.removeItem(itemId);
+      this.saveToStorage();
     }
-
-    this.saveToStorage();
-    return true;
   }
 
-  // Clear entire cart
+  // =====================
+  // GETTERS
+  // =====================
+  getItems() {
+    return this.items;
+  }
+
+  getTotalPrice() {
+    return this.items.reduce(
+      (sum, i) => sum + i.item.price * i.quantity,
+      0
+    );
+  }
+
+  getTotalCount() {
+    return this.items.reduce((sum, i) => sum + i.quantity, 0);
+  }
+
   clear() {
     this.items = [];
     this.saveToStorage();
-    return true;
-  }
-
-  // Check if cart is empty
-  isEmpty() {
-    return this.items.length === 0;
-  }
-
-  // Get cart size (number of unique items)
-  getSize() {
-    return this.items.length;
-  }
-
-  // Validate cart integrity
-  validate() {
-    if (!Array.isArray(this.items)) {
-      console.warn('Cart items is not an array, resetting');
-      this.items = [];
-      return false;
-    }
-
-    const validItems = this.items.filter(cartItem => {
-      return cartItem &&
-             cartItem.item &&
-             cartItem.item.id &&
-             typeof cartItem.quantity === 'number' &&
-             cartItem.quantity > 0;
-    });
-
-    if (validItems.length !== this.items.length) {
-      console.warn(`Cart integrity check failed: removed ${this.items.length - validItems.length} invalid items`);
-      this.items = validItems;
-      this.saveToStorage();
-      return false;
-    }
-
-    return true;
-  }
-
-  // Export cart for backup/export
-  export() {
-    return {
-      items: this.getItems(),
-      totalCount: this.getTotalCount(),
-      totalPrice: this.getTotalPrice(),
-      exportDate: new Date().toISOString()
-    };
-  }
-
-  // Import cart from backup
-  import(cartData) {
-    if (!cartData || !Array.isArray(cartData.items)) {
-      console.error('Invalid cart data for import');
-      return false;
-    }
-
-    this.items = cartData.items;
-    this.validate();
-    this.saveToStorage();
-    return true;
   }
 }
 
-// Global cart manager instance
-const cartManager = new CartManager();
+// ===============================
+// GLOBAL INSTANCE
+// ===============================
+window.cartManager = new CartManager();
 
-// Expose cart manager globally for compatibility
-window.cartManager = cartManager;
+// ===============================
+// GLOBAL HELPERS
+// ===============================
+window.addToCartManager = (item) =>
+  window.cartManager.addItem(item, 1);
 
-// Backward compatibility - sync cartManager with old global cart variable
-if (typeof cart !== 'undefined') {
-  // Sync initial cart variable with cartManager
-  cart = cartManager.getItems();
-
-  // Setup listener to keep cart variable in sync
-  cartManager.subscribe((items) => {
-    // Only update if cart variable exists (for compatibility)
-    if (typeof cart !== 'undefined') {
-      cart = [...items];
-    }
-  });
-}
-
-// Helper functions for use in templates and event handlers
-function getCartCount() {
-  return cartManager.getTotalCount();
-}
-
-function getCartTotal() {
-  return cartManager.getTotalPrice();
-}
-
-function addToCartManager(item) {
-  return cartManager.addItem(item, 1);
-}
-
-function removeFromCartManager(itemId) {
-  return cartManager.removeItem(itemId);
-}
-
-function updateCartQuantity(itemId, quantity) {
-  return cartManager.updateQuantity(itemId, quantity);
-}
-
-function increaseCartQuantity(itemId) {
-  return cartManager.increaseQuantity(itemId);
-}
-
-function decreaseCartQuantity(itemId) {
-  return cartManager.decreaseQuantity(itemId);
-}
-
-function clearCart() {
-  return cartManager.clear();
-}
-
-function getCartItems() {
-  return cartManager.getItems();
-}
-
-// Expose helper functions globally
-window.getCartCount = getCartCount;
-window.getCartTotal = getCartTotal;
-window.addToCartManager = addToCartManager;
-window.removeFromCartManager = removeFromCartManager;
-window.updateCartQuantity = updateCartQuantity;
-window.increaseCartQuantity = increaseCartQuantity;
-window.decreaseCartQuantity = decreaseCartQuantity;
-window.clearCart = clearCart;
-window.getCartItems = getCartItems;
+window.getCartItems = () => window.cartManager.getItems();
+window.getCartTotal = () => window.cartManager.getTotalPrice();
+window.clearCart = () => window.cartManager.clear();

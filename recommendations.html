@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Smart Combos - ChaatBazar</title>
+
+  <!-- GOOGLE FONT -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- FONT AWESOME -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+  <!-- MAIN CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+
+    body{
+      font-family: "Poppins", sans-serif;
+      background: #fff8f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container{
+      width: 90%;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    /* ================= HEADER ================= */
+
+    header{
+      background: #ff6b35;
+      padding: 16px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .header-inner{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo{
+      color: white;
+      font-size: 28px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    nav{
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    nav a{
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active{
+      color: #ffe66d;
+    }
+
+    /* ================= HERO ================= */
+
+    .combo-hero{
+      text-align: center;
+      padding: 70px 20px 50px;
+      background: linear-gradient(
+        135deg,
+        #ffecd2,
+        #fcb69f
+      );
+    }
+
+    .combo-hero h1{
+      font-size: 48px;
+      margin-bottom: 15px;
+      color: #222;
+    }
+
+    .combo-hero p{
+      font-size: 18px;
+      color: #444;
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.6;
+    }
+
+    /* ================= SECTION ================= */
+
+    .combo-section{
+      padding: 60px 0;
+    }
+
+    .section-title{
+      font-size: 34px;
+      text-align: center;
+      margin-bottom: 40px;
+      color: #222;
+    }
+
+    /* ================= GRID ================= */
+
+    .combo-grid{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+    }
+
+    /* ================= CARD ================= */
+
+    .combo-card{
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .combo-card:hover{
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+    }
+
+    .combo-card::before{
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(
+        90deg,
+        #ff6b35,
+        #ffb347
+      );
+    }
+
+    .combo-food{
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+
+    .combo-card h3{
+      margin: 0 0 10px;
+      color: #222;
+      font-size: 24px;
+    }
+
+    .combo-card p{
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .pairing-list{
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .pairing-item{
+      background: #fff3ec;
+      border-radius: 12px;
+      padding: 12px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+    }
+
+    .pairing-item span{
+      color: #ff6b35;
+      font-weight: 600;
+    }
+
+    /* ================= FOOTER ================= */
+
+    footer{
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 25px 10px;
+      margin-top: 50px;
+    }
+
+    .social-icons{
+      margin-bottom: 15px;
+    }
+
+    .social-icons a{
+      color: white;
+      margin: 0 10px;
+      font-size: 20px;
+      transition: 0.3s;
+    }
+
+    .social-icons a:hover{
+      color: #ffb347;
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media(max-width: 768px){
+
+      .combo-hero h1{
+        font-size: 36px;
+      }
+
+      nav{
+        gap: 14px;
+      }
+
+      nav a{
+        font-size: 14px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+  <div class="header-inner container">
+
+    <a href="index.html" class="logo">
+      ChaatBazar 🍴
+    </a>
+
+    <nav>
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="menu.html">
+        Menu
+      </a>
+
+      <a href="recommendations.html" class="active">
+        Smart Combos
+      </a>
+
+      <a href="cart.html">
+        Cart
+      </a>
+
+    </nav>
+
+  </div>
+
+</header>
+
+<!-- ================= HERO ================= -->
+
+<section class="combo-hero">
+
+  <h1>
+    ✨ Smart Food Pairings
+  </h1>
+
+  <p>
+    Discover delicious food combinations specially curated
+    to enhance your ChaatBazar experience.
+  </p>
+
+</section>
+
+<!-- ================= COMBO SECTION ================= -->
+
+<section class="combo-section container">
+
+  <h2 class="section-title">
+    Recommended Combos 🍽️
+  </h2>
+
+  <div class="combo-grid" id="combo-grid">
+
+    <!-- Cards injected by JS -->
+
+  </div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+  <div class="social-icons">
+
+    <a href="#">
+      <i class="fa-brands fa-facebook"></i>
+    </a>
+
+    <a href="#">
+      <i class="fa-brands fa-instagram"></i>
+    </a>
+
+    <a href="#">
+      <i class="fa-brands fa-twitter"></i>
+    </a>
+
+    <a href="#">
+      <i class="fa-brands fa-github"></i>
+    </a>
+
+  </div>
+
+  <p>
+    © 2026 ChaatBazar. All rights reserved.
+  </p>
+
+</footer>
+
+<!-- ================= SCRIPT ================= -->
+
+<script src="js/cart-manager.js"></script>
+
+<script>
+
+  const foodPairings = {
+
+    "Samosa": [
+      { name: "Masala Chai", price: 40 },
+      { name: "Green Chutney", price: 20 }
+    ],
+
+    "Pani Puri": [
+      { name: "Sweet Lassi", price: 60 },
+      { name: "Papdi Chaat", price: 80 }
+    ],
+
+    "Papdi Chaat": [
+      { name: "Cold Coffee", price: 90 },
+      { name: "Dahi Puri", price: 85 }
+    ],
+
+    "Bhel Puri": [
+      { name: "Masala Soda", price: 50 },
+      { name: "Sev Puri", price: 75 }
+    ],
+
+    "Dahi Puri": [
+      { name: "Mango Lassi", price: 70 },
+      { name: "Pav Bhaji", price: 120 }
+    ],
+
+    "Pav Bhaji": [
+      { name: "Fresh Lime Soda", price: 45 },
+      { name: "Extra Butter Pav", price: 35 }
+    ],
+
+    "Burger": [
+      { name: "French Fries", price: 90 },
+      { name: "Coke", price: 50 }
+    ],
+
+    "Pizza": [
+      { name: "Garlic Bread", price: 110 },
+      { name: "Coke", price: 50 }
+    ],
+
+    "Coffee": [
+      { name: "Brownie", price: 90 },
+      { name: "Cookies", price: 70 }
+    ],
+
+    "Ice Cream": [
+      { name: "Brownie", price: 90 },
+      { name: "Cold Coffee", price: 80 }
+    ]
+  };
+
+  const foodEmojis = {
+    "Samosa": "🥟",
+    "Pani Puri": "🥙",
+    "Papdi Chaat": "🍲",
+    "Bhel Puri": "🥗",
+    "Dahi Puri": "🍛",
+    "Pav Bhaji": "🍞",
+    "Burger": "🍔",
+    "Pizza": "🍕",
+    "Coffee": "☕",
+    "Ice Cream": "🍨"
+  };
+
+  // ✅ FIXED CART FUNCTION (IMPORTANT)
+  function addToCart(name, price, parentFood) {
+
+    if (!window.cartManager) {
+      console.error("CartManager not loaded");
+      alert("Cart is loading... please wait");
+      return;
+    }
+
+    window.cartManager.addItem({
+      id: name + "-" + price,
+      name: name,
+      price: price,
+      parentFood: parentFood
+    }, 1);
+  }
+
+  function renderComboCards() {
+
+    const comboGrid = document.getElementById("combo-grid");
+    comboGrid.innerHTML = "";
+
+    for (const food in foodPairings) {
+
+      const pairings = foodPairings[food];
+
+      const card = document.createElement("div");
+      card.className = "combo-card";
+
+      let pairingHTML = "";
+
+      pairings.forEach(item => {
+
+        pairingHTML += `
+          <div class="pairing-item">
+
+            <div>
+              ${item.name}
+              <span>₹${item.price}</span>
+            </div>
+
+            <button
+              onclick="addToCart('${item.name}', ${item.price}, '${food}')"
+              style="
+                background:#ff6b35;
+                color:white;
+                border:none;
+                padding:6px 10px;
+                border-radius:8px;
+                cursor:pointer;
+                font-size:12px;
+              ">
+              Add
+            </button>
+
+          </div>
+        `;
+      });
+
+      card.innerHTML = `
+        <div class="combo-food">
+          ${foodEmojis[food] || "🍴"}
+        </div>
+
+        <h3>${food}</h3>
+
+        <p>Best enjoyed with these delicious pairings.</p>
+
+        <div class="pairing-list">
+          ${pairingHTML}
+        </div>
+      `;
+
+      comboGrid.appendChild(card);
+    }
+  }
+
+  // wait for DOM + cart system
+  window.addEventListener("load", renderComboCards);
+
+</script>
