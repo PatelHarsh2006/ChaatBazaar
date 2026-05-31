@@ -26,8 +26,13 @@ function applyTranslations() {
 
   const cartOpenBtn = document.getElementById('cart-open-btn');
   if (cartOpenBtn) {
-    const count = document.getElementById('cart-count')?.textContent || '0';
-    cartOpenBtn.innerHTML = `${t('nav_cart')} (<span id="cart-count">${count}</span>)`;
+    const cartText = cartOpenBtn.querySelector('.cart-text');
+    if (cartText) {
+      cartText.textContent = t('nav_cart');
+    } else {
+      const count = document.getElementById('cart-count')?.textContent || '0';
+      cartOpenBtn.innerHTML = `${t('nav_cart')} (<span id="cart-count">${count}</span>)`;
+    }
   }
 
   const searchInput = document.getElementById('search-input');
