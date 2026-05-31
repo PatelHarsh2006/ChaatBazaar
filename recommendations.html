@@ -36,45 +36,6 @@
       margin: auto;
     }
 
-    /* ================= HEADER ================= */
-
-    header{
-      background: #ff6b35;
-      padding: 16px 0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .header-inner{
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo{
-      color: white;
-      font-size: 28px;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    nav{
-      display: flex;
-      gap: 24px;
-      align-items: center;
-    }
-
-    nav a{
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      transition: 0.3s;
-    }
-
-    nav a:hover,
-    nav a.active{
-      color: #ffe66d;
-    }
-
     /* ================= HERO ================= */
 
     .combo-hero{
@@ -224,13 +185,6 @@
         font-size: 36px;
       }
 
-      nav{
-        gap: 14px;
-      }
-
-      nav a{
-        font-size: 14px;
-      }
     }
 
   </style>
@@ -238,38 +192,8 @@
 
 <body>
 
-<!-- ================= HEADER ================= -->
-
-<header>
-
-  <div class="header-inner container">
-
-    <a href="index.html" class="logo">
-      ChaatBazar 🍴
-    </a>
-
-    <nav>
-
-      <a href="index.html">
-        Home
-      </a>
-
-      <a href="menu.html">
-        Menu
-      </a>
-
-      <a href="recommendations.html" class="active">
-        Smart Combos
-      </a>
-
-      <a href="cart.html">
-        Cart
-      </a>
-
-    </nav>
-
-  </div>
-
+<header class="site-header">
+  <div class="header-inner container" role="banner"></div>
 </header>
 
 <!-- ================= HERO ================= -->
@@ -336,9 +260,14 @@
 <!-- ================= SCRIPT ================= -->
 
 <script src="js/cart-manager.js"></script>
-
+<script src="js/recently-viewed.js"></script>
+<script src="js/delivery-tracker.js"></script>
+<script src="js/geolocation.js"></script>
+<script src="js/sanitization.js"></script>
+<script src="js/loyalty.js"></script>
+<script src="js/main.js"></script>
+<script src="js/auth.js"></script>
 <script>
-
   const foodPairings = {
 
     "Samosa": [
