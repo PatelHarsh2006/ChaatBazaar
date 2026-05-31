@@ -402,6 +402,20 @@
       visibility: visible;
       transform: translateY(0);
     }
+    /* When JS toggles the open class (keyboard interaction), show the menu the same way as hover */
+    .dropdown.open .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* Force-hide override for dropdown when JS needs to hide it despite :hover */
+    .dropdown.force-hide .dropdown-menu {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      transform: translateY(10px) !important;
+      pointer-events: none !important;
+    }
 
     /* ===== Auth/Profile Nav ===== */
     .auth-nav-item {
