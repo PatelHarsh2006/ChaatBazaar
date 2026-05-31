@@ -22,7 +22,7 @@ function setupCartManager() {
   });
  
   // Validate cart integrity
-  cartManager.validate();
+  
 }
  
 async function loadMenuData() {
@@ -975,11 +975,6 @@ function addToCart(id) {
 }
  
 function removeFromCart(id) {
-  const cartIndex = cart.findIndex(ci => ci.item.id === id);
-  if (cartIndex === -1) return;
- 
-  const removedItem = cart[cartIndex].item;
-  cartManager.decreaseQuantity(id);
   const cartItem = cart.find(
     (ci) => ci.item.id === id
   );
@@ -989,15 +984,18 @@ function removeFromCart(id) {
   const removedItem = cartItem.item;
 
   if (
-    typeof cartManager.decreaseQuantity ===
-    "function"
+    typeof cartManager.decreaseQuantity === "function"
   ) {
     cartManager.decreaseQuantity(id);
   } else {
     cartManager.removeItem(id);
   }
-  return true;
-};
+
+  updateCartCount();
+  renderCart();
+
+  showToast(`🗑️ ${removedItem.name} removed from cart`);
+}
 
 window.placeOrderFromCheckout = function (customerDetails, pricingInfo) {
   if (cart.length === 0) {
@@ -1204,8 +1202,8 @@ function setupSearchSuggestions() {
   document.addEventListener("click", (e) => {
     if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
       suggestionsContainer.style.display = "none";
-    }
-  );
+    }}
+  )
 }
  
 function setupSearch() {
@@ -1505,68 +1503,10 @@ async function init() {
         window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
       }
     });
-    );
+    
 
-    recognition.onresult = (
-      event
-    ) => {
-      const transcript =
-        event.results[0][0].transcript;
-
-      searchInput.value = transcript;
-
-      applyAllFilters();
-
-      voiceBtn.innerHTML = "🎤";
-
-  // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
-  setupCartToggle();
-  setupFilterButtons();
-  setupCouponListeners();
-  setupOrderNowScroll();
-  setupSearchSuggestions();
-  setupSearch();
-  setupAdvancedFilters();
-  setupContactForm();
-  setupNewsletterForm();
-  setupActiveNavbar();
-  setupDropdownFilterLinks();
-
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-      }
-      window.location.href = "orders.html";
-    });
   }
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
 
-    recognition.onerror = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-
-      alert(
-        "Voice recognition failed."
-      );
-    };
-
-    recognition.onend = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
-  }
  
   // Load menu data, then render
   await loadMenuData();
