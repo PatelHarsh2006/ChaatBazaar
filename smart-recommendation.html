@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mood Based Food Recommender | ChaatBazaar</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+    background:#f8f5f1;
+    min-height:100vh;
+    padding:25px 15px;
+}
+
+.container{
+    max-width:750px;
+    margin:auto;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.header h1{
+    color:#ff5722;
+    font-size:2rem;
+    margin-bottom:6px;
+}
+
+.header p{
+    color:#666;
+    font-size:0.95rem;
+}
+
+.recommender-card{
+    background:white;
+    padding:22px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.06);
+}
+
+.form-group{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    font-weight:600;
+    margin-bottom:8px;
+    color:#333;
+    font-size:0.95rem;
+}
+
+select{
+    width:100%;
+    padding:12px 14px;
+    border:2px solid #eee;
+    border-radius:10px;
+    font-size:0.95rem;
+}
+
+.generate-btn{
+    width:100%;
+    padding:13px;
+    border:none;
+    background:#ff5722;
+    color:white;
+    font-size:0.95rem;
+    font-weight:600;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+.results{
+    margin-top:22px;
+}
+
+.result-title{
+    text-align:center;
+    margin-bottom:18px;
+    color:#ff5722;
+    font-size:1.6rem;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+
+.food-card{
+    background:#fff7f3;
+    padding:16px;
+    border-radius:14px;
+    border:2px solid #ffe0d4;
+}
+
+.food-card h3{
+    font-size:1.15rem;
+    margin-bottom:8px;
+}
+
+.score{
+    color:#ff5722;
+    font-weight:700;
+    margin-bottom:8px;
+    font-size:0.95rem;
+}
+
+.reason{
+    font-size:0.85rem;
+    color:#666;
+    line-height:1.5;
+}
+
+.back-btn{
+    display:inline-block;
+    margin-top:20px;
+    text-decoration:none;
+    color:white;
+    background:#333;
+    padding:10px 16px;
+    border-radius:10px;
+    font-size:0.9rem;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+<h1>🍽️ Mood-Based Food Recommender</h1>
+<p>Tell us your mood and we'll find the perfect ChaatBazaar dish.</p>
+</div>
+
+<div class="recommender-card">
+
+<div class="form-group">
+<label>How are you feeling today?</label>
+<select id="mood">
+<option value="">Select Mood</option>
+<option value="happy">😊 Happy</option>
+<option value="energetic">⚡ Energetic</option>
+<option value="relaxed">😌 Relaxed</option>
+<option value="stressed">😵 Stressed</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>What are you craving?</label>
+<select id="craving">
+<option value="">Select Craving</option>
+<option value="spicy">🌶️ Spicy</option>
+<option value="sweet">🍩 Sweet</option>
+<option value="crispy">🥟 Crispy</option>
+<option value="chatpata">😋 Chatpata</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Hunger Level</label>
+<select id="hunger">
+<option value="">Select Hunger Level</option>
+<option value="light">🍪 Light Snack</option>
+<option value="medium">🍽️ Medium</option>
+<option value="heavy">🍛 Very Hungry</option>
+</select>
+</div>
+
+<button class="generate-btn" onclick="generateRecommendation()">
+✨ Generate Recommendation
+</button>
+
+<div class="results" id="results">
+
+<h2 class="result-title">
+🎯 Your Perfect Matches
+</h2>
+
+<div class="cards" id="cards"></div>
+
+</div>
+
+<a href="menu.html" class="back-btn">
+← Back To Menu
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+const recommendations = {
+
+spicy:[
+{
+name:"Pani Puri",
+score:"98%",
+reason:"Perfect for spicy and chatpata cravings."
+},
+{
+name:"Vada Pav",
+score:"95%",
+reason:"Popular among spicy food lovers."
+}
+],
+
+sweet:[
+{
+name:"Gulab Jamun",
+score:"97%",
+reason:"Best match for sweet cravings."
+},
+{
+name:"Jalebi",
+score:"94%",
+reason:"Crispy and sweet delight."
+}
+],
+
+crispy:[
+{
+name:"Aloo Samosa",
+score:"96%",
+reason:"Golden crispy snack loved by everyone."
+},
+{
+name:"Pyaz Kachori",
+score:"93%",
+reason:"Crunchy and flavorful."
+}
+],
+
+chatpata:[
+{
+name:"Bhel Puri",
+score:"97%",
+reason:"Street-food favorite full of flavors."
+},
+{
+name:"Sev Puri",
+score:"94%",
+reason:"Tangy and chatpata delight."
+}
+]
+
+};
+
+function generateRecommendation(){
+
+const craving=document.getElementById("craving").value;
+
+if(!craving){
+alert("Please select a craving.");
+return;
+}
+
+const cards=document.getElementById("cards");
+cards.innerHTML="";
+
+recommendations[craving].forEach(item=>{
+
+cards.innerHTML+=`
+<div class="food-card">
+<h3>🔥 ${item.name}</h3>
+<div class="score">Match Score: ${item.score}</div>
+<div class="reason">${item.reason}</div>
+</div>
+`;
+
+});
+
+document.getElementById("results").style.display="block";
+
+}
+
+</script>
+
+</body>
+</html>

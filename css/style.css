@@ -3046,5 +3046,39 @@ button:disabled {
   align-items: center;
   gap: 10px;
 }
+
+
+.mood-recommender-banner{
+    max-width:900px;
+    margin:40px auto;
+    padding:30px;
+    background:#fff;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 8px 25px rgba(255,87,34,0.15);
 }
 
+.mood-recommender-banner h2{
+    color:#ff5722;
+    margin-bottom:10px;
+}
+
+.mood-recommender-banner p{
+    color:#666;
+    margin-bottom:20px;
+}
+
+.recommend-btn{
+    display:inline-block;
+    background:#ff5722;
+    color:white;
+    padding:14px 28px;
+    border-radius:50px;
+    text-decoration:none;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.recommend-btn:hover{
+    transform:translateY(-3px);
+}
