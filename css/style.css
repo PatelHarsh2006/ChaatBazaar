@@ -231,9 +231,9 @@
       user-select: none;
     }
     .header-inner {
-      max-width: 1200px;
+      max-width: 1600px;
       margin: 0 auto;
-      padding: 0.8rem 1rem;
+      padding: 1rem 1.8rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -248,6 +248,20 @@
       align-items: center;
       white-space: nowrap;
       gap: 0.4rem;
+      margin-right: 2rem;
+    }
+    .navbar-logo-img {
+      height: 42px;
+      width: 42px;
+      object-fit: cover;
+      border-radius: 50%;
+      background: white;
+      padding: 2px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    .logo:hover .navbar-logo-img {
+      transform: scale(1.08);
     }
     nav {
       display: flex;
@@ -387,6 +401,20 @@
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
+    }
+    /* When JS toggles the open class (keyboard interaction), show the menu the same way as hover */
+    .dropdown.open .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* Force-hide override for dropdown when JS needs to hide it despite :hover */
+    .dropdown.force-hide .dropdown-menu {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      transform: translateY(10px) !important;
+      pointer-events: none !important;
     }
 
     /* ===== Auth/Profile Nav ===== */
@@ -668,6 +696,7 @@
       font-weight: 600;
       user-select: text;
       line-height: 1.4;
+      color: black;
     }
     .btn-primary {
       background: #e64a19;
@@ -1323,6 +1352,19 @@
       align-items: center;
       gap: 0.5rem;
       font-family: 'Poppins', sans-serif;
+    }
+    .footer-logo-img {
+      height: 40px;
+      width: 40px;
+      object-fit: cover;
+      border-radius: 50%;
+      background: white;
+      padding: 2px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    .footer-brand:hover .footer-logo-img {
+      transform: scale(1.08);
     }
     
     .footer-desc {
@@ -2925,11 +2967,6 @@ select:focus-visible {
   }
 }
 
-/* Ensure links are underlined for clarity */
-a[href] {
-  text-decoration: underline;
-  text-decoration-color: rgba(255, 87, 34, 0.5);
-}
 
 /* Improve contrast of disabled buttons */
 button:disabled {
@@ -2965,6 +3002,7 @@ button:disabled {
   transform: none !important;
   opacity: 0.6;
 }
+
 
 
 /* ===== Loyalty Wallet Styles ===== */
@@ -3040,146 +3078,67 @@ body.dark .loyalty-redeem-action {
 .loyalty-toggle {
   display: flex;
   align-items: center;
-  cursor: pointer;
-  user-select: none;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #bf360c;
-  gap: 0.6rem;
-}
 
-body.dark .loyalty-toggle {
-  color: #ff7a45;
-}
-
-.loyalty-toggle input {
-  display: none;
-}
-
-.toggle-slider {
-  position: relative;
-  width: 44px;
-  height: 22px;
-  background-color: #ccc;
-  border-radius: 34px;
-  transition: .3s;
-}
-
-.toggle-slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  border-radius: 50%;
-  transition: .3s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.loyalty-toggle input:checked + .toggle-slider {
-  background-color: #4caf50;
-}
-
-.loyalty-toggle input:checked + .toggle-slider:before {
-  transform: translateX(22px);
-}
-
-.loyalty-empty-message {
-  font-size: 0.8rem;
-  color: #795548;
-  font-style: italic;
-  margin-top: 0.4rem;
-}
-
-body.dark .loyalty-empty-message {
-  color: #aaa;
-}
-
-/* Cart Total Breakdown */
-.cart-total-breakdown {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  padding: 0.5rem 0;
-}
-
-.breakdown-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #5d4037;
-}
-
-body.dark .breakdown-row {
-  color: #ccc;
-}
-
-.breakdown-row.discount {
-  color: #e64a19;
-}
-
-.breakdown-row.final {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #bf360c;
-  border-top: 1px solid #ffcc80;
-  padding-top: 0.5rem;
-  margin-top: 0.2rem;
-}
-
-body.dark .breakdown-row.final {
-  color: #ff7a45;
-  border-top-color: #555;
-}
-
-.lang-toggle-btn {
-  background: linear-gradient(135deg, #ff6200, #ff8c00);
-  color: #fff;
+#voice-search-btn {
   border: none;
-  border-radius: 20px;
-  padding: 6px 16px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  background: #ff7043;
+  color: white;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
   cursor: pointer;
-  font-family: 'Poppins', sans-serif;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  white-space: nowrap;
-  margin-left: 8px;
-}
-.lang-toggle-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 98, 0, 0.35);
-}
-
-/* Navbar Container */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  flex-wrap: wrap;
-  width: 100%;
-}
-
-/* Navigation Links */
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  list-style: none;
-  flex-wrap: wrap;
-}
-
-/* Nav Link Styling */
-.nav-links a {
-  text-decoration: none;
-  font-size: 1rem;
+  margin-left: 0.4rem;
   transition: 0.3s ease;
 }
+
+#voice-search-btn:hover {
+  background: #f4511e;
+}
+
+#voice-search-btn.listening {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.12);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+/* ===== Combo Add Button ===== */
+
+.combo-add-btn {
+  background: #ff5722;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.combo-add-btn:hover {
+  background: #e64a19;
+  transform: scale(1.05);
+}
+.combo-item-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+}
+
 
 /* Better Hover Effect */
 .nav-links a:hover {
@@ -3350,3 +3309,4 @@ body.dark .breakdown-row.final {
   color: #ff3d00;
   font-weight: 600;
 }
+

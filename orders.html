@@ -12,24 +12,23 @@
   <link rel="stylesheet" href="css/delivery-tracker.css">
   <link rel="stylesheet" href="css/invoice-print.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="icon" href="img/logo.png" type="image/png" />
 </head>
 
 <body>
 
-  <header>
-    <div class="header-inner container" role="banner">
-      <a href="index.html" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
-      <nav role="navigation" aria-label="Primary Navigation">
-        <a href="index.html" class="nav-link">Home</a>
-        <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
-          <a href="menu.html" class="dropdown-toggle nav-link">Menu</a>
-          <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
-            <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('All')">All</a>
-            <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Snacks')">Snacks</a>
-            <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Chaat')">Chaat</a>
-            <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Beverages')">Beverages</a>
-          </div>
+<header>
+  <div class="header-inner container" role="banner">
+    <a href="index.html" class="logo" aria-label="ChaatBazaar Home"><img src="img/logo.png" alt="ChaatBazaar Logo" class="navbar-logo-img" />ChaatBazaar</a>
+    <nav role="navigation" aria-label="Primary Navigation">
+      <a href="index.html" class="nav-link">Home</a>
+      <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
+        <a href="menu.html" class="dropdown-toggle nav-link">Menu</a>
+        <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
+          <a href="menu.html?filter=All#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="All">All</a>
+          <a href="menu.html?filter=Snacks#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Snacks">Snacks</a>
+          <a href="menu.html?filter=Chaat#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Chaat">Chaat</a>
+          <a href="menu.html?filter=Beverages#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Beverages">Beverages</a>
         </div>
       </div>
       <a href="about.html" class="nav-link">About</a>
@@ -57,9 +56,17 @@
           <span class="theme-toggle-icon moon-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
           </span>
+          <span class="theme-toggle-thumb"></span>
+        </span>
+      </button>
 
-    </div>
-  </header>
+      <!-- Dynamic auth slot: replaced by js/auth.js based on session state -->
+      <div id="authNavItem" class="auth-nav-item">
+        <a href="login.html" class="login-btn-nav">Login</a>
+      </div>
+    </nav>
+  </div>
+</header>
 
   <section id="live-tracking-section" class="tracking-section-container">
 
@@ -201,28 +208,6 @@
     </div>
   </div>
 
-  <main class="container orders-main-history">
-    <h1 class="orders-history-title">My Orders History</h1>
-
-    <div class="orders-container" id="orders-container" aria-live="polite">
-      <!-- Historical orders will be rendered dynamically -->
-    </div>
-  </main>
-
-  <footer>
-    <div class="social-icons">
-      <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i
-          class="fa-brands fa-facebook"></i></a>
-      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i
-          class="fa-brands fa-instagram"></i></a>
-      <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i
-          class="fa-brands fa-twitter"></i></a>
-      <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i
-          class="fa-brands fa-github"></i></a>
-    </div>
-    <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
-  </footer>
-
 <main class="container orders-main-history">
   <h1 class="orders-history-title">My Orders History</h1>
   
@@ -234,7 +219,7 @@
 <footer>
   <div class="footer-container">
     <div class="footer-column brand-col">
-      <div class="footer-brand">ChaatBazar 🍴</div>
+      <div class="footer-brand"><img src="img/logo.png" alt="ChaatBazaar Logo" class="footer-logo-img" />ChaatBazaar</div>
       <p class="footer-desc">Your ultimate destination for authentic and mouth-watering Indian street food - from crispy golgappas to hot samosas. Hassle-free delivery right to your doorstep.</p>
     </div>
     
@@ -295,23 +280,153 @@
 </footer>
 
 
+  <!-- Premium Checkout Modal Overlay & Bottom Sheet -->
+  <div id="checkout-modal-overlay" class="checkout-modal-overlay" style="display: none;">
+    <div id="checkout-modal-container" class="checkout-modal-container">
+      <div class="checkout-modal-header">
+        <h3>Confirm & Complete Order 🛍️</h3>
+        <button id="checkout-modal-close" class="checkout-modal-close-btn" aria-label="Close Checkout">&times;</button>
+      </div>
+      <div class="checkout-modal-body">
+        
+        <!-- Left Column: Customer Form Details -->
+        <form id="checkout-form" class="checkout-form-column" novalidate>
+          <h4 class="checkout-section-title">Delivery Details</h4>
+          
+          <div class="checkout-field-group">
+            <label for="checkout-name">Full Name <span class="required">*</span></label>
+            <div class="input-icon-wrapper">
+              <span class="field-icon">👤</span>
+              <input type="text" id="checkout-name" placeholder="Enter your name" required />
+            </div>
+            <div class="field-error-msg" id="err-checkout-name">Name is required</div>
+          </div>
+
+          <div class="checkout-field-group">
+            <label for="checkout-phone">Mobile Phone (10 Digits) <span class="required">*</span></label>
+            <div class="input-icon-wrapper">
+              <span class="field-icon">📞</span>
+              <input type="tel" id="checkout-phone" placeholder="Enter 10-digit mobile number" maxlength="10" required />
+            </div>
+            <div class="field-error-msg" id="err-checkout-phone">Enter a valid 10-digit mobile number</div>
+          </div>
+
+          <div class="checkout-field-group">
+            <label for="checkout-address">Delivery Address <span class="required">*</span></label>
+            <div class="input-icon-wrapper">
+              <span class="field-icon">📍</span>
+              <textarea id="checkout-address" placeholder="Verify your delivery address" rows="2" required></textarea>
+            </div>
+            <div class="field-error-msg" id="err-checkout-address">Delivery address is required</div>
+          </div>
+
+          <h4 class="checkout-section-title" style="margin-top: 1.25rem;">Payment Method</h4>
+          <div class="payment-methods-grid">
+            <div class="payment-card active" data-method="UPI">
+              <span class="payment-icon">📱</span>
+              <span class="payment-label">UPI / NetBanking</span>
+            </div>
+            <div class="payment-card" data-method="Card">
+              <span class="payment-icon">💳</span>
+              <span class="payment-label">Credit / Debit Card</span>
+            </div>
+            <div class="payment-card" data-method="COD">
+              <span class="payment-icon">💵</span>
+              <span class="payment-label">Cash on Delivery</span>
+            </div>
+          </div>
+          <input type="hidden" id="checkout-payment-method" value="UPI" />
+
+          <div id="checkout-validation-error" class="checkout-error-banner" style="display: none;"></div>
+        </form>
+
+        <!-- Right Column: Order Summary & Pricing -->
+        <div class="checkout-summary-column">
+          <h4 class="checkout-section-title">Order Summary</h4>
+          <div id="checkout-items-list" class="checkout-items-list">
+            <!-- Dynamically populated cart items -->
+          </div>
+
+          <!-- Coupon Promo section -->
+          <h4 class="checkout-section-title" style="margin-top: 1.25rem;">Have a promo code?</h4>
+          <div class="checkout-coupon-row">
+            <input type="text" id="checkout-coupon-input" placeholder="Promo code (SAVE50, FREEDEL, CHAAT20)" />
+            <button type="button" id="checkout-coupon-btn">Apply</button>
+          </div>
+          <div id="checkout-coupon-msg" class="checkout-coupon-msg"></div>
+
+          <!-- Loyalty Section -->
+          <div id="checkout-loyalty-widget" class="checkout-loyalty-widget">
+            <!-- Dynamically populated loyalty points balance & toggle -->
+          </div>
+
+          <div class="checkout-pricing-breakdown">
+            <div class="price-row">
+              <span>Items Subtotal</span>
+              <span id="checkout-subtotal-val">₹0</span>
+            </div>
+            <div class="price-row" id="checkout-delivery-row">
+              <span>Delivery Fee</span>
+              <span id="checkout-delivery-val">₹40</span>
+            </div>
+            <div class="price-row">
+              <span>Platform Fee</span>
+              <span id="checkout-platform-val">₹10</span>
+            </div>
+            <div class="price-row">
+              <span>GST / Tax (5%)</span>
+              <span id="checkout-gst-val">₹0</span>
+            </div>
+            <div class="price-row discount-row" id="checkout-coupon-discount-row" style="display: none;">
+              <span>Coupon Discount</span>
+              <span id="checkout-discount-val">-₹0</span>
+            </div>
+            <div class="price-row discount-row" id="checkout-loyalty-discount-row" style="display: none;">
+              <span>Loyalty Points Discount</span>
+              <span id="checkout-loyalty-discount-val">-₹0</span>
+            </div>
+            <div class="price-row grand-total-row">
+              <span>Grand Total</span>
+              <span id="checkout-grand-total-val">₹0</span>
+            </div>
+          </div>
+
+          <button type="button" id="checkout-place-order-btn" class="btn-primary checkout-place-order-btn">Proceed to Live Tracking 🚀</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-notification" class="toast-notification"></div>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="js/cart-manager.js"></script>
+  <script src="js/recently-viewed.js"></script>
+  <script src="js/geolocation.js"></script>
+  <script src="js/sanitization.js"></script>
+  <script src="js/loyalty.js"></script>
+  <script src="js/translations.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/live-tracking.js"></script>
   <script src="js/delivery-tracker.js"></script>
+  <script src="js/geolocation.js"></script>
+  <script src="js/sanitization.js"></script>
+  <script src="js/loyalty.js"></script>
+  <script src="js/translations.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/live-tracking.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
 
   <script>
-
     const params = new URLSearchParams(window.location.search);
-
-    const deliveryAvailable =
-      params.get("delivery") === "true";
-
+    const deliveryAvailable = params.get("delivery") === "true";
     if (!deliveryAvailable) {
-      document.getElementById("delivery-coverage-box").style.display = "flex";
+      const covBox = document.getElementById("delivery-coverage-box");
+      if (covBox) covBox.style.display = "flex";
     }
-
   </script>
-
 </body>
-
 </html>

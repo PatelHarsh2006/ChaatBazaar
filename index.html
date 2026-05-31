@@ -1,21 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ChaatBazar 🍴 | Authentic Indian Street Food Delivered Hot</title>
-  <link rel="stylesheet" href="css/auth.css">
-  
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="favicon.png" type="image/png" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+
+  <title>
+    ChaatBazar 🍴 | Authentic Indian Street Food Delivered Hot
+  </title>
+
+  <!-- GOOGLE FONTS -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- FONT AWESOME -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+  <!-- MAIN CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <link
+    rel="icon"
+    href="favicon.png"
+    type="image/png"
+  />
+
 </head>
+
 <body>
 
+<!-- ================= HEADER ================= -->
 
-<!-- Header & Navigation -->
 <header>
   <div class="header-inner container" role="banner">
     <a href="#" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
@@ -24,339 +48,851 @@
       <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
         <a href="menu.html" class="dropdown-toggle nav-link">Menu</a>
         <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
-          <a href="#specials" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Specials">Specials</a>
-          <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Snacks">Snacks</a>
-          <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Chaat">Chaat</a>
-          <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Beverages">Beverages</a>
-          <a href="#menu" role="menuitem" tabindex="-1" class="menu-filter" data-filter="All">All</a>
+          <a href="menu.html?filter=Specials#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Specials">Specials</a>
+          <a href="menu.html?filter=All#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="All">All</a>
+          <a href="menu.html?filter=Snacks#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Snacks">Snacks</a>
+          <a href="menu.html?filter=Chaat#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Chaat">Chaat</a>
+          <a href="menu.html?filter=Beverages#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Beverages">Beverages</a>
         </div>
+
       </div>
-      <a href="about.html" class="nav-link">About</a>
-      <a href="orders.html" class="nav-link">Orders</a>
-      <a href="#cart-sidebar" class="nav-link cart-btn-modern" id="cart-open-btn" aria-label="Open Cart">
-        <span class="cart-icon-wrapper">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="cart-svg-icon"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-          <span id="cart-count" class="cart-badge">0</span>
-        </span>
-        <span class="cart-text">Cart</span>
+
+      <a
+        href="recommendations.html"
+        class="nav-link"
+      >
+        Smart Combos
       </a>
-      <div class="search-bar" role="search">
-        <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" autocomplete="off" />
-        <button aria-label="Search" id="search-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="search-svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </button>
-        <div class="search-suggestions" id="search-suggestions" style="display: none;"></div>
+
+      <a
+        href="#about"
+        class="nav-link"
+      >
+        About
+      </a>
+
+      <a
+        href="orders.html"
+        class="nav-link"
+      >
+        Orders
+      </a>
+
+      <a
+        href="#cart-sidebar"
+        class="nav-link"
+        id="cart-open-btn"
+      >
+        Cart (
+        <span id="cart-count">0</span>
+        )
+      </a>
+
+      <!-- SEARCH -->
+
+      <div
+        class="search-bar"
+        role="search"
+      >
+
+        <input
+          type="search"
+          placeholder="Search menu..."
+          aria-label="Search menu"
+          id="search-input"
+          autocomplete="off"
+        />
+
+        <button
+          aria-label="Search"
+          id="search-btn"
+        ></button>
+
+        <div
+          class="search-suggestions"
+          id="search-suggestions"
+          style="display:none;"
+        ></div>
+
       </div>
-      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
-        <span class="theme-toggle-track">
-          <span class="theme-toggle-icon sun-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-          </span>
-          <span class="theme-toggle-icon moon-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-          </span>
-          <span class="theme-toggle-thumb"></span>
-        </span>
+
+      <!-- THEME TOGGLE -->
+
+      <button
+        id="theme-toggle"
+        class="theme-toggle"
+      >
+        🌙
       </button>
 
-      <!-- Dynamic auth slot: replaced by js/auth.js based on session state -->
-      <div id="authNavItem" class="auth-nav-item">
-        <a href="login.html" class="login-btn-nav">Login</a>
-      </div>
     </nav>
+
   </div>
+
 </header>
 
-<!-- Hero Section -->
-<section id="hero" class="hero" role="region" aria-label="Hero Section">
+<!-- ================= HERO SECTION ================= -->
+
+<section
+  id="hero"
+  class="hero"
+  role="region"
+  aria-label="Hero Section"
+>
+
   <div class="hero-content">
-    <h1>Satisfy Your Cravings with Tasty Indian Delights</h1>
-    <p>From crunchy bites to tangy flavors, experience India’s most loved street food anytime, anywhere.</p>
-    <button class="btn-primary" id="order-now-btn" aria-haspopup="true" aria-controls="menu">Order Now</button>
+
+    <h1>
+      Authentic Indian Street Food Delivered Hot!
+    </h1>
+
+    <p>
+      Delicious Samosa, Kachori, Pani Puri
+      and more delivered fresh to your
+      doorstep.
+    </p>
+
+    <button
+      class="btn-primary"
+      id="order-now-btn"
+    >
+      Order Now
+    </button>
+
   </div>
-  <div class="hero-image" aria-hidden="true">
-    <img src="img/hero_img.png" alt="Colorful Indian street food platter" />
+
+  <div
+    class="hero-image"
+    aria-hidden="true"
+  >
+
+    <img
+      src="img/chaat.png"
+      alt="Indian street food platter"
+    />
+
   </div>
+
 </section>
 
-<!-- Specials Section -->
-<section id="specials" class="specials" role="region" aria-label="Today's Specials">
-  <h2 class="section-title">Today's Specials</h2>
-  <div class="cards" id="specials-cards">
-    <!-- Special cards will be injected here -->
+<!-- ================= SPECIALS ================= -->
+
+<section
+  id="specials"
+  class="specials"
+  role="region"
+  aria-label="Today's Specials"
+>
+
+  <h2 class="section-title">
+    Today's Specials
+  </h2>
+
+  <div
+    class="cards"
+    id="specials-cards"
+  >
+
+    <!-- Injected via JS -->
+
   </div>
+
 </section>
 
-<!-- Recently Viewed Section -->
-<section id="recently-viewed" class="recently-viewed" role="region" aria-label="Recently Viewed Items" style="display: none;">
-  <h2 class="section-title">Recently Viewed</h2>
-  <div class="cards" id="recently-viewed-cards">
-    <!-- Recently viewed cards will be injected here -->
+<!-- ================= RECENTLY VIEWED ================= -->
+
+<section
+  id="recently-viewed"
+  class="recently-viewed"
+  role="region"
+  aria-label="Recently Viewed Items"
+  style="display:none;"
+>
+
+  <h2 class="section-title">
+    Recently Viewed
+  </h2>
+
+  <div
+    class="cards"
+    id="recently-viewed-cards"
+  >
+
+    <!-- Injected via JS -->
+
   </div>
+
 </section>
 
-<!-- Menu Section -->
-<section id="menu" class="menu" role="region" aria-label="Full Menu">
-  <h2 class="section-title">Explore Our Menu</h2>
-  <div class="filter-buttons" role="toolbar" aria-label="Filter menu categories">
-    <button class="filter-btn active" data-filter="All" aria-pressed="true">All</button>
-    <button class="filter-btn" data-filter="Snacks" aria-pressed="false">Snacks</button>
-    <button class="filter-btn" data-filter="Chaat" aria-pressed="false">Chaat</button>
-    <button class="filter-btn" data-filter="Beverages" aria-pressed="false">Beverages</button>
+<!-- ================= MENU ================= -->
+
+<section
+  id="menu"
+  class="menu"
+  role="region"
+  aria-label="Full Menu"
+>
+
+  <h2 class="section-title">
+    Explore Our Menu
+  </h2>
+
+  <!-- FILTER BUTTONS -->
+
+  <div
+    class="filter-buttons"
+    role="toolbar"
+    aria-label="Filter menu categories"
+  >
+
+    <button
+      class="filter-btn active"
+      data-filter="All"
+    >
+      All
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="Snacks"
+    >
+      Snacks
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="Chaat"
+    >
+      Chaat
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="Beverages"
+    >
+      Beverages
+    </button>
+
   </div>
+
+  <!-- ADVANCED FILTER TOGGLE -->
 
   <div class="filter-toggle-container">
-    <button class="btn-filter-toggle" id="filter-toggle-btn" aria-expanded="false" aria-controls="advanced-filters">
-      <span>⚙️ Advanced Filters</span>
+
+    <button
+      class="btn-filter-toggle"
+      id="filter-toggle-btn"
+      aria-expanded="false"
+      aria-controls="advanced-filters"
+    >
+
+      <span>
+        ⚙️ Advanced Filters
+      </span>
+
     </button>
+
   </div>
 
-  <div class="advanced-filters" id="advanced-filters" style="display: none;">
+  <!-- ADVANCED FILTERS -->
+
+  <div
+    class="advanced-filters"
+    id="advanced-filters"
+    style="display:none;"
+  >
+
     <div class="filter-grid">
-      <!-- Price Range Slider -->
+
+      <!-- PRICE -->
+
       <div class="filter-group">
-        <label for="price-range-slider">Max Price: <span id="price-slider-val">₹100</span></label>
-        <input type="range" id="price-range-slider" min="10" max="100" step="5" value="100" aria-valuemin="10" aria-valuemax="100" aria-valuenow="100" />
+
+        <label for="price-range-slider">
+
+          Max Price:
+          <span id="price-slider-val">
+            ₹100
+          </span>
+
+        </label>
+
+        <input
+          type="range"
+          id="price-range-slider"
+          min="10"
+          max="100"
+          step="5"
+          value="100"
+        />
+
       </div>
 
-      <!-- Spice Level Selector -->
+      <!-- SPICE -->
+
       <div class="filter-group">
-        <label for="spice-level-select">Spice Level</label>
+
+        <label for="spice-level-select">
+          Spice Level
+        </label>
+
         <select id="spice-level-select">
-          <option value="All">All Spice Levels</option>
-          <option value="Low">🌶️ Low</option>
-          <option value="Medium">🌶️🌶️ Medium</option>
-          <option value="High">🌶️🌶️🌶️ High</option>
+
+          <option value="All">
+            All Spice Levels
+          </option>
+
+          <option value="Low">
+            🌶️ Low
+          </option>
+
+          <option value="Medium">
+            🌶️🌶️ Medium
+          </option>
+
+          <option value="High">
+            🌶️🌶️🌶️ High
+          </option>
+
         </select>
+
       </div>
 
-      <!-- Rating Selector -->
+      <!-- RATING -->
+
       <div class="filter-group">
-        <label for="rating-select">Minimum Rating</label>
+
+        <label for="rating-select">
+          Minimum Rating
+        </label>
+
         <select id="rating-select">
-          <option value="All">All Ratings</option>
-          <option value="4.6">⭐ 4.6+ Stars</option>
-          <option value="4.8">⭐⭐ 4.8+ Stars</option>
-          <option value="4.9">⭐⭐⭐ 4.9+ Stars</option>
+
+          <option value="All">
+            All Ratings
+          </option>
+
+          <option value="4.6">
+            ⭐ 4.6+ Stars
+          </option>
+
+          <option value="4.8">
+            ⭐⭐ 4.8+ Stars
+          </option>
+
+          <option value="4.9">
+            ⭐⭐⭐ 4.9+ Stars
+          </option>
+
         </select>
+
       </div>
 
-      <!-- Dietary Preferences -->
+      <!-- DIETARY -->
+
       <div class="filter-group dietary-group">
-        <label>Dietary Preferences</label>
+
+        <label>
+          Dietary Preferences
+        </label>
+
         <div class="checkbox-container">
+
           <label class="custom-checkbox">
-            <input type="checkbox" id="dietary-vegan" />
-            <span class="checkbox-label">🌱 Vegan</span>
+
+            <input
+              type="checkbox"
+              id="dietary-vegan"
+            />
+
+            <span class="checkbox-label">
+              🌱 Vegan
+            </span>
+
           </label>
+
           <label class="custom-checkbox">
-            <input type="checkbox" id="dietary-gf" />
-            <span class="checkbox-label">🌾 Gluten-Free</span>
+
+            <input
+              type="checkbox"
+              id="dietary-gf"
+            />
+
+            <span class="checkbox-label">
+              🌾 Gluten-Free
+            </span>
+
           </label>
+
         </div>
+
       </div>
+
     </div>
-    
-    <!-- Reset Filters Button -->
+
+    <!-- RESET -->
+
     <div class="filter-actions">
-      <button class="btn-reset-filters" id="reset-filters-btn">Reset All Filters</button>
+
+      <button
+        class="btn-reset-filters"
+        id="reset-filters-btn"
+      >
+        Reset All Filters
+      </button>
+
     </div>
+
   </div>
-  <div class="cards" id="menu-cards" aria-live="polite" aria-relevant="additions removals">
-    <!-- Menu cards injected here -->
+
+  <!-- MENU CARDS -->
+
+  <div
+    class="cards"
+    id="menu-cards"
+    aria-live="polite"
+    aria-relevant="additions removals"
+  >
+
+    <!-- Injected by JS -->
+
   </div>
+
 </section>
 
-<!-- About Section -->
-<!-- About Section -->
-<section id="about" class="about" role="region" aria-label="About ChaatBazar">
+<!-- ================= SMART COMBO PREVIEW ================= -->
+
+<section class="combo-preview">
+
   <div class="container">
-    <h2>About Us</h2>
-    <p>At <strong>ChaatBazar</strong>, we bring you the authentic flavors of India's vibrant street food culture, freshly prepared and delivered hot right to your door. Our passion is to share the love of chaat, snacks, and beverages made from time-tested recipes.</p>
 
-    <div class="team" aria-label="Meet our team">
+    <h2 class="section-title">
+      ✨ Smart Food Pairings
+    </h2>
 
-      <article class="team-member" tabindex="0">
+    <p class="combo-preview-text">
+
+      Discover AI-inspired food combinations
+      perfectly matched for your cravings.
+
+    </p>
+
+    <a
+      href="recommendations.html"
+      class="btn-primary combo-btn"
+    >
+      Explore Smart Combos
+    </a>
+
+  </div>
+
+</section>
+
+<!-- ================= ABOUT ================= -->
+
+<section
+  id="about"
+  class="about"
+  role="region"
+  aria-label="About ChaatBazar"
+>
+
+  <div class="container">
+
+    <h2>
+      About Us
+    </h2>
+
+    <p>
+
+      At <strong>ChaatBazar</strong>,
+      we bring the authentic taste of
+      Indian street food right to your
+      doorstep.
+
+    </p>
+
+    <!-- TEAM -->
+
+    <div class="team">
+
+      <!-- MEMBER -->
+
+      <article
+        class="team-member"
+        tabindex="0"
+      >
+
         <div class="team-member-inner">
 
           <div class="team-member-front">
-            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya Sharma - Founder & Head Chef" />
-            <h4>Priya Sharma</h4>
-            <p>Founder & Head Chef - Crafting every dish with love and authenticity.</p>
+
+            <img
+              src="https://randomuser.me/api/portraits/women/68.jpg"
+              alt="Priya Sharma"
+            />
+
+            <h4>
+              Priya Sharma
+            </h4>
+
+            <p>
+              Founder & Head Chef
+            </p>
+
           </div>
 
           <div class="team-member-back">
-            <h4>About Priya</h4>
-            <p>10+ years of culinary expertise specializing in authentic Indian street food and handcrafted signature recipes.</p>
+
+            <h4>
+              About Priya
+            </h4>
+
+            <p>
+              10+ years of expertise
+              in authentic Indian
+              street food.
+            </p>
+
           </div>
 
         </div>
+
       </article>
 
-      <article class="team-member" tabindex="0">
+      <!-- MEMBER -->
+
+      <article
+        class="team-member"
+        tabindex="0"
+      >
+
         <div class="team-member-inner">
 
           <div class="team-member-front">
-            <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Anjali Verma - Customer Support" />
-            <h4>Anjali Verma</h4>
-            <p>Customer Support - Always here to assist you with your orders.</p>
+
+            <img
+              src="https://randomuser.me/api/portraits/women/45.jpg"
+              alt="Anjali Verma"
+            />
+
+            <h4>
+              Anjali Verma
+            </h4>
+
+            <p>
+              Customer Support
+            </p>
+
           </div>
 
           <div class="team-member-back">
-            <h4>About Anjali</h4>
-            <p>Ensures smooth customer experience, quick assistance, and seamless order support from start to finish.</p>
+
+            <h4>
+              About Anjali
+            </h4>
+
+            <p>
+              Ensures smooth
+              customer experience
+              and fast support.
+            </p>
+
           </div>
 
         </div>
+
       </article>
 
     </div>
+
   </div>
+
 </section>
 
-<!-- Contact Section -->
-<section class="contact" role="region" aria-label="Contact Us">
+<!-- ================= CONTACT ================= -->
+
+<section
+  class="contact"
+  role="region"
+  aria-label="Contact Us"
+>
+
   <div class="container">
-    <h2>Contact Us</h2>
-    <form class="contact-form" id="contact-form" novalidate aria-label="Contact Form">
-      <label for="name">Name <span class="required">*</span></label>
-      <input type="text" id="name" name="name" required aria-required="true" minlength="2" />
-      <div class="error-msg" id="error-name" aria-live="assertive"></div>
 
-      <label for="email">Email <span class="required">*</span></label>
-      <input type="email" id="email" name="email" required aria-required="true" />
-      <div class="error-msg" id="error-email" aria-live="assertive"></div>
+    <h2>
+      Contact Us
+    </h2>
 
-      <label for="message">Message <span class="required">*</span></label>
-      <textarea id="message" name="message" required aria-required="true" minlength="10"></textarea>
-      <div class="error-msg" id="error-message" aria-live="assertive"></div>
+    <form
+      class="contact-form"
+      id="contact-form"
+      novalidate
+    >
 
-      <div class="form-success-msg" id="form-success" role="alert" aria-live="polite" style="display:none;">
-        Your message has been sent. We'll get back to you soon.
-      </div>
-      <button type="submit" class="btn-submit">Send Message</button>
+      <label for="name">
+        Name
+      </label>
+
+      <input
+        type="text"
+        id="name"
+        required
+      />
+
+      <div
+        class="error-msg"
+        id="error-name"
+      ></div>
+
+      <label for="email">
+        Email
+      </label>
+
+      <input
+        type="email"
+        id="email"
+        required
+      />
+
+      <div
+        class="error-msg"
+        id="error-email"
+      ></div>
+
+      <label for="message">
+        Message
+      </label>
+
+      <textarea
+        id="message"
+        required
+      ></textarea>
+
+      <div
+        class="error-msg"
+        id="error-message"
+      ></div>
+
+      <button
+        type="submit"
+        class="btn-submit"
+      >
+        Send Message
+      </button>
+
     </form>
+
   </div>
+
 </section>
 
-<!-- Testimonials -->
-<section class="testimonials" role="region" aria-label="Customer Testimonials">
-  <h2 class="section-title">What Our Customers Say</h2>
+<!-- ================= TESTIMONIALS ================= -->
+
+<section
+  class="testimonials"
+  role="region"
+  aria-label="Testimonials"
+>
+
+  <h2 class="section-title">
+    What Customers Say
+  </h2>
+
   <div class="testimonial-cards">
-    <blockquote class="testimonial" tabindex="0">
-      <p>The Samosas were crispy and flavorful, delivered piping hot! Amazing service and quality.</p>
-      <cite class="author">- Meera K.</cite>
+
+    <blockquote
+      class="testimonial"
+      tabindex="0"
+    >
+
+      <p>
+        Amazing taste and super fast delivery!
+      </p>
+
+      <cite>
+        - Meera K.
+      </cite>
+
     </blockquote>
-    <blockquote class="testimonial" tabindex="0">
-      <p>Love the variety and authentic taste. The Pani Puri is the best I've had outside India!</p>
-      <cite class="author">- Arjun P.</cite>
+
+    <blockquote
+      class="testimonial"
+      tabindex="0"
+    >
+
+      <p>
+        Best Pani Puri outside India!
+      </p>
+
+      <cite>
+        - Arjun P.
+      </cite>
+
     </blockquote>
-    <blockquote class="testimonial" tabindex="0">
-      <p>Quick delivery and very friendly staff. The Kachoris are my go-to snack now. Highly recommended!</p>
-      <cite class="author">- Sneha M.</cite>
+
+    <blockquote
+      class="testimonial"
+      tabindex="0"
+    >
+
+      <p>
+        Delicious snacks and excellent quality.
+      </p>
+
+      <cite>
+        - Sneha M.
+      </cite>
+
     </blockquote>
+
   </div>
+
 </section>
 
-<!-- Newsletter Signup -->
-<section class="newsletter" role="region" aria-label="Newsletter Signup">
-  <h2>Subscribe to Our Newsletter</h2>
-  <p>Get the latest deals, menu updates, and exclusive offers delivered to your inbox.</p>
-  <form class="newsletter-form" id="newsletter-form" aria-label="Newsletter subscription form">
-    <input type="email" id="newsletter-email" name="newsletter-email" placeholder="Enter your email" required aria-required="true" />
-    <button type="submit" aria-label="Subscribe to newsletter">Subscribe</button>
+<!-- ================= NEWSLETTER ================= -->
+
+<section
+  class="newsletter"
+  role="region"
+  aria-label="Newsletter"
+>
+
+  <h2>
+    Subscribe To Newsletter
+  </h2>
+
+  <p>
+    Get latest deals and updates.
+  </p>
+
+  <form
+    class="newsletter-form"
+    id="newsletter-form"
+  >
+
+    <input
+      type="email"
+      placeholder="Enter your email"
+      required
+    />
+
+    <button type="submit">
+      Subscribe
+    </button>
+
   </form>
+
 </section>
 
-<!-- Cart Sidebar -->
-<aside id="cart-sidebar" role="region" aria-label="Shopping Cart" aria-hidden="true">
+<!-- ================= CART SIDEBAR ================= -->
+
+<aside
+  id="cart-sidebar"
+  role="region"
+  aria-label="Shopping Cart"
+  aria-hidden="true"
+>
+
   <div id="cart-header">
+
     Your Cart
-    <button id="cart-close" aria-label="Close Cart">&times;</button>
+
+    <button id="cart-close">
+      &times;
+    </button>
+
   </div>
-  <div id="cart-items" tabindex="0" aria-live="polite" aria-relevant="additions removals">
-    <!-- Cart items injected here -->
+
+  <div
+    id="cart-items"
+    tabindex="0"
+  >
+
+    <!-- Cart items -->
+
   </div>
+
   <div id="cart-footer">
-    <span id="cart-total">Total: ₹0</span>
-    <button id="checkout-btn" disabled>Checkout</button>
+
+    <span id="cart-total">
+      Total: ₹0
+    </span>
+
+    <button
+      id="checkout-btn"
+      disabled
+    >
+      Checkout
+    </button>
+
   </div>
+
 </aside>
 
-<!-- Footer -->
+<!-- ================= FOOTER ================= -->
+
 <footer>
-  <div class="footer-container">
-    <div class="footer-column brand-col">
-      <div class="footer-brand">ChaatBazar 🍴</div>
-      <p class="footer-desc">Your ultimate destination for authentic and mouth-watering Indian street food - from crispy golgappas to hot samosas. Hassle-free delivery right to your doorstep.</p>
-    </div>
-    
-    <div class="footer-column">
-      <h3>ChaatBazar</h3>
-      <ul class="footer-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="menu.html">Menu</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="orders.html">Orders</a></li>
-        <li><a href="favorites.html">Favorites</a></li>
-        <li><a href="faq.html">FAQ</a></li>
-      </ul>
-    </div>
-    
-    <div class="footer-column">
-      <h3>For Partners</h3>
-      <ul class="footer-links">
-        <li><a href="#">Partners With Us</a></li>
-        <li><a href="#">Apps For You</a></li>
-        <li><a href="#">Franchise Consulting</a></li>
-        <li><a href="#">Advertise With Us</a></li>
-        <li><a href="#">Sell On ChaatBazar</a></li>
-      </ul>
-    </div>
-    
-    <div class="footer-column">
-      <h3>Learn More</h3>
-      <ul class="footer-links">
-        <li><a href="#">Privacy & Security</a></li>
-        <li><a href="#">Terms & Conditions</a></li>
-        <li><a href="#">Help & Support</a></li>
-        <li><a href="#">Report a Fraud</a></li>
-      </ul>
-    </div>
-    
-    <div class="footer-column">
-      <div class="footer-social-wrapper">
-        <h3>Connect Us</h3>
-        <div class="footer-social-icons">
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-          <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
-        </div>
-      </div>
-      <h3>Contact Us</h3>
-      <ul class="footer-contact-info">
-        <li><strong>Email:</strong> support@chaatbazar.com</li>
-        <li><strong>Phone:</strong> +91 98765 43210</li>
-        <li><strong>Headquarter:</strong> Bhavnagar, Gujarat, 364001</li>
-      </ul>
-    </div>
+
+  <div class="social-icons">
+
+    <a
+      href="https://facebook.com"
+      target="_blank"
+    >
+      <i class="fa-brands fa-facebook"></i>
+    </a>
+
+    <a
+      href="https://instagram.com"
+      target="_blank"
+    >
+      <i class="fa-brands fa-instagram"></i>
+    </a>
+
+    <a
+      href="https://twitter.com"
+      target="_blank"
+    >
+      <i class="fa-brands fa-twitter"></i>
+    </a>
+
+    <a
+      href="https://github.com"
+      target="_blank"
+    >
+      <i class="fa-brands fa-github"></i>
+    </a>
+
   </div>
-  <div class="footer-bottom">
-    <p>&copy; 2026 ChaatBazar. All rights reserved.</p>
-  </div>
+
+  <p>
+    © 2026 ChaatBazar.
+    All rights reserved.
+  </p>
+
 </footer>
 
-<div id="toast-notification" class="toast-notification"></div>
+<!-- TOAST -->
+
+<div
+  id="toast-notification"
+  class="toast-notification"
+></div>
+
+<!-- ================= SCRIPTS ================= -->
+
 <script src="js/cart-manager.js"></script>
+
 <script src="js/recently-viewed.js"></script>
+
 <script src="js/delivery-tracker.js"></script>
+
 <script src="js/geolocation.js"></script>
+
 <script src="js/sanitization.js"></script>
-<script src="js/loyalty.js"></script>
-<script src="js/translations.js"></script>
-<script src="js/i18n.js"></script>
+
 <script src="js/main.js"></script>
-<script src="js/auth.js"></script>
+
 </body>
 </html>

@@ -162,6 +162,9 @@ if (window.deliveryRadiusCircle) {
     const distanceKm = calculateDistance(restLat, restLng, userLat, userLng);
     const inRange = isWithinDeliveryRadius(distanceKm);
 
+    window.selectedDeliveryCoords = { latitude: userLat, longitude: userLng };
+    window.selectedDeliveryDistance = distanceKm;
+
     if (userLocationText) {
       userLocationText.innerHTML = `📍 Distance: <strong>${distanceKm.toFixed(2)} km</strong><br><span style="font-size: 0.8rem; color: var(--text-muted);">${userLat.toFixed(4)}, ${userLng.toFixed(4)}</span>`;
     }
@@ -411,31 +414,427 @@ if (window.deliveryRadiusCircle) {
   // Initial Load (GPS or fallback)
   performGPSDetection();
 
-  // Confirm Location Button Flow
+  // Confirm Location Button Flow & Checkout Modal Manager
+  let activeCheckoutCoupon = null;
+  let loyaltyApplied = false;
+
+  function recalculateCheckoutPricing() {
+    if (typeof cartManager === 'undefined') return;
+    const items = cartManager.getItems();
+    const subtotal = items.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
+    
+    // Delivery Fee (flat 40 or 0 with FREEDEL)
+    const deliveryFee = activeCheckoutCoupon === "FREEDEL" ? 0 : 40;
+    
+    // Platform Fee (flat 10)
+    const platformFee = 10;
+    
+    // GST (5% of subtotal)
+    const gst = Math.round(subtotal * 0.05);
+
+    // Coupon discount calculation
+    let couponDiscount = 0;
+    if (activeCheckoutCoupon === "SAVE50") {
+      if (subtotal >= 100) {
+        couponDiscount = 50;
+      } else {
+        activeCheckoutCoupon = null;
+        const msg = document.getElementById("checkout-coupon-msg");
+        if (msg) {
+          msg.className = "checkout-coupon-msg error";
+          msg.textContent = "SAVE50 coupon removed because subtotal is below ₹100.";
+        }
+      }
+    } else if (activeCheckoutCoupon === "CHAAT20") {
+      couponDiscount = Math.min(Math.round(subtotal * 0.20), 100);
+    }
+
+    const subtotalAfterCoupon = Math.max(subtotal - couponDiscount, 0);
+
+    // Loyalty points discount calculation
+    let loyaltyDiscount = 0;
+    let pointsRedeemed = 0;
+    if (loyaltyApplied && typeof loyalty !== 'undefined') {
+      const balance = loyalty.getBalance();
+      pointsRedeemed = Math.min(balance, subtotalAfterCoupon);
+      loyaltyDiscount = pointsRedeemed;
+    }
+
+    const grandTotal = Math.max(subtotalAfterCoupon - loyaltyDiscount + deliveryFee + platformFee + gst, 0);
+
+    // Render summary items
+    const listContainer = document.getElementById("checkout-items-list");
+    if (listContainer) {
+      listContainer.innerHTML = "";
+      if (items.length === 0) {
+        listContainer.innerHTML = `<div class="checkout-empty-summary">Your cart is empty.</div>`;
+      } else {
+        items.forEach(ci => {
+          const row = document.createElement("div");
+          row.className = "checkout-item-row";
+          row.innerHTML = `
+            <span>${ci.item.name} × ${ci.quantity}</span>
+            <span>₹${ci.item.price * ci.quantity}</span>
+          `;
+          listContainer.appendChild(row);
+        });
+      }
+    }
+
+    // Render loyalty points widget
+    const loyaltyContainer = document.getElementById("checkout-loyalty-widget");
+    if (loyaltyContainer) {
+      if (typeof loyalty !== 'undefined') {
+        const balance = loyalty.getBalance();
+        if (balance > 0) {
+          const discountVal = Math.min(balance, subtotalAfterCoupon);
+          loyaltyContainer.innerHTML = `
+            <label class="checkout-loyalty-toggle">
+              <input type="checkbox" id="checkout-loyalty-checkbox" ${loyaltyApplied ? 'checked' : ''} />
+              <span class="toggle-slider"></span>
+              <span class="toggle-label">Redeem <strong>₹${discountVal}</strong> Loyalty Discount (${balance} pts)</span>
+            </label>
+          `;
+          const chk = document.getElementById("checkout-loyalty-checkbox");
+          if (chk) {
+            chk.addEventListener("change", (e) => {
+              loyaltyApplied = e.target.checked;
+              recalculateCheckoutPricing();
+            });
+          }
+        } else {
+          loyaltyContainer.innerHTML = `
+            <div class="checkout-loyalty-empty">
+              <span>🌟 You will earn <strong>${Math.floor(grandTotal / 10)}</strong> loyalty points on this order!</span>
+            </div>
+          `;
+        }
+      }
+    }
+
+    // Update fields in the pricing section
+    const subtotalEl = document.getElementById("checkout-subtotal-val");
+    if (subtotalEl) subtotalEl.textContent = `₹${subtotal}`;
+
+    const deliveryEl = document.getElementById("checkout-delivery-val");
+    if (deliveryEl) deliveryEl.textContent = `₹${deliveryFee}`;
+    
+    const deliveryRow = document.getElementById("checkout-delivery-row");
+    if (deliveryRow) {
+      if (activeCheckoutCoupon === "FREEDEL") {
+        deliveryEl.innerHTML = `<del style="color: var(--text-muted); margin-right: 0.5rem;">₹40</del> <strong style="color: #2e7d32;">FREE</strong>`;
+      } else {
+        deliveryEl.textContent = `₹40`;
+      }
+    }
+
+    const platformEl = document.getElementById("checkout-platform-val");
+    if (platformEl) platformEl.textContent = `₹${platformFee}`;
+
+    const gstEl = document.getElementById("checkout-gst-val");
+    if (gstEl) gstEl.textContent = `₹${gst}`;
+
+    const couponRow = document.getElementById("checkout-coupon-discount-row");
+    const couponDiscountEl = document.getElementById("checkout-discount-val");
+    if (couponRow && couponDiscountEl) {
+      if (couponDiscount > 0) {
+        couponRow.style.display = "flex";
+        couponDiscountEl.textContent = `-₹${couponDiscount}`;
+      } else {
+        couponRow.style.display = "none";
+      }
+    }
+
+    const loyaltyRow = document.getElementById("checkout-loyalty-discount-row");
+    const loyaltyDiscountEl = document.getElementById("checkout-loyalty-discount-val");
+    if (loyaltyRow && loyaltyDiscountEl) {
+      if (loyaltyDiscount > 0) {
+        loyaltyRow.style.display = "flex";
+        loyaltyDiscountEl.textContent = `-₹${loyaltyDiscount}`;
+      } else {
+        loyaltyRow.style.display = "none";
+      }
+    }
+
+    const grandTotalEl = document.getElementById("checkout-grand-total-val");
+    if (grandTotalEl) grandTotalEl.textContent = `₹${grandTotal}`;
+  }
+
   const confirmLocBtn = document.getElementById("confirm-location-btn");
   if (confirmLocBtn) {
     confirmLocBtn.addEventListener("click", () => {
+      if (typeof cartManager === 'undefined' || cartManager.getItems().length === 0) {
+        alert("Your cart is empty! Please add some street food to your cart first.");
+        window.location.href = "menu.html";
+        return;
+      }
+
+      // Hide confirm container
       document.getElementById("confirm-location-btn-container").style.display = "none";
-      const wrapper = document.getElementById("tracking-wrapper");
-      if (wrapper) {
-        wrapper.classList.remove("sidebar-hidden");
-        // Allow CSS transition to begin before invalidating map size
+
+      // 1. Fetch current search address or GPS coordinates
+      let addressVal = searchInput ? searchInput.value.trim() : "";
+      if (!addressVal || addressVal === "Device Live GPS Location") {
+        addressVal = "India Gate, New Delhi (GPS Coordinates)";
+      }
+
+      // Populate address input in modal
+      const checkoutAddressInput = document.getElementById("checkout-address");
+      if (checkoutAddressInput) {
+        checkoutAddressInput.value = addressVal;
+      }
+
+      // Check if user coordinates are set. If not, use fallback restaurant coords
+      if (!window.selectedDeliveryCoords) {
+        const restLat = window.RESTAURANT_LOCATION?.latitude || FALLBACK_LAT;
+        const restLng = window.RESTAURANT_LOCATION?.longitude || FALLBACK_LNG;
+        window.selectedDeliveryCoords = { latitude: restLat, longitude: restLng };
+        window.selectedDeliveryDistance = 0;
+      }
+
+      // 2. Open checkout modal
+      const modalOverlay = document.getElementById("checkout-modal-overlay");
+      if (modalOverlay) {
+        modalOverlay.style.display = "flex";
         setTimeout(() => {
-          if (window.liveMap) {
-            window.liveMap.invalidateSize();
-            // Optionally, pan to bounds again
-            if (window.routeCoordinates) {
-              window.liveMap.flyToBounds(L.latLngBounds(window.routeCoordinates), {
+          modalOverlay.classList.add("open");
+        }, 50);
+      }
+
+      // 3. Initialize pricing state variables
+      activeCheckoutCoupon = null;
+      loyaltyApplied = false;
+
+      // Clear coupon code field & msg
+      const couponInput = document.getElementById("checkout-coupon-input");
+      if (couponInput) couponInput.value = "";
+      const couponMsg = document.getElementById("checkout-coupon-msg");
+      if (couponMsg) {
+        couponMsg.textContent = "";
+        couponMsg.className = "checkout-coupon-msg";
+      }
+
+      // Clear errors
+      document.querySelectorAll(".checkout-field-group").forEach(g => g.classList.remove("invalid"));
+      const errorBanner = document.getElementById("checkout-validation-error");
+      if (errorBanner) {
+        errorBanner.style.display = "none";
+        errorBanner.textContent = "";
+      }
+
+      // Render checkout summary details
+      recalculateCheckoutPricing();
+    });
+  }
+
+  // Modal Close handler
+  const modalClose = document.getElementById("checkout-modal-close");
+  const modalOverlay = document.getElementById("checkout-modal-overlay");
+  if (modalClose && modalOverlay) {
+    modalClose.addEventListener("click", () => {
+      modalOverlay.classList.remove("open");
+      setTimeout(() => {
+        modalOverlay.style.display = "none";
+      }, 300);
+      // Bring back confirm button container
+      const confirmBtnContainer = document.getElementById("confirm-location-btn-container");
+      if (confirmBtnContainer) {
+        confirmBtnContainer.style.display = "flex";
+      }
+    });
+  }
+
+  // Payment select handler
+  const paymentCards = document.querySelectorAll(".payment-card");
+  const hiddenPaymentInput = document.getElementById("checkout-payment-method");
+  paymentCards.forEach(card => {
+    card.addEventListener("click", () => {
+      paymentCards.forEach(c => c.classList.remove("active"));
+      card.classList.add("active");
+      if (hiddenPaymentInput) {
+        hiddenPaymentInput.value = card.getAttribute("data-method");
+      }
+    });
+  });
+
+  // Apply Coupon handler
+  const couponBtn = document.getElementById("checkout-coupon-btn");
+  const couponInput = document.getElementById("checkout-coupon-input");
+  const couponMsg = document.getElementById("checkout-coupon-msg");
+  if (couponBtn && couponInput) {
+    couponBtn.addEventListener("click", () => {
+      const code = couponInput.value.trim().toUpperCase();
+      if (!code) {
+        activeCheckoutCoupon = null;
+        couponMsg.className = "checkout-coupon-msg error";
+        couponMsg.textContent = "Please enter a coupon code.";
+        recalculateCheckoutPricing();
+        return;
+      }
+
+      if (code === "SAVE50") {
+        const sub = cartManager.getItems().reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
+        if (sub < 100) {
+          couponMsg.className = "checkout-coupon-msg error";
+          couponMsg.textContent = "SAVE50 is only valid on orders of ₹100 or more.";
+          activeCheckoutCoupon = null;
+        } else {
+          couponMsg.className = "checkout-coupon-msg success";
+          couponMsg.textContent = "SAVE50 applied! ₹50 off subtotal.";
+          activeCheckoutCoupon = "SAVE50";
+        }
+      } else if (code === "FREEDEL") {
+        couponMsg.className = "checkout-coupon-msg success";
+        couponMsg.textContent = "FREEDEL applied! ₹40 delivery fee waived.";
+        activeCheckoutCoupon = "FREEDEL";
+      } else if (code === "CHAAT20") {
+        couponMsg.className = "checkout-coupon-msg success";
+        couponMsg.textContent = "CHAAT20 applied! 20% off items subtotal (up to ₹100).";
+        activeCheckoutCoupon = "CHAAT20";
+      } else {
+        couponMsg.className = "checkout-coupon-msg error";
+        couponMsg.textContent = "Invalid coupon code.";
+        activeCheckoutCoupon = null;
+      }
+      recalculateCheckoutPricing();
+    });
+  }
+
+  // Place Order handler
+  const placeOrderBtn = document.getElementById("checkout-place-order-btn");
+  if (placeOrderBtn) {
+    placeOrderBtn.addEventListener("click", () => {
+      // Validate inputs
+      const nameVal = document.getElementById("checkout-name").value.trim();
+      const phoneVal = document.getElementById("checkout-phone").value.trim();
+      const addressVal = document.getElementById("checkout-address").value.trim();
+      const paymentVal = document.getElementById("checkout-payment-method").value;
+      const errorBanner = document.getElementById("checkout-validation-error");
+
+      let isValid = true;
+      
+      // Reset validation states
+      document.querySelectorAll(".checkout-field-group").forEach(g => g.classList.remove("invalid"));
+      if (errorBanner) {
+        errorBanner.style.display = "none";
+        errorBanner.textContent = "";
+      }
+
+      if (!nameVal) {
+        document.getElementById("checkout-name").parentElement.parentElement.classList.add("invalid");
+        isValid = false;
+      }
+
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phoneVal || !phoneRegex.test(phoneVal)) {
+        document.getElementById("checkout-phone").parentElement.parentElement.classList.add("invalid");
+        isValid = false;
+      }
+
+      if (!addressVal || addressVal.length < 5) {
+        document.getElementById("checkout-address").parentElement.parentElement.classList.add("invalid");
+        isValid = false;
+      }
+
+      if (!isValid) {
+        if (errorBanner) {
+          errorBanner.style.display = "block";
+          errorBanner.textContent = "Please correct the highlighted errors before placing your order.";
+        }
+        return;
+      }
+
+      // If valid, place the order!
+      const customerDetails = {
+        name: nameVal,
+        phone: phoneVal,
+        address: addressVal,
+        paymentMethod: paymentVal
+      };
+
+      const items = cartManager.getItems();
+      const subtotal = items.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
+      const deliveryFee = activeCheckoutCoupon === "FREEDEL" ? 0 : 40;
+      const platformFee = 10;
+      const gst = Math.round(subtotal * 0.05);
+
+      let couponDiscount = 0;
+      if (activeCheckoutCoupon === "SAVE50") {
+        if (subtotal >= 100) couponDiscount = 50;
+      } else if (activeCheckoutCoupon === "CHAAT20") {
+        couponDiscount = Math.min(Math.round(subtotal * 0.20), 100);
+      }
+
+      let subtotalAfterCoupon = Math.max(subtotal - couponDiscount, 0);
+
+      let loyaltyDiscount = 0;
+      let pointsRedeemed = 0;
+      if (loyaltyApplied && typeof loyalty !== 'undefined') {
+        const balance = loyalty.getBalance();
+        pointsRedeemed = Math.min(balance, subtotalAfterCoupon);
+        loyaltyDiscount = pointsRedeemed;
+      }
+
+      const grandTotal = Math.max(subtotalAfterCoupon - loyaltyDiscount + deliveryFee + platformFee + gst, 0);
+
+      const pricingInfo = {
+        subtotal: subtotal,
+        deliveryFee: deliveryFee,
+        platformFee: platformFee,
+        gst: gst,
+        couponDiscount: couponDiscount,
+        couponCode: activeCheckoutCoupon,
+        pointsRedeemed: pointsRedeemed,
+        loyaltyDiscount: loyaltyDiscount,
+        grandTotal: grandTotal
+      };
+
+      // Call global window.placeOrderFromCheckout
+      if (typeof window.placeOrderFromCheckout === 'function') {
+        const order = window.placeOrderFromCheckout(customerDetails, pricingInfo);
+        
+        if (order) {
+          // Close modal
+          if (modalOverlay) {
+            modalOverlay.classList.remove("open");
+            setTimeout(() => {
+              modalOverlay.style.display = "none";
+            }, 300);
+          }
+
+          // Show tracking sidebar and start simulation
+          const wrapper = document.getElementById("tracking-wrapper");
+          if (wrapper) {
+            wrapper.classList.remove("sidebar-hidden");
+          }
+
+          // Trigger map resize and routing path display
+          setTimeout(() => {
+            if (window.liveMap) {
+              window.liveMap.invalidateSize();
+              // Fly to bounds smoothly
+              const restLat = window.RESTAURANT_LOCATION?.latitude || 28.6129;
+              const restLng = window.RESTAURANT_LOCATION?.longitude || 77.2295;
+              const userLat = window.selectedDeliveryCoords?.latitude || restLat;
+              const userLng = window.selectedDeliveryCoords?.longitude || restLng;
+              const routeCoordinates = [
+                [restLat, restLng],
+                [userLat, userLng]
+              ];
+              window.liveMap.flyToBounds(L.latLngBounds(routeCoordinates), {
                 padding: [60, 60],
                 maxZoom: 15,
-                duration: 1.0
+                duration: 1.2
               });
             }
+          }, 400);
+
+          if (typeof window.triggerDeliverySimulation === "function") {
+            window.triggerDeliverySimulation();
           }
-        }, 400);
-      }
-      if (typeof window.triggerDeliverySimulation === "function") {
-        window.triggerDeliverySimulation();
+        }
+      } else {
+        alert("System error: window.placeOrderFromCheckout is not available!");
       }
     });
   }

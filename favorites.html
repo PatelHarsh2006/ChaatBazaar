@@ -10,22 +10,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="icon" href="img/logo.png" type="image/png" />
 </head>
 
 <body>
   <header>
     <div class="header-inner container" role="banner">
-      <a href="index.html" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
+      <a href="index.html" class="logo" aria-label="ChaatBazaar Home"><img src="img/logo.png" alt="ChaatBazaar Logo" class="navbar-logo-img" />ChaatBazaar</a>
       <nav role="navigation" aria-label="Primary Navigation">
         <a href="index.html" class="nav-link">Home</a>
         <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
           <a href="menu.html" class="dropdown-toggle nav-link">Menu</a>
           <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
-            <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('All')">All</a>
-            <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Snacks')">Snacks</a>
-            <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Chaat')">Chaat</a>
-            <a href="menu.html" role="menuitem" tabindex="-1" onclick="filterCategory('Beverages')">Beverages</a>
+            <a href="menu.html?filter=All#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="All">All</a>
+            <a href="menu.html?filter=Snacks#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Snacks">Snacks</a>
+            <a href="menu.html?filter=Chaat#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Chaat">Chaat</a>
+            <a href="menu.html?filter=Beverages#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Beverages">Beverages</a>
           </div>
         </div>
         <a href="about.html" class="nav-link">About</a>
@@ -74,7 +74,7 @@
   <footer>
     <div class="footer-container">
       <div class="footer-column brand-col">
-        <div class="footer-brand">ChaatBazar 🍴</div>
+        <div class="footer-brand"><img src="img/logo.png" alt="ChaatBazaar Logo" class="footer-logo-img" />ChaatBazaar</div>
         <p class="footer-desc">Your ultimate destination for authentic and mouth-watering Indian street food - from crispy golgappas to hot samosas. Hassle-free delivery right to your doorstep.</p>
       </div>
       
