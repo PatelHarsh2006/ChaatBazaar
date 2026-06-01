@@ -1686,4 +1686,58 @@ if (toggleBtn) {
     localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
   });
 }
+
+/* =========================
+   FEEDBACK SECTION
+
+const stars = document.querySelectorAll(".star");
+const ratingValue = document.getElementById("rating-value");
+const feedbackForm = document.getElementById("feedback-form");
+const feedbackSuccess = document.getElementById("feedback-success");
+
+let selectedRating = 0;
+
+// Star Rating Logic
+stars.forEach((star) => {
+  star.addEventListener("click", () => {
+    selectedRating = star.dataset.value;
+    ratingValue.value = selectedRating;
+
+    stars.forEach((s) => {
+      s.classList.remove("active");
+    });
+
+    for (let i = 0; i < selectedRating; i++) {
+      stars[i].classList.add("active");
+    }
+  });
+});
+
+// Form Submit
+feedbackForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("feedback-name").value.trim();
+  const message = document.getElementById("feedback-message").value.trim();
+
+  if (selectedRating === 0) {
+    alert("Please select a rating.");
+    return;
+  }
+
+  if (name === "" || message === "") {
+    alert("Please fill all fields.");
+    return;
+  }
+
+  // Success Message
+  feedbackSuccess.style.display = "block";
+
+  // Reset Form
+  feedbackForm.reset();
+
+  stars.forEach((s) => s.classList.remove("active"));
+
+  selectedRating = 0;
+});
  
