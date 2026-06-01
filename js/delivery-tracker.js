@@ -1,51 +1,58 @@
+/**
+ * Delivery Tracker
+ * Connects order state to the map markers, sidebar progress, and ETA.
+ */
+
 const deliveryTracker = (() => {
   const stageDefinitions = [
     {
       key: 'preparing',
       label: 'Preparing Order 🍳',
-      message: 'Your order is being prepared with love... 🍳',
-      progress: '0%',
-      cartTranslate: '0%'
+      message: 'Vendor is roasting hot spices for your Chaat... 🍳',
+      progress: '12.5%',
+      cartTop: '-5%',
+      eta: '20'
     },
     {
       key: 'packed',
       label: 'Packed 📦',
-      message: 'Freshly packaged and ready to leave the stall! 📦',
-      progress: '33%',
-      cartTranslate: '28%'
+      message: 'Packaged freshly in clay pots & ready to ride! 📦',
+      progress: '37.5%',
+      cartTop: '26%',
+      eta: '14'
     },
     {
       key: 'out-for-delivery',
-      label: 'Out for Delivery 🚲',
-      message: 'Vendor is pedaling hot chaat straight to you! 🚲',
-      progress: '66%',
-      cartTranslate: '62%'
+      label: 'Out for Delivery 🛍️',
+      message: 'Your hot street eats are on the way! 🛍️',
+      progress: '65%',
+      cartTop: '58%',
+      eta: '6'
     },
     {
       key: 'delivered',
       label: 'Delivered ✅',
-      message: 'Order delivered — enjoy your street food feast! ✅',
+      message: 'Order arrived — dig into your hot street feast! ✅',
       progress: '100%',
-      cartTranslate: '90%'
+      cartTop: '90%',
+      eta: '0'
     }
   ];
 
-  let modal = null;
-  let cartEl = null;
+  // Dom element references
   let progressBar = null;
-  let statusText = null;
+  let cartEl = null;
+  let statusTextEl = null;
+  let etaMinsEl = null;
   let steps = [];
-  let closeBtn = null;
-  let activeStageIndex = 0;
   let stageTimeouts = [];
 
   const queryTrackerElements = () => {
-    modal = document.getElementById('delivery-modal');
-    cartEl = document.getElementById('vendor-cart');
     progressBar = document.getElementById('active-progress-bar');
-    statusText = document.getElementById('live-status-text');
-    steps = Array.from(document.querySelectorAll('.progress-steps .step'));
-    closeBtn = document.getElementById('close-delivery-modal');
+    cartEl = document.getElementById('vendor-cart');
+    statusTextEl = document.getElementById('live-status-text');
+    etaMinsEl = document.getElementById('eta-mins-val');
+    steps = Array.from(document.querySelectorAll('.stepper-steps-wrapper .stepper-step'));
   };
 
   const delay = (ms) => new Promise((resolve) => {
@@ -53,113 +60,71 @@ const deliveryTracker = (() => {
     stageTimeouts.push(id);
   });
 
-  const clearStageTimers = () => {
-    stageTimeouts.forEach((id) => clearTimeout(id));
+  const clearTimers = () => {
+    stageTimeouts.forEach(id => clearTimeout(id));
     stageTimeouts = [];
   };
 
-  const hideModal = () => {
-    if (!modal) return;
-    modal.classList.add('hidden');
-    modal.setAttribute('aria-hidden', 'true');
-    clearStageTimers();
-  };
+  const updateSidebarTimeline = (stageIndex) => {
+    const stage = stageDefinitions[stageIndex];
+    if (!stage) return;
 
-  const updateStepVisuals = (index) => {
-    steps.forEach((step, stepIndex) => {
-      step.classList.toggle('completed', stepIndex < index);
-      step.classList.toggle('active', stepIndex === index);
-      step.classList.toggle('current', stepIndex === index);
+    // 1. Update progress bar filled width
+    if (progressBar) {
+      progressBar.style.width = stage.progress;
+    }
+
+    // 2. Move cart icon on rail
+    if (cartEl) {
+      cartEl.style.top = stage.cartTop;
+      // Change icon depending on active stage
+      cartEl.textContent = stageIndex === 3 ? '✅' : stageIndex === 2 ? '🛍️' : '🍳';
+    }
+
+    // 3. Update active message and ETA timers
+    if (statusTextEl) {
+      statusTextEl.textContent = stage.message;
+    }
+    if (etaMinsEl) {
+      etaMinsEl.textContent = stage.eta;
+    }
+
+    // 4. Highlight timeline steps
+    steps.forEach((step, idx) => {
+      step.classList.toggle('completed', idx < stageIndex);
+      step.classList.toggle('active', idx <= stageIndex);
+      step.classList.toggle('current', idx === stageIndex);
     });
   };
 
-  const updateStage = (stageIndex) => {
-    if (!stageDefinitions[stageIndex] || !progressBar || !cartEl || !statusText) return;
+  // --- Map Animation Pin Interpolator ---
+  // (Removed per request to maintain human-made non-mechanical aesthetic)
 
-    const stage = stageDefinitions[stageIndex];
-    activeStageIndex = stageIndex;
+  const runTrackingSimulation = async () => {
+    queryTrackerElements();
+    clearTimers();
 
-    const progressValue = stage.progress;
-    const cartPosition = stage.cartTranslate;
+    console.log("Beginning order tracking simulation...");
 
-    progressBar.style.width = progressValue;
-    cartEl.style.transform = `translateX(${cartPosition})`;
-    statusText.textContent = stage.message;
-    statusText.classList.toggle('success', stageIndex === stageDefinitions.length - 1);
-    statusText.setAttribute('aria-live', 'polite');
-    statusText.setAttribute('aria-atomic', 'true');
-    statusText.setAttribute('aria-label', stage.message);
+    for (let i = 0; i < stageDefinitions.length; i++) {
+      // Apply updates to sidebar
+      updateSidebarTimeline(i);
 
-    updateStepVisuals(stageIndex);
-
-    if (stageIndex === stageDefinitions.length - 1) {
-      if (closeBtn) {
-        closeBtn.classList.remove('hidden');
-        closeBtn.textContent = 'View Order Status';
-      }
-    }
-  };
-
-  const resetTracker = () => {
-    if (!modal || !progressBar || !cartEl || !statusText) return;
-
-    clearStageTimers();
-    activeStageIndex = 0;
-    progressBar.style.width = '0%';
-    cartEl.style.transform = 'translateX(0%)';
-    statusText.textContent = stageDefinitions[0].message;
-    statusText.classList.remove('success');
-    updateStepVisuals(0);
-
-    if (closeBtn) {
-      closeBtn.classList.add('hidden');
-      closeBtn.textContent = 'View Order Status';
-    }
-  };
-
-  const openModal = () => {
-    if (!modal) return;
-    modal.classList.remove('hidden');
-    modal.setAttribute('aria-hidden', 'false');
-    modal.querySelector('.delivery-modal-content')?.focus();
-  };
-
-  const startSimulation = async () => {
-    if (!modal || !cartEl || !progressBar || !statusText || steps.length === 0) return;
-
-    clearStageTimers();
-    resetTracker();
-    openModal();
-
-    for (let index = 0; index < stageDefinitions.length; index += 1) {
-      updateStage(index);
-      if (index === stageDefinitions.length - 1) {
+      if (i === stageDefinitions.length - 1) {
         break;
       }
-      await delay(index === 0 ? 2400 : index === 1 ? 2600 : 2800);
-    }
-  };
 
-  const bindEvents = () => {
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        hideModal();
-        window.location.href = 'orders.html';
-      });
+      // Delay between stages
+      await delay(i === 0 ? 5000 : i === 1 ? 6000 : 7000);
     }
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
-        hideModal();
-      }
-    });
   };
 
   const initialize = () => {
     queryTrackerElements();
-    bindEvents();
-    resetTracker();
-    window.triggerDeliverySimulation = startSimulation;
+    window.triggerDeliverySimulation = runTrackingSimulation;
+
+    // Default to idle state until user confirms location
+    updateSidebarTimeline(0);
   };
 
   return {
@@ -167,12 +132,10 @@ const deliveryTracker = (() => {
   };
 })();
 
-window.triggerDeliverySimulation = window.triggerDeliverySimulation || function () {
-  console.warn('Delivery tracker initializing shortly.');
-};
-
+// Self startup listener
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', deliveryTracker.init);
 } else {
-  deliveryTracker.init();
+  // Let Leaflet load first if executed dynamically
+  setTimeout(deliveryTracker.init, 500);
 }
