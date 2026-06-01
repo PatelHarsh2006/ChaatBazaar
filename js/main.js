@@ -336,6 +336,7 @@ function createCard(item, highlightQuery = "") {
       </button>
 
     </div>
+main
   `;
  
   const addBtn = card.querySelector(".add-btn");
