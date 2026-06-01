@@ -1670,6 +1670,21 @@ function showSkeletonCartItems(count = 2) {
   cartItemsContainer.innerHTML = "";
   for (let i = 0; i < count; i++) cartItemsContainer.appendChild(createSkeletonCartItem());
 }
+
+// ===== Scroll To Top Button =====
+const scrollTopBtn = document.getElementById('scroll-top-btn');
+if (scrollTopBtn) {
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      scrollTopBtn.classList.add('visible');
+    } else {
+      scrollTopBtn.classList.remove('visible');
+    }
+  });
+  scrollTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
  
 // ===== Dark Mode =====
 const toggleBtn = document.getElementById("theme-toggle");

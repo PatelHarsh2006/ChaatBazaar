@@ -2839,6 +2839,37 @@ body.dark .cart-badge {
   color: #1e1e1e;
 }
 
+/* ===== Scroll To Top Button ===== */
+#scroll-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #ff5722;
+  color: #fff;
+  border: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(255,87,34,0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease;
+}
+#scroll-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+#scroll-top-btn:hover {
+  background: #e64a19;
+  box-shadow: 0 8px 25px rgba(230,74,25,0.7);
+  transform: translateY(-2px);
+/* ===== Custom Scrollbar ===== */
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
