@@ -140,38 +140,95 @@
   aria-label="Hero Section"
 >
 
+  <div class="hero-video-stage" aria-hidden="true">
+    <video
+      class="hero-video hero-bg-video active"
+      src="videos/food-preparation.mp4"
+      muted
+      loop
+      autoplay
+      playsinline
+      preload="auto"
+    ></video>
+
+    <video
+      class="hero-video hero-bg-video"
+      muted
+      loop
+      autoplay
+      playsinline
+      preload="none"
+    ></video>
+  </div>
+
+  <div class="hero-overlay" aria-hidden="true"></div>
+
   <div class="hero-content">
 
-    <h1>
-      Authentic Indian Street Food Delivered Hot!
+    <div class="hero-badge">
+      <span aria-hidden="true">🔥</span>
+      India's Favourite Street Food
+    </div>
+
+    <h1 class="hero-title">
+      Authentic Indian<br />
+      Street Food<br />
+      Delivered Fresh &amp; Hot
     </h1>
 
     <p>
-      Delicious Samosa, Kachori, Pani Puri
-      and more delivered fresh to your
+      From crispy samosas to spicy pani puri and mouth-watering chaat,
+      experience India's most loved street food delivered straight to your
       doorstep.
     </p>
 
-    <button
-      class="btn-primary"
-      id="order-now-btn"
-    >
-      Order Now
-    </button>
+    <div class="hero-actions">
+      <button
+        class="btn-primary hero-primary-btn"
+        id="order-now-btn"
+      >
+        Order Now
+      </button>
+
+      <a
+        class="hero-secondary-btn"
+        href="#menu"
+      >
+        Explore Menu
+      </a>
+    </div>
 
   </div>
 
-  <div
-    class="hero-image"
-    aria-hidden="true"
-  >
+  <div class="hero-stats" aria-label="ChaatBazar highlights">
+    <div class="hero-stat-card hero-stat-rating">
+      <span class="hero-stat-icon" aria-hidden="true">⭐</span>
+      <span>
+        <strong>4.9</strong>
+        Rating
+      </span>
+    </div>
 
-    <img
-      src="img/chaat.png"
-      alt="Indian street food platter"
-    />
+    <div class="hero-stat-card hero-stat-delivery">
+      <span class="hero-stat-icon" aria-hidden="true">🚚</span>
+      <span>
+        <strong>20 Min</strong>
+        Delivery
+      </span>
+    </div>
 
+    <div class="hero-stat-card hero-stat-orders">
+      <span class="hero-stat-icon" aria-hidden="true">🍽</span>
+      <span>
+        <strong>10,000+</strong>
+        Orders
+      </span>
+    </div>
   </div>
+
+  <a class="hero-scroll-indicator" href="#specials" aria-label="Scroll to specials">
+    <span></span>
+  </a>
 
 </section>
 
@@ -891,6 +948,8 @@
 <script src="js/geolocation.js"></script>
 
 <script src="js/sanitization.js"></script>
+
+<script src="js/hero-video.js"></script>
 
 <script src="js/main.js"></script>
 
