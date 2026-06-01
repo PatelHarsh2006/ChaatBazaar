@@ -794,7 +794,7 @@
       font-size: 1.4rem;
       font-weight: 700;
       margin-bottom: 0.6rem;
-      color: #3e2723;
+      color: #ffb347;
       user-select: text;
     }
     .card p.price {
@@ -805,7 +805,7 @@
     }
     .card p.description {
       font-size: 0.9rem;
-      color: #5d4037;
+      color: #81b91a;
       margin-bottom: 1.3rem;
       text-align: center;
       user-select: text;
@@ -2107,9 +2107,9 @@ mark.highlight {
 }
 
 .tag-vegan {
-  background: #e8f5e9;
-  color: #2e7d32;
-  border: 1px solid rgba(46, 125, 50, 0.2);
+  background: rgba(34, 197, 94, 0.12);
+  color: #86efac;
+  border: 1px solid rgba(134, 239, 172, 0.25);
 }
 
 .tag-gluten-free {
@@ -2131,9 +2131,9 @@ mark.highlight {
 }
 
 .card-content p {
-  font-size: 0.9rem;
-  color: #5d4037;
-  line-height: 1.4;
+  font-size: 0.92rem;
+  color: #9ca3af;
+  line-height: 1.6;
   margin-bottom: auto;
 }
 
