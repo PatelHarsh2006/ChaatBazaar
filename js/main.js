@@ -326,37 +326,21 @@ function createCard(item, highlightQuery = "") {
     </div>
 
     <div class="card-footer">
-newFeatures
-  <div class="price-section">
-    <span class="original-price">
-      ₹${item.originalPrice}
-    </span>
-
-    <span class="price">
-      ${formatPrice(item.price)}
-    </span>
-
-    <span class="discount-badge">
-      ${Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% OFF
-    </span>
-  </div>
-
-  <button class="add-btn" aria-label="Add ${item.name} to cart">
-    Add
-  </button>
-  </div>
-
-      <span class="price">${formatPrice(item.price)}</span>
-      <button class="add-btn"
-        aria-label="Add ${item.name} to cart"
-        ${buttonDisabled}
-        style="background-color:${buttonColor}"
-      >
+      <div class="price-section">
+        <span class="original-price">
+          ₹${item.originalPrice || item.price + 20}
+        </span>
+        <span class="price">
+          ${formatPrice(item.price)}
+        </span>
+        <span class="discount-badge">
+          ${item.originalPrice ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100) : 15}% OFF
+        </span>
+      </div>
+      <button class="add-btn" aria-label="Add ${item.name} to cart" ${buttonDisabled} style="background-color:${buttonColor}">
         Add
       </button>
-
     </div>
-main
   `;
  
   const addBtn = card.querySelector(".add-btn");
@@ -415,8 +399,7 @@ function renderRecentlyViewed() {
   recentItems.forEach(item => recentlyViewedContainer.appendChild(createCard(item)));
 }
 
- newFeatures
-// Unified Interactive Filter Engine =====
+// ===== Favorites Engine =====
 function renderFavorites() {
   const favoritesContainer = document.getElementById("favorites-container");
   if (!favoritesContainer) return;
@@ -426,9 +409,7 @@ function renderFavorites() {
   favoritesContainer.innerHTML = "";
  
   if (recentItems.length === 0) {
-    recentlyViewedSection.style.display =
-      "none";
-
+    favoritesContainer.innerHTML = "<p>No favorites yet.</p>";
     return;
   }
  
@@ -1531,72 +1512,19 @@ async function init() {
   if (checkoutBtn) {
     checkoutBtn.addEventListener("click", async (e) => {
       e.preventDefault();
-      const result = await window.checkout();
-      if (result) {
-        window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
-      }
-    });
-    );
-
-    recognition.onresult = (
-      event
-    ) => {
-      const transcript =
-        event.results[0][0].transcript;
-
-      searchInput.value = transcript;
-
-      applyAllFilters();
-
-      voiceBtn.innerHTML = "🎤";
-
-  // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
-  setupCartToggle();
-  setupFilterButtons();
-  setupCouponListeners();
-  setupOrderNowScroll();
-  setupSearchSuggestions();
-  setupSearch();
-  setupAdvancedFilters();
-  setupContactForm();
-  setupNewsletterForm();
-  setupActiveNavbar();
-  setupDropdownFilterLinks();
-
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
       if (cart.length === 0) {
         alert("Your cart is empty!");
         return;
       }
-      window.location.href = "orders.html";
+      if (typeof window.checkout === 'function') {
+        const result = await window.checkout();
+        if (result) {
+          window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
+        }
+      } else {
+        window.location.href = "orders.html";
+      }
     });
-  }
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
-
-    recognition.onerror = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-
-      alert(
-        "Voice recognition failed."
-      );
-    };
-
-    recognition.onend = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
   }
  
   // Load menu data, then render

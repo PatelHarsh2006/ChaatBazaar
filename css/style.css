@@ -274,6 +274,9 @@
       padding: 0.5rem 1rem;
       border-radius: 8px;
       transition: background 0.3s ease;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
     }
     nav a:hover,
     nav a.active {
@@ -359,6 +362,8 @@
     /* ===== Dropdown Nav ===== */
     .dropdown {
       position: relative;
+      display: flex;
+      align-items: center;
     }
     .dropdown-toggle {
       display: flex;
@@ -670,7 +675,7 @@
     /* ===== Hero Section ===== */
     .hero {
       background: rgb(255, 228, 205);
-      padding: 5rem 1rem 6rem;
+      padding: 3rem 1rem 4rem;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -731,7 +736,7 @@
     section.specials,
     section.menu,
     section.recently-viewed {
-      padding: 4rem 1rem 5rem;
+      padding: 2.5rem 1rem 3rem;
       background: #fff3e0;
     }
     .section-title {
@@ -996,179 +1001,225 @@
       box-shadow: none;
     }
 
-    /* ===== About Section ===== */
-    section.about {
-      padding: 5rem 1rem 7rem;
-      background: white;
-      color: #3e3e3e;
-      user-select: text;
+    /* ===== Smart Food Pairings ===== */
+    .combo-preview {
+      padding: 4rem 1rem;
+      background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
-    .about .container {
+    .combo-preview .container {
       max-width: 900px;
       margin: 0 auto;
     }
-    .about h2 {
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: #bf360c;
-      margin-bottom: 2rem;
-      text-align: center;
+    .combo-preview-text {
+      font-size: 1.1rem;
+      color: #5d4037;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+    .combo-btn {
+      display: inline-block;
+      margin-top: 0.5rem;
+    }    /* ===== Testimonials Redesign (Glassmorphism) ===== */
+    section.testimonials {
+      padding: 4rem 1rem;
+      background: #fff3e0;
+      color: #3e2723;
       user-select: none;
     }
-    .about p {
+    .testimonial-cards {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      align-items: stretch;
+    }
+    .testimonial-glass-card {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .testimonial-glass-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(255, 87, 34, 0.15);
+      background: rgba(255, 255, 255, 0.9);
+    }
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    .testimonial-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ffcc99;
+    }
+    .testimonial-info h4 {
+      margin: 0 0 0.2rem 0;
       font-size: 1.1rem;
-      line-height: 1.5;
+      color: #3e2723;
+      font-weight: 700;
+    }
+    .testimonial-city {
+      font-size: 0.85rem;
+      color: #795548;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .testimonial-stars {
+      color: #ff9800;
+      font-size: 0.9rem;
+    }
+    .testimonial-text {
+      font-style: italic;
+      color: #5d4037;
+      line-height: 1.6;
+      font-size: 1.05rem;
+      flex-grow: 1;
+    }
+
+    /* ===== Join The ChaatBazaar Family (Merged Section) ===== */
+    .join-family {
+      padding: 5rem 1rem 3rem;
+      background: linear-gradient(180deg, #fff3e0 0%, #ffffff 100%);
+      color: #3e3e3e;
+      user-select: text;
+    }
+    .join-family-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto 3rem auto;
+      align-items: stretch;
+    }
+    .join-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    @media (max-width: 900px) {
+      .join-family-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    /* Reusable Glass Card */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      height: 100%;
+      box-sizing: border-box;
+    }
+    .glass-card h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #bf360c;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Story & Stats */
+    .join-story-card p {
+      font-size: 1.1rem;
+      line-height: 1.7;
       color: #5d4037;
       margin-bottom: 2rem;
     }
-    .team {
+    .join-stats {
       display: flex;
       gap: 2rem;
-      justify-content: center;
       flex-wrap: wrap;
-      margin-bottom: 3rem;
     }
-   
-   .team-member {
-   width: 100%;
-   max-width: 420px;
-   min-width: 280px;
-   height: 320px;
-   flex: 1 1 320px;
-   perspective: 1000px;
-   background: transparent;
-   border-radius: 20px;
-   box-shadow: none;
-   padding: 0;
-   text-align: center;
-   user-select: none;
-}
-
-.team-member-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.8s ease;
-  transform-style: preserve-3d;
-}
-
-.team-member:hover .team-member-inner,
-.team-member:focus .team-member-inner {
-  transform: rotateY(180deg);
-}
-
-.team-member-front,
-.team-member-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #fff3e0;
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgb(0 0 0 / 0.1);
-  backface-visibility: hidden;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  padding: 1.5rem 1.2rem;
-  box-sizing: border-box;
-}
-
-.team-member-front:hover,
-.team-member-back:hover {
-  box-shadow: 0 12px 28px rgb(0 0 0 / 0.15);
-}
-
-.team-member-back {
-  transform: rotateY(180deg);
-}
-
-.team-member img {
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  margin-bottom: 1rem;
-  object-fit: cover;
-  user-select: none;
-}
-
-.team-member h4 {
-  font-weight: 700;
-  margin-bottom: 0.3rem;
-  color: #3e2723;
-}
-
-.team-member p {
-  font-size: 0.9rem;
-  color: #5d4037;
-  user-select: text;
-}
-
-.team-member-back p {
-  max-width: 85%;
-  line-height: 1.5;
-}
-
-    /* ===== Contact Section ===== */
-    section.contact {
-      padding: 5rem 1rem 7rem;
-      background: white;
-      color: #3e3e3e;
-      user-select: text;
+    .stat-item {
+      display: flex;
+      flex-direction: column;
     }
-    section.contact .container {
-      max-width: 900px;
-      margin: 0 auto;
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #ff5722;
+      line-height: 1;
+      margin-bottom: 0.3rem;
     }
-    section.contact h2 {
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: #bf360c;
-      margin-bottom: 3rem;
-      text-align: center;
-      user-select: none;
+    .stat-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #795548;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    /* ===== Contact Form ===== */
-    form.contact-form {
-      max-width: 500px;
-      margin: 0 auto;
-      background: #fff3e0;
-      padding: 2rem 2.5rem;
-      border-radius: 20px;
-      box-shadow: 0 10px 28px rgb(0 0 0 / 0.12);
-      user-select: text;
+    /* Contact Form Restyling */
+    .contact-glass-card form.contact-form {
+      max-width: 100%;
+      margin: 0;
+      background: transparent;
+      padding: 0;
+      box-shadow: none;
     }
-    form.contact-form label {
+    .contact-glass-card .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+    @media (max-width: 600px) {
+      .contact-glass-card .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+    }
+    .contact-glass-card label {
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 600;
       color: #bf360c;
-      user-select: none;
     }
-    form.contact-form input,
-    form.contact-form textarea {
+    .contact-glass-card input,
+    .contact-glass-card textarea {
       width: 100%;
-      padding: 0.7rem 1rem;
+      padding: 0.8rem 1rem;
       border-radius: 12px;
-      border: 2px solid #ffcc99;
+      border: 1px solid rgba(255, 87, 34, 0.3);
       font-size: 1rem;
-      margin-bottom: 1.3rem;
+      margin-bottom: 1.2rem;
       font-family: inherit;
       resize: vertical;
-      transition: border-color 0.3s ease;
-      user-select: text;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.9);
+      box-sizing: border-box;
     }
-    form.contact-form input:focus,
-    form.contact-form textarea:focus {
+    .contact-glass-card input:focus,
+    .contact-glass-card textarea:focus {
       border-color: #ff5722;
       outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.15);
     }
-    form.contact-form textarea {
-      min-height: 100px;
+    .contact-glass-card textarea {
+      min-height: 120px;
     }
+
+    /* Form Global States */
     .error-msg {
       font-size: 0.85rem;
       color: #c0392b;
@@ -1210,100 +1261,59 @@
       background: #e64a19;
     }
 
-    /* ===== Testimonials ===== */
-    section.testimonials {
-      padding: 5rem 1rem 7rem;
-      background: #fff3e0;
-      color: #3e2723;
-      user-select: none;
-    }
-    .testimonial-cards {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .testimonial {
-      background: white;
-      padding: 1.8rem 2rem;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgb(0 0 0 / 0.1);
-      max-width: 320px;
-      position: relative;
-      font-style: italic;
-      user-select: text;
-    }
-    .testimonial::before {
-      content: "“";
-      position: absolute;
-      font-size: 4rem;
-      top: -20px;
-      left: 20px;
-      color: #ff5722;
-      font-weight: 900;
-      user-select: none;
-    }
-    .testimonial p {
-      margin-bottom: 1rem;
-    }
-    .testimonial .author {
-      font-weight: 700;
-      text-align: right;
-      color: #bf360c;
-      user-select: text;
-    }
-
-    /* ===== Newsletter Signup ===== */
-    section.newsletter {
-      background: #ff5722;
-      color: white;
-      padding: 3rem 1rem 5rem;
+    /* Newsletter Restyling */
+    .newsletter-glass-card {
       text-align: center;
-      user-select: none;
+      background: linear-gradient(135deg, #ff5722, #bf360c);
+      color: white;
+      border: none;
+      padding: 3rem 2rem;
     }
-    section.newsletter h2 {
-      font-weight: 700;
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+    .newsletter-glass-card h3 {
+      color: white;
+      font-size: 2.2rem;
+      margin-bottom: 0.8rem;
     }
-    section.newsletter p {
-      font-weight: 500;
-      margin-bottom: 1.5rem;
+    .newsletter-glass-card p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
     }
     .newsletter-form {
-      max-width: 400px;
+      max-width: 500px;
       margin: 0 auto;
       display: flex;
-      gap: 0.6rem;
-      justify-content: center;
+      gap: 0.8rem;
       flex-wrap: wrap;
+      justify-content: center;
     }
     .newsletter-form input {
-      padding: 0.8rem 1rem;
-      border-radius: 40px;
+      padding: 1rem 1.5rem;
+      border-radius: 50px;
       border: none;
       flex-grow: 1;
       font-size: 1rem;
       outline: none;
       font-family: inherit;
+      min-width: 250px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-sizing: border-box;
     }
     .newsletter-form button {
-      padding: 0.8rem 1.8rem;
-      background: #fff;
+      padding: 1rem 2rem;
+      background: #3e2723;
       border: none;
-      border-radius: 40px;
-      color: #ff5722;
+      border-radius: 50px;
+      color: white;
       font-weight: 700;
-      box-shadow: 0 6px 15px rgb(255 87 34 / 0.8);
-      transition: background 0.3s ease;
-      user-select: none;
+      transition: all 0.3s ease;
       font-size: 1rem;
       cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
     .newsletter-form button:hover {
-      background: #fbe9e7;
+      background: #5d4037;
+      transform: translateY(-2px);
     }
 
     /* ===== Modern Premium Footer ===== */
