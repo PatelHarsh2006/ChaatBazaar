@@ -15,13 +15,36 @@
 <body data-page-type="dashboard">
   <header>
     <div class="header-inner container" role="banner">
-      <a href="index.html" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
+      <a href="index.html" class="logo" aria-label="ChaatBazaar Home"><img src="img/logo.png" alt="ChaatBazaar Logo" class="navbar-logo-img" />ChaatBazaar</a>
       <nav role="navigation" aria-label="Primary Navigation">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="menu.html" class="nav-link">Menu</a>
-        <a href="index.html#about" class="nav-link">About</a>
+        <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
+          <a href="menu.html" class="dropdown-toggle nav-link">Menu</a>
+          <div class="dropdown-menu" role="menu" aria-label="Menu Categories">
+            <a href="menu.html?filter=All#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="All">All</a>
+            <a href="menu.html?filter=Snacks#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Snacks">Snacks</a>
+            <a href="menu.html?filter=Chaat#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Chaat">Chaat</a>
+            <a href="menu.html?filter=Beverages#filters" role="menuitem" tabindex="-1" class="menu-filter" data-filter="Beverages">Beverages</a>
+          </div>
+        </div>
+        <a href="recommendations.html" class="nav-link">Smart Combos</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="favorites.html" class="nav-link">Favorites (<span id="fav-count">0</span>)</a>
         <a href="orders.html" class="nav-link">Orders</a>
-        <a href="cart.html" class="nav-link">Cart</a>
+        <a href="cart.html" class="nav-link cart-btn-modern" id="cart-open-btn" aria-label="Cart">
+          <span class="cart-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="cart-svg-icon"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span id="cart-count" class="cart-badge">0</span>
+          </span>
+          <span class="cart-text">Cart</span>
+        </a>
+        <div class="search-bar" role="search">
+          <input type="search" placeholder="Search menu..." aria-label="Search menu" id="search-input" autocomplete="off" />
+          <button aria-label="Search" id="search-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="search-svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </button>
+          <div class="search-suggestions" id="search-suggestions" style="display: none;"></div>
+        </div>
         <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
           <span class="theme-toggle-track">
             <span class="theme-toggle-icon sun-icon">
