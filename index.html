@@ -125,6 +125,8 @@
         🌙
       </button>
 
+      <div id="authNavItem" class="auth-nav-item"></div>
+
     </nav>
 
   </div>
@@ -545,208 +547,10 @@
 
 </section>
 
-<!-- ================= ABOUT ================= -->
-
-<section
-  id="about"
-  class="about"
-  role="region"
-  aria-label="About ChaatBazar"
->
-
-  <div class="container">
-
-    <h2>
-      About Us
-    </h2>
-
-    <p>
-
-      At <strong>ChaatBazar</strong>,
-      we bring the authentic taste of
-      Indian street food right to your
-      doorstep.
-
-    </p>
-
-    <!-- TEAM -->
-
-    <div class="team">
-
-      <!-- MEMBER -->
-
-      <article
-        class="team-member"
-        tabindex="0"
-      >
-
-        <div class="team-member-inner">
-
-          <div class="team-member-front">
-
-            <img
-              src="https://randomuser.me/api/portraits/women/68.jpg"
-              alt="Priya Sharma"
-            />
-
-            <h4>
-              Priya Sharma
-            </h4>
-
-            <p>
-              Founder & Head Chef
-            </p>
-
-          </div>
-
-          <div class="team-member-back">
-
-            <h4>
-              About Priya
-            </h4>
-
-            <p>
-              10+ years of expertise
-              in authentic Indian
-              street food.
-            </p>
-
-          </div>
-
-        </div>
-
-      </article>
-
-      <!-- MEMBER -->
-
-      <article
-        class="team-member"
-        tabindex="0"
-      >
-
-        <div class="team-member-inner">
-
-          <div class="team-member-front">
-
-            <img
-              src="https://randomuser.me/api/portraits/women/45.jpg"
-              alt="Anjali Verma"
-            />
-
-            <h4>
-              Anjali Verma
-            </h4>
-
-            <p>
-              Customer Support
-            </p>
-
-          </div>
-
-          <div class="team-member-back">
-
-            <h4>
-              About Anjali
-            </h4>
-
-            <p>
-              Ensures smooth
-              customer experience
-              and fast support.
-            </p>
-
-          </div>
-
-        </div>
-
-      </article>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- ================= CONTACT ================= -->
-
-<section
-  class="contact"
-  role="region"
-  aria-label="Contact Us"
->
-
-  <div class="container">
-
-    <h2>
-      Contact Us
-    </h2>
-
-    <form
-      class="contact-form"
-      id="contact-form"
-      novalidate
-    >
-
-      <label for="name">
-        Name
-      </label>
-
-      <input
-        type="text"
-        id="name"
-        required
-      />
-
-      <div
-        class="error-msg"
-        id="error-name"
-      ></div>
-
-      <label for="email">
-        Email
-      </label>
-
-      <input
-        type="email"
-        id="email"
-        required
-      />
-
-      <div
-        class="error-msg"
-        id="error-email"
-      ></div>
-
-      <label for="message">
-        Message
-      </label>
-
-      <textarea
-        id="message"
-        required
-      ></textarea>
-
-      <div
-        class="error-msg"
-        id="error-message"
-      ></div>
-
-      <button
-        type="submit"
-        class="btn-submit"
-      >
-        Send Message
-      </button>
-
-    </form>
-
-  </div>
-
-</section>
-
 <!-- ================= TESTIMONIALS ================= -->
 
 <section
+  id="testimonials"
   class="testimonials"
   role="region"
   aria-label="Testimonials"
@@ -757,89 +561,142 @@
   </h2>
 
   <div class="testimonial-cards">
-
-    <blockquote
-      class="testimonial"
-      tabindex="0"
-    >
-
-      <p>
-        Amazing taste and super fast delivery!
+    <div class="testimonial-glass-card">
+      <div class="testimonial-header">
+        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Meera K." class="testimonial-avatar" />
+        <div class="testimonial-info">
+          <h4>Meera K.</h4>
+          <span class="testimonial-city">Mumbai, MH</span>
+          <div class="testimonial-stars">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+          </div>
+        </div>
+      </div>
+      <p class="testimonial-text">
+        "Amazing taste and super fast delivery! The food arrived piping hot, and the packaging was absolutely premium."
       </p>
+    </div>
 
-      <cite>
-        - Meera K.
-      </cite>
-
-    </blockquote>
-
-    <blockquote
-      class="testimonial"
-      tabindex="0"
-    >
-
-      <p>
-        Best Pani Puri outside India!
+    <div class="testimonial-glass-card">
+      <div class="testimonial-header">
+        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Arjun P." class="testimonial-avatar" />
+        <div class="testimonial-info">
+          <h4>Arjun P.</h4>
+          <span class="testimonial-city">Delhi, DL</span>
+          <div class="testimonial-stars">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+          </div>
+        </div>
+      </div>
+      <p class="testimonial-text">
+        "Best Pani Puri outside India! The spice level was perfect and it brought back so many childhood memories."
       </p>
+    </div>
 
-      <cite>
-        - Arjun P.
-      </cite>
-
-    </blockquote>
-
-    <blockquote
-      class="testimonial"
-      tabindex="0"
-    >
-
-      <p>
-        Delicious snacks and excellent quality.
+    <div class="testimonial-glass-card">
+      <div class="testimonial-header">
+        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sneha M." class="testimonial-avatar" />
+        <div class="testimonial-info">
+          <h4>Sneha M.</h4>
+          <span class="testimonial-city">Bengaluru, KA</span>
+          <div class="testimonial-stars">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+          </div>
+        </div>
+      </div>
+      <p class="testimonial-text">
+        "Delicious snacks and excellent quality. ChaatBazaar is my go-to for weekend evening cravings!"
       </p>
-
-      <cite>
-        - Sneha M.
-      </cite>
-
-    </blockquote>
-
+    </div>
   </div>
 
 </section>
 
-<!-- ================= NEWSLETTER ================= -->
+<!-- ================= JOIN FAMILY (About, Contact, Newsletter) ================= -->
 
 <section
-  class="newsletter"
+  id="about"
+  class="join-family"
   role="region"
-  aria-label="Newsletter"
+  aria-label="Join The ChaatBazaar Family"
 >
+  <div class="container">
+    <h2 class="section-title">Join The ChaatBazaar Family</h2>
 
-  <h2>
-    Subscribe To Newsletter
-  </h2>
+    <div class="join-family-grid">
+      <!-- LEFT: Story, Mission, Stats -->
+      <div class="join-left">
+        <div class="join-story-card glass-card">
+          <h3>Our Story</h3>
+          <p>
+            At <strong>ChaatBazaar</strong>, we bring the authentic taste of Indian street food right to your doorstep. Born from a love of vibrant, spicy, and tangy flavors, our mission is to deliver the freshest snacks with uncompromising quality.
+          </p>
+          <div class="join-stats">
+            <div class="stat-item">
+              <span class="stat-number">10k+</span>
+              <span class="stat-label">Happy Foodies</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">50+</span>
+              <span class="stat-label">Authentic Dishes</span>
+            </div>
+          </div>
+        </div>
 
-  <p>
-    Get latest deals and updates.
-  </p>
+        <!-- Hidden legacy team members kept as requested -->
+        <!--
+        <div class="team" style="display:none">
+          <article class="team-member">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya Sharma" />
+            <h4>Priya Sharma</h4><p>Founder & Head Chef. 10+ years of expertise in authentic Indian street food.</p>
+          </article>
+          <article class="team-member">
+            <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Anjali Verma" />
+            <h4>Anjali Verma</h4><p>Customer Support. Ensures smooth customer experience and fast support.</p>
+          </article>
+        </div>
+        -->
+      </div>
 
-  <form
-    class="newsletter-form"
-    id="newsletter-form"
-  >
+      <!-- RIGHT: Contact Form -->
+      <div class="join-right" id="contact">
+        <div class="contact-glass-card glass-card">
+          <h3>Contact Us</h3>
+          <form class="contact-form" id="contact-form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" required />
+                <div class="error-msg" id="error-name"></div>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required />
+                <div class="error-msg" id="error-email"></div>
+              </div>
+            </div>
+            <label for="message">Message</label>
+            <textarea id="message" required></textarea>
+            <div class="error-msg" id="error-message"></div>
+            <button type="submit" class="btn-submit">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
 
-    <input
-      type="email"
-      placeholder="Enter your email"
-      required
-    />
+    <!-- BOTTOM: Newsletter -->
+    <div class="join-bottom" id="newsletter">
+      <div class="newsletter-glass-card glass-card">
+        <h3>Subscribe To Newsletter</h3>
+        <p>Get latest deals and updates straight to your inbox.</p>
+        <form class="newsletter-form" id="newsletter-form">
+          <input type="email" placeholder="Enter your email" required />
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
 
-    <button type="submit">
-      Subscribe
-    </button>
-
-  </form>
-
+  </div>
 </section>
 
 <!-- ================= CART SIDEBAR ================= -->
