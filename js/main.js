@@ -326,7 +326,6 @@ function createCard(item, highlightQuery = "") {
     </div>
 
     <div class="card-footer">
-newFeatures
   <div class="price-section">
     <span class="original-price">
       ₹${item.originalPrice}
@@ -356,7 +355,6 @@ newFeatures
       </button>
 
     </div>
-main
   `;
  
   const addBtn = card.querySelector(".add-btn");
@@ -415,7 +413,6 @@ function renderRecentlyViewed() {
   recentItems.forEach(item => recentlyViewedContainer.appendChild(createCard(item)));
 }
 
- newFeatures
 // Unified Interactive Filter Engine =====
 function renderFavorites() {
   const favoritesContainer = document.getElementById("favorites-container");
@@ -952,7 +949,6 @@ window.reorderOrder = function (orderId) {
     sidebar.classList.add("open");
   }
 };
- newFeatures
 
 //  Cart Operations 
 
@@ -962,7 +958,6 @@ window.reorderOrder = function (orderId) {
  
 // ===== Toast Notification =====
  
-main
 function showToast(message) {
   const toast = document.getElementById("toast-notification");
   if (!toast) return;
