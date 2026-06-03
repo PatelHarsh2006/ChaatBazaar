@@ -326,6 +326,26 @@ function createCard(item, highlightQuery = "") {
     </div>
 
     <div class="card-footer">
+newFeatures
+  <div class="price-section">
+    <span class="original-price">
+      ₹${item.originalPrice}
+    </span>
+
+    <span class="price">
+      ${formatPrice(item.price)}
+    </span>
+
+    <span class="discount-badge">
+      ${Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% OFF
+    </span>
+  </div>
+
+  <button class="add-btn" aria-label="Add ${item.name} to cart">
+    Add
+  </button>
+  </div>
+
       <span class="price">${formatPrice(item.price)}</span>
       <button class="add-btn"
         aria-label="Add ${item.name} to cart"
@@ -336,6 +356,7 @@ function createCard(item, highlightQuery = "") {
       </button>
 
     </div>
+main
   `;
  
   const addBtn = card.querySelector(".add-btn");
@@ -393,7 +414,9 @@ function renderRecentlyViewed() {
   recentlyViewedSection.style.display = "block";
   recentItems.forEach(item => recentlyViewedContainer.appendChild(createCard(item)));
 }
- 
+
+ newFeatures
+// Unified Interactive Filter Engine =====
 function renderFavorites() {
   const favoritesContainer = document.getElementById("favorites-container");
   if (!favoritesContainer) return;
@@ -413,7 +436,7 @@ function renderFavorites() {
 }
  
 // ===== Unified Interactive Filter Engine =====
- 
+
 function applyAllFilters() {
   if (!menuContainer) return;
  
@@ -929,9 +952,17 @@ window.reorderOrder = function (orderId) {
     sidebar.classList.add("open");
   }
 };
+ newFeatures
+
+//  Cart Operations 
+
+//  Toast Notification 
+
+
  
 // ===== Toast Notification =====
  
+main
 function showToast(message) {
   const toast = document.getElementById("toast-notification");
   if (!toast) return;
