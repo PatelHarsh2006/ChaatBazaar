@@ -3803,8 +3803,26 @@ textarea.input-error:focus {
   
   .team-member {
     max-width: 100% !important;
-    height: auto !important;
-    min-height: 300px;
+    height: 320px !important;
+  }
+
+  /* Increase tap target sizes for filter and social icons on mobile */
+  .filter-btn {
+    padding: 0.8rem 2rem !important;
+  }
+
+  .footer-social-icons a {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 1.25rem !important;
+  }
+
+  footer .social-icons a {
+    display: inline-flex !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 }
 
