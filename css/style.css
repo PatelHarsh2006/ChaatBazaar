@@ -2436,8 +2436,6 @@ mark.highlight {
   box-shadow: 0 6px 20px rgba(191, 54, 12, 0.4);
   transform: translateY(-1px);
 }
- newFeatures
-
 .price-section {
   display: flex;
   align-items: center;
@@ -2852,12 +2850,9 @@ body.dark .cart-badge {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #e64a19;
-  newFeatures
 /*Accessibility Styles */
 }
 /* ===== Accessibility Styles ===== */
-main
-
 /* Skip link - visible on focus */
 .skip-link {
   position: absolute;
@@ -3026,7 +3021,7 @@ button:disabled {
 /* Hover effect for disabled button */
 .add-btn:disabled:hover {
   transform: none !important;
-  opacity: 0.6; main
+  opacity: 0.6;
 }
 #voice-search-btn {
   border: none;
