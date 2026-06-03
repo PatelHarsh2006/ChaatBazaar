@@ -304,7 +304,14 @@ function createCard(item, highlightQuery = "") {
   const isAvailable      = item.available !== undefined ? item.available : true;
   const outOfStockBadge  = !isAvailable ? '<span class="out-of-stock-badge">Out of Stock ❌</span>' : '';
   const buttonDisabled   = !isAvailable ? 'disabled' : '';
-  const buttonColor      = isAvailable  ? '#28a745'  : '#cccccc';
+  const buttonColor      = isAvailable  ? '#2e7d32'  : '#cccccc';
+  
+  const originalPriceHtml = item.originalPrice && item.originalPrice > item.price
+    ? `<span class="original-price">₹${item.originalPrice}</span>`
+    : "";
+  const discountBadgeHtml = item.originalPrice && item.originalPrice > item.price
+    ? `<span class="discount-badge">${Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% OFF</span>`
+    : "";
  
   card.innerHTML = `
     <img src="${item.image}" 
@@ -326,27 +333,12 @@ function createCard(item, highlightQuery = "") {
     </div>
 
     <div class="card-footer">
-newFeatures
-  <div class="price-section">
-    <span class="original-price">
-      ₹${item.originalPrice}
-    </span>
+      <div class="price-section">
+        ${originalPriceHtml}
+        <span class="price">${formatPrice(item.price)}</span>
+        ${discountBadgeHtml}
+      </div>
 
-    <span class="price">
-      ${formatPrice(item.price)}
-    </span>
-
-    <span class="discount-badge">
-      ${Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% OFF
-    </span>
-  </div>
-
-  <button class="add-btn" aria-label="Add ${item.name} to cart">
-    Add
-  </button>
-  </div>
-
-      <span class="price">${formatPrice(item.price)}</span>
       <button class="add-btn"
         aria-label="Add ${item.name} to cart"
         ${buttonDisabled}
@@ -354,9 +346,7 @@ newFeatures
       >
         Add
       </button>
-
     </div>
-main
   `;
  
   const addBtn = card.querySelector(".add-btn");
@@ -415,7 +405,6 @@ function renderRecentlyViewed() {
   recentItems.forEach(item => recentlyViewedContainer.appendChild(createCard(item)));
 }
 
- newFeatures
 // Unified Interactive Filter Engine =====
 function renderFavorites() {
   const favoritesContainer = document.getElementById("favorites-container");
@@ -599,7 +588,7 @@ alt="${item.name}" />
       `;
  
       cartItem.querySelector(".qty-decrease").addEventListener("click", () => removeFromCart(item.id));
-      cartItem.querySelector(".qty-increase").addEventListener("click", () => addToCart(item.id));
+      cartItem.querySelector(".qty-increase").addEventListener("click", () => addToCart(item.id, false));
       cartItem.querySelector(".cart-item-remove").addEventListener("click", () => {
         cartManager.removeItem(item.id);
         updateCartCount();
@@ -952,7 +941,6 @@ window.reorderOrder = function (orderId) {
     sidebar.classList.add("open");
   }
 };
- newFeatures
 
 //  Cart Operations 
 
@@ -962,7 +950,6 @@ window.reorderOrder = function (orderId) {
  
 // ===== Toast Notification =====
  
-main
 function showToast(message) {
   const toast = document.getElementById("toast-notification");
   if (!toast) return;
@@ -978,7 +965,7 @@ function showToast(message) {
  
 // ===== Cart Operations =====
  
-function addToCart(id) {
+function addToCart(id, showFeedback = true) {
   const item = menuItems.find(i => i.id === id);
   if (!item) return;
  
@@ -992,16 +979,18 @@ function addToCart(id) {
   updateCartCount();
   updateFavCount();
   renderCart();
-  showToast(`🛒 ${item.name} added to cart`);
+ 
+  if (showFeedback) {
+    showToast(`🛒 ${item.name} added to cart`);
+    if (cartSidebar) {
+      cartSidebar.setAttribute("aria-hidden", "false");
+      cartSidebar.classList.add("open");
+    }
+  }
  
   if (cartCount) {
     cartCount.classList.add("cart-bounce");
     setTimeout(() => cartCount.classList.remove("cart-bounce"), 400);
-  }
- 
-  if (cartSidebar) {
-    cartSidebar.setAttribute("aria-hidden", "false");
-    cartSidebar.classList.add("open");
   }
 }
  
@@ -1009,25 +998,10 @@ function removeFromCart(id) {
   const cartIndex = cart.findIndex(ci => ci.item.id === id);
   if (cartIndex === -1) return;
  
-  const removedItem = cart[cartIndex].item;
   cartManager.decreaseQuantity(id);
-  const cartItem = cart.find(
-    (ci) => ci.item.id === id
-  );
-
-  if (!cartItem) return;
-
-  const removedItem = cartItem.item;
-
-  if (
-    typeof cartManager.decreaseQuantity ===
-    "function"
-  ) {
-    cartManager.decreaseQuantity(id);
-  } else {
-    cartManager.removeItem(id);
-  }
-  return true;
+  updateCartCount();
+  updateFavCount();
+  renderCart();
 };
 
 window.placeOrderFromCheckout = function (customerDetails, pricingInfo) {
@@ -1236,7 +1210,7 @@ function setupSearchSuggestions() {
     if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
       suggestionsContainer.style.display = "none";
     }
-  );
+  });
 }
  
 function setupSearch() {
@@ -1258,6 +1232,53 @@ function setupSearch() {
       if (suggestionsContainer) suggestionsContainer.style.display = "none";
     }
   });
+}
+
+function setupVoiceSearch() {
+  const voiceBtn = document.getElementById("voice-search-btn");
+  const searchInput = document.getElementById("search-input");
+  if (!voiceBtn || !searchInput) return;
+
+  if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+    voiceBtn.style.display = "none";
+    return;
+  }
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SpeechRecognition();
+  recognition.lang = "en-IN";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  voiceBtn.addEventListener("click", () => {
+    try {
+      recognition.start();
+      voiceBtn.innerHTML = "🎙️";
+      voiceBtn.classList.add("listening");
+    } catch (err) {
+      console.error("Speech recognition start error:", err);
+    }
+  });
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    searchInput.value = transcript;
+    applyAllFilters();
+    voiceBtn.innerHTML = "🎤";
+    voiceBtn.classList.remove("listening");
+  };
+
+  recognition.onerror = (event) => {
+    console.error("Speech recognition error:", event.error);
+    voiceBtn.innerHTML = "🎤";
+    voiceBtn.classList.remove("listening");
+    alert("Voice recognition failed.");
+  };
+
+  recognition.onend = () => {
+    voiceBtn.innerHTML = "🎤";
+    voiceBtn.classList.remove("listening");
+  };
 }
  
 // ===== Advanced Filters Panel =====
@@ -1522,6 +1543,7 @@ async function init() {
   setupOrderNowScroll();
   setupSearchSuggestions();
   setupSearch();
+  setupVoiceSearch();
   setupAdvancedFilters();
   setupContactForm();
   setupNewsletterForm();
@@ -1536,67 +1558,6 @@ async function init() {
         window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
       }
     });
-    );
-
-    recognition.onresult = (
-      event
-    ) => {
-      const transcript =
-        event.results[0][0].transcript;
-
-      searchInput.value = transcript;
-
-      applyAllFilters();
-
-      voiceBtn.innerHTML = "🎤";
-
-  // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
-  setupCartToggle();
-  setupFilterButtons();
-  setupCouponListeners();
-  setupOrderNowScroll();
-  setupSearchSuggestions();
-  setupSearch();
-  setupAdvancedFilters();
-  setupContactForm();
-  setupNewsletterForm();
-  setupActiveNavbar();
-  setupDropdownFilterLinks();
-
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-      }
-      window.location.href = "orders.html";
-    });
-  }
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
-
-    recognition.onerror = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-
-      alert(
-        "Voice recognition failed."
-      );
-    };
-
-    recognition.onend = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
   }
  
   // Load menu data, then render
