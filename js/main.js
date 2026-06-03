@@ -986,7 +986,7 @@ function removeFromCart(id) {
 
   if (!cartItem) return;
 
-  const removedItem = cartItem.item;
+  // const removedItem = cartItem.item;
 
   if (
     typeof cartManager.decreaseQuantity ===
@@ -1205,9 +1205,8 @@ function setupSearchSuggestions() {
     if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
       suggestionsContainer.style.display = "none";
     }
-  );
+  });
 }
- 
 function setupSearch() {
   const searchInput = document.getElementById("search-input");
   const searchBtn   = document.getElementById("search-btn");
@@ -1505,7 +1504,7 @@ async function init() {
         window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
       }
     });
-    );
+    
 
     recognition.onresult = (
       event
@@ -1655,4 +1654,19 @@ if (toggleBtn) {
     localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
   });
 }
- 
+
+const backToTopBtn = document.querySelector("#backToTop"); 
+const backToTopContainer = document.querySelector(".back-to-top-container");
+
+
+window.addEventListener("scroll", () => {
+  backToTopContainer.style.display =
+    window.scrollY > 300 ? "flex" : "none";
+});
+
+backToTopBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});

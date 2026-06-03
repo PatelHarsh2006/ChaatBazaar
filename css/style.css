@@ -3060,5 +3060,47 @@ button:disabled {
   align-items: center;
   gap: 10px;
 }
+.back-to-top-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+
+  display: none;
+  flex-direction: column;
+  align-items: center;
 }
 
+#backToTop {
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: 0.3s ease;
+}
+
+#backToTop:hover {
+  transform: translateY(-5px);
+}
+
+#backToTop img {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+}
+
+.back-to-top-text {
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ff6b35;
+}
