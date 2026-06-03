@@ -49,30 +49,47 @@ function setupMobileNavigation() {
 
   headerInner.insertBefore(toggleBtn, nav);
 
+  // Create backdrop overlay element
+  let overlay = document.querySelector('.nav-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    document.body.appendChild(overlay);
+  }
+
+  function closeMenu() {
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    toggleBtn.setAttribute('aria-label', 'Open navigation menu');
+    nav.classList.remove('nav-open');
+    document.body.classList.remove('nav-menu-open');
+    overlay.classList.remove('active');
+    toggleBtn.focus();
+  }
+
+  function openMenu() {
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    toggleBtn.setAttribute('aria-label', 'Close navigation menu');
+    nav.classList.add('nav-open');
+    document.body.classList.add('nav-menu-open');
+    overlay.classList.add('active');
+    const firstLink = nav.querySelector('a');
+    if (firstLink) setTimeout(() => firstLink.focus(), 100);
+  }
+
   toggleBtn.addEventListener('click', () => {
     const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-    const nextState = !isExpanded;
-    toggleBtn.setAttribute('aria-expanded', String(nextState));
-    toggleBtn.setAttribute('aria-label', nextState ? 'Close navigation menu' : 'Open navigation menu');
-    nav.classList.toggle('nav-open', nextState);
-    document.body.classList.toggle('nav-menu-open', nextState);
-    
-    if (nextState) {
-      const firstLink = nav.querySelector('a');
-      if (firstLink) setTimeout(() => firstLink.focus(), 100);
+    if (isExpanded) {
+      closeMenu();
     } else {
-      toggleBtn.focus();
+      openMenu();
     }
   });
 
+  overlay.addEventListener('click', closeMenu);
+
   const navLinks = nav.querySelectorAll('a:not(.dropdown-toggle)');
   navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      toggleBtn.setAttribute('aria-expanded', 'false');
-      toggleBtn.setAttribute('aria-label', 'Open navigation menu');
-      nav.classList.remove('nav-open');
-      document.body.classList.remove('nav-menu-open');
-    });
+    link.addEventListener('click', closeMenu);
   });
 
   // Dropdown accordions for mobile menu
@@ -107,11 +124,7 @@ function setupMobileNavigation() {
 
     if (e.key === 'Escape') {
       e.preventDefault();
-      toggleBtn.setAttribute('aria-expanded', 'false');
-      toggleBtn.setAttribute('aria-label', 'Open navigation menu');
-      nav.classList.remove('nav-open');
-      document.body.classList.remove('nav-menu-open');
-      toggleBtn.focus();
+      closeMenu();
     }
 
     if (e.key === 'Tab') {

@@ -1,3 +1,28 @@
+:root {
+  /* Premium Spacing Scale */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4.5rem;
+  --space-xxl: 6.5rem;
+
+  /* Standardized Section Rhythm */
+  --section-padding: var(--space-xxl) var(--space-sm);
+  --section-padding-tablet: var(--space-xl) var(--space-sm);
+  --section-padding-mobile: var(--space-lg) var(--space-sm);
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --section-padding: var(--section-padding-tablet);
+  }
+}
+@media (max-width: 768px) {
+  :root {
+    --section-padding: var(--section-padding-mobile);
+  }
+}
 
 @font-face {
   font-family: 'Poppins';
@@ -670,7 +695,7 @@
     /* ===== Hero Section ===== */
     .hero {
       background: rgb(255, 228, 205);
-      padding: 5rem 1rem 6rem;
+      padding: var(--space-xl) var(--space-sm) var(--space-xxl);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -706,13 +731,17 @@
       border-radius: 50px;
       box-shadow: 0 8px 25px rgb(255 87 34 / 0.4);
       border: none;
-      transition: background 0.3s ease, color 0.3s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       user-select: none;
     }
     .btn-primary:hover {
       background: #ff6333;
       color: #fff;
       box-shadow: 0 10px 30px rgb(230 74 25 / 0.6);
+      transform: translateY(-2px);
+    }
+    .btn-primary:active {
+      transform: translateY(0) scale(0.97);
     }
     .hero-image {
       flex: 1 1 400px;
@@ -731,7 +760,7 @@
     section.specials,
     section.menu,
     section.recently-viewed {
-      padding: 4rem 1rem 5rem;
+      padding: var(--section-padding);
       background: #fff3e0;
     }
     .section-title {
@@ -745,17 +774,17 @@
     .cards {
       display: flex;
       flex-wrap: wrap;
-      gap: 2rem;
+      gap: var(--space-md);
       justify-content: center;
     }
     .menu-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 2rem;
+      gap: var(--space-md);
       justify-content: center;
       justify-items: center;
       width: 100%;
-      margin-top: 2rem;
+      margin-top: var(--space-md);
     }
     .card {
       background: white;
@@ -765,21 +794,32 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1rem 1rem 1.8rem;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      padding: var(--space-sm) var(--space-sm) var(--space-md);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, box-shadow;
       user-select: none;
       cursor: default;
     }
     .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 35px rgb(0 0 0 / 0.2);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 16px 40px rgba(255, 87, 34, 0.18);
     }
-    .add-btn{
-      background-color: green;
-      padding: 3px 8px;
-      border-radius: 15px;
+    .add-btn {
+      background-color: #2e7d32;
+      padding: 6px 16px;
+      border-radius: 30px;
       color: white;
       border: none;
+      font-weight: 600;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .add-btn:hover {
+      background-color: #1b5e20;
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
+    }
+    .add-btn:active {
+      transform: scale(0.95);
     }
     .card img {
       border-radius: 15px;
@@ -844,13 +884,17 @@
       border-radius: 50px;
       font-weight: 600;
       font-size: 1rem;
-      transition: all 0.3s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .filter-btn.active,
     .filter-btn:hover {
       background: #ff5722;
       color: white;
       box-shadow: 0 6px 20px rgb(255 87 34 / 0.6);
+      transform: translateY(-1px);
+    }
+    .filter-btn:active {
+      transform: translateY(0) scale(0.97);
     }
 
     /* ===== Cart Sidebar ===== */
@@ -998,7 +1042,7 @@
 
     /* ===== About Section ===== */
     section.about {
-      padding: 5rem 1rem 7rem;
+      padding: var(--section-padding);
       background: white;
       color: #3e3e3e;
       user-select: text;
@@ -1113,7 +1157,7 @@
 
     /* ===== Contact Section ===== */
     section.contact {
-      padding: 5rem 1rem 7rem;
+      padding: var(--section-padding);
       background: white;
       color: #3e3e3e;
       user-select: text;
@@ -1202,17 +1246,22 @@
       border-radius: 50px;
       border: none;
       box-shadow: 0 8px 25px rgb(255 87 34 / 0.7);
-      transition: background 0.3s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       user-select: none;
       width: 100%;
     }
     .btn-submit:hover {
       background: #e64a19;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgb(230 74 25 / 0.8);
+    }
+    .btn-submit:active {
+      transform: translateY(0) scale(0.97);
     }
 
     /* ===== Testimonials ===== */
     section.testimonials {
-      padding: 5rem 1rem 7rem;
+      padding: var(--section-padding);
       background: #fff3e0;
       color: #3e2723;
       user-select: none;
@@ -2957,14 +3006,7 @@ select:focus-visible {
   }
 }
 
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+
 
 /* Dark mode support for better contrast */
 @media (prefers-color-scheme: dark) {
@@ -3614,6 +3656,28 @@ textarea.input-error:focus {
   border-color: #c0392b !important;
   box-shadow: 0 0 12px rgba(192, 57, 43, 0.4) !important;
   outline: none !important;
+}
+
+/* Navigation Drawer Backdrop Overlay */
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1050;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, visibility;
+}
+
+.nav-overlay.active {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Mobile responsive navigation styles */
