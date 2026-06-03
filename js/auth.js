@@ -187,99 +187,94 @@
     if (!authNavItem) return;
 
     const loggedInUser = getSessionUser();
+
+    // Logged out state
     if (!loggedInUser || !loggedInUser.name) {
-      authNavItem.innerHTML = '<a href="login.html" class="login-btn-nav" aria-label="Go to login page">Login</a>';
+      const loginLink = document.createElement("a");
+      loginLink.href = "login.html";
+      loginLink.className = "login-btn-nav";
+      loginLink.textContent = "Login";
+      loginLink.setAttribute("aria-label", "Go to login page");
+
+      authNavItem.innerHTML = "";
+      authNavItem.appendChild(loginLink);
       return;
     }
 
-    const safeName = escapeHTML(String(loggedInUser.name).trim());
-    const safeEmail = escapeHTML(String(loggedInUser.email || "").trim());
+    // Logged in state (SAFE DOM BUILD)
+    const profileMenu = document.createElement("div");
+    profileMenu.className = "profile-menu";
+    profileMenu.setAttribute("data-profile-menu", "");
 
-    authNavItem.innerHTML = `
-      <div class="profile-menu" data-profile-menu>
-        <button
-          type="button"
-          class="profile-toggle"
-          id="profileToggle"
-          aria-haspopup="true"
-          aria-expanded="false"
-          aria-label="Open profile menu"
-        >
-          <span class="profile-avatar" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 12c2.76 0 5-2.46 5-5.5S14.76 1 12 1 7 3.46 7 6.5 9.24 12 12 12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-              <path d="M4 23c0-4.42 3.58-8 8-8s8 3.58 8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-          </span>
-          <span class="sr-only">Open profile menu for ${safeName}</span>
-        </button>
-        <div class="profile-dropdown" id="profileDropdown" role="menu" aria-label="Account menu">
-          <div class="profile-dropdown-header">
-            <span class="profile-dropdown-name">${safeName}</span>
-            <span class="profile-dropdown-email">${safeEmail}</span>
-          </div>
-          <a href="profile.html" role="menuitem">Profile</a>
-          <a href="dashboard.html" role="menuitem">Dashboard</a>
-          <button type="button" class="profile-dropdown-logout" id="logoutBtn">Logout</button>
-        </div>
-      </div>
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "profile-toggle";
+    button.id = "profileToggle";
+    button.setAttribute("aria-haspopup", "true");
+    button.setAttribute("aria-expanded", "false");
+    button.setAttribute("aria-label", "Open profile menu");
+
+    button.innerHTML = `
+      <span class="profile-avatar" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 12c2.76 0 5-2.46 5-5.5S14.76 1 12 1 7 3.46 7 6.5 9.24 12 12 12Z" stroke="currentColor" stroke-width="1.8"></path>
+          <path d="M4 23c0-4.42 3.58-8 8-8s8 3.58 8 8" stroke="currentColor" stroke-width="1.8"></path>
+        </svg>
+      </span>
     `;
 
-    setupProfileDropdown();
-  }
+    const dropdown = document.createElement("div");
+    dropdown.className = "profile-dropdown";
+    dropdown.id = "profileDropdown";
+    dropdown.setAttribute("role", "menu");
 
-  function handleLoginPage() {
-    const loginForm = document.getElementById("login-form");
-    if (!loginForm) return;
+    const header = document.createElement("div");
+    header.className = "profile-dropdown-header";
 
-    loginForm.addEventListener("submit", function (event) {
-      event.preventDefault();
+    const nameEl = document.createElement("span");
+    nameEl.className = "profile-dropdown-name";
+    nameEl.textContent = loggedInUser.name; // SAFE
 
-      const emailInput = document.getElementById("login-email");
-      const passwordInput = document.getElementById("login-password");
-      const email = normalizeEmail(emailInput ? emailInput.value : "");
-      const password = String(passwordInput ? passwordInput.value : "").trim();
+    const emailEl = document.createElement("span");
+    emailEl.className = "profile-dropdown-email";
+    emailEl.textContent = loggedInUser.email || ""; // SAFE
 
-      clearFormErrors(["login-email", "login-password"], "login-form");
+    header.appendChild(nameEl);
+    header.appendChild(emailEl);
 
-      let hasError = false;
+    const profileLink = document.createElement("a");
+    profileLink.href = "profile.html";
+    profileLink.textContent = "Profile";
+    profileLink.setAttribute("role", "menuitem");
 
-      if (!validateEmail(email)) {
-        setFieldError("login-email", "Please enter a valid email address.");
-        hasError = true;
-      }
+    const dashboardLink = document.createElement("a");
+    dashboardLink.href = "dashboard.html";
+    dashboardLink.textContent = "Dashboard";
+    dashboardLink.setAttribute("role", "menuitem");
 
-      if (password.length < 6) {
-        setFieldError("login-password", "Password must be at least 6 characters.");
-        hasError = true;
-      }
+    const logoutBtn = document.createElement("button");
+    logoutBtn.type = "button";
+    logoutBtn.textContent = "Logout";
+    logoutBtn.id = "logoutBtn";
+    logoutBtn.className = "profile-dropdown-logout";
 
-      if (hasError) {
-        setFormMessage("login-form", "Please fix the highlighted fields.", "error");
-        return;
-      }
-
-      const users = getUsers();
-      const matchedUser = users.find(
-        (user) => normalizeEmail(user.email) === email && String(user.password || "") === password
-      );
-
-      if (!matchedUser) {
-        setFormMessage("login-form", "Invalid email or password. Please try again.", "error");
-        return;
-      }
-
-      setSessionUser({
-        name: matchedUser.name,
-        email: matchedUser.email,
-        phone: matchedUser.phone,
-        location: matchedUser.location,
-        loginAt: new Date().toISOString()
-      });
-
-      setFormMessage("login-form", "Login successful. Redirecting...", "success");
+    logoutBtn.addEventListener("click", () => {
+      clearSessionUser();
       window.location.href = "index.html";
     });
+
+    dropdown.appendChild(header);
+    dropdown.appendChild(profileLink);
+    dropdown.appendChild(dashboardLink);
+    dropdown.appendChild(logoutBtn);
+
+    profileMenu.appendChild(button);
+    profileMenu.appendChild(dropdown);
+
+    authNavItem.innerHTML = "";
+    authNavItem.appendChild(profileMenu);
+
+    setupProfileDropdown();
   }
 
   function handleSignupPage() {
