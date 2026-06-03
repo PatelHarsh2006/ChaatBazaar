@@ -1,8 +1,17 @@
-// ===== Accessibility Enhancements =====
-// Screen reader support, keyboard navigation, and ARIA improvements
+// ===== Accessibility & Responsive Navigation Enhancements =====
+// Screen reader support, keyboard navigation, dynamic mobile navigation, and ARIA improvements
 
 // Setup skip links for keyboard navigation
 function setupSkipLinks() {
+  let mainContent = document.getElementById('main-content') || document.querySelector('main') || document.querySelector('section');
+  if (mainContent) {
+    if (!mainContent.id) {
+      mainContent.id = 'main-content';
+    }
+    mainContent.setAttribute('tabindex', '-1');
+    mainContent.style.outline = 'none';
+  }
+
   const skipLink = document.createElement('a');
   skipLink.href = '#main-content';
   skipLink.className = 'skip-link';
@@ -10,7 +19,120 @@ function setupSkipLinks() {
   document.body.insertBefore(skipLink, document.body.firstChild);
 }
 
-// Enhance dropdown keyboard navigation
+// Setup mobile hamburger navigation and accessibility controls
+function setupMobileNavigation() {
+  const headerInner = document.querySelector('.header-inner');
+  const nav = document.querySelector('nav');
+  if (!headerInner || !nav) return;
+
+  if (document.getElementById('mobile-nav-toggle')) return;
+
+  const toggleBtn = document.createElement('button');
+  toggleBtn.id = 'mobile-nav-toggle';
+  toggleBtn.className = 'mobile-nav-toggle';
+  toggleBtn.setAttribute('aria-label', 'Open navigation menu');
+  toggleBtn.setAttribute('aria-expanded', 'false');
+  toggleBtn.setAttribute('aria-controls', 'primary-navigation');
+  
+  toggleBtn.innerHTML = `
+    <span class="hamburger-bar"></span>
+    <span class="hamburger-bar"></span>
+    <span class="hamburger-bar"></span>
+  `;
+
+  if (!nav.id) {
+    nav.id = 'primary-navigation';
+  }
+
+  headerInner.insertBefore(toggleBtn, nav);
+
+  toggleBtn.addEventListener('click', () => {
+    const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+    const nextState = !isExpanded;
+    toggleBtn.setAttribute('aria-expanded', String(nextState));
+    toggleBtn.setAttribute('aria-label', nextState ? 'Close navigation menu' : 'Open navigation menu');
+    nav.classList.toggle('nav-open', nextState);
+    document.body.classList.toggle('nav-menu-open', nextState);
+    
+    if (nextState) {
+      const firstLink = nav.querySelector('a');
+      if (firstLink) setTimeout(() => firstLink.focus(), 100);
+    } else {
+      toggleBtn.focus();
+    }
+  });
+
+  const navLinks = nav.querySelectorAll('a:not(.dropdown-toggle)');
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      toggleBtn.setAttribute('aria-label', 'Open navigation menu');
+      nav.classList.remove('nav-open');
+      document.body.classList.remove('nav-menu-open');
+    });
+  });
+
+  // Dropdown accordions for mobile menu
+  const dropdowns = nav.querySelectorAll('.dropdown');
+  dropdowns.forEach(dropdown => {
+    const toggle = dropdown.querySelector('.dropdown-toggle');
+    if (!toggle) return;
+
+    toggle.addEventListener('click', (e) => {
+      if (window.innerWidth <= 1024) {
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen = dropdown.classList.contains('open');
+        
+        dropdowns.forEach(d => {
+          if (d !== dropdown) {
+            d.classList.remove('open');
+            const dToggle = d.querySelector('.dropdown-toggle');
+            if (dToggle) dToggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        dropdown.classList.toggle('open', !isOpen);
+        toggle.setAttribute('aria-expanded', String(!isOpen));
+      }
+    });
+  });
+
+  // Trap focus and close drawer on Escape
+  nav.addEventListener('keydown', (e) => {
+    if (!nav.classList.contains('nav-open')) return;
+
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      toggleBtn.setAttribute('aria-label', 'Open navigation menu');
+      nav.classList.remove('nav-open');
+      document.body.classList.remove('nav-menu-open');
+      toggleBtn.focus();
+    }
+
+    if (e.key === 'Tab') {
+      const focusable = nav.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex="0"]');
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          last.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === last) {
+          first.focus();
+          e.preventDefault();
+        }
+      }
+    }
+  });
+}
+
+// Enhance dropdown keyboard navigation for desktop
 function setupDropdownKeyboardNav() {
   const dropdowns = document.querySelectorAll('.dropdown');
 
@@ -86,6 +208,7 @@ function setupSearchKeyboardNav() {
       e.preventDefault();
       selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
       if (selectedIndex >= 0) {
+        items.forEach(el => el.classList.remove('focused'));
         items[selectedIndex].classList.add('focused');
         items[selectedIndex].scrollIntoView({ block: 'nearest' });
       }
@@ -102,8 +225,8 @@ function setupSearchKeyboardNav() {
         searchInput.focus();
       }
     } else if (e.key === 'Enter') {
-      e.preventDefault();
       if (selectedIndex >= 0) {
+        e.preventDefault();
         items[selectedIndex].click();
       }
     } else if (e.key === 'Escape') {
@@ -113,7 +236,6 @@ function setupSearchKeyboardNav() {
     }
   });
 
-  const originalShowSuggestions = searchInput._showSuggestions;
   searchInput.addEventListener('input', () => {
     selectedIndex = -1;
   });
@@ -144,9 +266,7 @@ function setupFormAccessibility() {
   if (contactForm) {
     const inputs = contactForm.querySelectorAll('input, textarea');
     inputs.forEach(input => {
-      const label = contactForm.querySelector(`label[for="${input.id}"]`);
       const errorMsg = contactForm.querySelector(`#error-${input.id}`);
-
       if (errorMsg) {
         input.setAttribute('aria-describedby', `error-${input.id}`);
       }
@@ -175,21 +295,53 @@ function setupFilterButtonAccessibility() {
   });
 }
 
-// Setup cart sidebar keyboard accessibility
+// Setup cart sidebar keyboard accessibility and focus trapping
 function setupCartSidebarKeyboardNav() {
   const cartSidebar = document.getElementById('cart-sidebar');
   const cartCloseBtn = document.getElementById('cart-close');
 
   if (!cartSidebar) return;
 
-  // Trap focus within sidebar when open
   cartSidebar.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       e.preventDefault();
       cartSidebar.setAttribute('aria-hidden', 'true');
       cartSidebar.classList.remove('open');
+      const cartOpenBtn = document.getElementById('cart-open-btn');
+      if (cartOpenBtn) cartOpenBtn.focus();
+    }
+
+    if (e.key === 'Tab') {
+      const focusable = cartSidebar.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex="0"]');
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          last.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === last) {
+          first.focus();
+          e.preventDefault();
+        }
+      }
     }
   });
+
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'class') {
+        const isOpen = cartSidebar.classList.contains('open');
+        if (isOpen && cartCloseBtn) {
+          setTimeout(() => cartCloseBtn.focus(), 50);
+        }
+      }
+    });
+  });
+  observer.observe(cartSidebar, { attributes: true });
 }
 
 // Enhance checkbox and radio accessibility
@@ -244,6 +396,7 @@ function setupFocusVisibility() {
 // Initialize all accessibility enhancements
 function initializeAccessibility() {
   setupSkipLinks();
+  setupMobileNavigation();
   setupDropdownKeyboardNav();
   setupSearchKeyboardNav();
   setupCardKeyboardNav();
