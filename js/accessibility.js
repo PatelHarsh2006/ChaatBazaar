@@ -1,5 +1,5 @@
 // ===== Accessibility & Responsive Navigation Enhancements =====
-// Screen reader support, keyboard navigation, dynamic mobile navigation, and ARIA improvements
+// Screen reader support, keyboard navigation, dynamic mobile navigation, validation feedback, and ARIA improvements
 
 // Setup skip links for keyboard navigation
 function setupSkipLinks() {
@@ -11,6 +11,9 @@ function setupSkipLinks() {
     mainContent.setAttribute('tabindex', '-1');
     mainContent.style.outline = 'none';
   }
+
+  // Check if skip link already exists
+  if (document.querySelector('.skip-link')) return;
 
   const skipLink = document.createElement('a');
   skipLink.href = '#main-content';
@@ -258,10 +261,89 @@ function setupCardKeyboardNav() {
   });
 }
 
+// Field validation helper for ARIA updates
+function validateField(input, errorMsg) {
+  let isValid = true;
+  let message = '';
+  const value = input.value.trim();
+
+  if (input.required && !value) {
+    isValid = false;
+    message = `${input.previousElementSibling ? input.previousElementSibling.textContent.trim() : 'Field'} is required.`;
+  } else if (input.type === 'email' && value) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(value)) {
+      isValid = false;
+      message = 'Please enter a valid email address.';
+    }
+  } else if (input.tagName === 'TEXTAREA' && value && value.length < 10) {
+    isValid = false;
+    message = 'Message must be at least 10 characters.';
+  }
+
+  if (!isValid) {
+    input.setAttribute('aria-invalid', 'true');
+    input.classList.add('input-error');
+    if (errorMsg) {
+      errorMsg.textContent = message;
+      errorMsg.style.display = 'block';
+    }
+  } else {
+    input.setAttribute('aria-invalid', 'false');
+    input.classList.remove('input-error');
+    if (errorMsg) {
+      errorMsg.textContent = '';
+    }
+  }
+
+  return isValid;
+}
+
+// Auth fields validation validation
+function validateAuthField(input, errorMsg) {
+  let isValid = true;
+  let message = '';
+  const value = input.value.trim();
+
+  if (input.required && !value) {
+    isValid = false;
+    message = 'This field is required.';
+  } else if (input.type === 'email' && value) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(value)) {
+      isValid = false;
+      message = 'Please enter a valid email address.';
+    }
+  } else if (input.type === 'password' && value && value.length < 6) {
+    isValid = false;
+    message = 'Password must be at least 6 characters.';
+  } else if (input.type === 'tel' && value && !/^\d{10}$/.test(value)) {
+    isValid = false;
+    message = 'Please enter a valid 10-digit phone number.';
+  }
+
+  if (!isValid) {
+    input.setAttribute('aria-invalid', 'true');
+    input.classList.add('input-error');
+    if (errorMsg) {
+      errorMsg.textContent = message;
+    }
+  } else {
+    input.setAttribute('aria-invalid', 'false');
+    input.classList.remove('input-error');
+    if (errorMsg) {
+      errorMsg.textContent = '';
+    }
+  }
+  return isValid;
+}
+
 // Enhance form accessibility with proper labels and error associations
 function setupFormAccessibility() {
   const contactForm = document.getElementById('contact-form');
   const newsLetterForm = document.getElementById('newsletter-form');
+  const loginForm = document.getElementById('login-form');
+  const signupForm = document.getElementById('signup-form');
 
   if (contactForm) {
     const inputs = contactForm.querySelectorAll('input, textarea');
@@ -270,6 +352,72 @@ function setupFormAccessibility() {
       if (errorMsg) {
         input.setAttribute('aria-describedby', `error-${input.id}`);
       }
+
+      input.addEventListener('blur', () => {
+        validateField(input, errorMsg);
+      });
+
+      input.addEventListener('input', () => {
+        input.removeAttribute('aria-invalid');
+        input.classList.remove('input-error');
+        if (errorMsg) errorMsg.textContent = '';
+      });
+    });
+
+    contactForm.addEventListener('submit', (e) => {
+      let isFormValid = true;
+      inputs.forEach(input => {
+        const errorMsg = contactForm.querySelector(`#error-${input.id}`);
+        const isValid = validateField(input, errorMsg);
+        if (!isValid) isFormValid = false;
+      });
+
+      if (!isFormValid) {
+        e.preventDefault();
+        e.stopPropagation();
+        const firstInvalid = contactForm.querySelector('[aria-invalid="true"]');
+        if (firstInvalid) firstInvalid.focus();
+      }
+    });
+  }
+
+  if (loginForm) {
+    const inputs = loginForm.querySelectorAll('input');
+    inputs.forEach(input => {
+      const errorMsg = loginForm.querySelector(`#${input.id}-error`);
+      if (errorMsg) {
+        input.setAttribute('aria-describedby', `${input.id}-error`);
+      }
+      
+      input.addEventListener('input', () => {
+        input.removeAttribute('aria-invalid');
+        input.classList.remove('input-error');
+        if (errorMsg) errorMsg.textContent = '';
+      });
+      
+      input.addEventListener('blur', () => {
+        validateAuthField(input, errorMsg);
+      });
+    });
+  }
+
+  if (signupForm) {
+    const inputs = signupForm.querySelectorAll('input');
+    inputs.forEach(input => {
+      const errorMsg = signupForm.querySelector(`#${input.id}-error`);
+      if (errorMsg) {
+        input.setAttribute('aria-describedby', `${input.id}-error`);
+      }
+      
+      input.addEventListener('input', () => {
+        input.removeAttribute('aria-invalid');
+        input.classList.remove('input-error');
+        if (errorMsg) errorMsg.textContent = '';
+      });
+      
+      input.addEventListener('blur', () => {
+        validateAuthField(input, errorMsg);
+      });
     });
   }
 

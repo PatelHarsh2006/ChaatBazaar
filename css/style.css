@@ -3560,13 +3560,34 @@ body.nav-menu-open {
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-/* High-Contrast Focus Ring Overrides */
+/* High-Contrast & Premium Glowing Focus Outlines */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid #ff5722 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 12px rgba(255, 87, 34, 0.6) !important;
+  border-radius: 4px;
+}
+
 header button:focus-visible,
 header a:focus-visible,
 header input:focus-visible {
   outline: 3px solid #ffffff !important;
   outline-offset: 2px !important;
-  box-shadow: 0 0 0 5px rgba(255, 87, 34, 0.5) !important;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.6) !important;
+}
+
+body.keyboard-nav button:focus,
+body.keyboard-nav a:focus,
+body.keyboard-nav input:focus,
+body.keyboard-nav textarea:focus,
+body.keyboard-nav select:focus {
+  outline: 3px solid #ff5722 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 12px rgba(255, 87, 34, 0.6) !important;
 }
 
 body.keyboard-nav header button:focus,
@@ -3574,7 +3595,30 @@ body.keyboard-nav header a:focus,
 body.keyboard-nav header input:focus {
   outline: 3px solid #ffffff !important;
   outline-offset: 2px !important;
-  box-shadow: 0 0 0 5px rgba(255, 87, 34, 0.5) !important;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Card & Interactive Element Keyboard Focus Indicator Refinements */
+.card:focus-visible,
+.team-member:focus-visible,
+.testimonial:focus-visible {
+  outline: 3px solid #ff5722 !important;
+  outline-offset: 4px !important;
+  box-shadow: 0 0 15px rgba(255, 87, 34, 0.5) !important;
+}
+
+/* Visual validation error states */
+input.input-error,
+textarea.input-error {
+  border-color: #c0392b !important;
+  box-shadow: 0 0 10px rgba(192, 57, 43, 0.25) !important;
+}
+
+input.input-error:focus,
+textarea.input-error:focus {
+  border-color: #c0392b !important;
+  box-shadow: 0 0 12px rgba(192, 57, 43, 0.4) !important;
+  outline: none !important;
 }
 
 /* Mobile responsive navigation styles */
@@ -3724,6 +3768,46 @@ body.keyboard-nav header input:focus {
   }
 }
 
+/* Spacing and Responsive Layout Polish */
+@media (max-width: 768px) {
+  /* About Page Section Polish */
+  .about-page {
+    padding-top: 3.5rem !important;
+    padding-bottom: 4rem !important;
+  }
+  
+  .about-desc-large {
+    font-size: 1.05rem !important;
+    margin-bottom: 2.5rem !important;
+    line-height: 1.7 !important;
+  }
+
+  /* Testimonials layout adjustments */
+  section.testimonials {
+    padding: 3.5rem 1rem 5rem !important;
+  }
+
+  .testimonial {
+    max-width: 100% !important;
+    margin-bottom: 1rem;
+  }
+  
+  .testimonial-cards {
+    gap: 1.5rem !important;
+  }
+
+  /* Team members layout */
+  .team {
+    gap: 1.5rem !important;
+  }
+  
+  .team-member {
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 300px;
+  }
+}
+
 /* Reduced Motion preferences */
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -3773,5 +3857,6 @@ body.keyboard-nav header input:focus {
     display: none !important;
   }
 }
+
 
 
