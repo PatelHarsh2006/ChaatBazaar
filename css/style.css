@@ -402,6 +402,20 @@
       visibility: visible;
       transform: translateY(0);
     }
+    /* When JS toggles the open class (keyboard interaction), show the menu the same way as hover */
+    .dropdown.open .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* Force-hide override for dropdown when JS needs to hide it despite :hover */
+    .dropdown.force-hide .dropdown-menu {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      transform: translateY(10px) !important;
+      pointer-events: none !important;
+    }
 
     /* ===== Auth/Profile Nav ===== */
     .auth-nav-item {
@@ -2422,6 +2436,29 @@ mark.highlight {
   box-shadow: 0 6px 20px rgba(191, 54, 12, 0.4);
   transform: translateY(-1px);
 }
+ newFeatures
+
+.price-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: gray;
+  font-size: 14px;
+}
+
+.discount-badge {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+=======
 /* ===== Dark Mode Theme ===== */
 .theme-toggle {
   position: relative;
@@ -2802,7 +2839,7 @@ body.dark .cart-badge {
   color: #1e1e1e;
 }
 
-/* ===== Custom Scrollbar ===== */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -2815,8 +2852,11 @@ body.dark .cart-badge {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #e64a19;
+  newFeatures
+/*Accessibility Styles */
 }
 /* ===== Accessibility Styles ===== */
+main
 
 /* Skip link - visible on focus */
 .skip-link {
@@ -2986,7 +3026,7 @@ button:disabled {
 /* Hover effect for disabled button */
 .add-btn:disabled:hover {
   transform: none !important;
-  opacity: 0.6;
+  opacity: 0.6; main
 }
 #voice-search-btn {
   border: none;
@@ -3041,6 +3081,7 @@ button:disabled {
   background: #e64a19;
   transform: scale(1.05);
 }
+
 .combo-item-right {
   display: flex;
   align-items: center;
@@ -3078,6 +3119,7 @@ button:disabled {
     font-weight:600;
     transition:0.3s;
 }
+
 
 .recommend-btn:hover{
     transform:translateY(-3px);
