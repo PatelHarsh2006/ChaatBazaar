@@ -326,27 +326,13 @@ function createCard(item, highlightQuery = "") {
     </div>
 
     <div class="card-footer">
-newFeatures
-  <div class="price-section">
-    <span class="original-price">
-      ₹${item.originalPrice}
-    </span>
-
-    <span class="price">
-      ${formatPrice(item.price)}
-    </span>
-
-    <span class="discount-badge">
-      ${Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% OFF
-    </span>
-  </div>
-
-  <button class="add-btn" aria-label="Add ${item.name} to cart">
-    Add
-  </button>
-  </div>
-
-      <span class="price">${formatPrice(item.price)}</span>
+      <div class="price-section">
+        <span class="original-price">₹${item.originalPrice || item.price}</span>
+        <span class="price">${formatPrice(item.price)}</span>
+        ${item.originalPrice && item.originalPrice > item.price
+          ? `<span class="discount-badge">${Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% OFF</span>`
+          : ''}
+      </div>
       <button class="add-btn"
         aria-label="Add ${item.name} to cart"
         ${buttonDisabled}
@@ -354,9 +340,7 @@ newFeatures
       >
         Add
       </button>
-
     </div>
-main
   `;
  
   const addBtn = card.querySelector(".add-btn");
@@ -415,8 +399,7 @@ function renderRecentlyViewed() {
   recentItems.forEach(item => recentlyViewedContainer.appendChild(createCard(item)));
 }
 
- newFeatures
-// Unified Interactive Filter Engine =====
+// ===== Favorites Renderer =====
 function renderFavorites() {
   const favoritesContainer = document.getElementById("favorites-container");
   if (!favoritesContainer) return;
@@ -426,9 +409,7 @@ function renderFavorites() {
   favoritesContainer.innerHTML = "";
  
   if (recentItems.length === 0) {
-    recentlyViewedSection.style.display =
-      "none";
-
+    favoritesContainer.innerHTML = `<p style="text-align:center;color:#5d4037;margin-top:2rem;">You have no favourites yet. Browse the menu and tap a card to save items!</p>`;
     return;
   }
  
