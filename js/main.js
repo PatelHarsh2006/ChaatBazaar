@@ -326,6 +326,53 @@ function createCard(item, highlightQuery = "") {
   return card;
 }
 
+function toKebabCase(value) {
+  return String(value || '')
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+async function renderStateExplorer() {
+  const container = document.getElementById('state-scroll-wrapper');
+  if (!container) return;
+
+  try {
+    const response = await fetch('items.json', { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`Failed to load items.json: ${response.status}`);
+    }
+
+    const items = await response.json();
+    const states = [...new Set(items.map(item => item.state).filter(Boolean))];
+
+    container.innerHTML = '';
+
+    states.forEach((state) => {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'state-card';
+      card.setAttribute('aria-label', `Explore ${state}`);
+      card.innerHTML = `
+        <img src="img/states/${toKebabCase(state)}.jpeg" alt="${state}" loading="lazy" />
+        <p>${state}</p>
+      `;
+
+      card.addEventListener('click', () => {
+        window.location.href = `state.html?state=${encodeURIComponent(state)}`;
+      });
+
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error('State explorer failed to render:', error);
+    container.innerHTML = '<p class="state-explorer-empty">State data is unavailable right now.</p>';
+  }
+}
+
 function renderSpecials() {
   if (!specialsContainer) return;
   const specials = menuItems.slice(0, 3);
@@ -792,46 +839,41 @@ window.checkout = async function () {
 
   const validationResult = await validateDeliveryLocation();
 
- if (!validationResult.valid) {
+  if (!validationResult.valid) {
+    localStorage.setItem(
+      "deliveryError",
+      JSON.stringify({
+        error: validationResult.error,
+        distance: validationResult.distance,
+        restaurantLocation: validationResult.restaurantLocation
+      })
+    );
 
-  // Save delivery failure info
-  localStorage.setItem(
-    "deliveryError",
-    JSON.stringify({
-      error: validationResult.error,
-      distance: validationResult.distance,
-      restaurantLocation: validationResult.restaurantLocation
-    })
-  );
+    return {
+      deliveryAvailable: false
+    };
+  }
 
-  // Still allow redirect to orders page
-  return {
-    deliveryAvailable: false
-  };
-}
+  const subtotal = getCartSubtotal();
+  const couponDiscount = calculateCouponDiscount(subtotal);
 
-  const subtotal = cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
-  let discount = 0;
+  let loyaltyDiscount = 0;
   let pointsRedeemed = 0;
 
   if (loyaltyPointsApplied && typeof loyalty !== 'undefined') {
     const balance = loyalty.getBalance();
     pointsRedeemed = Math.min(balance, subtotal);
-    discount = pointsRedeemed; // 1 point = ₹1 discount
+    loyaltyDiscount = pointsRedeemed;
     loyalty.redeemPoints(pointsRedeemed);
   }
 
-  const finalTotal = subtotal - discount;
+  const discount = loyaltyDiscount + couponDiscount;
+  const finalTotal = Math.max(subtotal - discount, 0);
 
-  // Award points on final total paid (10 points per ₹100 spent)
   let pointsEarned = 0;
   if (typeof loyalty !== 'undefined') {
     pointsEarned = loyalty.awardPoints(finalTotal);
   }
-
-  const subtotal = getCartSubtotal();
-  const discount = calculateCouponDiscount(subtotal);
-  const totalAmount = Math.max(subtotal - discount, 0);
 
   const newOrder = {
     id: "CB-" + Math.floor(100000 + Math.random() * 900000),
@@ -841,14 +883,12 @@ window.checkout = async function () {
     }),
     timestamp: Date.now(),
     items: JSON.parse(JSON.stringify(cart)),
-    total: totalAmount,
+    total: finalTotal,
+    subtotal,
     discount,
     coupon: activeCoupon?.code || null,
-    subtotal: subtotal,
-    discount: discount,
-    pointsRedeemed: pointsRedeemed,
-    pointsEarned: pointsEarned,
-    total: finalTotal,
+    pointsRedeemed,
+    pointsEarned,
     status: "Pending",
     deliveryAddress: {
       latitude: validationResult.userLocation.latitude,
@@ -862,7 +902,6 @@ window.checkout = async function () {
   orders.unshift(newOrder);
   localStorage.setItem('chaatOrders', JSON.stringify(orders));
 
-  // Reset points applied state
   loyaltyPointsApplied = false;
 
   cartManager.clear();
@@ -870,15 +909,15 @@ window.checkout = async function () {
   updateFavCount();
   renderCart();
 
-  // Launch the animation simulation modal if available.
   if (typeof window.triggerDeliverySimulation === 'function') {
     window.triggerDeliverySimulation();
   } else {
     console.warn('Delivery tracker is not ready yet. Order has been placed.');
   }
+
   return {
-  deliveryAvailable: true
-};
+    deliveryAvailable: true
+  };
 };
 
 window.reorderOrder = function (orderId) {
@@ -1361,6 +1400,7 @@ async function init() {
   await loadMenuData();
 
   renderSpecials();
+  await renderStateExplorer();
   renderRecentlyViewed();
   renderFavorites();
   applyAllFilters();
