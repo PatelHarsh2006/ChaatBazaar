@@ -67,9 +67,10 @@ class CartManager {
   // NORMALIZE ITEM (CRITICAL FIX)
   // =====================
 normalize(item) {
+  const safeName = typeof sanitizeInput !== "undefined" ? sanitizeInput(item.name, 100) : item.name;
   return {
-    id: item.id || item.name + "-" + item.price,
-    name: item.name,
+    id: item.id || safeName + "-" + item.price,
+    name: safeName,
     price: Number(item.price),
 
     // ✅ SAFE IMAGE FIX (does NOT affect menu)

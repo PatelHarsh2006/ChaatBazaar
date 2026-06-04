@@ -272,7 +272,11 @@ function fuzzyMatch(target, query) {
  
 function highlightText(text, query) {
   if (!text)  return "";
-  if (!query) return text;
+  
+  // Always wrap text to be safe
+  const safeText = typeof escapeHTML !== "undefined" ? escapeHTML(text) : text;
+  
+  if (!query) return safeText;
 
   const escapedQuery = query.replace(
     /[-\/\\^$*+?.()|[\]{}]/g,
@@ -280,7 +284,7 @@ function highlightText(text, query) {
   );
 
   const regex = new RegExp(`(${escapedQuery})`, "gi");
-  return text.replace(regex, "<mark class='highlight'>$1</mark>");
+  return safeText.replace(regex, "<mark class='highlight'>$1</mark>");
 }
  
 // ===== Render Functions =====
