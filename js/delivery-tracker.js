@@ -10,7 +10,7 @@ const deliveryTracker = (() => {
       label: 'Preparing Order 🍳',
       message: 'Vendor is roasting hot spices for your Chaat... 🍳',
       progress: '12.5%',
-      cartLeft: '12.5%',
+      cartTop: '-5%',
       eta: '20'
     },
     {
@@ -18,7 +18,7 @@ const deliveryTracker = (() => {
       label: 'Packed 📦',
       message: 'Packaged freshly in clay pots & ready to ride! 📦',
       progress: '37.5%',
-      cartLeft: '37.5%',
+      cartTop: '26%',
       eta: '14'
     },
     {
@@ -26,7 +26,7 @@ const deliveryTracker = (() => {
       label: 'Out for Delivery 🛍️',
       message: 'Your hot street eats are on the way! 🛍️',
       progress: '65%',
-      cartLeft: '62.5%',
+      cartTop: '58%',
       eta: '6'
     },
     {
@@ -34,7 +34,7 @@ const deliveryTracker = (() => {
       label: 'Delivered ✅',
       message: 'Order arrived — dig into your hot street feast! ✅',
       progress: '100%',
-      cartLeft: '90%',
+      cartTop: '90%',
       eta: '0'
     }
   ];
@@ -76,7 +76,7 @@ const deliveryTracker = (() => {
 
     // 2. Move cart icon on rail
     if (cartEl) {
-      cartEl.style.left = stage.cartLeft;
+      cartEl.style.top = stage.cartTop;
       // Change icon depending on active stage
       cartEl.textContent = stageIndex === 3 ? '✅' : stageIndex === 2 ? '🛍️' : '🍳';
     }
