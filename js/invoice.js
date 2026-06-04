@@ -21,11 +21,28 @@ window.invoiceGenerator = (() => {
     });
   }
 
+  function getLoggedInUserEmail() {
+    try {
+      const user = JSON.parse(localStorage.getItem('loggedInUser'));
+      return String(user?.email || "").trim().toLowerCase();
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function isOrderOwnedByCurrentUser(order) {
+    const activeEmail = getLoggedInUserEmail();
+    if (!activeEmail) {
+      return !order.ownerEmail;
+    }
+    return String(order.ownerEmail || "").trim().toLowerCase() === activeEmail;
+  }
+
   // Retrieve order details from localStorage
   function getOrderById(orderId) {
     try {
       const orders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
-      return orders.find(o => o.id === orderId);
+      return orders.find(o => o.id === orderId && isOrderOwnedByCurrentUser(o));
     } catch (error) {
       console.error("Error loading order for invoice:", error);
       return null;

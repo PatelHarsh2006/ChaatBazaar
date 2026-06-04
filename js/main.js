@@ -1,11 +1,51 @@
 // ===== Global State =====
 let menuItems = [];
 let currentCategory = "All";
-let orders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
+const ORDER_STORAGE_KEY = 'chaatOrders';
+const SESSION_STORAGE_KEY = 'loggedInUser';
+let orders = readStoredOrders();
  
 // Initialize cart from cart manager (will be set after DOM loads)
 let cart = [];
 let loyaltyPointsApplied = false;
+
+function readStoredOrders() {
+  try {
+    return JSON.parse(localStorage.getItem(ORDER_STORAGE_KEY)) || [];
+  } catch (error) {
+    console.warn("Failed to parse stored orders:", error);
+    return [];
+  }
+}
+
+function getLoggedInUserEmail() {
+  try {
+    const user = JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY));
+    return String(user?.email || "").trim().toLowerCase();
+  } catch (error) {
+    return "";
+  }
+}
+
+function orderBelongsToCurrentUser(order) {
+  const activeEmail = getLoggedInUserEmail();
+  if (!activeEmail) {
+    return !order.ownerEmail;
+  }
+  return String(order.ownerEmail || "").trim().toLowerCase() === activeEmail;
+}
+
+function getCurrentUserOrders() {
+  return orders.filter(orderBelongsToCurrentUser);
+}
+
+function findCurrentUserOrder(orderId) {
+  return getCurrentUserOrders().find(order => order.id === orderId);
+}
+
+function persistOrders() {
+  localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(orders));
+}
  
 // Will be initialized in setupCartManager() after document loads
 function setupCartManager() {
@@ -710,7 +750,7 @@ function updateOrderStatuses() {
   let changed = false;
   const now   = Date.now();
  
-  orders.forEach(order => {
+  getCurrentUserOrders().forEach(order => {
     if (order.status === "Delivered") return;
  
     const elapsedSeconds = (now - order.timestamp) / 1000;
@@ -727,7 +767,7 @@ function updateOrderStatuses() {
   });
  
   if (changed) {
-    localStorage.setItem('chaatOrders', JSON.stringify(orders));
+    persistOrders();
     renderOrdersList();
   }
 }
@@ -736,7 +776,8 @@ function renderOrdersList() {
   const container = document.getElementById("orders-container");
   if (!container) return;
  
-  if (orders.length === 0) {
+  const visibleOrders = getCurrentUserOrders();
+  if (visibleOrders.length === 0) {
     container.innerHTML = `
       <div class="empty-orders">
         <h2>No Orders Found</h2>
@@ -749,7 +790,7 @@ function renderOrdersList() {
  
   container.innerHTML = "";
  
-  orders.forEach(order => {
+  visibleOrders.forEach(order => {
     const card = document.createElement("article");
     card.className = "order-card";
  
@@ -903,6 +944,7 @@ window.checkout = async function () {
     pointsEarned,
     total:      finalTotal,
     status:     "Pending",
+    ownerEmail: getLoggedInUserEmail(),
     deliveryAddress: {
       latitude:  validationResult.userLocation.latitude,
       longitude: validationResult.userLocation.longitude,
@@ -913,7 +955,7 @@ window.checkout = async function () {
   };
  
   orders.unshift(newOrder);
-  localStorage.setItem('chaatOrders', JSON.stringify(orders));
+  persistOrders();
  
   loyaltyPointsApplied = false;
   activeCoupon         = null;
@@ -934,7 +976,7 @@ window.checkout = async function () {
 };
  
 window.reorderOrder = function (orderId) {
-  const pastOrder = orders.find(o => o.id === orderId);
+  const pastOrder = findCurrentUserOrder(orderId);
   if (!pastOrder) return;
  
   pastOrder.items.forEach(orderItem => {
@@ -1009,7 +1051,6 @@ function removeFromCart(id) {
   const cartIndex = cart.findIndex(ci => ci.item.id === id);
   if (cartIndex === -1) return;
  
-  const removedItem = cart[cartIndex].item;
   cartManager.decreaseQuantity(id);
   const cartItem = cart.find(
     (ci) => ci.item.id === id
@@ -1073,6 +1114,7 @@ window.placeOrderFromCheckout = function (customerDetails, pricingInfo) {
     pointsRedeemed: pointsRedeemed,
     pointsEarned: pointsEarned,
     status: "Pending",
+    ownerEmail: getLoggedInUserEmail(),
     customerDetails: {
       name: customerDetails.name,
       phone: customerDetails.phone,
@@ -1089,7 +1131,7 @@ window.placeOrderFromCheckout = function (customerDetails, pricingInfo) {
   };
 
   orders.unshift(newOrder);
-  localStorage.setItem('chaatOrders', JSON.stringify(orders));
+  persistOrders();
 
   // Reset points applied state
   loyaltyPointsApplied = false;
@@ -1112,7 +1154,7 @@ window.placeOrderFromCheckout = function (customerDetails, pricingInfo) {
 
 
 window.reorderOrder = function (orderId) {
-  const pastOrder = orders.find(o => o.id === orderId);
+  const pastOrder = findCurrentUserOrder(orderId);
   if (!pastOrder) return;
 
   pastOrder.items.forEach(orderItem => {
@@ -1122,7 +1164,9 @@ window.reorderOrder = function (orderId) {
   updateCartCount();
   updateFavCount();
   renderCart();
-  showToast(`🗑️ ${removedItem.name} removed from cart`);
+  if (typeof showToast === "function") {
+    showToast("Order items added back to your cart.");
+  }
 }
  
 // ===== Event Listeners =====
@@ -1236,7 +1280,7 @@ function setupSearchSuggestions() {
     if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
       suggestionsContainer.style.display = "none";
     }
-  );
+  });
 }
  
 function setupSearch() {
@@ -1536,67 +1580,6 @@ async function init() {
         window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
       }
     });
-    );
-
-    recognition.onresult = (
-      event
-    ) => {
-      const transcript =
-        event.results[0][0].transcript;
-
-      searchInput.value = transcript;
-
-      applyAllFilters();
-
-      voiceBtn.innerHTML = "🎤";
-
-  // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
-  setupCartToggle();
-  setupFilterButtons();
-  setupCouponListeners();
-  setupOrderNowScroll();
-  setupSearchSuggestions();
-  setupSearch();
-  setupAdvancedFilters();
-  setupContactForm();
-  setupNewsletterForm();
-  setupActiveNavbar();
-  setupDropdownFilterLinks();
-
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-      }
-      window.location.href = "orders.html";
-    });
-  }
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
-
-    recognition.onerror = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-
-      alert(
-        "Voice recognition failed."
-      );
-    };
-
-    recognition.onend = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
   }
  
   // Load menu data, then render
