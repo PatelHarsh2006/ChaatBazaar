@@ -1,0 +1,16 @@
+{
+  "name": "ChaatBazaar🍴",
+  "short_name": "ChaatBazaar",
+  "description": "Authentic Indian Street Food Delivered",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fff8f0",
+  "theme_color": "#ff7a00",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
