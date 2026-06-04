@@ -4,28 +4,27 @@
     "name": "Aloo Samosa",
     "description": "Crispy triangular pastry filled with spiced potato and peas",
     "price": 20,
-    "image": "img/Aloo Samosa.png",
+    "image": "img/1.avif",
     "category": "Snacks",
-newFeatures
-    "price": 30,
-    "originalPrice": 50,
-    "spice": "Medium",
- main
     "rating": 4.8,
     "spice": "Medium",
-    "dietary": ["vegan"],
-    "available" : false
+    "dietary": [
+      "vegan"
+    ],
+    "available": false
   },
   {
     "id": "kachori-002",
     "name": "Pyaaz Ki Kachori",
     "description": "Golden fried kachori with aromatic onion filling",
     "price": 25,
-    "image": "img/Pyaaz Ki Kachori.png",
+    "image": "img/2.avif",
     "category": "Snacks",
     "rating": 4.7,
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -33,16 +32,13 @@ newFeatures
     "name": "Pani Puri",
     "description": "Crispy puris filled with moong sprouts, served with sweet and spicy water",
     "price": 30,
-    "image": "img/paani puri.png",
+    "image": "img/7.avif",
     "category": "Chaat",
- newFeatures
-    "price": 50,
-    "originalPrice": 70,
-
     "rating": 4.9,
-main
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -50,11 +46,13 @@ main
     "name": "Bhel Puri",
     "description": "Mix of puffed rice, vegetables, and tangy tamarind chutney",
     "price": 35,
-    "image": "img/bhel puri.png",
+    "image": "img/8.avif",
     "category": "Chaat",
     "rating": 4.6,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -62,7 +60,7 @@ main
     "name": "Mango Lassi",
     "description": "Refreshing yogurt-based drink blended with fresh mango pulp",
     "price": 40,
-    "image": "img/Mango lassi.png",
+    "image": "img/9.avif",
     "category": "Beverages",
     "rating": 4.8,
     "spice": "Low",
@@ -74,7 +72,7 @@ main
     "name": "Dahi Bhalle",
     "description": "Soft lentil dumplings dunked in sweetened yogurt",
     "price": 45,
-    "image": "img/dahi bhalle.png",
+    "image": "img/1.avif",
     "category": "Chaat",
     "rating": 4.7,
     "spice": "Low",
@@ -86,11 +84,13 @@ main
     "name": "Chole Bhature",
     "description": "Fluffy fried bread served with spiced chickpea curry",
     "price": 50,
-    "image": "img/chole bhature.png",
+    "image": "img/2.avif",
     "category": "Snacks",
     "rating": 4.9,
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -98,11 +98,13 @@ main
     "name": "Aloo Tikki",
     "description": "Crispy potato patty topped with chutneys and yogurt",
     "price": 25,
-    "image": "img/Aloo Tikki.png",
-    "category": "Snacks",
+    "image": "img/7.avif",
+    "category": "Chaat",
     "rating": 4.7,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -110,11 +112,13 @@ main
     "name": "Gol Gappa",
     "description": "Hollow crispy balls filled with chickpeas and potatoes, served with tangy water",
     "price": 25,
-    "image": "img/Gol Gappa.png",
+    "image": "img/8.avif",
     "category": "Chaat",
     "rating": 4.8,
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -122,7 +126,7 @@ main
     "name": "Masala Chai",
     "description": "Traditional Indian spiced tea with cardamom, ginger, and cloves",
     "price": 15,
-    "image": "img/masala chai.png",
+    "image": "img/9.avif",
     "category": "Beverages",
     "rating": 4.6,
     "spice": "Medium",
@@ -134,11 +138,13 @@ main
     "name": "Mixed Vegetable Pakora",
     "description": "Battered and deep-fried assorted vegetables with chickpea flour",
     "price": 30,
-    "image": "img/Mixed Vegetable Pakora.png",
+    "image": "img/1.avif",
     "category": "Snacks",
     "rating": 4.8,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -146,11 +152,13 @@ main
     "name": "Masala Dosa",
     "description": "Crispy fermented rice pancake filled with spiced potatoes, served with sambar and chutney",
     "price": 55,
-    "image": "img/masala dosa.png",
-    "category": "Chaat",
+    "image": "img/2.avif",
+    "category": "Snacks",
     "rating": 4.9,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -158,19 +166,13 @@ main
     "name": "Jalebi",
     "description": "Golden coiled sweet treat soaked in sugar syrup",
     "price": 20,
-newFeatures
-newFeatures
-    "originalPrice": 35,
-    "spice": "Low",
-
     "image": "img/7.avif",
-    "image": "img/jalebi.png",
-main
     "category": "Snacks",
- main
     "rating": 4.7,
     "spice": "Low",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -178,18 +180,14 @@ main
     "name": "Idli with Sambar",
     "description": "Fluffy steamed rice cakes served with spiced lentil vegetable stew",
     "price": 35,
-newFeatures
-newFeatures
-    "originalPrice": 50,
-
     "image": "img/8.avif",
-    "image": "img/Idli with Sambar.png",
- main
-    "category": "Chaat",
+    "category": "Snacks",
     "rating": 4.8,
- main
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true
   },
   {
@@ -197,11 +195,13 @@ newFeatures
     "name": "Aam Panna",
     "description": "Tangy and sweet raw mango drink perfect for summer",
     "price": 30,
-    "image": "img/Aam panna.png",
+    "image": "img/9.avif",
     "category": "Beverages",
     "rating": 4.6,
     "spice": "Low",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -209,11 +209,13 @@ newFeatures
     "name": "Vada Pav",
     "description": "Crispy potato fritter inside soft bread, Mumbai street food favorite",
     "price": 20,
-    "image": "img/vada pav.png",
+    "image": "img/1.avif",
     "category": "Snacks",
     "rating": 4.9,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -221,16 +223,13 @@ newFeatures
     "name": "Sev Tameta",
     "description": "Crispy noodles mixed with tomato curry and spices",
     "price": 28,
-    "image": "img/Sev Tameta.png",
-    "category": "Chaat",
-newFeatures
-    "price": 45,
-    "originalPrice": 70,
-
+    "image": "img/2.avif",
+    "category": "Snacks",
     "rating": 4.7,
- main
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -238,7 +237,7 @@ newFeatures
     "name": "Sweet Lassi",
     "description": "Creamy yogurt drink sweetened with sugar and spiced with cardamom",
     "price": 35,
-    "image": "img/sweet lassi.png",
+    "image": "img/7.avif",
     "category": "Beverages",
     "rating": 4.8,
     "spice": "Low",
@@ -250,11 +249,13 @@ newFeatures
     "name": "Raj Kachori",
     "description": "Large crispy kachori stuffed with moong sprouts, pomegranate, and chutneys",
     "price": 60,
-    "image": "img/Raj Kachori.png",
+    "image": "img/8.avif",
     "category": "Chaat",
     "rating": 4.9,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true
   },
   {
@@ -262,24 +263,28 @@ newFeatures
     "name": "Shikanji (Lemonade)",
     "description": "Refreshing lemonade with mint and black salt",
     "price": 20,
-    "image": "img/Shikanji (Lemonade).png",
+    "image": "img/9.avif",
     "category": "Beverages",
     "rating": 4.7,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true
   },
-
   {
     "id": "rajasthan-001",
     "name": "Dal Baati Churma",
     "description": "Baked wheat balls served with lentil curry and sweet crumbled bread",
     "price": 80,
-    "image": "img/dishes/rajasthan/dal bati churma.png",
+    "image": "img/dishes/rajasthan/1.jpeg",
     "category": "Snacks",
     "rating": 4.9,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Rajasthan",
     "featured": true
@@ -289,11 +294,13 @@ newFeatures
     "name": "Ghevar",
     "description": "Disc-shaped sweet made from flour, soaked in sugar syrup",
     "price": 60,
-    "image": "img/dishes/rajasthan/ghevar.png",
+    "image": "img/dishes/rajasthan/2.jpeg",
     "category": "Snacks",
     "rating": 4.8,
     "spice": "Low",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Rajasthan",
     "featured": true
@@ -304,7 +311,7 @@ newFeatures
     "description": "Fiery Rajasthani mutton curry cooked with mathania red chilies",
     "price": 180,
     "image": "img/dishes/rajasthan/3.jpeg",
-    "category": "Chaat",
+    "category": "Snacks",
     "rating": 4.7,
     "spice": "High",
     "dietary": [],
@@ -317,11 +324,13 @@ newFeatures
     "name": "Pyaaz Kachori",
     "description": "Deep-fried pastry stuffed with spiced onion filling",
     "price": 25,
-    "image": "img/dishes/rajasthan/pyaaz kachori.png",
+    "image": "img/dishes/rajasthan/4.jpeg",
     "category": "Snacks",
     "rating": 4.7,
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Rajasthan",
     "featured": false
@@ -331,7 +340,7 @@ newFeatures
     "name": "Mawa Kachori",
     "description": "Sweet kachori stuffed with mawa and dry fruits, soaked in sugar syrup",
     "price": 35,
-    "image": "img/dishes/rajasthan/mawa kachori.png",
+    "image": "img/dishes/rajasthan/5.jpeg",
     "category": "Snacks",
     "rating": 4.6,
     "spice": "Low",
@@ -345,11 +354,14 @@ newFeatures
     "name": "Ker Sangri",
     "description": "Desert bean and berry stir fry, a Rajasthani tribal delicacy",
     "price": 70,
-    "image": "img/dishes/rajasthan/ker sangri.jpeg",
-    "category": "Chaat",
+    "image": "img/dishes/rajasthan/6.jpeg",
+    "category": "Snacks",
     "rating": 4.5,
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Rajasthan",
     "featured": false
@@ -359,11 +371,13 @@ newFeatures
     "name": "Momo",
     "description": "Steamed dumplings stuffed with spiced vegetables, served with fiery chutney",
     "price": 60,
-    "image": "img/dishes/sikkim/momo.jpeg",
+    "image": "img/dishes/sikkim/1.jpeg",
     "category": "Snacks",
     "rating": 4.9,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Sikkim",
     "featured": true
@@ -373,11 +387,13 @@ newFeatures
     "name": "Thukpa",
     "description": "Hearty noodle soup with vegetables and broth, a Himalayan comfort staple",
     "price": 70,
-    "image": "img/dishes/sikkim/thukpa.jpeg",
-    "category": "Chaat",
+    "image": "img/dishes/sikkim/2.jpeg",
+    "category": "Snacks",
     "rating": 4.8,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Sikkim",
     "featured": true
@@ -387,11 +403,14 @@ newFeatures
     "name": "Gundruk",
     "description": "Fermented leafy green soup with tangy and earthy flavor",
     "price": 50,
-    "image": "img/dishes/sikkim/gundruk.jpeg",
-    "category": "Chaat",
+    "image": "img/dishes/sikkim/3.jpeg",
+    "category": "Snacks",
     "rating": 4.5,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Sikkim",
     "featured": false
@@ -401,11 +420,14 @@ newFeatures
     "name": "Sel Roti",
     "description": "Crispy ring-shaped sweet rice bread, popular during festivals",
     "price": 30,
-    "image": "img/dishes/sikkim/sel roti.jpeg",
+    "image": "img/dishes/sikkim/4.jpeg",
     "category": "Snacks",
     "rating": 4.6,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Sikkim",
     "featured": false
@@ -415,8 +437,8 @@ newFeatures
     "name": "Chhurpi Soup",
     "description": "Traditional Sikkimese soup made from hardened yak cheese",
     "price": 55,
-    "image": "img/dishes/sikkim/Chhurpi Soup.jpeg",
-    "category": "Chaat",
+    "image": "img/dishes/sikkim/5.jpeg",
+    "category": "Beverages",
     "rating": 4.4,
     "spice": "Low",
     "dietary": [],
@@ -429,8 +451,8 @@ newFeatures
     "name": "Phagshapa",
     "description": "Pork fat strips cooked with dried chilies and radishes",
     "price": 120,
-    "image": "img/dishes/sikkim/momo.jpeg",
-    "category": "Chaat",
+    "image": "img/dishes/sikkim/6.jpeg",
+    "category": "Snacks",
     "rating": 4.6,
     "spice": "High",
     "dietary": [],
@@ -443,8 +465,8 @@ newFeatures
     "name": "Chettinad Chicken Curry",
     "description": "Aromatic chicken curry from Chettinad with freshly ground spices",
     "price": 160,
-    "image": "img/dishes/tamil-nadu/Murukku.jpeg",
-    "category": "Chaat",
+    "image": "img/dishes/tamil-nadu/1.jpeg",
+    "category": "Snacks",
     "rating": 4.9,
     "spice": "High",
     "dietary": [],
@@ -457,11 +479,14 @@ newFeatures
     "name": "Idiyappam",
     "description": "Delicate steamed rice noodle rounds served with coconut milk and chutney",
     "price": 45,
-    "image": "img/dishes/tamil-nadu/idiyappam.png",
+    "image": "img/dishes/tamil-nadu/2.jpeg",
     "category": "Snacks",
     "rating": 4.7,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Tamil Nadu",
     "featured": true
@@ -471,7 +496,7 @@ newFeatures
     "name": "Pongal",
     "description": "Comforting rice and lentil porridge seasoned with black pepper and ghee",
     "price": 40,
-    "image": "img/dishes/tamil-nadu/pongal.png",
+    "image": "img/dishes/tamil-nadu/3.jpeg",
     "category": "Snacks",
     "rating": 4.8,
     "spice": "Low",
@@ -485,11 +510,14 @@ newFeatures
     "name": "Sundal",
     "description": "Stir-fried chickpeas with coconut and mustard seeds",
     "price": 30,
-    "image": "img/dishes/tamil-nadu/sundal.png",
+    "image": "img/dishes/tamil-nadu/4.jpeg",
     "category": "Snacks",
     "rating": 4.5,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Tamil Nadu",
     "featured": false
@@ -499,7 +527,7 @@ newFeatures
     "name": "Filter Coffee",
     "description": "Strong South Indian decoction coffee served frothy in a davara set",
     "price": 20,
-    "image": "img/dishes/tamil-nadu/filter coffee.jpeg",
+    "image": "img/dishes/tamil-nadu/5.jpeg",
     "category": "Beverages",
     "rating": 4.9,
     "spice": "Low",
@@ -513,11 +541,14 @@ newFeatures
     "name": "Murukku",
     "description": "Crunchy spiral-shaped savory snack made from rice flour and urad dal",
     "price": 25,
-    "image": "img/dishes/tamil-nadu/Murukku.jpeg",
+    "image": "img/dishes/tamil-nadu/6.jpeg",
     "category": "Snacks",
     "rating": 4.6,
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Tamil Nadu",
     "featured": false
@@ -527,8 +558,8 @@ newFeatures
     "name": "Hyderabadi Biryani",
     "description": "Slow-cooked dum biryani layered with fragrant basmati rice and spiced meat",
     "price": 200,
-    "image": "img/dishes/telangana/masala chicken curry.jpeg",
-    "category": "Chaat",
+    "image": "img/dishes/telangana/1.jpeg",
+    "category": "Snacks",
     "rating": 4.9,
     "spice": "High",
     "dietary": [],
@@ -541,11 +572,14 @@ newFeatures
     "name": "Pesarattu",
     "description": "Green moong dal crepe served with ginger chutney, a Telangana breakfast classic",
     "price": 40,
-    "image": "img/dishes/telangana/Pesarattu.jpeg",
+    "image": "img/dishes/telangana/2.jpeg",
     "category": "Snacks",
     "rating": 4.7,
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Telangana",
     "featured": true
@@ -555,11 +589,14 @@ newFeatures
     "name": "Sarva Pindi",
     "description": "Crispy rice flour pancake tempered with peanuts, sesame and chili",
     "price": 35,
-    "image": "img/dishes/telangana/Sarva Pindi.png",
+    "image": "img/dishes/telangana/3.jpeg",
     "category": "Snacks",
     "rating": 4.5,
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Telangana",
     "featured": false
@@ -569,8 +606,8 @@ newFeatures
     "name": "Gongura Mutton",
     "description": "Tender mutton cooked in tangy sorrel leaf gravy",
     "price": 180,
-    "image": "img/dishes/telangana/masala chicken curry.jpeg",
-    "category": "Chaat",
+    "image": "img/dishes/telangana/4.jpeg",
+    "category": "Snacks",
     "rating": 4.8,
     "spice": "High",
     "dietary": [],
@@ -583,7 +620,7 @@ newFeatures
     "name": "Qubani Ka Meetha",
     "description": "Hyderabadi apricot dessert served with cream or custard",
     "price": 60,
-    "image": "img/dishes/telangana/Qubani Ka Meetha.jpeg",
+    "image": "img/dishes/telangana/5.jpeg",
     "category": "Snacks",
     "rating": 4.6,
     "spice": "Low",
@@ -597,7 +634,7 @@ newFeatures
     "name": "Double Ka Meetha",
     "description": "Bread pudding soaked in sugar syrup, milk and topped with dry fruits",
     "price": 55,
-    "image": "img/dishes/telangana/Double Ka Meetha.jpeg",
+    "image": "img/dishes/telangana/6.jpeg",
     "category": "Snacks",
     "rating": 4.7,
     "spice": "Low",
@@ -611,8 +648,8 @@ newFeatures
     "name": "Mui Borok",
     "description": "Traditional Tripuri bamboo shoot curry with fermented fish",
     "price": 90,
-    "image": "img/dishes/tripura/mui borok.png",
-    "category": "Chaat",
+    "image": "img/dishes/tripura/1.jpeg",
+    "category": "Snacks",
     "rating": 4.6,
     "spice": "High",
     "dietary": [],
@@ -625,7 +662,7 @@ newFeatures
     "name": "Wahan Mosdeng",
     "description": "Spicy minced pork chutney with chilies and coriander",
     "price": 110,
-    "image": "img/dishes/tripura/Bhangui.jpeg",
+    "image": "img/dishes/tripura/2.jpeg",
     "category": "Chaat",
     "rating": 4.5,
     "spice": "High",
@@ -639,8 +676,8 @@ newFeatures
     "name": "Chakhwi",
     "description": "Slow-cooked pork with bamboo shoots and local herbs",
     "price": 130,
-    "image": "img/dishes/tripura/Gudok.jpeg",
-    "category": "Chaat",
+    "image": "img/dishes/tripura/3.jpeg",
+    "category": "Snacks",
     "rating": 4.7,
     "spice": "Medium",
     "dietary": [],
@@ -653,7 +690,7 @@ newFeatures
     "name": "Gudok",
     "description": "Steamed fish or pork with fermented vegetables wrapped in banana leaf",
     "price": 100,
-    "image": "img/dishes/tripura/Gudok.jpeg",
+    "image": "img/dishes/tripura/4.jpeg",
     "category": "Snacks",
     "rating": 4.4,
     "spice": "Medium",
@@ -667,7 +704,7 @@ newFeatures
     "name": "Berma",
     "description": "Dried and fermented small fish used as a condiment or eaten plain",
     "price": 40,
-    "image": "img/dishes/tripura/Berma.jpeg",
+    "image": "img/dishes/tripura/5.jpeg",
     "category": "Snacks",
     "rating": 4.3,
     "spice": "Low",
@@ -681,11 +718,14 @@ newFeatures
     "name": "Bhangui",
     "description": "Rice cooked in banana leaf parcels, a traditional Tripuri delicacy",
     "price": 50,
-    "image": "img/dishes/tripura/Bhangui.jpeg",
+    "image": "img/dishes/tripura/6.jpeg",
     "category": "Snacks",
     "rating": 4.5,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Tripura",
     "featured": false
@@ -695,7 +735,7 @@ newFeatures
     "name": "Tunday Kebab",
     "description": "Melt-in-mouth galouti kebabs from Lucknow made with 100+ spices",
     "price": 120,
-    "image": "img/dishes/uttar-pradesh/Bedmi Puri.jpeg",
+    "image": "img/dishes/uttar-pradesh/1.jpeg",
     "category": "Snacks",
     "rating": 4.9,
     "spice": "Medium",
@@ -709,11 +749,13 @@ newFeatures
     "name": "Banarasi Paan",
     "description": "Betel leaf filled with sweet and aromatic ingredients, a Varanasi specialty",
     "price": 15,
-    "image": "img/dishes/uttar-pradesh/Banarasi Paan.jpeg",
+    "image": "img/dishes/uttar-pradesh/2.jpeg",
     "category": "Snacks",
     "rating": 4.7,
     "spice": "Low",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Uttar Pradesh",
     "featured": true
@@ -723,11 +765,13 @@ newFeatures
     "name": "Bedmi Puri",
     "description": "Fried puri stuffed with urad dal and spices, served with aloo sabzi",
     "price": 40,
-    "image": "img/dishes/uttar-pradesh/Bedmi Puri.jpeg",
+    "image": "img/dishes/uttar-pradesh/3.jpeg",
     "category": "Snacks",
     "rating": 4.7,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Uttar Pradesh",
     "featured": false
@@ -737,7 +781,7 @@ newFeatures
     "name": "Malaiyo",
     "description": "Airy saffron-scented milk foam dessert eaten in winter mornings in Varanasi",
     "price": 30,
-    "image": "img/dishes/uttar-pradesh/Malaiyo.jpeg",
+    "image": "img/dishes/uttar-pradesh/4.jpeg",
     "category": "Snacks",
     "rating": 4.8,
     "spice": "Low",
@@ -751,11 +795,13 @@ newFeatures
     "name": "Tehri",
     "description": "One-pot vegetarian rice dish cooked with potatoes and spices",
     "price": 55,
-    "image": "img/dishes/uttar-pradesh/Tehri.jpeg",
-    "category": "Chaat",
+    "image": "img/dishes/uttar-pradesh/5.jpeg",
+    "category": "Snacks",
     "rating": 4.6,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "Uttar Pradesh",
     "featured": false
@@ -765,7 +811,7 @@ newFeatures
     "name": "Balushahi",
     "description": "Flaky deep-fried sweet soaked in sugar syrup, similar to a glazed doughnut",
     "price": 25,
-    "image": "img/dishes/uttar-pradesh/Balushahi.jpeg",
+    "image": "img/dishes/uttar-pradesh/6.jpeg",
     "category": "Snacks",
     "rating": 4.5,
     "spice": "Low",
@@ -779,11 +825,14 @@ newFeatures
     "name": "Kafuli",
     "description": "Thick spinach and fenugreek curry cooked with rice paste, a Pahadi staple",
     "price": 60,
-    "image": "img/dishes/uttarakhand/Kafuli.jpeg",
-    "category": "Chaat",
+    "image": "img/dishes/uttarakhand/1.jpeg",
+    "category": "Snacks",
     "rating": 4.7,
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Uttarakhand",
     "featured": true
@@ -793,11 +842,14 @@ newFeatures
     "name": "Aloo Ke Gutke",
     "description": "Spicy cubed potatoes tempered with whole spices and jakhiya seeds",
     "price": 45,
-    "image": "img/dishes/uttarakhand/aloo ke gutke.png",
+    "image": "img/dishes/uttarakhand/2.jpeg",
     "category": "Snacks",
     "rating": 4.8,
     "spice": "High",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Uttarakhand",
     "featured": true
@@ -807,11 +859,14 @@ newFeatures
     "name": "Bhatt Ki Churkani",
     "description": "Black soybean curry with sharp tangy flavor, rich in protein",
     "price": 65,
-    "image": "img/dishes/uttarakhand/Bhatt Ki Churkani.png",
-    "category": "Chaat",
+    "image": "img/dishes/uttarakhand/3.jpeg",
+    "category": "Snacks",
     "rating": 4.5,
     "spice": "Medium",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Uttarakhand",
     "featured": false
@@ -821,7 +876,7 @@ newFeatures
     "name": "Singori",
     "description": "Cone-shaped sweet made of khoya wrapped in maalu leaf",
     "price": 30,
-    "image": "img/dishes/uttarakhand/Singori.png",
+    "image": "img/dishes/uttarakhand/4.jpeg",
     "category": "Snacks",
     "rating": 4.6,
     "spice": "Low",
@@ -835,11 +890,14 @@ newFeatures
     "name": "Chainsoo",
     "description": "Black gram dal roasted and cooked into a thick gravy",
     "price": 50,
-    "image": "img/dishes/uttarakhand/Chainsoo.jpeg",
-    "category": "Chaat",
+    "image": "img/dishes/uttarakhand/5.jpeg",
+    "category": "Beverages",
     "rating": 4.4,
     "spice": "Low",
-    "dietary": ["vegan", "gluten-free"],
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
     "available": true,
     "state": "Uttarakhand",
     "featured": false
@@ -849,7 +907,7 @@ newFeatures
     "name": "Arsa",
     "description": "Traditional sweet rice cake fried in ghee, made during festivals",
     "price": 35,
-    "image": "img/dishes/uttarakhand/arsa.png",
+    "image": "img/dishes/uttarakhand/6.jpeg",
     "category": "Snacks",
     "rating": 4.5,
     "spice": "Low",
@@ -863,7 +921,7 @@ newFeatures
     "name": "Rosogolla",
     "description": "Spongy cottage cheese balls soaked in light sugar syrup, Bengal's pride",
     "price": 30,
-    "image": "img/dishes/west-bengal/Rosogolla.jpeg",
+    "image": "img/dishes/west-bengal/1.jpeg",
     "category": "Snacks",
     "rating": 4.9,
     "spice": "Low",
@@ -877,8 +935,8 @@ newFeatures
     "name": "Kosha Mangsho",
     "description": "Slow-cooked spicy Bengali mutton curry with caramelized onion gravy",
     "price": 190,
-    "image": "img/dishes/west-bengal/mutton curry.jpeg",
-    "category": "Chaat",
+    "image": "img/dishes/west-bengal/2.jpeg",
+    "category": "Snacks",
     "rating": 4.9,
     "spice": "High",
     "dietary": [],
@@ -892,7 +950,7 @@ newFeatures
     "description": "Light Bengali fish curry with potatoes and tomatoes in turmeric broth",
     "price": 150,
     "image": "img/dishes/west-bengal/3.jpeg",
-    "category": "Chaat",
+    "category": "Snacks",
     "rating": 4.8,
     "spice": "Medium",
     "dietary": [],
@@ -905,11 +963,13 @@ newFeatures
     "name": "Luchi Aloo Dom",
     "description": "Deep-fried fluffy bread served with spiced dum potatoes",
     "price": 50,
-    "image": "img/dishes/west-bengal/Luchi Aloo Dom.jpeg",
+    "image": "img/dishes/west-bengal/4.jpeg",
     "category": "Snacks",
     "rating": 4.7,
     "spice": "Medium",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "West Bengal",
     "featured": false
@@ -919,8 +979,8 @@ newFeatures
     "name": "Mishti Doi",
     "description": "Sweetened thick yogurt fermented in earthen pots with jaggery",
     "price": 35,
-    "image": "img/dishes/west-bengal/Mishti Doi.jpeg",
-    "category": "Beverages",
+    "image": "img/dishes/west-bengal/5.jpeg",
+    "category": "Snacks",
     "rating": 4.8,
     "spice": "Low",
     "dietary": [],
@@ -933,13 +993,976 @@ newFeatures
     "name": "Puchka",
     "description": "Bengal's version of pani puri with tamarind water and spiced potato filling",
     "price": 25,
-    "image": "img/dishes/west-bengal/Puchka.jpeg",
+    "image": "img/dishes/west-bengal/6.jpeg",
     "category": "Chaat",
     "rating": 4.7,
     "spice": "High",
-    "dietary": ["vegan"],
+    "dietary": [
+      "vegan"
+    ],
     "available": true,
     "state": "West Bengal",
+    "featured": false
+  },
+  {
+    "id": "karnataka-001",
+    "name": "Mysore Pak",
+    "description": "A rich, ghee-based sweet made with gram flour and sugar.",
+    "price": 70,
+    "image": "img/dishes/karnataka/1.jpeg",
+    "category": "Dessert",
+    "rating": 4.9,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Karnataka",
+    "featured": true
+  },
+  {
+    "id": "karnataka-002",
+    "name": "Bisi Bele Bath",
+    "description": "A hearty rice and lentil dish with vegetables and spice.",
+    "price": 95,
+    "image": "img/dishes/karnataka/2.jpeg",
+    "category": "Main Course",
+    "rating": 4.8,
+    "spice": "Medium",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Karnataka",
+    "featured": true
+  },
+  {
+    "id": "karnataka-003",
+    "name": "Ragi Mudde",
+    "description": "Nutty finger millet balls served with spicy curry.",
+    "price": 80,
+    "image": "img/dishes/karnataka/3.jpeg",
+    "category": "Main Course",
+    "rating": 4.6,
+    "spice": "Medium",
+    "dietary": [
+      "vegan",
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Karnataka",
+    "featured": false
+  },
+  {
+    "id": "karnataka-004",
+    "name": "Neer Dosa",
+    "description": "Soft, thin rice crepes ideal with coconut chutney.",
+    "price": 60,
+    "image": "img/dishes/karnataka/4.jpeg",
+    "category": "Snacks",
+    "rating": 4.7,
+    "spice": "Low",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Karnataka",
+    "featured": false
+  },
+  {
+    "id": "karnataka-005",
+    "name": "Mangalore Buns",
+    "description": "Banana-flavored soft buns with a hint of spice.",
+    "price": 55,
+    "image": "img/dishes/karnataka/5.jpeg",
+    "category": "Snacks",
+    "rating": 4.5,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Karnataka",
+    "featured": false
+  },
+  {
+    "id": "karnataka-006",
+    "name": "Obbattu",
+    "description": "A sweet flatbread filled with lentils and jaggery.",
+    "price": 65,
+    "image": "img/dishes/karnataka/6.jpeg",
+    "category": "Dessert",
+    "rating": 4.8,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Karnataka",
+    "featured": false
+  },
+  {
+    "id": "kerala-001",
+    "name": "Appam",
+    "description": "Lacy rice pancakes with a soft center, best with stew.",
+    "price": 75,
+    "image": "img/dishes/kerala/1.jpeg",
+    "category": "Breakfast",
+    "rating": 4.9,
+    "spice": "Low",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Kerala",
+    "featured": true
+  },
+  {
+    "id": "kerala-002",
+    "name": "Puttu",
+    "description": "Steamed rice flour cylinders with coconut and banana.",
+    "price": 70,
+    "image": "img/dishes/kerala/2.jpeg",
+    "category": "Breakfast",
+    "rating": 4.8,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Kerala",
+    "featured": true
+  },
+  {
+    "id": "kerala-003",
+    "name": "Kerala Sadya",
+    "description": "A traditional feast of rice, curries, and vegetables.",
+    "price": 180,
+    "image": "img/dishes/kerala/3.jpeg",
+    "category": "Main Course",
+    "rating": 4.9,
+    "spice": "Medium",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Kerala",
+    "featured": false
+  },
+  {
+    "id": "kerala-004",
+    "name": "Malabar Parotta",
+    "description": "Flaky layered flatbread served with spicy curries.",
+    "price": 85,
+    "image": "img/dishes/kerala/4.jpeg",
+    "category": "Main Course",
+    "rating": 4.7,
+    "spice": "Medium",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Kerala",
+    "featured": false
+  },
+  {
+    "id": "kerala-005",
+    "name": "Fish Moilee",
+    "description": "A creamy coconut fish curry with mild spices.",
+    "price": 160,
+    "image": "img/dishes/kerala/5.jpeg",
+    "category": "Main Course",
+    "rating": 4.8,
+    "spice": "Medium",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Kerala",
+    "featured": false
+  },
+  {
+    "id": "kerala-006",
+    "name": "Palada Payasam",
+    "description": "Rice pudding cooked with milk, jaggery, and cardamom.",
+    "price": 90,
+    "image": "img/dishes/kerala/6.jpeg",
+    "category": "Dessert",
+    "rating": 4.9,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Kerala",
+    "featured": false
+  },
+  {
+    "id": "madhya-pradesh-001",
+    "name": "Poha Jalebi",
+    "description": "A famous sweet-savory combination of flattened rice and jalebi.",
+    "price": 65,
+    "image": "img/dishes/madhya-pradesh/1.jpeg",
+    "category": "Breakfast",
+    "rating": 4.7,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Madhya Pradesh",
+    "featured": true
+  },
+  {
+    "id": "madhya-pradesh-002",
+    "name": "Bhutte Ka Kees",
+    "description": "A creamy corn dish with spices and fresh coriander.",
+    "price": 75,
+    "image": "img/dishes/madhya-pradesh/2.jpeg",
+    "category": "Snacks",
+    "rating": 4.6,
+    "spice": "Medium",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Madhya Pradesh",
+    "featured": true
+  },
+  {
+    "id": "madhya-pradesh-003",
+    "name": "Dal Bafla",
+    "description": "Baked wheat dough balls served with lentils and ghee.",
+    "price": 110,
+    "image": "img/dishes/madhya-pradesh/3.jpeg",
+    "category": "Main Course",
+    "rating": 4.8,
+    "spice": "Medium",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Madhya Pradesh",
+    "featured": false
+  },
+  {
+    "id": "madhya-pradesh-004",
+    "name": "Chakki Ki Shaak",
+    "description": "A rustic wheatgrass curry with spices and warmth.",
+    "price": 90,
+    "image": "img/dishes/madhya-pradesh/4.jpeg",
+    "category": "Main Course",
+    "rating": 4.5,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Madhya Pradesh",
+    "featured": false
+  },
+  {
+    "id": "madhya-pradesh-005",
+    "name": "Bhopali Gosht Korma",
+    "description": "Slow-cooked mutton in a creamy, aromatic gravy.",
+    "price": 170,
+    "image": "img/dishes/madhya-pradesh/5.jpeg",
+    "category": "Main Course",
+    "rating": 4.7,
+    "spice": "High",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Madhya Pradesh",
+    "featured": false
+  },
+  {
+    "id": "madhya-pradesh-006",
+    "name": "Malpua",
+    "description": "Sweet pancakes dipped in sugar syrup and cardamom.",
+    "price": 80,
+    "image": "img/dishes/madhya-pradesh/6.jpeg",
+    "category": "Dessert",
+    "rating": 4.8,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Madhya Pradesh",
+    "featured": false
+  },
+  {
+    "id": "maharashtra-001",
+    "name": "Vada Pav",
+    "description": "Crispy potato fritter tucked in a soft bun.",
+    "price": 45,
+    "image": "img/dishes/maharashtra/1.jpeg",
+    "category": "Snacks",
+    "rating": 4.8,
+    "spice": "Medium",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Maharashtra",
+    "featured": true
+  },
+  {
+    "id": "maharashtra-002",
+    "name": "Misal Pav",
+    "description": "Spiced sprouted lentils served with bread and farsan.",
+    "price": 85,
+    "image": "img/dishes/maharashtra/2.jpeg",
+    "category": "Main Course",
+    "rating": 4.9,
+    "spice": "High",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Maharashtra",
+    "featured": true
+  },
+  {
+    "id": "maharashtra-003",
+    "name": "Pav Bhaji",
+    "description": "A buttery vegetable mash served with soft buns.",
+    "price": 95,
+    "image": "img/dishes/maharashtra/3.jpeg",
+    "category": "Main Course",
+    "rating": 4.7,
+    "spice": "Medium",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Maharashtra",
+    "featured": false
+  },
+  {
+    "id": "maharashtra-004",
+    "name": "Sabudana Vada",
+    "description": "Crisp tapioca fritters with peanuts and spices.",
+    "price": 60,
+    "image": "img/dishes/maharashtra/4.jpeg",
+    "category": "Snacks",
+    "rating": 4.6,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Maharashtra",
+    "featured": false
+  },
+  {
+    "id": "maharashtra-005",
+    "name": "Puran Poli",
+    "description": "Sweet flatbread filled with lentils and jaggery.",
+    "price": 70,
+    "image": "img/dishes/maharashtra/5.jpeg",
+    "category": "Dessert",
+    "rating": 4.8,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Maharashtra",
+    "featured": false
+  },
+  {
+    "id": "maharashtra-006",
+    "name": "Thalipeeth",
+    "description": "Multigrain savory pancakes with herbs and spices.",
+    "price": 80,
+    "image": "img/dishes/maharashtra/6.jpeg",
+    "category": "Snacks",
+    "rating": 4.5,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Maharashtra",
+    "featured": false
+  },
+  {
+    "id": "manipur-001",
+    "name": "Eromba",
+    "description": "A tangy mashed dish of potatoes, leafy greens, and fish.",
+    "price": 110,
+    "image": "img/dishes/manipur/1.jpeg",
+    "category": "Main Course",
+    "rating": 4.7,
+    "spice": "Medium",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Manipur",
+    "featured": true
+  },
+  {
+    "id": "manipur-002",
+    "name": "Kangshu",
+    "description": "A hearty bamboo shoot curry with meat and spices.",
+    "price": 130,
+    "image": "img/dishes/manipur/2.jpeg",
+    "category": "Main Course",
+    "rating": 4.8,
+    "spice": "High",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Manipur",
+    "featured": true
+  },
+  {
+    "id": "manipur-003",
+    "name": "Singju",
+    "description": "A fresh salad of herbs, cabbage, and vegetables.",
+    "price": 75,
+    "image": "img/dishes/manipur/3.jpeg",
+    "category": "Salad",
+    "rating": 4.6,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Manipur",
+    "featured": false
+  },
+  {
+    "id": "manipur-004",
+    "name": "Chamthong",
+    "description": "A thick mushroom curry with local herbs and spice.",
+    "price": 105,
+    "image": "img/dishes/manipur/4.jpeg",
+    "category": "Main Course",
+    "rating": 4.7,
+    "spice": "Medium",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Manipur",
+    "featured": false
+  },
+  {
+    "id": "manipur-005",
+    "name": "Sana Khechidi",
+    "description": "A nutritious rice and black lentil preparation.",
+    "price": 95,
+    "image": "img/dishes/manipur/5.jpeg",
+    "category": "Main Course",
+    "rating": 4.5,
+    "spice": "Medium",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Manipur",
+    "featured": false
+  },
+  {
+    "id": "manipur-006",
+    "name": "Morok Metpa",
+    "description": "A fiery chili and fermented soybean chutney.",
+    "price": 60,
+    "image": "img/dishes/manipur/6.jpeg",
+    "category": "Side Dish",
+    "rating": 4.8,
+    "spice": "High",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Manipur",
+    "featured": false
+  },
+  {
+    "id": "meghalaya-001",
+    "name": "Jadoh",
+    "description": "A fragrant rice dish with pork and aromatic spices.",
+    "price": 125,
+    "image": "img/dishes/meghalaya/1.jpeg",
+    "category": "Main Course",
+    "rating": 4.8,
+    "spice": "Medium",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Meghalaya",
+    "featured": true
+  },
+  {
+    "id": "meghalaya-002",
+    "name": "Tungrymbai",
+    "description": "Fermented soybean curry with herbs and green chilies.",
+    "price": 115,
+    "image": "img/dishes/meghalaya/2.jpeg",
+    "category": "Main Course",
+    "rating": 4.7,
+    "spice": "Medium",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Meghalaya",
+    "featured": true
+  },
+  {
+    "id": "meghalaya-003",
+    "name": "Pumaloi",
+    "description": "A steamed sticky rice dish with herbs and spices.",
+    "price": 90,
+    "image": "img/dishes/meghalaya/3.jpeg",
+    "category": "Main Course",
+    "rating": 4.6,
+    "spice": "Low",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Meghalaya",
+    "featured": false
+  },
+  {
+    "id": "meghalaya-004",
+    "name": "Dohneiiong",
+    "description": "A rich pork curry with black sesame and herbs.",
+    "price": 135,
+    "image": "img/dishes/meghalaya/4.jpeg",
+    "category": "Main Course",
+    "rating": 4.9,
+    "spice": "Medium",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Meghalaya",
+    "featured": false
+  },
+  {
+    "id": "meghalaya-005",
+    "name": "Sakin Gata",
+    "description": "A traditional sweet rice cake with coconut flavor.",
+    "price": 75,
+    "image": "img/dishes/meghalaya/5.jpeg",
+    "category": "Dessert",
+    "rating": 4.5,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Meghalaya",
+    "featured": false
+  },
+  {
+    "id": "meghalaya-006",
+    "name": "Nakham Bitchi",
+    "description": "A tangy bamboo shoot and fish preparation.",
+    "price": 120,
+    "image": "img/dishes/meghalaya/6.jpeg",
+    "category": "Main Course",
+    "rating": 4.7,
+    "spice": "Medium",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Meghalaya",
+    "featured": false
+  },
+  {
+    "id": "mizoram-001",
+    "name": "Bai",
+    "description": "A wholesome dish of steamed vegetables and meat.",
+    "price": 130,
+    "image": "img/dishes/mizoram/1.jpeg",
+    "category": "Main Course",
+    "rating": 4.8,
+    "spice": "Medium",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Mizoram",
+    "featured": true
+  },
+  {
+    "id": "mizoram-002",
+    "name": "Vawksa Rep",
+    "description": "Smoked pork with mustard greens and aromatic spices.",
+    "price": 140,
+    "image": "img/dishes/mizoram/2.jpeg",
+    "category": "Main Course",
+    "rating": 4.9,
+    "spice": "High",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Mizoram",
+    "featured": true
+  },
+  {
+    "id": "mizoram-003",
+    "name": "Sawhchiar",
+    "description": "A savory rice and meat dish wrapped in local flavors.",
+    "price": 120,
+    "image": "img/dishes/mizoram/3.jpeg",
+    "category": "Main Course",
+    "rating": 4.6,
+    "spice": "Medium",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Mizoram",
+    "featured": false
+  },
+  {
+    "id": "mizoram-004",
+    "name": "Misa Mach Poora",
+    "description": "Smoked fish with herbs, spices, and a smoky aroma.",
+    "price": 110,
+    "image": "img/dishes/mizoram/4.jpeg",
+    "category": "Main Course",
+    "rating": 4.7,
+    "spice": "Medium",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Mizoram",
+    "featured": false
+  },
+  {
+    "id": "mizoram-005",
+    "name": "Puktein",
+    "description": "A simple, peppery rice dish with greens and heat.",
+    "price": 85,
+    "image": "img/dishes/mizoram/5.jpeg",
+    "category": "Main Course",
+    "rating": 4.5,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Mizoram",
+    "featured": false
+  },
+  {
+    "id": "mizoram-006",
+    "name": "Chhum Han",
+    "description": "A local vegetable and herb dish with a fresh finish.",
+    "price": 95,
+    "image": "img/dishes/mizoram/6.jpeg",
+    "category": "Side Dish",
+    "rating": 4.6,
+    "spice": "Low",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Mizoram",
+    "featured": false
+  },
+  {
+    "id": "nagaland-001",
+    "name": "Akhuni",
+    "description": "A traditional fermented soybean dish with earthy depth.",
+    "price": 100,
+    "image": "img/dishes/nagaland/1.jpeg",
+    "category": "Side Dish",
+    "rating": 4.8,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Nagaland",
+    "featured": true
+  },
+  {
+    "id": "nagaland-002",
+    "name": "Galho",
+    "description": "A comforting rice and vegetable porridge with herbs.",
+    "price": 90,
+    "image": "img/dishes/nagaland/2.jpeg",
+    "category": "Main Course",
+    "rating": 4.7,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Nagaland",
+    "featured": true
+  },
+  {
+    "id": "nagaland-003",
+    "name": "Smoked Pork with Bamboo Shoot",
+    "description": "A signature Naga delicacy with smoky pork and bamboo shoot.",
+    "price": 155,
+    "image": "img/dishes/nagaland/3.jpeg",
+    "category": "Main Course",
+    "rating": 4.9,
+    "spice": "High",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Nagaland",
+    "featured": false
+  },
+  {
+    "id": "nagaland-004",
+    "name": "Naga Chili Fish",
+    "description": "Spiced fish with bold chilies and fermented notes.",
+    "price": 145,
+    "image": "img/dishes/nagaland/4.jpeg",
+    "category": "Main Course",
+    "rating": 4.8,
+    "spice": "High",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Nagaland",
+    "featured": false
+  },
+  {
+    "id": "nagaland-005",
+    "name": "Bamboo Shoot Fry",
+    "description": "Crisp bamboo shoot slices with local spices.",
+    "price": 80,
+    "image": "img/dishes/nagaland/5.jpeg",
+    "category": "Snacks",
+    "rating": 4.6,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Nagaland",
+    "featured": false
+  },
+  {
+    "id": "nagaland-006",
+    "name": "Pork with Axone",
+    "description": "A rich pork dish cooked with fermented soybeans.",
+    "price": 165,
+    "image": "img/dishes/nagaland/6.jpeg",
+    "category": "Main Course",
+    "rating": 4.7,
+    "spice": "High",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Nagaland",
+    "featured": false
+  },
+  {
+    "id": "odisha-001",
+    "name": "Pakhala Bhata",
+    "description": "Fermented rice served with greens, garnish, and spice.",
+    "price": 70,
+    "image": "img/dishes/odisha/1.jpeg",
+    "category": "Main Course",
+    "rating": 4.8,
+    "spice": "Low",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Odisha",
+    "featured": true
+  },
+  {
+    "id": "odisha-002",
+    "name": "Chhena Poda",
+    "description": "A caramelized cottage cheese cake with smoky sweetness.",
+    "price": 95,
+    "image": "img/dishes/odisha/2.jpeg",
+    "category": "Dessert",
+    "rating": 4.9,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Odisha",
+    "featured": true
+  },
+  {
+    "id": "odisha-003",
+    "name": "Dahi Vada",
+    "description": "Soft lentil dumplings in seasoned yogurt.",
+    "price": 65,
+    "image": "img/dishes/odisha/3.jpeg",
+    "category": "Snacks",
+    "rating": 4.7,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Odisha",
+    "featured": false
+  },
+  {
+    "id": "odisha-004",
+    "name": "Rasagola",
+    "description": "Soft cheese balls soaked in light sugar syrup.",
+    "price": 55,
+    "image": "img/dishes/odisha/4.jpeg",
+    "category": "Dessert",
+    "rating": 4.8,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Odisha",
+    "featured": false
+  },
+  {
+    "id": "odisha-005",
+    "name": "Santula",
+    "description": "A comforting vegetable stew with mild seasoning.",
+    "price": 80,
+    "image": "img/dishes/odisha/5.jpeg",
+    "category": "Main Course",
+    "rating": 4.6,
+    "spice": "Low",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Odisha",
+    "featured": false
+  },
+  {
+    "id": "odisha-006",
+    "name": "Machha Besara",
+    "description": "Fish curry in mustard seed gravy with aromatic spices.",
+    "price": 150,
+    "image": "img/dishes/odisha/6.jpeg",
+    "category": "Main Course",
+    "rating": 4.8,
+    "spice": "Medium",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Odisha",
+    "featured": false
+  },
+  {
+    "id": "punjab-001",
+    "name": "Sarson da Saag",
+    "description": "A classic mustard greens curry with rustic spices.",
+    "price": 110,
+    "image": "img/dishes/punjab/1.jpeg",
+    "category": "Main Course",
+    "rating": 4.9,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Punjab",
+    "featured": true
+  },
+  {
+    "id": "punjab-002",
+    "name": "Makki di Roti",
+    "description": "Golden corn flatbread served with saag and butter.",
+    "price": 70,
+    "image": "img/dishes/punjab/2.jpeg",
+    "category": "Bread",
+    "rating": 4.8,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Punjab",
+    "featured": true
+  },
+  {
+    "id": "punjab-003",
+    "name": "Amritsari Kulcha",
+    "description": "Stuffed flatbread crisped and served with chole.",
+    "price": 95,
+    "image": "img/dishes/punjab/3.jpeg",
+    "category": "Snacks",
+    "rating": 4.8,
+    "spice": "Medium",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Punjab",
+    "featured": false
+  },
+  {
+    "id": "punjab-004",
+    "name": "Butter Chicken",
+    "description": "Creamy tomato curry with tender chicken pieces.",
+    "price": 160,
+    "image": "img/dishes/punjab/4.jpeg",
+    "category": "Main Course",
+    "rating": 4.9,
+    "spice": "Medium",
+    "dietary": [
+      "non-vegetarian"
+    ],
+    "available": true,
+    "state": "Punjab",
+    "featured": false
+  },
+  {
+    "id": "punjab-005",
+    "name": "Lassi",
+    "description": "A chilled yogurt drink with a rich, creamy finish.",
+    "price": 55,
+    "image": "img/dishes/punjab/5.jpeg",
+    "category": "Beverage",
+    "rating": 4.7,
+    "spice": "Low",
+    "dietary": [
+      "vegetarian"
+    ],
+    "available": true,
+    "state": "Punjab",
+    "featured": false
+  },
+  {
+    "id": "punjab-006",
+    "name": "Chole Bhature",
+    "description": "Spiced chickpeas served with fluffy fried bread.",
+    "price": 105,
+    "image": "img/dishes/punjab/6.jpeg",
+    "category": "Main Course",
+    "rating": 4.8,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Punjab",
     "featured": false
   }
 ]
