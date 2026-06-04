@@ -61,6 +61,24 @@ async function loadMenuData() {
 const specialsContainer   = document.getElementById("specials-cards");
 // FIX: menu.html uses id="menu-container"; index.html uses id="menu-cards"
 const menuContainer       = document.getElementById("menu-cards") || document.getElementById("menu-container");
+
+function showSkeletons() {
+  if (!menuContainer) return;
+  menuContainer.innerHTML = "";
+  for (let i = 0; i < 8; i++) {
+    const skeleton = document.createElement("div");
+    skeleton.className = "skeleton-card";
+    skeleton.innerHTML = `
+      <div class="skeleton-img skeleton"></div>
+      <div class="skeleton-title skeleton"></div>
+      <div class="skeleton-text skeleton"></div>
+      <div class="skeleton-text skeleton"></div>
+      <div class="skeleton-btn skeleton"></div>
+    `;
+    menuContainer.appendChild(skeleton);
+  }
+}
+
 const cartCount           = document.getElementById("cart-count");
 const cartSidebar         = document.getElementById("cart-sidebar");
 const cartItemsContainer  = document.getElementById("cart-items");
