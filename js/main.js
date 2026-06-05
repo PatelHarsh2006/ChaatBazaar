@@ -20,10 +20,12 @@ function setupCartManager() {
   cartManager.subscribe((items) => {
     cart = [...items];
   });
- 
-  // Validate cart integrity
-  cartManager.validate();
+   if (typeof cartManager.validate === "function") {
+    cartManager.validate();
+  }
 }
+  
+
  
 async function loadMenuData() {
   try {
@@ -415,7 +417,7 @@ function renderRecentlyViewed() {
   recentItems.forEach(item => recentlyViewedContainer.appendChild(createCard(item)));
 }
 
- newFeatures
+
 // Unified Interactive Filter Engine =====
 function renderFavorites() {
   const favoritesContainer = document.getElementById("favorites-container");
@@ -824,7 +826,7 @@ function renderOrdersList() {
     `;
  
     container.appendChild(card);
-  });
+  });q
 }
  
 // ===== Global Window Handlers =====
@@ -952,7 +954,7 @@ window.reorderOrder = function (orderId) {
     sidebar.classList.add("open");
   }
 };
- newFeatures
+
 
 //  Cart Operations 
 
@@ -962,7 +964,7 @@ window.reorderOrder = function (orderId) {
  
 // ===== Toast Notification =====
  
-main
+
 function showToast(message) {
   const toast = document.getElementById("toast-notification");
   if (!toast) return;
@@ -1017,7 +1019,7 @@ function removeFromCart(id) {
 
   if (!cartItem) return;
 
-  const removedItem = cartItem.item;
+  // const removedItem = cartItem.item;
 
   if (
     typeof cartManager.decreaseQuantity ===
@@ -1236,9 +1238,8 @@ function setupSearchSuggestions() {
     if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
       suggestionsContainer.style.display = "none";
     }
-  );
+  });
 }
- 
 function setupSearch() {
   const searchInput = document.getElementById("search-input");
   const searchBtn   = document.getElementById("search-btn");
@@ -1536,67 +1537,7 @@ async function init() {
         window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
       }
     });
-    );
-
-    recognition.onresult = (
-      event
-    ) => {
-      const transcript =
-        event.results[0][0].transcript;
-
-      searchInput.value = transcript;
-
-      applyAllFilters();
-
-      voiceBtn.innerHTML = "🎤";
-
-  // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
-  setupCartToggle();
-  setupFilterButtons();
-  setupCouponListeners();
-  setupOrderNowScroll();
-  setupSearchSuggestions();
-  setupSearch();
-  setupAdvancedFilters();
-  setupContactForm();
-  setupNewsletterForm();
-  setupActiveNavbar();
-  setupDropdownFilterLinks();
-
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-      }
-      window.location.href = "orders.html";
-    });
-  }
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
-
-    recognition.onerror = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-
-      alert(
-        "Voice recognition failed."
-      );
-    };
-
-    recognition.onend = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
+    
   }
  
   // Load menu data, then render
@@ -1616,6 +1557,7 @@ async function init() {
   renderOrdersList();
   updateOrderStatuses();
   setInterval(updateOrderStatuses, 3000);
+  initBackToTopButton();
 }
  
 if (document.readyState === "loading") {
@@ -1686,4 +1628,22 @@ if (toggleBtn) {
     localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
   });
 }
- 
+
+function initBackToTopButton() {
+  const backToTopBtn = document.querySelector("#backToTop");
+  const backToTopContainer = document.querySelector(".back-to-top-container");
+
+  if (backToTopBtn && backToTopContainer) {
+    window.addEventListener("scroll", () => {
+      backToTopContainer.style.display =
+        window.scrollY > 200 ? "flex" : "none";
+    });
+
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  }
+}

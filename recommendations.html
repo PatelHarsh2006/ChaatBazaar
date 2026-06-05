@@ -333,6 +333,17 @@
 
 </footer>
 
+ <!-- BACK-TO-TOP-BUTTON -->
+<div class="back-to-top-container">
+  <button id="backToTop" title="Back to Top">
+    <img src="img/golgappa.png" alt="Back to Top">
+     <!-- <button id="backToTop" title="Back to Top">
+      😋
+      </button> -->
+  </button>
+  <span class="back-to-top-text">Back to Top</span>
+</div>
+
 <!-- ================= SCRIPT ================= -->
 
 <script src="js/cart-manager.js"></script>
@@ -484,5 +495,23 @@
 
   // wait for DOM + cart system
   window.addEventListener("load", renderComboCards);
+ 
+//back-to-top-button
+const backToTopContainer = document.querySelector(".back-to-top-container");
+const backToTopBtn = document.getElementById("backToTop");
+
+window.addEventListener("scroll", () => {
+  if (backToTopContainer) {
+    backToTopContainer.style.display =
+      window.scrollY > 50 ? "flex" : "none";
+  }
+});
+
+backToTopBtn?.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
 
 </script>
