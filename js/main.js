@@ -20,10 +20,12 @@ function setupCartManager() {
   cartManager.subscribe((items) => {
     cart = [...items];
   });
- 
-  // Validate cart integrity
-  cartManager.validate();
+   if (typeof cartManager.validate === "function") {
+    cartManager.validate();
+  }
 }
+  
+
  
 async function loadMenuData() {
   try {
@@ -326,6 +328,26 @@ function createCard(item, highlightQuery = "") {
     </div>
 
     <div class="card-footer">
+newFeatures
+  <div class="price-section">
+    <span class="original-price">
+      ₹${item.originalPrice}
+    </span>
+
+    <span class="price">
+      ${formatPrice(item.price)}
+    </span>
+
+    <span class="discount-badge">
+      ${Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% OFF
+    </span>
+  </div>
+
+  <button class="add-btn" aria-label="Add ${item.name} to cart">
+    Add
+  </button>
+  </div>
+
       <span class="price">${formatPrice(item.price)}</span>
       <button class="add-btn"
         aria-label="Add ${item.name} to cart"
@@ -336,6 +358,7 @@ function createCard(item, highlightQuery = "") {
       </button>
 
     </div>
+main
   `;
  
   const addBtn = card.querySelector(".add-btn");
@@ -393,7 +416,9 @@ function renderRecentlyViewed() {
   recentlyViewedSection.style.display = "block";
   recentItems.forEach(item => recentlyViewedContainer.appendChild(createCard(item)));
 }
- 
+
+
+// Unified Interactive Filter Engine =====
 function renderFavorites() {
   const favoritesContainer = document.getElementById("favorites-container");
   if (!favoritesContainer) return;
@@ -413,7 +438,7 @@ function renderFavorites() {
 }
  
 // ===== Unified Interactive Filter Engine =====
- 
+
 function applyAllFilters() {
   if (!menuContainer) return;
  
@@ -801,7 +826,7 @@ function renderOrdersList() {
     `;
  
     container.appendChild(card);
-  });
+  });q
 }
  
 // ===== Global Window Handlers =====
@@ -929,9 +954,17 @@ window.reorderOrder = function (orderId) {
     sidebar.classList.add("open");
   }
 };
+
+
+//  Cart Operations 
+
+//  Toast Notification 
+
+
  
 // ===== Toast Notification =====
  
+
 function showToast(message) {
   const toast = document.getElementById("toast-notification");
   if (!toast) return;
@@ -1505,66 +1538,6 @@ async function init() {
       }
     });
     
-
-    recognition.onresult = (
-      event
-    ) => {
-      const transcript =
-        event.results[0][0].transcript;
-
-      searchInput.value = transcript;
-
-      applyAllFilters();
-
-      voiceBtn.innerHTML = "🎤";
-
-  // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
-  setupCartToggle();
-  setupFilterButtons();
-  setupCouponListeners();
-  setupOrderNowScroll();
-  setupSearchSuggestions();
-  setupSearch();
-  setupAdvancedFilters();
-  setupContactForm();
-  setupNewsletterForm();
-  setupActiveNavbar();
-  setupDropdownFilterLinks();
-
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-      }
-      window.location.href = "orders.html";
-    });
-  }
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
-
-    recognition.onerror = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-
-      alert(
-        "Voice recognition failed."
-      );
-    };
-
-    recognition.onend = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
   }
  
   // Load menu data, then render
@@ -1584,6 +1557,7 @@ async function init() {
   renderOrdersList();
   updateOrderStatuses();
   setInterval(updateOrderStatuses, 3000);
+  initBackToTopButton();
 }
  
 if (document.readyState === "loading") {
@@ -1655,18 +1629,21 @@ if (toggleBtn) {
   });
 }
 
-const backToTopBtn = document.querySelector("#backToTop"); 
-const backToTopContainer = document.querySelector(".back-to-top-container");
+function initBackToTopButton() {
+  const backToTopBtn = document.querySelector("#backToTop");
+  const backToTopContainer = document.querySelector(".back-to-top-container");
 
+  if (backToTopBtn && backToTopContainer) {
+    window.addEventListener("scroll", () => {
+      backToTopContainer.style.display =
+        window.scrollY > 200 ? "flex" : "none";
+    });
 
-window.addEventListener("scroll", () => {
-  backToTopContainer.style.display =
-    window.scrollY > 300 ? "flex" : "none";
-});
-
-backToTopBtn.addEventListener("click", () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-});
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  }
+}

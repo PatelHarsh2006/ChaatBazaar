@@ -2436,6 +2436,29 @@ mark.highlight {
   box-shadow: 0 6px 20px rgba(191, 54, 12, 0.4);
   transform: translateY(-1px);
 }
+ newFeatures
+
+.price-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: gray;
+  font-size: 14px;
+}
+
+.discount-badge {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+
 /* ===== Dark Mode Theme ===== */
 .theme-toggle {
   position: relative;
@@ -2816,7 +2839,7 @@ body.dark .cart-badge {
   color: #1e1e1e;
 }
 
-/* ===== Custom Scrollbar ===== */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -2829,8 +2852,10 @@ body.dark .cart-badge {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #e64a19;
+/*Accessibility Styles */
 }
 /* ===== Accessibility Styles ===== */
+
 
 /* Skip link - visible on focus */
 .skip-link {
@@ -3060,6 +3085,8 @@ button:disabled {
   align-items: center;
   gap: 10px;
 }
+}
+
 .back-to-top-container {
   position: fixed;
   bottom: 20px;
@@ -3072,13 +3099,12 @@ button:disabled {
 }
 
 #backToTop {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border: none;
   border-radius: 50%;
   cursor: pointer;
-
-  background: #fff;
+  background: white;
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 
   display: flex;
@@ -3093,8 +3119,8 @@ button:disabled {
 }
 
 #backToTop img {
-  width: 55px;
-  height: 55px;
+  width: 70px;
+  height: 70px;
   object-fit: contain;
 }
 
