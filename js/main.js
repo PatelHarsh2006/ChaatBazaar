@@ -20,9 +20,6 @@ function setupCartManager() {
   cartManager.subscribe((items) => {
     cart = [...items];
   });
- 
-  // Validate cart integrity
-  cartManager.validate();
 }
  
 async function loadMenuData() {
@@ -325,27 +322,7 @@ function createCard(item, highlightQuery = "") {
       ${outOfStockBadge}
     </div>
 
-    <div class="card-footer">
-newFeatures
-  <div class="price-section">
-    <span class="original-price">
-      ₹${item.originalPrice}
-    </span>
-
-    <span class="price">
-      ${formatPrice(item.price)}
-    </span>
-
-    <span class="discount-badge">
-      ${Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% OFF
-    </span>
-  </div>
-
-  <button class="add-btn" aria-label="Add ${item.name} to cart">
-    Add
-  </button>
-  </div>
-
+    
       <span class="price">${formatPrice(item.price)}</span>
       <button class="add-btn"
         aria-label="Add ${item.name} to cart"
@@ -356,7 +333,6 @@ newFeatures
       </button>
 
     </div>
-main
   `;
  
   const addBtn = card.querySelector(".add-btn");
@@ -414,8 +390,6 @@ function renderRecentlyViewed() {
   recentlyViewedSection.style.display = "block";
   recentItems.forEach(item => recentlyViewedContainer.appendChild(createCard(item)));
 }
-
- newFeatures
 // Unified Interactive Filter Engine =====
 function renderFavorites() {
   const favoritesContainer = document.getElementById("favorites-container");
@@ -952,7 +926,6 @@ window.reorderOrder = function (orderId) {
     sidebar.classList.add("open");
   }
 };
- newFeatures
 
 //  Cart Operations 
 
@@ -961,8 +934,6 @@ window.reorderOrder = function (orderId) {
 
  
 // ===== Toast Notification =====
- 
-main
 function showToast(message) {
   const toast = document.getElementById("toast-notification");
   if (!toast) return;
@@ -1008,27 +979,17 @@ function addToCart(id) {
 function removeFromCart(id) {
   const cartIndex = cart.findIndex(ci => ci.item.id === id);
   if (cartIndex === -1) return;
- 
+
   const removedItem = cart[cartIndex].item;
-  cartManager.decreaseQuantity(id);
-  const cartItem = cart.find(
-    (ci) => ci.item.id === id
-  );
 
-  if (!cartItem) return;
-
-  const removedItem = cartItem.item;
-
-  if (
-    typeof cartManager.decreaseQuantity ===
-    "function"
-  ) {
+  if (typeof cartManager.decreaseQuantity === "function") {
     cartManager.decreaseQuantity(id);
   } else {
     cartManager.removeItem(id);
   }
+
   return true;
-};
+}
 
 window.placeOrderFromCheckout = function (customerDetails, pricingInfo) {
   if (cart.length === 0) {
@@ -1235,27 +1196,6 @@ function setupSearchSuggestions() {
   document.addEventListener("click", (e) => {
     if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
       suggestionsContainer.style.display = "none";
-    }
-  );
-}
- 
-function setupSearch() {
-  const searchInput = document.getElementById("search-input");
-  const searchBtn   = document.getElementById("search-btn");
-  if (!searchInput || !searchBtn) return;
- 
-  function handleSearchClick() {
-    const menuSection = document.getElementById("menu") || document.querySelector(".menu-page");
-    if (menuSection) menuSection.scrollIntoView({ behavior: "smooth" });
-    applyAllFilters();
-  }
- 
-  searchBtn.addEventListener("click", handleSearchClick);
-  searchInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      handleSearchClick();
-      const suggestionsContainer = document.getElementById("search-suggestions");
-      if (suggestionsContainer) suggestionsContainer.style.display = "none";
     }
   });
 }
@@ -1536,7 +1476,6 @@ async function init() {
         window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
       }
     });
-    );
 
     recognition.onresult = (
       event

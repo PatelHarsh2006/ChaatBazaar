@@ -1,10 +1,6 @@
 /// ===== SMART RECOMMENDATION ENGINE =====
 
 // Load cart from localStorage
-let cart = JSON.parse(localStorage.getItem("chaatCart")) || [];
-
-// ===== FOOD PAIRINGS =====
-
 const foodPairings = {
 
   "Samosa": [
@@ -365,3 +361,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderComboPage();
 });
+function setupSearch() {
+  const searchInput = document.getElementById("search-input");
+  const searchBtn = document.getElementById("search-btn");
+  if (!searchInput || !searchBtn) return;
+
+  function handleSearchClick() {
+    const menuSection = document.getElementById("menu") || document.querySelector(".menu-page");
+    if (menuSection) menuSection.scrollIntoView({ behavior: "smooth" });
+    applyAllFilters();
+  }
+
+  searchBtn.addEventListener("click", handleSearchClick);
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      handleSearchClick();
+      const suggestionsContainer = document.getElementById("search-suggestions");
+      if (suggestionsContainer) suggestionsContainer.style.display = "none";
+    }
+  });
+}
+
