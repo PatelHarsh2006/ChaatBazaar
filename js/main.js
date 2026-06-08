@@ -20,9 +20,6 @@ function setupCartManager() {
   cartManager.subscribe((items) => {
     cart = [...items];
   });
- 
-  // Validate cart integrity
-  cartManager.validate();
 }
  
 async function loadMenuData() {
@@ -326,26 +323,6 @@ function createCard(item, highlightQuery = "") {
     </div>
 
     <div class="card-footer">
-newFeatures
-  <div class="price-section">
-    <span class="original-price">
-      ₹${item.originalPrice}
-    </span>
-
-    <span class="price">
-      ${formatPrice(item.price)}
-    </span>
-
-    <span class="discount-badge">
-      ${Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% OFF
-    </span>
-  </div>
-
-  <button class="add-btn" aria-label="Add ${item.name} to cart">
-    Add
-  </button>
-  </div>
-
       <span class="price">${formatPrice(item.price)}</span>
       <button class="add-btn"
         aria-label="Add ${item.name} to cart"
@@ -354,9 +331,7 @@ newFeatures
       >
         Add
       </button>
-
     </div>
-main
   `;
  
   const addBtn = card.querySelector(".add-btn");
@@ -415,8 +390,7 @@ function renderRecentlyViewed() {
   recentItems.forEach(item => recentlyViewedContainer.appendChild(createCard(item)));
 }
 
- newFeatures
-// Unified Interactive Filter Engine =====
+// ===== Unified Interactive Filter Engine =====
 function renderFavorites() {
   const favoritesContainer = document.getElementById("favorites-container");
   if (!favoritesContainer) return;
@@ -426,9 +400,7 @@ function renderFavorites() {
   favoritesContainer.innerHTML = "";
  
   if (recentItems.length === 0) {
-    recentlyViewedSection.style.display =
-      "none";
-
+    favoritesContainer.innerHTML = `<p style="text-align:center;color:#5d4037;margin-top:2rem;">No favorites yet.</p>`;
     return;
   }
  
@@ -952,17 +924,15 @@ window.reorderOrder = function (orderId) {
     sidebar.classList.add("open");
   }
 };
- newFeatures
 
-//  Cart Operations 
+// Cart Operations
 
-//  Toast Notification 
+// Toast Notification
 
 
  
 // ===== Toast Notification =====
- 
-main
+
 function showToast(message) {
   const toast = document.getElementById("toast-notification");
   if (!toast) return;
@@ -1008,16 +978,8 @@ function addToCart(id) {
 function removeFromCart(id) {
   const cartIndex = cart.findIndex(ci => ci.item.id === id);
   if (cartIndex === -1) return;
- 
+
   const removedItem = cart[cartIndex].item;
-  cartManager.decreaseQuantity(id);
-  const cartItem = cart.find(
-    (ci) => ci.item.id === id
-  );
-
-  if (!cartItem) return;
-
-  const removedItem = cartItem.item;
 
   if (
     typeof cartManager.decreaseQuantity ===
@@ -1028,7 +990,7 @@ function removeFromCart(id) {
     cartManager.removeItem(id);
   }
   return true;
-};
+}
 
 window.placeOrderFromCheckout = function (customerDetails, pricingInfo) {
   if (cart.length === 0) {
@@ -1122,7 +1084,6 @@ window.reorderOrder = function (orderId) {
   updateCartCount();
   updateFavCount();
   renderCart();
-  showToast(`🗑️ ${removedItem.name} removed from cart`);
 }
  
 // ===== Event Listeners =====
@@ -1236,7 +1197,7 @@ function setupSearchSuggestions() {
     if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
       suggestionsContainer.style.display = "none";
     }
-  );
+  });
 }
  
 function setupSearch() {
@@ -1536,67 +1497,6 @@ async function init() {
         window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
       }
     });
-    );
-
-    recognition.onresult = (
-      event
-    ) => {
-      const transcript =
-        event.results[0][0].transcript;
-
-      searchInput.value = transcript;
-
-      applyAllFilters();
-
-      voiceBtn.innerHTML = "🎤";
-
-  // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
-  setupCartToggle();
-  setupFilterButtons();
-  setupCouponListeners();
-  setupOrderNowScroll();
-  setupSearchSuggestions();
-  setupSearch();
-  setupAdvancedFilters();
-  setupContactForm();
-  setupNewsletterForm();
-  setupActiveNavbar();
-  setupDropdownFilterLinks();
-
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-      }
-      window.location.href = "orders.html";
-    });
-  }
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
-
-    recognition.onerror = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-
-      alert(
-        "Voice recognition failed."
-      );
-    };
-
-    recognition.onend = () => {
-      voiceBtn.innerHTML = "🎤";
-
-      voiceBtn.classList.remove(
-        "listening"
-      );
-    };
   }
  
   // Load menu data, then render
@@ -1686,4 +1586,4 @@ if (toggleBtn) {
     localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
   });
 }
- 
+  
