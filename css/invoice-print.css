@@ -1,0 +1,108 @@
+/* Print Stylesheet for Invoice Receipts */
+
+@media print {
+  /* Hide all elements on the parent webpage */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* Show only the print receipt box */
+  #print-invoice-receipt,
+  #print-invoice-receipt * {
+    visibility: visible !important;
+  }
+
+  /* Reset layout constraints and fit to page */
+  #print-invoice-receipt {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 10mm;
+    box-sizing: border-box;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+    background: #fff;
+    page-break-after: avoid;
+  }
+
+  /* General print configuration */
+  @page {
+    size: auto;
+    margin: 15mm;
+  }
+
+  /* Receipt Layout details */
+  .print-receipt-box {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .receipt-header {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .receipt-header h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #e64a19;
+    margin: 0 0 5px 0;
+    letter-spacing: 1px;
+  }
+
+  .receipt-header .subtitle {
+    font-size: 11px;
+    color: #666;
+    margin: 0 0 10px 0;
+    font-style: italic;
+  }
+
+  .receipt-header h2 {
+    font-size: 16px;
+    font-weight: 800;
+    color: #333;
+    margin: 10px 0 0 0;
+  }
+
+  .receipt-meta {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    color: #444;
+  }
+
+  .receipt-table {
+    width: 100%;
+    margin-top: 15px;
+    border-collapse: collapse;
+  }
+
+  .receipt-table th,
+  .receipt-table td {
+    padding: 8px 10px;
+    font-size: 12px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .receipt-table th {
+    background: #f5f5f5 !important;
+    color: #333;
+    font-weight: bold;
+  }
+
+  .receipt-summary table td {
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+
+  .receipt-footer {
+    border-top: 1px dashed #bbb;
+    padding-top: 15px;
+    margin-top: 40px;
+    text-align: center;
+    font-style: italic;
+    color: #777;
+  }
+}

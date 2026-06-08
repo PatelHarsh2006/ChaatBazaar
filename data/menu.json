@@ -6,6 +6,11 @@
     "price": 20,
     "image": "img/Aloo Samosa.png",
     "category": "Snacks",
+newFeatures
+    "price": 30,
+    "originalPrice": 50,
+    "spice": "Medium",
+ main
     "rating": 4.8,
     "spice": "Medium",
     "dietary": ["vegan"],
@@ -30,7 +35,12 @@
     "price": 30,
     "image": "img/paani puri.png",
     "category": "Chaat",
+ newFeatures
+    "price": 50,
+    "originalPrice": 70,
+
     "rating": 4.9,
+main
     "spice": "High",
     "dietary": ["vegan"],
     "available": true
@@ -148,8 +158,16 @@
     "name": "Jalebi",
     "description": "Golden coiled sweet treat soaked in sugar syrup",
     "price": 20,
+newFeatures
+newFeatures
+    "originalPrice": 35,
+    "spice": "Low",
+
+    "image": "img/7.avif",
     "image": "img/jalebi.png",
+main
     "category": "Snacks",
+ main
     "rating": 4.7,
     "spice": "Low",
     "dietary": ["vegan"],
@@ -160,9 +178,16 @@
     "name": "Idli with Sambar",
     "description": "Fluffy steamed rice cakes served with spiced lentil vegetable stew",
     "price": 35,
+newFeatures
+newFeatures
+    "originalPrice": 50,
+
+    "image": "img/8.avif",
     "image": "img/Idli with Sambar.png",
+ main
     "category": "Chaat",
     "rating": 4.8,
+ main
     "spice": "Medium",
     "dietary": ["vegan", "gluten-free"],
     "available": true
@@ -198,7 +223,12 @@
     "price": 28,
     "image": "img/Sev Tameta.png",
     "category": "Chaat",
+newFeatures
+    "price": 45,
+    "originalPrice": 70,
+
     "rating": 4.7,
+ main
     "spice": "High",
     "dietary": ["vegan"],
     "available": true

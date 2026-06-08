@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | ChaatBazar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body data-page-type="login">
+  <header>
+    <div class="header-inner container" role="banner">
+      <a href="index.html" class="logo" aria-label="ChaatBazar Home">ChaatBazar 🍴</a>
+      <nav role="navigation" aria-label="Primary Navigation">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="menu.html" class="nav-link">Menu</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="cart.html" class="nav-link">Cart</a>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+          <span class="theme-toggle-track">
+            <span class="theme-toggle-icon sun-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            </span>
+            <span class="theme-toggle-icon moon-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </span>
+            <span class="theme-toggle-thumb"></span>
+          </span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="auth-main" role="main" aria-label="Login form">
+    <div class="food-animation-bg" aria-hidden="true">
+      <span class="floating-food samosa">🥟</span>
+      <span class="floating-food pani-puri">🫓</span>
+      <span class="floating-food chaat">🍲</span>
+      <span class="floating-food chai">☕</span>
+      <span class="floating-food lassi">🥛</span>
+    </div>
+
+    <section class="auth-wrapper">
+      <div class="auth-card">
+        <div class="auth-header">
+          <h2>Welcome Back</h2>
+          <p>Login to continue your ChaatBazar journey.</p>
+        </div>
+
+        <form id="login-form" novalidate>
+          <div class="input-group">
+            <label for="login-email"><i class="fa-solid fa-envelope"></i>Email</label>
+            <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" required />
+            <p id="login-email-error" class="error-message" aria-live="polite"></p>
+          </div>
+
+          <div class="input-group">
+            <label for="login-password"><i class="fa-solid fa-lock"></i>Password</label>
+            <input type="password" id="login-password" placeholder="Minimum 6 characters" minlength="6" autocomplete="current-password" required />
+            <p id="login-password-error" class="error-message" aria-live="polite"></p>
+          </div>
+
+          <p class="form-message" aria-live="polite"></p>
+
+          <button type="submit" class="auth-btn">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            Login
+          </button>
+        </form>
+
+        <p class="auth-switch-text">
+          New here?
+          <a class="auth-link" href="signup.html">Create an account</a>
+        </p>
+
+        <p class="auth-footer-note">Fresh flavors. Fast delivery. Happy cravings.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>
