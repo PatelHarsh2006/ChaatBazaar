@@ -417,20 +417,25 @@ function renderRecentlyViewed() {
 
  newFeatures
 // Unified Interactive Filter Engine =====
+
 function renderFavorites() {
   const favoritesContainer = document.getElementById("favorites-container");
   if (!favoritesContainer) return;
- 
+
+  const emptyFavorites = document.getElementById("empty-favorites");
   if (typeof RecentlyViewed === 'undefined') return;
   const recentItems = RecentlyViewed.getItems();
   favoritesContainer.innerHTML = "";
- 
-  if (recentItems.length === 0) {
-    recentlyViewedSection.style.display =
-      "none";
 
-    return;
+  if (recentItems.length === 0) {
+    if (emptyFavorites) {
+      emptyFavorites.style.display = "flex";
+    }
+      return;
   }
+   if (emptyFavorites) {
+    emptyFavorites.style.display = "none";
+    }
  
   recentItems.forEach(item => favoritesContainer.appendChild(createCard(item)));
 }
@@ -1236,7 +1241,7 @@ function setupSearchSuggestions() {
     if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
       suggestionsContainer.style.display = "none";
     }
-  );
+});
 }
  
 function setupSearch() {
@@ -1536,7 +1541,7 @@ async function init() {
         window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
       }
     });
-    );
+  };
 
     recognition.onresult = (
       event
@@ -1616,7 +1621,7 @@ async function init() {
   renderOrdersList();
   updateOrderStatuses();
   setInterval(updateOrderStatuses, 3000);
-}
+
  
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);

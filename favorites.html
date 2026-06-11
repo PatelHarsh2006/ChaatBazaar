@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="icon" href="img/logo.png" type="image/png" />
+
 </head>
 
 <body>
@@ -66,9 +67,15 @@
   </header>
   <section class="favorites-page container">
     <h1>My Favorites</h1>
-
+ <!-- When the favorites section is empty this will show -->
+      <div class="empty-favorites" id="empty-favorites">
+      <img src="./img/EmptyPlate.png" alt="Empty plate Icon">
+      <h2> No Favorites Yet!</h2>
+      <p>Start adding your favorite dishes to see them here!</p>
+      <a href="./recommendations.html" class="btn-primary">Explore Smart Combos</a>
+         </div>
     <div class="favorites-container cards" id="favorites-container" aria-live="polite">
-      <!-- Favorited items will be rendered here dynamically -->
+    
     </div>
   </section>
   <footer>

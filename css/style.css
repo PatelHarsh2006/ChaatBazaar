@@ -3520,4 +3520,34 @@ body.dark .hero-content p {
     transition: none !important;
   }
 }
-
+.empty-favorites {
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  padding: 3rem 4rem;
+  text-align: center;
+  h2{
+    color:#dc6337;
+    margin-bottom: 0.2rem;
+    font-size:largest;
+    font-weight: 700;
+  }
+  p{
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    color:#5d4037;
+    line-height: 1.6;
+    max-width: 420px
+  }
+  img{
+    opacity:1.2;
+    background-color:#2a2a2a;
+    margin-bottom: 1.2rem;
+    height: 300px;
+    width: 350px;
+    border-radius: 12px;
+    border: 1px solid #fbe9e7;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  }
+}
