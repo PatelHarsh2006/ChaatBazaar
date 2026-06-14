@@ -3521,3 +3521,35 @@ body.dark .hero-content p {
   }
 }
 
+/* Light Theme (default) */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --card-bg: #ffffff;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --card-bg: #1e1e1e;
+}
+
+/* Apply globally */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Card */
+.card {
+  background-color: var(--card-bg);
+}
+
+/* Button Styling */
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
