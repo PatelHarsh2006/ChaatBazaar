@@ -65,11 +65,28 @@
           </div>
 
           <div class="input-group">
-            <label for="signup-password"><i class="fa-solid fa-lock"></i>Password</label>
-            <input type="password" id="signup-password" placeholder="Minimum 6 characters" minlength="6" autocomplete="new-password" required />
-            <p id="signup-password-error" class="error-message" aria-live="polite"></p>
-          </div>
+            <label for="signup-password">
+              <i class="fa-solid fa-lock"></i>Password
+           </label>
 
+      <div class="password-input-wrapper">
+        <input
+          type="password"
+          id="signup-password"
+          placeholder="Minimum 6 characters"
+          minlength="6"
+          autocomplete="new-password"
+          required/>
+       <button
+          type="button"
+          id="signup-password-toggle"
+          class="password-toggle-btn"
+          aria-label="Show password"
+       >Show</button>
+     </div>
+
+       <p id="signup-password-error" class="error-message" aria-live="polite"></p>
+   </div>
           <div class="input-group">
             <label for="signup-phone"><i class="fa-solid fa-phone"></i>Phone</label>
             <input type="tel" id="signup-phone" placeholder="10 digit mobile number" maxlength="10" autocomplete="tel" required />
