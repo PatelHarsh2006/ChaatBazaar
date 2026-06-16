@@ -389,9 +389,17 @@ function renderRecentlyViewed() {
 
  
 // Unified Interactive Filter Engine =====
+
 function renderFavorites() {
   const favoritesContainer = document.getElementById("favorites-container");
   if (!favoritesContainer) return;
+
+
+  const emptyFavorites = document.getElementById("empty-favorites");
+  if (typeof RecentlyViewed === 'undefined') return;
+  const recentItems = RecentlyViewed.getItems();
+  favoritesContainer.innerHTML = "";
+
  
   const recentItems = RecentlyViewed.getItems();
   favoritesContainer.innerHTML = "";
@@ -405,8 +413,16 @@ function renderFavorites() {
       </div>
     `;
 
-    return;
+
+  if (recentItems.length === 0) {
+    if (emptyFavorites) {
+      emptyFavorites.style.display = "flex";
+    }
+      return;
   }
+   if (emptyFavorites) {
+    emptyFavorites.style.display = "none";
+    }
  
   recentItems.forEach(item => favoritesContainer.appendChild(createCard(item)));
 }
@@ -1464,7 +1480,27 @@ async function init() {
   setupNewsletterForm();
   setupActiveNavbar();
   setupDropdownFilterLinks();
-  
+
+ 
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const result = await window.checkout();
+      if (result) {
+        window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
+      }
+    });
+  };
+
+    recognition.onresult = (
+      event
+    ) => {
+      const transcript =
+        event.results[0][0].transcript;
+
+      searchInput.value = transcript;
+
+      applyAllFilters();
 
 if (checkoutBtn) {
     checkoutBtn.addEventListener("click", async (e) => {
@@ -1493,7 +1529,7 @@ if (checkoutBtn) {
   renderOrdersList();
   updateOrderStatuses();
   setInterval(updateOrderStatuses, 3000);
-}
+
  
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);
