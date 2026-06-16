@@ -940,8 +940,25 @@ function addToCart(id) {
     alert(`${item.name} is currently out of stock!`);
     return;
   }
+
+  // Interactive customization prompt
+  const customize = confirm(`Customize your ${item.name}? (Choose spice level and toppings)`);
+  let itemToCart = { ...item };
+  if (customize) {
+    const spiceChoice = prompt(`Choose spice level for ${item.name}:\n1. Mild 🌶️\n2. Medium 🌶️🌶️\n3. Spicy 🌶️🌶️🌶️`, "2");
+    let chosenSpice = "Medium";
+    if (spiceChoice === "1") chosenSpice = "Mild";
+    else if (spiceChoice === "3") chosenSpice = "Spicy";
+    
+    const addExtra = confirm(`Add extra toppings (Sev, Onions & Special Chutney) for ₹15?`);
+    
+    itemToCart.name = `${item.name} (${chosenSpice}${addExtra ? ", Extra Toppings" : ""})`;
+    if (addExtra) {
+      itemToCart.price = item.price + 15;
+    }
+  }
  
-  cartManager.addItem(item, 1);
+  cartManager.addItem(itemToCart, 1);
   updateCartCount();
   updateFavCount();
   renderCart();
