@@ -174,6 +174,31 @@ Follow these steps to contribute your changes to **ChaatBazaar**:
 
 <img src="https://capsule-render.vercel.app/api?type=rect&height=4&color=FF7B54" width="100%">
 
+## 💖 Contributors
+
+Thanks to all the amazing people who contribute to **ChaatBazaar** 🚀
+
+<p align="center">
+  <a href="https://github.com/PatelHarsh2006/ChaatBazaar/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=PatelHarsh2006/ChaatBazaar" alt="Contributors"/>
+  </a>
+</p>
+
+<br>
+
+## ⭐ Project Support
+
+<p align="center">
+  <a href="https://github.com/PatelHarsh2006/ChaatBazaar/stargazers">
+    <img src="https://img.shields.io/github/stars/PatelHarsh2006/ChaatBazaar?style=social" alt="Stars">
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://github.com/PatelHarsh2006/ChaatBazaar/network/members">
+    <img src="https://img.shields.io/github/forks/PatelHarsh2006/ChaatBazaar?style=social" alt="Forks">
+  </a>
+</p>
+
+<img src="https://capsule-render.vercel.app/api?type=rect&height=4&color=FF7B54" width="100%">
 
 ## 📜 License <a name="-license"></a>
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/PatelHarsh2006/ChaatBazaar/blob/main/LICENSE) file for details.
