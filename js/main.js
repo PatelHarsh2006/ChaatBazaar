@@ -1580,35 +1580,19 @@ function showSkeletonCartItems(count = 2) {
   for (let i = 0; i < count; i++) cartItemsContainer.appendChild(createSkeletonCartItem());
 }
 
-// ==========================
-// Global Theme Toggle Script
-// ==========================
+// ===== Dark Mode =====
+const toggleBtn = document.getElementById("theme-toggle");
 
 document.addEventListener("DOMContentLoaded", () => {
-  const toggleBtn = document.getElementById("theme-toggle");
-
-  // Load saved theme from localStorage
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "light") {
-    document.body.classList.add("light-theme");
-  } else {
-    document.body.classList.add("dark-theme"); // default
-  }
-
-  if (toggleBtn) {
-    toggleBtn.addEventListener("click", () => {
-      const isDark = document.body.classList.contains("dark-theme");
-
-      if (isDark) {
-        document.body.classList.remove("dark-theme");
-        document.body.classList.add("light-theme");
-        localStorage.setItem("theme", "light");
-      } else {
-        document.body.classList.remove("light-theme");
-        document.body.classList.add("dark-theme");
-        localStorage.setItem("theme", "dark");
-      }
-    });
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
   }
 });
+
+if (toggleBtn) {
+  toggleBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+  });
+}
 
