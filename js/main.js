@@ -85,6 +85,18 @@ let activeCoupon = null;
 function formatPrice(price) {
   return `₹${price}`;
 }
+
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
  
 function getCartSubtotal() {
   return cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
@@ -1190,7 +1202,7 @@ function setupSearchSuggestions() {
     suggestionsContainer.style.display = "block";
   }
  
-  searchInput.addEventListener("input", showSuggestions);
+  searchInput.addEventListener("input", debounce(showSuggestions, 300));
   searchInput.addEventListener("focus", showSuggestions);
   document.addEventListener("click", (e) => {
     if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
