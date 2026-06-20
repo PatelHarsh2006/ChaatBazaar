@@ -6,10 +6,34 @@ const CART_STORAGE_KEY = 'chaatCart';
 const CART_SYNC_EVENT = 'cartStateChanged';
 
 class CartManager {
-  constructor() {
+  constructor(maxUniqueItems = 50) {
+    this.maxUniqueItems = maxUniqueItems;
     this.items = this.loadFromStorage();
     this.listeners = [];
     this.setupStorageSync();
+  }
+
+  getMaxUniqueItems() {
+    return this.maxUniqueItems;
+  }
+
+  setMaxUniqueItems(limit) {
+    if (typeof limit === 'number' && limit > 0) {
+      this.maxUniqueItems = limit;
+      return true;
+    }
+    return false;
+  }
+
+  showCartFullMessage() {
+    const message = "Your cart is full. Please remove some items before adding more.";
+    if (typeof showToast === 'function') {
+      showToast(message);
+    } else if (typeof window.showToast === 'function') {
+      window.showToast(message);
+    } else {
+      alert(message);
+    }
   }
 
   // =====================
@@ -117,10 +141,14 @@ class CartManager {
       return false;
     }
 
-   const existingItem = this.getItem(item.id);
+    const existingItem = this.getItem(item.id);
     if (existingItem) {
       existingItem.quantity += quantity;
     } else {
+      if (this.getSize() >= this.maxUniqueItems) {
+        this.showCartFullMessage();
+        return false;
+      }
       this.items.push({
         item: { ...item },
         quantity: quantity

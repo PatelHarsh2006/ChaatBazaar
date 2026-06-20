@@ -106,17 +106,38 @@ const foodPairings = {
 // ===== ADD TO CART FUNCTION =====
 
 function addToCart(itemName, itemPrice) {
+  if (typeof cartManager !== 'undefined') {
+    const success = cartManager.addItem({
+      id: itemName + "-" + itemPrice,
+      name: itemName,
+      price: itemPrice
+    }, 1);
+    
+    if (success) {
+      cart = cartManager.getItems();
+      updateCartCount();
+      renderRecommendations();
+      showToast(`${itemName} added to cart 🛒`);
+    }
+    return;
+  }
 
   const existingItem = cart.find(
     cartItem => cartItem.item.name === itemName
   );
 
   if (existingItem) {
-
     existingItem.quantity += 1;
-
   } else {
-
+    if (cart.length >= 50) {
+      const message = "Your cart is full. Please remove some items before adding more.";
+      if (typeof showToast === 'function') {
+        showToast(message);
+      } else {
+        alert(message);
+      }
+      return;
+    }
     cart.push({
       item: {
         name: itemName,
