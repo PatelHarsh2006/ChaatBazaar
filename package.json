@@ -1,0 +1,13 @@
+{
+  "name": "chaatbazaar",
+  "version": "1.0.0",
+  "description": "ChaatBazaar - Authentic Indian Street Food Platform",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  }
+}

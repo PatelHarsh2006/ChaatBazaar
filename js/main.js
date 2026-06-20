@@ -941,7 +941,8 @@ function addToCart(id) {
     return;
   }
  
-  cartManager.addItem(item, 1);
+  const success = cartManager.addItem(item, 1);
+  if (!success) return;
   updateCartCount();
   updateFavCount();
   renderCart();
