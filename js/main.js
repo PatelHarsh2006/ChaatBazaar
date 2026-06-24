@@ -587,6 +587,41 @@ function renderCart() {
  
     cartItemsContainer.appendChild(loyaltyDiv);
  
+    // Smart Combo recommendations
+    const hasSamosa = cart.some(ci => ci.item.id === "samosa-001");
+    const hasChai = cart.some(ci => ci.item.id === "masala-chai-010");
+    const hasGolGappa = cart.some(ci => ci.item.id === "gol-gappa-009" || ci.item.id === "panipuri-003");
+    const hasLassi = cart.some(ci => ci.item.id === "sweet-lassi-018");
+
+    let recommendationHtml = "";
+    if (hasSamosa && !hasChai) {
+      recommendationHtml = `
+        <div class="cart-combo-rec" style="background:#fff3e0;border:1px dashed #ff5722;padding:0.75rem;border-radius:8px;margin-top:1rem;font-size:0.9rem;color:#bf360c;display:flex;justify-content:space-between;align-items:center;">
+          <span>☕ Add <strong>Masala Chai</strong> to unlock Samosa Chai combo!</span>
+          <button class="btn-add-rec" data-id="masala-chai-010" style="background:#ff5722;color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-size:0.8rem;font-weight:600;">Add</button>
+        </div>
+      `;
+    } else if (hasGolGappa && !hasLassi) {
+      recommendationHtml = `
+        <div class="cart-combo-rec" style="background:#fff3e0;border:1px dashed #ff5722;padding:0.75rem;border-radius:8px;margin-top:1rem;font-size:0.9rem;color:#bf360c;display:flex;justify-content:space-between;align-items:center;">
+          <span>🥛 Add <strong>Sweet Lassi</strong> for the perfect sweet-spicy pairing!</span>
+          <button class="btn-add-rec" data-id="sweet-lassi-018" style="background:#ff5722;color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-size:0.8rem;font-weight:600;">Add</button>
+        </div>
+      `;
+    }
+
+    if (recommendationHtml) {
+      const recDiv = document.createElement("div");
+      recDiv.innerHTML = recommendationHtml;
+      const addBtn = recDiv.querySelector(".btn-add-rec");
+      if (addBtn) {
+        addBtn.addEventListener("click", () => {
+          addToCart(addBtn.dataset.id);
+        });
+      }
+      cartItemsContainer.appendChild(recDiv);
+    }
+ 
     const checkbox = loyaltyDiv.querySelector("#apply-loyalty-checkbox");
     if (checkbox) {
       checkbox.addEventListener("change", (e) => {
