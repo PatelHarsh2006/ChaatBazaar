@@ -10,6 +10,18 @@ Demo Link : <a href="https://patelharsh2006.github.io/ChaatBazaar/">Link</a>
 
 <img src="https://capsule-render.vercel.app/api?type=rect&height=4&color=FF7B54" width="100%">
 
+
+## 📚 Table of Contents
+- [🚀 About the Project](#-about-the-project-)
+- [✨ Key Features](#-key-features-)
+- [📸 Visual Showcase](#-visual-showcase-)
+- [💻 Tech Stack](#-tech-stack-)
+- [📋 Important Points for Contributors](#important-points-for-contributors-to-keep-in-mind-)
+- [📥 Submitting a Pull Request for First Time](#-submitting-a-pull-request-for-first-time-)
+* [📜 License](#-license-)
+* [🤝 Contacts](#-contacts)
+
+
 ## 🚀 About the Project <a name="-about-the-project"></a>
 **ChaatBazaar** is a responsive, mobile-first web application designed to bring the vibrant experience of Indian street food directly to your screens. With location-based delivery checks, intuitive categorization, and a dynamic cart system, it offers a seamless ordering experience tailored for cravings.
 
