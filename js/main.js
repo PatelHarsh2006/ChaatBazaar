@@ -12,10 +12,6 @@ let loyaltyPointsApplied = false;
  
 // Will be initialized in setupCartManager() after document loads
 function setupCartManager() {
-  if (!window.cartManager) {
-    console.error("cartManager is not defined");
-    return;
-  }
 
   cart = cartManager.getItems();
  
@@ -382,11 +378,7 @@ function fuzzyMatch(target, query) {
 function highlightText(text, query) {
   if (!text)  return "";
   if (!query) return text;
-
-  const escapedQuery = query.replace(
-    /[-\/\\^$*+?.()|[\]{}]/g,
-    "\\$&"
-  );
+  const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 
   const regex = new RegExp(`(${escapedQuery})`, "gi");
   return text.replace(regex, "<mark class='highlight'>$1</mark>");
@@ -402,12 +394,10 @@ function createCard(item, highlightQuery = "") {
   card.setAttribute("aria-label", `${item.name} - ${item.description}. Price: ${formatPrice(item.price)}.`);
  
   const ratingStars  = "⭐".repeat(Math.round(item.rating || 5));
-  const dietaryTags  = item.dietary
-    ? item.dietary.map(d => `<span class="tag tag-${d}">${d}</span>`).join(" ")
-    : "";
+  const dietaryTags  = item.dietary ? item.dietary.map(d => `<span class="tag tag-${d}">${d}</span>`).join(" ") : "";
   const spiceIcon    = item.spice === "High" ? "🌶️🌶️🌶️" : item.spice === "Medium" ? "🌶️🌶️" : "🌶️";
  
-  const highlightedName = highlightText(item.name,        highlightQuery);
+  const highlightedName = highlightText(item.name, highlightQuery);
   const highlightedDesc = highlightText(item.description, highlightQuery);
 
   const isFestivalFeatured = activeFestival && activeFestival.featuredDishes?.includes(item.id);
@@ -434,12 +424,8 @@ function createCard(item, highlightQuery = "") {
   const buttonColor      = isAvailable  ? '#28a745'  : '#cccccc';
  
   card.innerHTML = `
-    <img src="${item.image}" 
-         alt="${item.name}" 
-         loading="lazy" />
-
+    <img src="${item.image}" alt="${item.name}" loading="lazy" />
     <div class="card-content">
-
       <div class="card-meta">
         <span class="rating" title="Rating: ${item.rating || 5.0}">${ratingStars} ${item.rating || '5.0'}</span>
         <span class="spice"  title="Spice level: ${item.spice}">${spiceIcon}</span>
@@ -454,33 +440,41 @@ function createCard(item, highlightQuery = "") {
     </div>
 
     <div class="card-footer">
-      <span class="price">${formatPrice(item.price)}</span>
-      <button class="add-btn"
-        aria-label="Add ${item.name} to cart"
-        ${buttonDisabled}
-        style="background-color:${buttonColor}"
-      >
-        Add
-      </button>
+
+  <div class="price-section">
+  
+  <span class="price">
+  ${formatPrice(item.price)}
+  </span>
+  
+  <span class="original-price">
+    ₹${item.price + 10}
+  </span>
+  
+    <span class="discount-badge">
+      ${Math.round((10 / item.price) * 100)}% OFF
+    </span>
+  </div>
+
+  <button class="add-btn" aria-label="Add ${item.name} to cart">
+    Add
+  </button>
+  </div>
 
     </div>
   `;
  
   const addBtn = card.querySelector(".add-btn");
   if (isAvailable) {
-    addBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      addToCart(item.id);
-    });
-  } else {
+    addBtn.addEventListener("click", () => addToCart(item.id));
+   } 
+  else {
     addBtn.addEventListener("click", () => alert(`${item.name} is currently out of stock!`));
   }
  
   card.addEventListener("click", () => {
-    if (typeof RecentlyViewed !== 'undefined') {
-      RecentlyViewed.addItem(item);
-      renderRecentlyViewed();
-    }
+    RecentlyViewed.addItem(item);
+    renderRecentlyViewed();
   });
  
   return card;
@@ -524,7 +518,6 @@ function renderRecentlyViewed() {
   const recentlyViewedSection   = document.getElementById("recently-viewed");
   if (!recentlyViewedContainer || !recentlyViewedSection) return;
  
-  if (typeof RecentlyViewed === 'undefined') return;
   const recentItems = RecentlyViewed.getItems();
   recentlyViewedContainer.innerHTML = "";
  
@@ -536,18 +529,24 @@ function renderRecentlyViewed() {
   recentlyViewedSection.style.display = "block";
   recentItems.forEach(item => recentlyViewedContainer.appendChild(createCard(item)));
 }
+
  
+// Unified Interactive Filter Engine =====
 function renderFavorites() {
   const favoritesContainer = document.getElementById("favorites-container");
   if (!favoritesContainer) return;
  
-  if (typeof RecentlyViewed === 'undefined') return;
   const recentItems = RecentlyViewed.getItems();
   favoritesContainer.innerHTML = "";
  
   if (recentItems.length === 0) {
-    recentlyViewedSection.style.display =
-      "none";
+    favoritesContainer.innerHTML = `
+      <div class="empty-favorites" style="text-align:center;width:100%;padding:3rem 1rem;">
+        <h2 style="color:var(--text-color);margin-bottom:1rem;">No Favorite Items Yet</h2>
+        <p style="color:var(--text-muted);margin-bottom:2rem;">Explore our menu and click on items to add them to your favorites!</p>
+        <a href="menu.html" class="btn-primary" style="display:inline-block;text-decoration:none;padding:0.8rem 1.8rem;border-radius:30px;">Go to Menu</a>
+      </div>
+    `;
 
     return;
   }
@@ -556,7 +555,7 @@ function renderFavorites() {
 }
  
 // ===== Unified Interactive Filter Engine =====
- 
+
 function applyAllFilters() {
   if (!menuContainer) return;
  
@@ -570,7 +569,7 @@ function applyAllFilters() {
  
     const priceSlider = document.getElementById("price-range-slider");
     // FIX: use slider's own max as fallback so all items show when slider is at max
-    const maxPrice    = priceSlider ? parseFloat(priceSlider.value) : Infinity;
+    const maxPrice    = priceSlider ? parseFloat(priceSlider.value) : 100;
  
     const spiceSelect   = document.getElementById("spice-level-select");
     const selectedSpice = spiceSelect ? spiceSelect.value : "All";
@@ -584,10 +583,7 @@ function applyAllFilters() {
     let filtered = menuItems;
  
     if (currentCategory !== "All") {
-      filtered = filtered.filter(
-        (item) =>
-          item.category === currentCategory
-      );
+      filtered = filtered.filter((item) => item.category === currentCategory);
     }
  
     if (query) {
@@ -601,18 +597,12 @@ function applyAllFilters() {
     filtered = filtered.filter(item => item.price <= maxPrice);
  
     if (selectedSpice !== "All") {
-      filtered = filtered.filter(
-        (item) =>
-          item.spice === selectedSpice
-      );
+      filtered = filtered.filter((item) => item.spice === selectedSpice);
     }
  
     if (minRating !== "All") {
-      filtered = filtered.filter(
-        (item) =>
-          (item.rating || 5) >=
-          parseFloat(minRating)
-      );
+     const ratingVal = parseFloat(minRating);
+      filtered = filtered.filter(item => (item.rating || 5) >= ratingVal);
     }
  
     if (veganCheck && veganCheck.checked) {
@@ -621,27 +611,15 @@ function applyAllFilters() {
 
     // Gluten Free
     if (gfCheck && gfCheck.checked) {
-      filtered = filtered.filter(
-        (item) =>
-          item.dietary &&
-          item.dietary.includes(
-            "gluten-free"
-          )
-      );
+     filtered = filtered.filter(item => item.dietary && item.dietary.includes("gluten-free"));
     }
  
     if (filtered.length === 0) {
       menuContainer.innerHTML = `
-        <p style="
-          text-align:center;
-          color:#bf360c;
-          font-weight:600;
-          margin-top:2rem;
-        ">
+        <p style="text-align:center;color:#bf360c;font-weight:600;width:100%;margin-top:2rem;">
           No items found matching your filters.
         </p>
       `;
-
       return;
     }
  
@@ -671,47 +649,23 @@ function renderCart() {
     }
  
     cart.forEach(({ item, quantity }) => {
-      const cartItem =
-        document.createElement("div");
-
+      const cartItem = document.createElement("div");
       cartItem.className = "cart-item";
-      cartItem.tabIndex  = 0;
-      cartItem.setAttribute(
-        "aria-label",
-        `${item.name}, quantity ${quantity}, price ${formatPrice(item.price * quantity)}`
-      );
  
       cartItem.innerHTML = `
-        <img src="${
-  item.image ||
-  item.img ||
-  item.thumbnail ||
-  (item.items && item.items[0]?.image) ||
-  "https://via.placeholder.com/80"
-}" 
-alt="${item.name}" />
+        <img src="${item.image}" alt="${item.name}" loading="lazy" />
 
         <div class="cart-item-info">
           <h4>${item.name}</h4>
-
-          <p>
-            ${formatPrice(item.price)} each
-          </p>
+          <p>${formatPrice(item.price)} each</p>
 
           <div class="qty-controls">
-
-            <button class="qty-decrease">
-              −
-            </button>
-
+          <button aria-label="Decrease ${item.name}" class="qty-decrease">−</button>
             <span>${quantity}</span>
-
-            <button class="qty-increase">
-              +
-            </button>
-
+          <button aria-label="Increase ${item.name}" class="qty-increase">+</button>
           </div>
         </div>
+
         <div style="text-align:right;">
           <p style="font-weight:700;color:#bf360c;">${formatPrice(item.price * quantity)}</p>
           <button class="cart-item-remove">Remove</button>
@@ -739,14 +693,25 @@ alt="${item.name}" />
       }
 
  
-      cartItem.querySelector(".qty-decrease").addEventListener("click", () => removeFromCart(item.id));
-      cartItem.querySelector(".qty-increase").addEventListener("click", () => addToCart(item.id));
-      cartItem.querySelector(".cart-item-remove").addEventListener("click", () => {
-        cartManager.removeItem(item.id);
-        updateCartCount();
-        updateFavCount();
-        renderCart();
-      });
+      const decreaseBtn = cartItem.querySelector(".qty-decrease");
+      if (decreaseBtn) {
+        decreaseBtn.addEventListener("click", () => removeFromCart(item.id));
+      }
+
+      const increaseBtn = cartItem.querySelector(".qty-increase");
+      if (increaseBtn) {
+        increaseBtn.addEventListener("click", () => addToCart(item.id));
+      }
+      
+      const removeBtn = cartItem.querySelector(".cart-item-remove");
+      if (removeBtn) {
+        removeBtn.addEventListener("click", () => {
+          cartManager.removeItem(item.id);
+          updateCartCount();
+          updateFavCount();
+          renderCart();
+        });
+      }
  
       cartItemsContainer.appendChild(cartItem);
     });
@@ -841,7 +806,14 @@ function updateCartCount() {
 function updateFavCount() {
   const favCount = document.getElementById("fav-count");
   if (favCount && typeof RecentlyViewed !== 'undefined') {
-    favCount.textContent = RecentlyViewed.getItems().length;
+    const recentItems = RecentlyViewed.getItems();
+    favCount.textContent = recentItems.length;
+  }
+}
+
+function saveCart() {
+  if (cartManager) {
+    cartManager.saveToStorage();
   }
 }
  
@@ -857,13 +829,13 @@ function updateOrderStatuses() {
     const elapsedSeconds = (now - order.timestamp) / 1000;
     let targetStatus = "Pending";
  
-    if      (elapsedSeconds >= 45) targetStatus = "Delivered";
-    else if (elapsedSeconds >= 25) targetStatus = "On the Way";
-    else if (elapsedSeconds >= 10) targetStatus = "Preparing";
+    if(elapsedSeconds >= 45) targetStatus = "Delivered";
+    else if(elapsedSeconds >= 25) targetStatus = "On the Way";
+    else if(elapsedSeconds >= 10) targetStatus = "Preparing";
  
     if (order.status !== targetStatus) {
       order.status = targetStatus;
-      changed      = true;
+      changed = true;
     }
   });
  
@@ -960,11 +932,14 @@ function renderOrdersList() {
           <span>Total Paid:</span>
           <strong>${formatPrice(order.total)}</strong>
         </div>
-        <button class="btn-reorder" onclick="reorderOrder('${order.id}')">Reorder Items</button>
+        <div class="order-actions-row" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.8rem; justify-content: flex-end; width: 100%;">
+          <button class="btn-reorder" onclick="reorderOrder('${order.id}')">Reorder Items</button>
+          <button class="btn-invoice-pdf" onclick="window.invoiceGenerator.downloadPDF('${order.id}')" style="background: #ff9800; color: #fff; border: none; border-radius: 30px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.9rem; cursor: pointer; box-shadow: 0 4px 10px rgba(255,152,0,0.3); transition: all 0.3s ease;">💾 PDF Invoice</button>
+          <button class="btn-invoice-print" onclick="window.invoiceGenerator.printReceipt('${order.id}')" style="background: #4caf50; color: #fff; border: none; border-radius: 30px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.9rem; cursor: pointer; box-shadow: 0 4px 10px rgba(76,175,80,0.3); transition: all 0.3s ease;">🖨️ Print Receipt</button>
+        </div>
       </div>
     `;
- 
-    container.appendChild(card);
+       container.appendChild(card);
   });
 }
  
@@ -972,18 +947,19 @@ function renderOrdersList() {
  
 window.filterCategory = function (category) {
   currentCategory = category;
- 
-  const filterButtons = document.querySelectorAll(".filter-btn");
-  filterButtons.forEach(btn => {
-    const isActive = btn.dataset.filter === category;
-    btn.classList.toggle("active", isActive);
-    btn.setAttribute("aria-pressed", isActive ? "true" : "false");
-  });
- 
   applyAllFilters();
-  // Scroll to menu container so filtered results are visible
-  const menuContainer = document.getElementById('menu-container');
-  if (menuContainer) menuContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+ 
+ const buttons = document.querySelectorAll(".filter-btn, .filter button");
+  buttons.forEach(btn => {
+    const filterAttr = btn.dataset.filter || (btn.getAttribute("onclick") ? btn.getAttribute("onclick").match(/'([^']+)'/)[1] : "");
+    if (filterAttr === category || btn.textContent.trim() === category) {
+      btn.classList.add("active");
+      btn.setAttribute("aria-pressed", "true");
+    } else {
+      btn.classList.remove("active");
+      btn.setAttribute("aria-pressed", "false");
+    }
+  });
 };
  
 // FIX: checkout — removed duplicate const declarations that caused SyntaxError
@@ -996,19 +972,21 @@ window.checkout = async function () {
   const validationResult = await validateDeliveryLocation();
  
   if (!validationResult.valid) {
-    localStorage.setItem(
-      "deliveryError",
-      JSON.stringify({
-        error:              validationResult.error,
-        distance:           validationResult.distance,
-        restaurantLocation: validationResult.restaurantLocation
-      })
-    );
+     localStorage.setItem(
+    "deliveryError",
+    JSON.stringify({
+      error: validationResult.error,
+      distance: validationResult.distance,
+      restaurantLocation: validationResult.restaurantLocation
+    })
+  );
     return { deliveryAvailable: false };
   }
  
   // Loyalty points discount
-  const subtotal       = cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
+  const subtotal = getCartSubtotal();
+  const couponDiscount = calculateCouponDiscount(subtotal);
+  const subtotalAfterCoupon = Math.max(subtotal - couponDiscount, 0);
   let loyaltyDiscount  = 0;
   let pointsRedeemed   = 0;
  
@@ -1019,11 +997,10 @@ window.checkout = async function () {
     loyalty.redeemPoints(pointsRedeemed);
   }
  
-  // Coupon discount (on post-loyalty subtotal)
-  const couponDiscount = calculateCouponDiscount(subtotal - loyaltyDiscount);
-  const finalTotal     = Math.max(subtotal - loyaltyDiscount - couponDiscount, 0);
- 
-  // Award loyalty points on final amount paid
+  const finalTotal = Math.max(subtotalAfterCoupon - pointsDiscount, 0);
+  const totalDiscount = couponDiscount + pointsDiscount;
+
+  // Award points on final total paid (10 points per ₹100 spent)
   let pointsEarned = 0;
   if (typeof loyalty !== 'undefined') {
     pointsEarned = loyalty.awardPoints(finalTotal);
@@ -1071,7 +1048,7 @@ window.checkout = async function () {
     console.warn('Delivery tracker not ready. Order has been placed.');
   }
  
-  return { deliveryAvailable: true };
+  return true;
 };
  
 window.reorderOrder = function (orderId) {
@@ -1093,6 +1070,13 @@ window.reorderOrder = function (orderId) {
     sidebar.classList.add("open");
   }
 };
+ 
+
+//  Cart Operations 
+
+//  Toast Notification 
+
+
  
 // ===== Toast Notification =====
  
@@ -1140,28 +1124,35 @@ function addToCart(id) {
  
 function removeFromCart(id) {
   const cartIndex = cart.findIndex(ci => ci.item.id === id);
+
   if (cartIndex === -1) return;
- 
+   
   const removedItem = cart[cartIndex].item;
+
   cartManager.decreaseQuantity(id);
-  const cartItem = cart.find(
-    (ci) => ci.item.id === id
-  );
+  updateCartCount();
+  updateFavCount();
+  renderCart();
 
-  if (!cartItem) return;
+  showToast(`🗑️ ${removedItem.name} removed from cart`);
+}
 
-  const removedItem = cartItem.item;
+// ===== Event Listeners =====
 
-  if (
-    typeof cartManager.decreaseQuantity ===
-    "function"
-  ) {
-    cartManager.decreaseQuantity(id);
-  } else {
-    cartManager.removeItem(id);
-  }
-  return true;
-};
+function setupFilterButtons() {
+  const filterButtons = document.querySelectorAll(".filter-btn");
+  filterButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      filterButtons.forEach(b => {
+        b.classList.remove("active");
+        b.setAttribute("aria-pressed", "false");
+      });
+      btn.classList.add("active");
+      btn.setAttribute("aria-pressed", "true");
+      renderMenu(btn.dataset.filter);
+    });
+  });
+}
 
 window.placeOrderFromCheckout = function (customerDetails, pricingInfo) {
   if (cart.length === 0) {
@@ -1369,7 +1360,7 @@ function setupSearchSuggestions() {
     if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
       suggestionsContainer.style.display = "none";
     }
-  );
+});
 }
  
 function setupSearch() {
@@ -1403,8 +1394,13 @@ function setupAdvancedFilters() {
   toggleBtn.addEventListener("click", () => {
     const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
     toggleBtn.setAttribute("aria-expanded", !isExpanded);
-    filterPanel.style.display = isExpanded ? "none" : "block";
-    toggleBtn.classList.toggle("active", !isExpanded);
+    if (isExpanded) {
+      filterPanel.style.display = "none";
+      toggleBtn.classList.remove("active");
+    } else {
+      filterPanel.style.display = "block";
+      toggleBtn.classList.add("active");
+    }
   });
  
   const priceSlider    = document.getElementById("price-range-slider");
@@ -1418,16 +1414,20 @@ function setupAdvancedFilters() {
   }
  
   const spiceSelect = document.getElementById("spice-level-select");
-  if (spiceSelect)  spiceSelect.addEventListener("change", applyAllFilters);
+  if(spiceSelect)  
+    spiceSelect.addEventListener("change", applyAllFilters);
  
   const ratingSelect = document.getElementById("rating-select");
-  if (ratingSelect)  ratingSelect.addEventListener("change", applyAllFilters);
+  if(ratingSelect)  
+    ratingSelect.addEventListener("change", applyAllFilters);
  
   const veganCheck = document.getElementById("dietary-vegan");
-  if (veganCheck)   veganCheck.addEventListener("change", applyAllFilters);
+  if(veganCheck)   
+    veganCheck.addEventListener("change", applyAllFilters);
  
   const gfCheck = document.getElementById("dietary-gf");
-  if (gfCheck)   gfCheck.addEventListener("change", applyAllFilters);
+  if(gfCheck)   
+    gfCheck.addEventListener("change", applyAllFilters);
  
   const resetBtn = document.getElementById("reset-filters-btn");
   if (resetBtn) {
@@ -1447,13 +1447,18 @@ function setupAdvancedFilters() {
  
       currentCategory = "All";
  
-      document.querySelectorAll(".filter-btn").forEach(btn => {
-        const isAll = btn.dataset.filter === "All";
-        btn.classList.toggle("active", isAll);
-        btn.setAttribute("aria-pressed", isAll ? "true" : "false");
+      const buttons = document.querySelectorAll(".filter-btn, .filter button");
+      buttons.forEach(btn => {
+        const filterAttr = btn.dataset.filter || (btn.getAttribute("onclick") ? btn.getAttribute("onclick").match(/'([^']+)'/)[1] : "");
+        if (filterAttr === "All" || btn.textContent.trim() === "All") {
+          btn.classList.add("active");
+          btn.setAttribute("aria-pressed", "true");
+        } else {
+          btn.classList.remove("active");
+          btn.setAttribute("aria-pressed", "false");
+        }
       });
- 
-      applyAllFilters();
+   applyAllFilters();
     });
   }
 }
@@ -1461,7 +1466,7 @@ function setupAdvancedFilters() {
 // ===== Contact Form =====
  
 function setupContactForm() {
-  const form        = document.getElementById("contact-form");
+  const form = document.getElementById("contact-form");
   const formSuccess = document.getElementById("form-success");
   if (!form || !formSuccess) return;
  
@@ -1548,63 +1553,28 @@ function setupDropdownFilterLinks() {
   const dropdownFilters = document.querySelectorAll(".menu-filter");
   dropdownFilters.forEach(link => {
     link.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      // Always close the dropdown immediately on click.
-      // Use a temporary `force-hide` class to override CSS :hover so the menu actually hides.
-      const parentDropdown = link.closest('.dropdown');
-      if (parentDropdown) {
-        parentDropdown.classList.add('force-hide');
-        parentDropdown.classList.remove('open');
-        const toggleEl = parentDropdown.querySelector('.dropdown-toggle');
-        if (toggleEl) toggleEl.setAttribute('aria-expanded', 'false');
-
-        // Move focus to the filter toolbar to remove :focus-within and keep the menu closed
-        const toolbar = document.querySelector('.filter-buttons');
-        if (toolbar && typeof toolbar.focus === 'function') toolbar.focus();
-
-        // Remove the force-hide override after a short delay (allows click visual feedback)
-        setTimeout(() => {
-          parentDropdown.classList.remove('force-hide');
-        }, 300);
-      }
-
-      const category = link.dataset.filter || (() => {
-        try {
-          const url = new URL(link.href, window.location.origin);
-          return url.searchParams.get('filter') || url.hash.replace('#', '') || '';
-        } catch (err) {
-          return '';
-        }
-      })();
-
-      // If we're already on menu page, apply filter in-page and scroll
-      if (window.location.pathname.endsWith('menu.html') || window.location.pathname === '/menu.html') {
-        if (category === 'Specials') {
-          const specialsSection = document.getElementById('specials');
-          if (specialsSection) specialsSection.scrollIntoView({ behavior: 'smooth' });
-        } else {
-          renderMenu(category);
-          document.querySelectorAll('.filter-btn').forEach(btn => {
-            const isActive = btn.dataset.filter === category;
-            btn.classList.toggle('active', isActive);
-            btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-          });
-          // Scroll to the filter-buttons toolbar (not the menu container)
-          const toolbar = document.querySelector('.filter-buttons');
-          if (toolbar) toolbar.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // Close the dropdown menu after click
-          const dropdown = link.closest('.dropdown');
-          if (dropdown) {
-            dropdown.classList.remove('open');
-            const toggleEl = dropdown.querySelector('.dropdown-toggle');
-            if (toggleEl) toggleEl.setAttribute('aria-expanded', 'false');
-          }
+      const category = link.dataset.filter;
+      if (category === "Specials") {
+        const specialsSection = document.getElementById("specials");
+        if (specialsSection) {
+          specialsSection.scrollIntoView({ behavior: "smooth" });
         }
       } else {
-        // Navigate to menu page with the chosen filter param and anchor to filters
-        const target = `menu.html?filter=${encodeURIComponent(category)}#filters`;
-        window.location.href = target;
+        renderMenu(category);
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        filterButtons.forEach(btn => {
+          if (btn.dataset.filter === category) {
+            btn.classList.add("active");
+            btn.setAttribute("aria-pressed", "true");
+          } else {
+            btn.classList.remove("active");
+            btn.setAttribute("aria-pressed", "false");
+          }
+        });
+        const menuSection = document.getElementById("menu");
+        if (menuSection) {
+          menuSection.scrollIntoView({ behavior: "smooth" });
+        }
       }
     });
   });
@@ -1612,9 +1582,7 @@ function setupDropdownFilterLinks() {
  
 // FIX: only one saveCart declaration
 function saveCart() {
-  if (typeof cartManager !== 'undefined') {
-    cartManager.saveToStorage();
-  }
+  localStorage.setItem("cart", JSON.stringify(cart));
 }
  
 // ===== FIX: Read ?filter= URL param on menu.html load =====
@@ -1660,50 +1628,15 @@ async function init() {
   setupNewsletterForm();
   setupActiveNavbar();
   setupDropdownFilterLinks();
- 
-  if (checkoutBtn) {
+  
+
+if (checkoutBtn) {
     checkoutBtn.addEventListener("click", async (e) => {
       e.preventDefault();
-      const result = await window.checkout();
-      if (result) {
-        window.location.href = `orders.html?delivery=${result.deliveryAvailable}`;
+      const success = await window.checkout();
+      if (success) {
+        window.location.href = "orders.html";
       }
-    });
-    );
-
-    recognition.onresult = (
-      event
-    ) => {
-      const transcript =
-        event.results[0][0].transcript;
-
-      searchInput.value = transcript;
-
-      applyAllFilters();
-
-      voiceBtn.innerHTML = "🎤";
-
-  // Bind interactive UI listeners immediately for instant input responsiveness (high INP)
-  setupCartToggle();
-  setupFilterButtons();
-  setupCouponListeners();
-  setupOrderNowScroll();
-  setupSearchSuggestions();
-  setupSearch();
-  setupAdvancedFilters();
-  setupContactForm();
-  setupNewsletterForm();
-  setupActiveNavbar();
-  setupDropdownFilterLinks();
-
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-      }
-      window.location.href = "orders.html";
     });
   }
       voiceBtn.classList.remove(
@@ -1738,11 +1671,11 @@ async function init() {
       );
     };
   }
+  
  
-  // Load menu data, then render
+      // Load menu data, then render
   await loadMenuData();
- 
-  // FIX: apply ?filter= param AFTER data is loaded and filter buttons exist
+     // FIX: apply ?filter= param AFTER data is loaded and filter buttons exist
   applyUrlFilterParam();
  
   renderSpecials();
@@ -1785,7 +1718,9 @@ function showSkeletonCards(container, count = 3) {
   if (!container) return;
 
   container.innerHTML = "";
-  for (let i = 0; i < count; i++) container.appendChild(createSkeletonCard());
+  for (let i = 0; i < count; i++) {
+    container.appendChild(createSkeletonCard());
+  }
 }
  
 function createSkeletonCartItem() {
