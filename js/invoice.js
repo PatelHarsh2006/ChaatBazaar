@@ -115,8 +115,12 @@ window.invoiceGenerator = (() => {
       const addrLines = [];
       if (address) {
         addrLines.push(`Source: ${address.source === 'geolocation' ? 'GPS Coordinates' : 'Manual Entry'}`);
-        addrLines.push(`Latitude: ${address.latitude.toFixed(5)}`);
-        addrLines.push(`Longitude: ${address.longitude.toFixed(5)}`);
+        if (typeof address.latitude === 'number' && typeof address.longitude === 'number') {
+          addrLines.push(`Latitude: ${address.latitude.toFixed(5)}`);
+          addrLines.push(`Longitude: ${address.longitude.toFixed(5)}`);
+        } else if (address.text) {
+          addrLines.push(`Address: ${address.text}`);
+        }
         if (order.deliveryDistance) {
           addrLines.push(`Distance: ${order.deliveryDistance.toFixed(2)} km`);
         }
@@ -285,7 +289,7 @@ window.invoiceGenerator = (() => {
           </div>
           <div style="margin-top: 10px;">
             <strong>From:</strong> ChaatBazar Central Kitchen, India Gate, New Delhi<br/>
-            <strong>Delivery:</strong> ${order.deliveryAddress ? `GPS Coordinates (${order.deliveryAddress.latitude.toFixed(4)}, ${order.deliveryAddress.longitude.toFixed(4)})` : 'Self-Counter Pickup'}
+            <strong>Delivery:</strong> ${order.deliveryAddress ? (typeof order.deliveryAddress.latitude === 'number' && typeof order.deliveryAddress.longitude === 'number' ? `GPS Coordinates (${order.deliveryAddress.latitude.toFixed(4)}, ${order.deliveryAddress.longitude.toFixed(4)})` : (order.deliveryAddress.text || 'Manual Address')) : 'Self-Counter Pickup'}
           </div>
         </div>
 
