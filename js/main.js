@@ -1551,18 +1551,11 @@ function showSkeletonCartItems(count = 2) {
 }
  
 // ===== Dark Mode =====
-const toggleBtn = document.getElementById("theme-toggle");
- 
+// Initial theme is handled centrally in `js/auth.js` (setupThemeToggle).
+// Keep a lightweight initial sync here in case `auth.js` is not included.
 document.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem("theme") === "dark") {
     document.body.classList.add("dark");
   }
 });
- 
-if (toggleBtn) {
-  toggleBtn.addEventListener("click", () => {
-    document.body.classList.toggle("dark");
-    localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-  });
-}
- 
+
