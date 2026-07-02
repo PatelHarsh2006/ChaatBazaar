@@ -1550,19 +1550,8 @@ function showSkeletonCartItems(count = 2) {
   for (let i = 0; i < count; i++) cartItemsContainer.appendChild(createSkeletonCartItem());
 }
  
+ 
 // ===== Dark Mode =====
-const toggleBtn = document.getElementById("theme-toggle");
- 
-document.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark");
-  }
-});
- 
-if (toggleBtn) {
-  toggleBtn.addEventListener("click", () => {
-    document.body.classList.toggle("dark");
-    localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-  });
-}
- 
+// Theme toggle is handled by auth.js (setupThemeToggle)
+// Do NOT add a duplicate listener here — it causes double-toggle issues.
+
