@@ -1336,23 +1336,53 @@ function setupContactForm() {
     }, 3000);
   });
 }
- 
+
+// ==== Newsletter form submission ====
+
 function setupNewsletterForm() {
   const newsletterForm = document.getElementById("newsletter-form");
   if (!newsletterForm) return;
+
   const emailInput = newsletterForm.querySelector("#newsletter-email");
- 
+
   newsletterForm.addEventListener("submit", (e) => {
     e.preventDefault();
+
     const validation = validateAndSanitizeEmail(emailInput.value);
+
+    // Remove any existing message
+    const existing = document.getElementById("newsletter-msg");
+    if (existing) existing.remove();
+
+    const msg = document.createElement("p");
+    msg.id = "newsletter-msg";
+    msg.setAttribute("role", "alert");
+
     if (!validation.valid) {
-      alert(validation.error);
-      return;
+      msg.className = "newsletter-error";
+      msg.textContent =
+        validation.error || "⚠️ Please enter a valid email address.";
+    } else {
+      msg.className = "newsletter-success";
+      msg.textContent =
+        "🎉 Thanks for subscribing! Check your inbox for exclusive deals.";
+      newsletterForm.reset();
     }
-    alert("Thank you for subscribing!");
-    newsletterForm.reset();
+
+    // Display the message below the form
+    newsletterForm.insertAdjacentElement("afterend", msg);
+
+    // Remove the message after 5 seconds
+    setTimeout(() => {
+      msg.remove();
+    }, 5000);
   });
 }
+
+// Initialize the newsletter form
+document.addEventListener("DOMContentLoaded", () => {
+  setupNewsletterForm();
+});
  
 function setupActiveNavbar() {
   const navLinks = document.querySelectorAll(".nav-link");
