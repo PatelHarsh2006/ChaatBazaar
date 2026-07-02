@@ -22,21 +22,23 @@ function setupDropdownKeyboardNav() {
     if (!toggle) return;
 
     toggle.addEventListener('keydown', (e) => {
-      const isOpen = menu && menu.style.display !== 'none';
+      const isOpen = dropdown.classList.contains('open');
 
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         dropdown.classList.toggle('open');
-        menu.style.display = isOpen ? 'none' : 'block';
+        toggle.setAttribute('aria-expanded', dropdown.classList.contains('open') ? 'true' : 'false');
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
-        if (!isOpen && menu) {
-          menu.style.display = 'block';
+        if (!isOpen) {
+          dropdown.classList.add('open');
+          toggle.setAttribute('aria-expanded', 'true');
         }
         if (items.length > 0) items[0].focus();
       } else if (e.key === 'Escape') {
         e.preventDefault();
-        if (menu) menu.style.display = 'none';
+        dropdown.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
         toggle.focus();
       }
     });
@@ -53,7 +55,8 @@ function setupDropdownKeyboardNav() {
           items[prevIndex].focus();
         } else if (e.key === 'Escape') {
           e.preventDefault();
-          if (menu) menu.style.display = 'none';
+          dropdown.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
           toggle.focus();
         } else if (e.key === 'Home') {
           e.preventDefault();

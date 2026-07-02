@@ -1,4 +1,6 @@
-// ===== Unified Cart State Management =====
+// ===============================
+// CHAATBAZAR CART MANAGER (FIXED)
+// ===============================
 
 const CART_STORAGE_KEY = 'chaatCart';
 const CART_SYNC_EVENT = 'cartStateChanged';
@@ -10,7 +12,9 @@ class CartManager {
     this.setupStorageSync();
   }
 
-  // Load cart from localStorage
+  // =====================
+  // LOAD
+  // =====================
   loadFromStorage() {
     try {
       const stored = localStorage.getItem(CART_STORAGE_KEY);
@@ -21,7 +25,9 @@ class CartManager {
     }
   }
 
-  // Save cart to localStorage and notify listeners
+  // =====================
+  // SAVE
+  // =====================
   saveToStorage() {
     try {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(this.items));
@@ -29,8 +35,21 @@ class CartManager {
       // Dispatch custom event for cross-tab/cross-component sync
       window.dispatchEvent(new CustomEvent(CART_SYNC_EVENT, { detail: this.items }));
     } catch (error) {
-      console.error('Error saving cart to storage:', error);
+      if (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+        console.error('Storage quota exceeded:', error);
+        this.handleStorageQuotaExceeded();
+      } else {
+        console.error('Error saving cart to storage:', error);
+      }
     }
+  }
+
+  // Handle storage quota exceeded
+  handleStorageQuotaExceeded() {
+    const message = 'Storage limit exceeded. Your cart may not be saved. Please clear browser cache and try again.';
+    console.warn(message);
+    // Dispatch event for UI to show notification
+    window.dispatchEvent(new CustomEvent('storageQuotaExceeded', { detail: message }));
   }
 
   // Setup storage event listener for cross-tab sync
@@ -46,7 +65,7 @@ class CartManager {
       }
     });
 
-    // Listen for custom cart events
+     // Listen for custom cart events
     window.addEventListener(CART_SYNC_EVENT, (event) => {
       this.notifyListeners();
     });
@@ -62,8 +81,7 @@ class CartManager {
     };
   }
 
-  // Notify all listeners of cart changes
-  notifyListeners() {
+   notifyListeners() {
     this.listeners.forEach(callback => {
       try {
         callback(this.items);
@@ -73,40 +91,39 @@ class CartManager {
     });
   }
 
-  // Get current cart items
-  getItems() {
+   getItems() {
     return [...this.items];
   }
 
-  // Get cart item by ID
+    // Get cart item by ID
   getItem(itemId) {
     return this.items.find(cartItem => cartItem.item.id === itemId);
   }
 
-  // Get total number of items
+    // Get total number of items
   getTotalCount() {
     return this.items.reduce((sum, cartItem) => sum + cartItem.quantity, 0);
   }
 
-  // Get total price
+     // Get total price
   getTotalPrice() {
     return this.items.reduce((sum, cartItem) => sum + (cartItem.item.price * cartItem.quantity), 0);
   }
 
-  // Add item to cart
+    // Add item to cart
   addItem(item, quantity = 1) {
     if (!item || !item.id) {
       console.error('Invalid item:', item);
       return false;
     }
 
-    const existingItem = this.getItem(item.id);
+   const existingItem = this.getItem(item.id);
     if (existingItem) {
       existingItem.quantity += quantity;
     } else {
       this.items.push({
         item: { ...item },
-        quantity
+        quantity: quantity
       });
     }
 
@@ -114,7 +131,7 @@ class CartManager {
     return true;
   }
 
-  // Remove item from cart
+ // Remove item from cart
   removeItem(itemId) {
     const index = this.items.findIndex(cartItem => cartItem.item.id === itemId);
     if (index !== -1) {
@@ -125,7 +142,7 @@ class CartManager {
     return false;
   }
 
-  // Update item quantity
+   // Update item quantity
   updateQuantity(itemId, quantity) {
     const cartItem = this.getItem(itemId);
     if (!cartItem) return false;
@@ -160,7 +177,6 @@ class CartManager {
     } else {
       return this.removeItem(itemId);
     }
-
     this.saveToStorage();
     return true;
   }
@@ -172,12 +188,12 @@ class CartManager {
     return true;
   }
 
-  // Check if cart is empty
+    // Check if cart is empty
   isEmpty() {
     return this.items.length === 0;
   }
 
-  // Get cart size (number of unique items)
+    // Get cart size (number of unique items)
   getSize() {
     return this.items.length;
   }
@@ -204,8 +220,8 @@ class CartManager {
       this.saveToStorage();
       return false;
     }
+  return true;
 
-    return true;
   }
 
   // Export cart for backup/export
@@ -225,7 +241,7 @@ class CartManager {
       return false;
     }
 
-    this.items = cartData.items;
+   this.items = cartData.items;
     this.validate();
     this.saveToStorage();
     return true;
