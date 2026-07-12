@@ -105,7 +105,18 @@ const foodPairings = {
 
 // ===== ADD TO CART FUNCTION =====
 
-function addToCart(itemName, itemPrice) {
+function addToCart(itemName, itemPrice, parentFood = null) {
+
+  if (window.cartManager) {
+    window.cartManager.addItem({
+      id: itemName + "-" + itemPrice,
+      name: itemName,
+      price: itemPrice,
+      parentFood: parentFood
+    }, 1);
+    showToast(`${itemName} added to cart 🛒`);
+    return;
+  }
 
   const existingItem = cart.find(
     cartItem => cartItem.item.name === itemName
@@ -272,7 +283,9 @@ function renderRecommendations() {
 
   recommendationContainer.innerHTML = "";
 
-  if (cart.length === 0) {
+  const currentCart = window.cartManager ? window.cartManager.getItems() : cart;
+
+  if (currentCart.length === 0) {
 
     recommendationContainer.innerHTML = `
       <p class="recommend-placeholder">
@@ -285,7 +298,7 @@ function renderRecommendations() {
 
   let recommendations = [];
 
-  cart.forEach(cartItem => {
+  currentCart.forEach(cartItem => {
 
     const itemName = cartItem.item.name;
 

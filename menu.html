@@ -142,6 +142,13 @@
   <div class="menu-container" id="menu-container" aria-live="polite" aria-relevant="additions removals">
     <!-- JS will dynamically load items -->
   </div>
+
+  <section class="recommendations-section" style="margin-top: 40px;">
+    <h2 class="section-title">Smart Combos For You</h2>
+    <div id="recommendation-container" class="combo-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
+      <!-- Recommendations will load here -->
+    </div>
+  </section>
 </section>
 
 <footer>
@@ -214,6 +221,7 @@
 <script src="js/geolocation.js"></script>
 <script src="js/sanitization.js"></script>
 <script src="js/loyalty.js"></script>
+<script src="js/recommendations.js"></script>
 <script src="js/main.js"></script>
 <script src="js/auth.js"></script>
 </body>
