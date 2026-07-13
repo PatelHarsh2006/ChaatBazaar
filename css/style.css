@@ -2611,8 +2611,8 @@ body.dark p{
 
 /* Header & Navigation */
 body.dark header {
-  background: #2c2c2c;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
+  /* Keep orange brand background — only deepen the shadow for dark mode depth */
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.55);
 }
 body.dark nav a {
   color: #f5f5f5;
@@ -2960,27 +2960,7 @@ select:focus-visible {
   }
 }
 
-/* Dark mode support for better contrast */
-@media (prefers-color-scheme: light) {
-  body {
-    background: #1a1a1a;
-    color: #e0e0e0;
-  }
-
-  .card {
-    background: #2d2d2d;
-  }
-
-  .suggestion-item {
-    background: #2d2d2d;
-    color: #e0e0e0;
-  }
-
-  .suggestion-item.focused {
-    background: #bf360c;
-    color: #fff;
-  }
-}
+/* Note: theme switching is handled via body.dark class (see auth.js setupThemeToggle) */
 
 
 /* Improve contrast of disabled buttons */
