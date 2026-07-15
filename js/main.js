@@ -493,6 +493,54 @@ function createCard(item, highlightQuery = "") {
   return card;
 }
 
+function toKebabCase(value) {
+  return String(value || '')
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+async function renderStateExplorer() {
+  const container = document.getElementById('state-scroll-wrapper');
+  if (!container) return;
+
+  try {
+    const response = await fetch('items.json', { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`Failed to load items.json: ${response.status}`);
+    }
+
+    const items = await response.json();
+    const states = [...new Set(items.map(item => item.state).filter(Boolean))];
+
+    container.innerHTML = '';
+
+    states.forEach((state) => {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'state-card';
+      card.setAttribute('aria-label', `Explore ${state}`);
+      card.innerHTML = `
+        <img src="img/states/${toKebabCase(state)}.jpeg" alt="${state}" loading="lazy" />
+        <p>${state}</p>
+      `;
+
+      card.addEventListener('click', () => {
+        window.location.href = `state.html?state=${encodeURIComponent(state)}`;
+      });
+
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error('State explorer failed to render:', error);
+    container.innerHTML = '<p class="state-explorer-empty">State data is unavailable right now.</p>';
+  }
+}
+
+ 
 function renderSpecials() {
   if (!specialsContainer) return;
   const specialsTitle = document.querySelector("#specials .section-title");
@@ -1012,12 +1060,40 @@ window.checkout = async function () {
 
   const validationResult = await validateDeliveryLocation();
 
+ 
   if (!validationResult.valid) {
     localStorage.setItem(
       "deliveryError",
       JSON.stringify({
         error: validationResult.error,
         distance: validationResult.distance,
+        restaurantLocation: validationResult.restaurantLocation
+      })
+    );
+
+    return {
+      deliveryAvailable: false
+    };
+  }
+
+  const subtotal = getCartSubtotal();
+  const couponDiscount = calculateCouponDiscount(subtotal);
+
+  let loyaltyDiscount = 0;
+  let pointsRedeemed = 0;
+
+  if (loyaltyPointsApplied && typeof loyalty !== 'undefined') {
+    const balance = loyalty.getBalance();
+    pointsRedeemed = Math.min(balance, subtotal);
+    loyaltyDiscount = pointsRedeemed;
+    loyalty.redeemPoints(pointsRedeemed);
+  }
+
+  const discount = loyaltyDiscount + couponDiscount;
+  const finalTotal = Math.max(subtotal - discount, 0);
+
+        error:              validationResult.error,
+        distance:           validationResult.distance,
         restaurantLocation: validationResult.restaurantLocation
       })
     );
@@ -1047,6 +1123,7 @@ window.checkout = async function () {
     pointsEarned = loyalty.awardPoints(finalTotal);
   }
 
+ 
   const newOrder = {
     id: "CB-" + Math.floor(100000 + Math.random() * 900000),
     date: new Date().toLocaleDateString(undefined, {
@@ -1055,6 +1132,18 @@ window.checkout = async function () {
     }),
     timestamp: Date.now(),
     items: JSON.parse(JSON.stringify(cart)),
+    total: finalTotal,
+    subtotal,
+    discount,
+    coupon: activeCoupon?.code || null,
+    pointsRedeemed,
+    pointsEarned,
+    status: "Pending",
+    timestamp:  Date.now(),
+    items:      JSON.parse(JSON.stringify(cart)),
+    subtotal:   subtotal,
+    discount:   loyaltyDiscount + couponDiscount,
+    coupon:     activeCoupon?.code || null,
     subtotal: subtotal,
     discount: loyaltyDiscount + couponDiscount,
     coupon: activeCoupon?.code || null,
@@ -1074,6 +1163,7 @@ window.checkout = async function () {
   orders.unshift(newOrder);
   localStorage.setItem('chaatOrders', JSON.stringify(orders));
 
+ 
   loyaltyPointsApplied = false;
   activeCoupon = null;
   saveCouponToStorage();
@@ -1083,12 +1173,18 @@ window.checkout = async function () {
   safeUpdateFavCount();
   renderCart();
 
+ 
   if (typeof window.triggerDeliverySimulation === 'function') {
     window.triggerDeliverySimulation();
   } else {
     console.warn('Delivery tracker not ready. Order has been placed.');
   }
 
+  return {
+    deliveryAvailable: true
+  };
+ 
+  return { deliveryAvailable: true };
   return true;
 };
 
@@ -1723,6 +1819,7 @@ async function init() {
   applyUrlFilterParam();
 
   renderSpecials();
+  await renderStateExplorer();
   renderRecentlyViewed();
   renderFavorites();
   applyAllFilters();
