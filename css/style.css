@@ -3812,3 +3812,18 @@ body.dark .hero-content p {
     transition: none !important;
   }
 }
+.menu-toggle-wrapper{
+    grid-column:1/-1;
+    display:flex;
+    justify-content:flex-end;
+    margin-top:20px;
+}
+
+.menu-toggle-btn{
+    padding:12px 25px;
+    border:none;
+    border-radius:40px;
+    background:#ff6b35;
+    color:white;
+    cursor:pointer;
+}
