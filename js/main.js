@@ -2,6 +2,9 @@
 let menuItems = [];
 let currentCategory = "All";
 let orders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
+let festivals = [];
+let activeFestival = null;
+
  
 // Initialize cart from cart manager (will be set after DOM loads)
 let cart = [];
@@ -52,6 +55,105 @@ async function loadMenuData() {
     }
   }
 }
+
+async function loadFestivalData() {
+  try {
+    const response = await fetch("data/festivals.json");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    festivals = await response.json();
+  } catch (error) {
+    console.error("Failed to load festival data:", error);
+    festivals = [];
+  }
+}
+
+function parseMonthDay(value) {
+  const [month, day] = String(value).split("-").map(Number);
+  return { month, day };
+}
+
+function getMonthDayKey(date) {
+  return date.month * 100 + date.day;
+}
+
+function isFestivalDateInRange(today, start, end) {
+  const currentKey = getMonthDayKey(today);
+  const startKey = getMonthDayKey(parseMonthDay(start));
+  const endKey = getMonthDayKey(parseMonthDay(end));
+
+  if (startKey <= endKey) {
+    return currentKey >= startKey && currentKey <= endKey;
+  }
+  return currentKey >= startKey || currentKey <= endKey;
+}
+
+function getFestivalOverrideFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const festivalId = params.get('festival');
+  if (!festivalId) return null;
+  return festivals.find(festival => festival.id.toLowerCase() === festivalId.toLowerCase()) || null;
+}
+
+function getActiveFestival() {
+  const override = getFestivalOverrideFromUrl();
+  if (override) {
+    return override;
+  }
+
+  const today = new Date();
+  const current = { month: today.getMonth() + 1, day: today.getDate() };
+  return festivals.find(festival => {
+    if (!festival.start || !festival.end) return false;
+    return isFestivalDateInRange(current, festival.start, festival.end);
+  }) || null;
+}
+
+function applyFestivalTheme(festival) {
+  const root = document.documentElement;
+  const defaults = {
+    primary: '#bf360c',
+    secondary: '#fff3e0',
+    accent: '#ff5722',
+    card: '#ffffff',
+    section: '#fff3e0',
+    text: '#3e2723',
+    buttonBg: '#ff7b54',
+    buttonHover: '#e64a19'
+  };
+
+  const theme = festival?.theme || defaults;
+  root.style.setProperty('--primary', theme.primary || defaults.primary);
+  root.style.setProperty('--secondary', theme.secondary || defaults.secondary);
+  root.style.setProperty('--accent', theme.accent || defaults.accent);
+  root.style.setProperty('--card-bg', theme.card || defaults.card);
+  root.style.setProperty('--section-bg', theme.section || defaults.section);
+  root.style.setProperty('--text-color', theme.text || defaults.text);
+  root.style.setProperty('--button-bg', theme.accent || defaults.buttonBg);
+  root.style.setProperty('--button-hover', theme.primary || defaults.buttonHover);
+}
+
+function renderFestivalBanner(festival) {
+  const banner = document.getElementById('festival-banner');
+  const bannerName = document.getElementById('festival-name');
+  const bannerTagline = document.getElementById('festival-tagline');
+  const bannerImage = document.getElementById('festival-banner-img');
+
+  if (!banner || !bannerName || !bannerTagline || !bannerImage) return;
+
+  if (!festival) {
+    banner.style.display = 'none';
+    return;
+  }
+
+  banner.style.display = 'block';
+  bannerName.textContent = `${festival.name} Specials`;
+  bannerTagline.textContent = festival.tagline;
+  bannerImage.src = festival.bannerImage;
+  bannerImage.alt = `${festival.name} festival banner`;
+}
+
  
 // ===== Globals =====
 const specialsContainer   = document.getElementById("specials-cards");
@@ -85,6 +187,13 @@ let activeCoupon = null;
 function formatPrice(price) {
   return `₹${price}`;
 }
+
+function safeUpdateFavCount() {
+  if (typeof updateFavCount === 'function') {
+    updateFavCount();
+  }
+}
+
  
 function getCartSubtotal() {
   return cart.reduce((sum, ci) => sum + ci.item.price * ci.quantity, 0);
@@ -290,6 +399,24 @@ function createCard(item, highlightQuery = "") {
  
   const highlightedName = highlightText(item.name, highlightQuery);
   const highlightedDesc = highlightText(item.description, highlightQuery);
+
+  const isFestivalFeatured = activeFestival && activeFestival.featuredDishes?.includes(item.id);
+
+  if (isFestivalFeatured) {
+    card.classList.add("festival-featured");
+  }
+
+  // Check if item is available (default to true if field doesn't exist)
+  const isAvailable = item.available !== undefined ? item.available : true;
+
+  // Creates out of stock badge (ONLY if unavailable)
+  const outOfStockBadge = !isAvailable ? '<span class="out-of-stock-badge">Out of Stock ❌</span>' : '';
+  const festivalBadge = isFestivalFeatured ? '<span class="festival-badge">Festival Favorite</span>' : '';
+
+  //Disables button and change color if out of stock
+  const buttonDisabled = !isAvailable ? 'disabled' : '';
+  const buttonColor = isAvailable ? '#28a745' : '#cccccc';
+
  
   const isAvailable      = item.available !== undefined ? item.available : true;
   const outOfStockBadge  = !isAvailable ? '<span class="out-of-stock-badge">Out of Stock ❌</span>' : '';
@@ -307,6 +434,7 @@ function createCard(item, highlightQuery = "") {
       <h3>${highlightedName}</h3>
 
       <p>${highlightedDesc}</p>
+      <div class="card-tags">${dietaryTags} ${festivalBadge}</div>
       <div class="card-tags">${dietaryTags}</div>
       ${outOfStockBadge}
     </div>
@@ -354,6 +482,21 @@ function createCard(item, highlightQuery = "") {
  
 function renderSpecials() {
   if (!specialsContainer) return;
+  const specialsTitle = document.querySelector("#specials .section-title");
+  let specials = menuItems.slice(0, 3);
+
+  if (activeFestival) {
+    specialsTitle.textContent = `${activeFestival.name} Specials`;
+    specials = activeFestival.featuredDishes
+      .map(id => menuItems.find(item => item.id === id))
+      .filter(Boolean);
+
+    if (specials.length === 0) {
+      specials = menuItems.slice(0, 3);
+    }
+  } else {
+    specialsTitle.textContent = "Today's Specials";
+  }
 
   const specials = menuItems.slice(0, 3);
  
@@ -528,6 +671,27 @@ function renderCart() {
           <button class="cart-item-remove">Remove</button>
         </div>
       `;
+
+      const decreaseBtn = cartItem.querySelector(".qty-decrease");
+      if (decreaseBtn) {
+        decreaseBtn.addEventListener("click", () => removeFromCart(item.id));
+      }
+
+      const increaseBtn = cartItem.querySelector(".qty-increase");
+      if (increaseBtn) {
+        increaseBtn.addEventListener("click", () => addToCart(item.id));
+      }
+
+      const removeBtn = cartItem.querySelector(".cart-item-remove");
+      if (removeBtn) {
+        removeBtn.addEventListener("click", () => {
+          cartManager.removeItem(item.id);
+          updateCartCount();
+          safeUpdateFavCount();
+          renderCart();
+        });
+      }
+
  
       const decreaseBtn = cartItem.querySelector(".qty-decrease");
       if (decreaseBtn) {
@@ -875,7 +1039,7 @@ window.checkout = async function () {
  
   cartManager.clear();
   updateCartCount();
-  updateFavCount();
+  safeUpdateFavCount();
   renderCart();
  
   if (typeof window.triggerDeliverySimulation === 'function') {
@@ -896,7 +1060,7 @@ window.reorderOrder = function (orderId) {
   });
  
   updateCartCount();
-  updateFavCount();
+  safeUpdateFavCount();
   renderCart();
   alert("Items added back to your cart successfully!");
  
@@ -943,7 +1107,7 @@ function addToCart(id) {
  
   cartManager.addItem(item, 1);
   updateCartCount();
-  updateFavCount();
+  safeUpdateFavCount();
   renderCart();
   showToast(`🛒 ${item.name} added to cart`);
  
@@ -1056,7 +1220,7 @@ window.placeOrderFromCheckout = function (customerDetails, pricingInfo) {
 
   cartManager.clear();
   updateCartCount();
-  updateFavCount();
+  safeUpdateFavCount();
   renderCart();
 
   // Re-render orders lists if we are on the orders page
@@ -1475,6 +1639,38 @@ if (checkoutBtn) {
       }
     });
   }
+      voiceBtn.classList.remove(
+        "listening"
+      );
+    };
+
+  // Load database items asynchronously without blocking UI interactions
+  await loadMenuData();
+  await loadFestivalData();
+
+  activeFestival = getActiveFestival();
+  applyFestivalTheme(activeFestival);
+  renderFestivalBanner(activeFestival);
+    recognition.onerror = () => {
+      voiceBtn.innerHTML = "🎤";
+
+      voiceBtn.classList.remove(
+        "listening"
+      );
+
+      alert(
+        "Voice recognition failed."
+      );
+    };
+
+    recognition.onend = () => {
+      voiceBtn.innerHTML = "🎤";
+
+      voiceBtn.classList.remove(
+        "listening"
+      );
+    };
+  }
   
  
       // Load menu data, then render
@@ -1487,7 +1683,7 @@ if (checkoutBtn) {
   renderFavorites();
   applyAllFilters();
   updateCartCount();
-  updateFavCount();
+  safeUpdateFavCount();
   renderCart();
  
   renderOrdersList();
