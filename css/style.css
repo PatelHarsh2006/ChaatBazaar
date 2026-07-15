@@ -3446,13 +3446,46 @@ body.dark .breakdown-row.final {
 }
 
 .combo-add-btn:hover {
-  background: #e64a19;
+  background: #e64a19; 
   transform: scale(1.05);
 }
 .combo-item-right {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+/* ===== Combo Preview ===== */
+.combo-preview {
+  padding: 3rem 1rem;
+  background: linear-gradient(180deg, #fffaf6 0%, #fff3e0 100%);
+}
+.combo-preview .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+}
+.combo-preview-text {
+  max-width: 760px;
+  margin: 0 auto;
+  color: #6b4a3a;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+.combo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 2.2rem;
+  border-radius: 40px;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .combo-preview { padding: 2rem 0.8rem; }
+  .combo-btn { width: 100%; max-width: 320px; }
 }
 
 
