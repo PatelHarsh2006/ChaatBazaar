@@ -432,6 +432,11 @@ function createCard(item, highlightQuery = "") {
   const buttonColor      = isAvailable  ? '#28a745'  : '#cccccc';
  
   card.innerHTML = `
+    <img src="${item.image}" 
+         alt="${item.name}" 
+         loading="lazy"
+         decoding="async" />
+
     <img src="${item.image}" alt="${item.name}" loading="lazy" />
     <div class="card-content">
       <div class="card-meta">
