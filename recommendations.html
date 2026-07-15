@@ -20,6 +20,7 @@
 
   <!-- MAIN CSS -->
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="img/logo.png" type="image/png" />
 
   <style>
 
@@ -165,7 +166,7 @@
     }
 
     .combo-card p{
-      color: #666;
+      color: #555;
       margin-bottom: 20px;
       line-height: 1.5;
     }
@@ -183,12 +184,23 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-weight: 500;
+      font-weight: 600;
+      color: #2d2a26;
+    }
+
+    .pairing-item div{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #2d2a26;
+      font-weight: 600;
+      font-size: 15px;
     }
 
     .pairing-item span{
-      color: #ff6b35;
-      font-weight: 600;
+      color: #d84315;
+      font-weight: 700;
+      font-size: 15px;
     }
 
     /* ================= FOOTER ================= */
@@ -214,6 +226,90 @@
 
     .social-icons a:hover{
       color: #ffb347;
+    }
+
+    /* ================= DARK MODE ================= */
+
+    body.dark{
+      background: #1a1a1a;
+      color: #e0e0e0;
+    }
+
+    body.dark header{
+      background: #2c2c2c;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    body.dark .logo{
+      color: #ffb347;
+    }
+
+    body.dark nav a{
+      color: #e0e0e0;
+    }
+
+    body.dark nav a:hover,
+    body.dark nav a.active{
+      color: #ffb347;
+      background: rgba(255,179,71,0.15);
+    }
+
+    body.dark .combo-hero{
+      background: linear-gradient(135deg, #2a1a10, #3b2015);
+    }
+
+    body.dark .combo-hero h1{
+      color: #ff8a50;
+    }
+
+    body.dark .combo-hero p{
+      color: #ccc;
+    }
+
+    body.dark .section-title{
+      color: #ff8a50;
+    }
+
+    body.dark .combo-card{
+      background: #2a2a2a;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    }
+
+    body.dark .combo-card::before{
+      background: linear-gradient(90deg, #ff5722, #ff8a50);
+    }
+
+    body.dark .combo-card h3{
+      color: #ffb347;
+    }
+
+    body.dark .combo-card p{
+      color: #bbb;
+    }
+
+    body.dark .pairing-item{
+      background: #363636;
+      color: #f0f0f0;
+    }
+
+    body.dark .pairing-item div{
+      color: #f0f0f0;
+    }
+
+    body.dark .pairing-item span{
+      color: #ff8a50;
+    }
+
+    body.dark footer{
+      background: #111;
+    }
+
+    body.dark .social-icons a{
+      color: #ccc;
+    }
+
+    body.dark .social-icons a:hover{
+      color: #ff8a50;
     }
 
     /* ================= RESPONSIVE ================= */
@@ -265,6 +361,18 @@
       <a href="cart.html">
         Cart
       </a>
+
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-icon sun-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          </span>
+          <span class="theme-toggle-icon moon-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </span>
+          <span class="theme-toggle-thumb"></span>
+        </span>
+      </button>
 
     </nav>
 
@@ -336,6 +444,7 @@
 <!-- ================= SCRIPT ================= -->
 
 <script src="js/cart-manager.js"></script>
+<script src="js/auth.js"></script>
 
 <script>
 
