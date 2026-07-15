@@ -1,0 +1,121 @@
+[
+  {
+    "id": "diwali",
+    "name": "Diwali",
+    "start": "10-24",
+    "end": "11-02",
+    "bannerImage": "img/9.avif",
+    "tagline": "Light up your cravings with festive sweets and savory street food.",
+    "featuredDishes": ["jalebi-013", "pakora-011", "masala-chai-010", "aam-panna-015"],
+    "theme": {
+      "primary": "#d84315",
+      "secondary": "#fff3e0",
+      "accent": "#ff6f00",
+      "card": "#fff8e1",
+      "section": "#fff3e0",
+      "text": "#3e2723"
+    }
+  },
+  {
+    "id": "holi",
+    "name": "Holi",
+    "start": "03-17",
+    "end": "03-25",
+    "bannerImage": "img/8.avif",
+    "tagline": "Celebrate with colorful chaat and refreshing festival favorites.",
+    "featuredDishes": ["panipuri-003", "bhelpuri-004", "sweet-lassi-018", "mango-lassi-005"],
+    "theme": {
+      "primary": "#8e24aa",
+      "secondary": "#f8bbd0",
+      "accent": "#ff4081",
+      "card": "#f3e5f5",
+      "section": "#fce4ec",
+      "text": "#4a148c"
+    }
+  },
+  {
+    "id": "durga-puja",
+    "name": "Durga Puja",
+    "start": "10-15",
+    "end": "10-25",
+    "bannerImage": "img/7.avif",
+    "tagline": "Savor the festive spirit with rich Bengali-inspired street food.",
+    "featuredDishes": ["aloo-tikki-008", "vada-pav-016", "gol-gappa-009", "dahi-bhalle-006"],
+    "theme": {
+      "primary": "#bf360c",
+      "secondary": "#ffe0b2",
+      "accent": "#ff6f00",
+      "card": "#fff3e0",
+      "section": "#ffebee",
+      "text": "#4e342e"
+    }
+  },
+  {
+    "id": "navratri",
+    "name": "Navratri",
+    "start": "10-01",
+    "end": "10-10",
+    "bannerImage": "img/2.avif",
+    "tagline": "Enjoy wholesome festival specials perfect for nine auspicious nights.",
+    "featuredDishes": ["aam-panna-015", "idli-014", "dahi-bhalle-006", "sweet-lassi-018"],
+    "theme": {
+      "primary": "#0d47a1",
+      "secondary": "#bbdefb",
+      "accent": "#1e88e5",
+      "card": "#e3f2fd",
+      "section": "#e8eaf6",
+      "text": "#0d47a1"
+    }
+  },
+  {
+    "id": "eid",
+    "name": "Eid",
+    "start": "04-08",
+    "end": "04-20",
+    "bannerImage": "img/1.avif",
+    "tagline": "Feast on celebratory street food made for joyful gatherings.",
+    "featuredDishes": ["chikhalwali-007", "masala-chai-010", "raj-kachori-019", "bhelpuri-004"],
+    "theme": {
+      "primary": "#2e7d32",
+      "secondary": "#c8e6c9",
+      "accent": "#43a047",
+      "card": "#e8f5e9",
+      "section": "#f1f8e9",
+      "text": "#1b5e20"
+    }
+  },
+  {
+    "id": "christmas",
+    "name": "Christmas",
+    "start": "12-20",
+    "end": "12-26",
+    "bannerImage": "img/chaat.png",
+    "tagline": "Celebrate with cozy flavors and holiday street food favorites.",
+    "featuredDishes": ["sweet-lassi-018", "jalebi-013", "masala-chai-010", "mango-lassi-005"],
+    "theme": {
+      "primary": "#b71c1c",
+      "secondary": "#ffebee",
+      "accent": "#2e7d32",
+      "card": "#ffffff",
+      "section": "#f1f8e9",
+      "text": "#0d47a1"
+    }
+  },
+  {
+    "id": "preview",
+    "name": "Festival Preview",
+    "start": "05-30",
+    "end": "06-02",
+    "bannerImage": "img/8.avif",
+    "tagline": "Preview the festival experience with seasonal street food highlights.",
+    "featuredDishes": ["jalebi-013", "masala-chai-010", "aam-panna-015", "panipuri-003"],
+    "theme": {
+      "primary": "#ff6f00",
+      "secondary": "#fff8e1",
+      "accent": "#d84315",
+      "card": "#fff3e0",
+      "section": "#fffde7",
+      "text": "#4e342e"
+    }
+  }
+]
