@@ -130,8 +130,22 @@ function applyTranslations() {
 
   const cartHeader = document.getElementById('cart-header');
   if (cartHeader) {
-    const closeBtn = document.getElementById('cart-close');
-    cartHeader.innerHTML = `${t('cart_title')} ${closeBtn ? closeBtn.outerHTML : ''}`;
+    const cartTitle = t('cart_title');
+    const closeBtn = cartHeader.querySelector('#cart-close');
+
+    if (closeBtn) {
+      const titleNode = Array.from(cartHeader.childNodes).find(
+        node => node.nodeType === Node.TEXT_NODE && node.textContent.trim()
+      );
+
+      if (titleNode) {
+        titleNode.textContent = `${cartTitle} `;
+      } else {
+        cartHeader.insertBefore(document.createTextNode(`${cartTitle} `), closeBtn);
+      }
+    } else {
+      cartHeader.textContent = cartTitle;
+    }
   }
 
   const checkoutBtn = document.getElementById('checkout-btn');
