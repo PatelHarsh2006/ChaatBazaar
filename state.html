@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChaatBazar | Explore by State</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-inner container" role="banner">
+      <a href="index.html" class="logo" aria-label="Back to home">ChaatBazar 🍴</a>
+      <nav role="navigation" aria-label="Primary Navigation">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="menu.html" class="nav-link">Menu</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2rem 1rem 4rem;">
+    <section class="state-page-heading">
+      <p class="eyebrow">State Spotlight</p>
+      <h1 id="state-title">State Delicacies</h1>
+      <p id="state-description">Browse regional favourites from this state.</p>
+    </section>
+
+    <section class="cards" id="state-items" aria-live="polite"></section>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const stateName = params.get('state') || 'Gujarat';
+
+    function formatPrice(value) {
+      return `₹${value}`;
+    }
+
+    fetch('items.json')
+      .then((res) => {
+        if (!res.ok) throw new Error('Unable to load items.json');
+        return res.json();
+      })
+      .then((items) => {
+        const filtered = items.filter((item) => item.state === stateName);
+        const title = document.getElementById('state-title');
+        const description = document.getElementById('state-description');
+        const container = document.getElementById('state-items');
+
+        title.textContent = `${stateName} Delicacies`;
+        description.textContent = filtered.length
+          ? `Discover ${filtered.length} regional favorites from ${stateName}.`
+          : `No regional favorites are available for ${stateName} yet.`;
+
+        if (!filtered.length) {
+          container.innerHTML = '<p class="empty-state">No items are available for this state yet.</p>';
+          return;
+        }
+
+        filtered.forEach((item) => {
+          const card = document.createElement('article');
+          card.className = 'card';
+          card.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" loading="lazy" />
+            <div class="card-content">
+              <h3>${item.name}</h3>
+              <p>${item.description}</p>
+              <p class="price">${formatPrice(item.price)}</p>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        document.getElementById('state-items').innerHTML = '<p class="empty-state">Unable to load regional items right now.</p>';
+      });
+  </script>
+</body>
+</html>

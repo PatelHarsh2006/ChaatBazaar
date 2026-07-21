@@ -422,3 +422,69 @@
         text-align: left;
     }
 }
+
+body.dark {
+  background: #111827;
+  color: #f3f4f6;
+}
+
+body.dark .auth-main {
+  background: linear-gradient(135deg, #111827, #1f2937);
+}
+
+body.dark .auth-card {
+  background: #1f2937;
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+}
+
+body.dark .auth-header h2 {
+  color: #fff;
+}
+
+body.dark .auth-header p,
+body.dark .auth-switch-text,
+
+
+body.dark .input-group label {
+  color: #e5e7eb;
+}
+
+body.dark .input-group input {
+  background: #374151;
+  color: #fff;
+  border: 1px solid #4b5563;
+}
+
+body.dark .input-group input::placeholder {
+  color: #9ca3af;
+}
+
+body.dark .input-group input:focus {
+  border-color: #ff6b35;
+}
+
+body.dark .auth-link {
+  color: #ff6b35;
+}
+
+body.dark .auth-btn {
+  background: #ff6b35;
+  color: #111827;
+}
+
+body.dark .auth-btn:hover {
+  background: #ff6b35;
+}
+
+body.dark .error-message {
+  color: #ff6b35;
+}
+
+body.dark .form-message.success {
+  color: #22c55e;
+}
+
+body.dark .form-message.error {
+  color: #ef4444;
+}

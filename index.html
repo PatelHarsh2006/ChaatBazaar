@@ -80,6 +80,22 @@
 
 </header>
 
+<!-- Festival Banner -->
+<section id="festival-banner" class="festival-banner" role="region" aria-label="Festival Specials Banner" style="display: none;">
+  <div class="festival-banner-inner container">
+    <div class="festival-banner-copy">
+      <span class="festival-chip">Festival Special</span>
+      <h2 id="festival-name">Festival Highlights</h2>
+      <p id="festival-tagline">Discover seasonal specials and festive flavors, handpicked for the celebration.</p>
+    </div>
+    <div class="festival-banner-image">
+      <img id="festival-banner-img" src="" alt="Festival special banner image" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<!-- Hero Section -->
+<section id="hero" class="hero" role="region" aria-label="Hero Section">
 <!-- ================= HERO SECTION ================= -->
 
 <section
@@ -193,6 +209,28 @@
 
 </section>
 
+<!-- State Explorer Section -->
+<section id="state-explorer" class="state-explorer" role="region" aria-label="Explore by State">
+  <h2 class="section-title">Explore by State</h2>
+  <div class="state-scroll-wrapper" id="state-scroll-wrapper" aria-live="polite">
+    <!-- State cards injected here -->
+  </div>
+</section>
+
+<!-- Recently Viewed Section -->
+<section id="recently-viewed" class="recently-viewed" role="region" aria-label="Recently Viewed Items" style="display: none;">
+  <h2 class="section-title">Recently Viewed</h2>
+  <div class="cards" id="recently-viewed-cards">
+    <!-- Recently viewed cards will be injected here -->
+<!-- ================= RECENTLY VIEWED ================= -->
+
+<section
+  id="recently-viewed"
+  class="recently-viewed"
+  role="region"
+  aria-label="Recently Viewed Items"
+  style="display:none;"
+>
 <!-- Recently Viewed Section -->
 
 <section id="recently-viewed" class="recently-viewed" role="region" aria-label="Recently Viewed Items" style="display: none;">
@@ -345,6 +383,22 @@
 
         <div class="team-member-inner">
           <div class="team-member-front">
+
+            <img
+              src="https://randomuser.me/api/portraits/women/68.jpg"
+              alt="Priya Sharma"
+              loading="lazy"
+              decoding="async"
+            />
+
+            <h4>
+              Priya Sharma
+            </h4>
+
+            <p>
+              Founder & Head Chef
+            </p>
+
             <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya Sharma - Founder & Head Chef" />
             <h4>Priya Sharma</h4>
             <p>Founder & Head Chef - Crafting every dish with love and authenticity.</p>
@@ -365,6 +419,22 @@
         <div class="team-member-inner">
 
           <div class="team-member-front">
+
+            <img
+              src="https://randomuser.me/api/portraits/women/45.jpg"
+              alt="Anjali Verma"
+              loading="lazy"
+              decoding="async"
+            />
+
+            <h4>
+              Anjali Verma
+            </h4>
+
+            <p>
+              Customer Support
+            </p>
+
             <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Anjali Verma - Customer Support" />
             <h4>Anjali Verma</h4>
             <p>Customer Support - Always here to assist you with your orders.</p>
@@ -555,6 +625,9 @@
 <!-- ================= SCRIPTS ================= -->
 
 <script src="js/cart-manager.js"></script>
+<script src="js/recently-viewed.js"></script>
+<script src="js/main.js"></script>
+
 <script src="js/recently-viewed.js"></script>
 <script src="js/delivery-tracker.js"></script>
 <script src="js/geolocation.js"></script>

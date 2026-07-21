@@ -1,0 +1,466 @@
+[
+  {
+    "id": "state-andhra-pradesh",
+    "name": "Andhra Pradesh Special",
+    "description": "Traditional regional delicacies and local favorites from Andhra Pradesh.",
+    "price": 60,
+    "image": "img/states/andhra-pradesh.jpeg",
+    "category": "Regional",
+    "rating": 4.6,
+    "spice": "Low",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Andhra Pradesh",
+    "featured": true
+  },
+  {
+    "id": "state-assam",
+    "name": "Assam Special",
+    "description": "Traditional regional delicacies and local favorites from Assam.",
+    "price": 61,
+    "image": "img/states/assam.jpeg",
+    "category": "Regional",
+    "rating": 4.699999999999999,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Assam",
+    "featured": true
+  },
+  {
+    "id": "state-bihar",
+    "name": "Bihar Special",
+    "description": "Traditional regional delicacies and local favorites from Bihar.",
+    "price": 62,
+    "image": "img/states/bihar.jpeg",
+    "category": "Regional",
+    "rating": 4.8,
+    "spice": "High",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Bihar",
+    "featured": true
+  },
+  {
+    "id": "state-chhattisgarh",
+    "name": "Chhattisgarh Special",
+    "description": "Traditional regional delicacies and local favorites from Chhattisgarh.",
+    "price": 63,
+    "image": "img/states/chhattisgarh.jpeg",
+    "category": "Regional",
+    "rating": 4.8999999999999995,
+    "spice": "Low",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Chhattisgarh",
+    "featured": true
+  },
+  {
+    "id": "state-delhi",
+    "name": "Delhi Special",
+    "description": "Traditional regional delicacies and local favorites from Delhi.",
+    "price": 64,
+    "image": "img/states/delhi.jpeg",
+    "category": "Regional",
+    "rating": 4.6,
+    "spice": "Medium",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Delhi",
+    "featured": true
+  },
+  {
+    "id": "state-goa",
+    "name": "Goa Special",
+    "description": "Traditional regional delicacies and local favorites from Goa.",
+    "price": 65,
+    "image": "img/states/goa.jpeg",
+    "category": "Regional",
+    "rating": 4.699999999999999,
+    "spice": "High",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Goa",
+    "featured": true
+  },
+  {
+    "id": "state-gujarat",
+    "name": "Gujarat Special",
+    "description": "Traditional regional delicacies and local favorites from Gujarat.",
+    "price": 66,
+    "image": "img/states/gujarat.jpeg",
+    "category": "Regional",
+    "rating": 4.8,
+    "spice": "Low",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Gujarat",
+    "featured": true
+  },
+  {
+    "id": "state-haryana",
+    "name": "Haryana Special",
+    "description": "Traditional regional delicacies and local favorites from Haryana.",
+    "price": 67,
+    "image": "img/states/haryana.jpeg",
+    "category": "Regional",
+    "rating": 4.8999999999999995,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Haryana",
+    "featured": true
+  },
+  {
+    "id": "state-himachal-pradesh",
+    "name": "Himachal Pradesh Special",
+    "description": "Traditional regional delicacies and local favorites from Himachal Pradesh.",
+    "price": 68,
+    "image": "img/states/himachal-pradesh.jpeg",
+    "category": "Regional",
+    "rating": 4.6,
+    "spice": "High",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Himachal Pradesh",
+    "featured": true
+  },
+  {
+    "id": "state-jammu-and-kashmir",
+    "name": "Jammu and Kashmir Special",
+    "description": "Traditional regional delicacies and local favorites from Jammu and Kashmir.",
+    "price": 69,
+    "image": "img/states/jammu-and-kashmir.jpeg",
+    "category": "Regional",
+    "rating": 4.699999999999999,
+    "spice": "Low",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Jammu and Kashmir",
+    "featured": true
+  },
+  {
+    "id": "state-jharkhand",
+    "name": "Jharkhand Special",
+    "description": "Traditional regional delicacies and local favorites from Jharkhand.",
+    "price": 70,
+    "image": "img/states/jharkhand.jpeg",
+    "category": "Regional",
+    "rating": 4.8,
+    "spice": "Medium",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Jharkhand",
+    "featured": true
+  },
+  {
+    "id": "state-karnataka",
+    "name": "Karnataka Special",
+    "description": "Traditional regional delicacies and local favorites from Karnataka.",
+    "price": 71,
+    "image": "img/states/karnataka.jpeg",
+    "category": "Regional",
+    "rating": 4.8999999999999995,
+    "spice": "High",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Karnataka",
+    "featured": true
+  },
+  {
+    "id": "state-kerala",
+    "name": "Kerala Special",
+    "description": "Traditional regional delicacies and local favorites from Kerala.",
+    "price": 72,
+    "image": "img/states/kerala.jpeg",
+    "category": "Regional",
+    "rating": 4.6,
+    "spice": "Low",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Kerala",
+    "featured": true
+  },
+  {
+    "id": "state-madhya-pradesh",
+    "name": "Madhya Pradesh Special",
+    "description": "Traditional regional delicacies and local favorites from Madhya Pradesh.",
+    "price": 73,
+    "image": "img/states/madhya-pradesh.jpeg",
+    "category": "Regional",
+    "rating": 4.699999999999999,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Madhya Pradesh",
+    "featured": true
+  },
+  {
+    "id": "state-maharashtra",
+    "name": "Maharashtra Special",
+    "description": "Traditional regional delicacies and local favorites from Maharashtra.",
+    "price": 74,
+    "image": "img/states/maharashtra.jpeg",
+    "category": "Regional",
+    "rating": 4.8,
+    "spice": "High",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Maharashtra",
+    "featured": true
+  },
+  {
+    "id": "state-manipur",
+    "name": "Manipur Special",
+    "description": "Traditional regional delicacies and local favorites from Manipur.",
+    "price": 75,
+    "image": "img/states/manipur.jpeg",
+    "category": "Regional",
+    "rating": 4.8999999999999995,
+    "spice": "Low",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Manipur",
+    "featured": true
+  },
+  {
+    "id": "state-meghalaya",
+    "name": "Meghalaya Special",
+    "description": "Traditional regional delicacies and local favorites from Meghalaya.",
+    "price": 76,
+    "image": "img/states/meghalaya.jpeg",
+    "category": "Regional",
+    "rating": 4.6,
+    "spice": "Medium",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Meghalaya",
+    "featured": true
+  },
+  {
+    "id": "state-mizoram",
+    "name": "Mizoram Special",
+    "description": "Traditional regional delicacies and local favorites from Mizoram.",
+    "price": 77,
+    "image": "img/states/mizoram.jpeg",
+    "category": "Regional",
+    "rating": 4.699999999999999,
+    "spice": "High",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Mizoram",
+    "featured": true
+  },
+  {
+    "id": "state-nagaland",
+    "name": "Nagaland Special",
+    "description": "Traditional regional delicacies and local favorites from Nagaland.",
+    "price": 78,
+    "image": "img/states/nagaland.jpeg",
+    "category": "Regional",
+    "rating": 4.8,
+    "spice": "Low",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Nagaland",
+    "featured": true
+  },
+  {
+    "id": "state-odisha",
+    "name": "Odisha Special",
+    "description": "Traditional regional delicacies and local favorites from Odisha.",
+    "price": 79,
+    "image": "img/states/odisha.jpeg",
+    "category": "Regional",
+    "rating": 4.8999999999999995,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Odisha",
+    "featured": true
+  },
+  {
+    "id": "state-punjab",
+    "name": "Punjab Special",
+    "description": "Traditional regional delicacies and local favorites from Punjab.",
+    "price": 80,
+    "image": "img/states/punjab.jpeg",
+    "category": "Regional",
+    "rating": 4.6,
+    "spice": "High",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Punjab",
+    "featured": true
+  },
+  {
+    "id": "state-rajasthan",
+    "name": "Rajasthan Special",
+    "description": "Traditional regional delicacies and local favorites from Rajasthan.",
+    "price": 81,
+    "image": "img/states/rajasthan.jpeg",
+    "category": "Regional",
+    "rating": 4.699999999999999,
+    "spice": "Low",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Rajasthan",
+    "featured": true
+  },
+  {
+    "id": "state-sikkim",
+    "name": "Sikkim Special",
+    "description": "Traditional regional delicacies and local favorites from Sikkim.",
+    "price": 82,
+    "image": "img/states/sikkim.jpeg",
+    "category": "Regional",
+    "rating": 4.8,
+    "spice": "Medium",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Sikkim",
+    "featured": true
+  },
+  {
+    "id": "state-tamil-nadu",
+    "name": "Tamil Nadu Special",
+    "description": "Traditional regional delicacies and local favorites from Tamil Nadu.",
+    "price": 83,
+    "image": "img/states/tamil-nadu.jpeg",
+    "category": "Regional",
+    "rating": 4.8999999999999995,
+    "spice": "High",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Tamil Nadu",
+    "featured": true
+  },
+  {
+    "id": "state-telangana",
+    "name": "Telangana Special",
+    "description": "Traditional regional delicacies and local favorites from Telangana.",
+    "price": 84,
+    "image": "img/states/telangana.jpeg",
+    "category": "Regional",
+    "rating": 4.6,
+    "spice": "Low",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Telangana",
+    "featured": true
+  },
+  {
+    "id": "state-tripura",
+    "name": "Tripura Special",
+    "description": "Traditional regional delicacies and local favorites from Tripura.",
+    "price": 85,
+    "image": "img/states/tripura.jpeg",
+    "category": "Regional",
+    "rating": 4.699999999999999,
+    "spice": "Medium",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Tripura",
+    "featured": true
+  },
+  {
+    "id": "state-uttar-pradesh",
+    "name": "Uttar Pradesh Special",
+    "description": "Traditional regional delicacies and local favorites from Uttar Pradesh.",
+    "price": 86,
+    "image": "img/states/uttar-pradesh.jpeg",
+    "category": "Regional",
+    "rating": 4.8,
+    "spice": "High",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "Uttar Pradesh",
+    "featured": true
+  },
+  {
+    "id": "state-uttarakhand",
+    "name": "Uttarakhand Special",
+    "description": "Traditional regional delicacies and local favorites from Uttarakhand.",
+    "price": 87,
+    "image": "img/states/uttarakhand.jpeg",
+    "category": "Regional",
+    "rating": 4.8999999999999995,
+    "spice": "Low",
+    "dietary": [
+      "vegan"
+    ],
+    "available": true,
+    "state": "Uttarakhand",
+    "featured": true
+  },
+  {
+    "id": "state-west-bengal",
+    "name": "West Bengal Special",
+    "description": "Traditional regional delicacies and local favorites from West Bengal.",
+    "price": 88,
+    "image": "img/states/west-bengal.jpeg",
+    "category": "Regional",
+    "rating": 4.6,
+    "spice": "Medium",
+    "dietary": [
+      "gluten-free"
+    ],
+    "available": true,
+    "state": "West Bengal",
+    "featured": true
+  }
+]
