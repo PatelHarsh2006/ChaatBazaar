@@ -558,7 +558,13 @@
     }
   }
 
-  // wait for DOM + cart system
-  window.addEventListener("load", renderComboCards);
+  // Render as soon as the DOM is ready — don't wait on external
+  // resources (fonts/icons) via the "load" event, since a slow or
+  // blocked CDN request would otherwise delay rendering indefinitely.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderComboCards);
+  } else {
+    renderComboCards();
+  }
 
 </script>
