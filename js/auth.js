@@ -86,6 +86,37 @@
     setFormMessage(formId, "", "");
   }
 
+  function setFieldValidity(inputId, message, hasValue) {
+    const inputEl = document.getElementById(inputId);
+    if (!inputEl) return;
+
+    inputEl.classList.toggle("invalid", Boolean(message) && hasValue);
+    inputEl.classList.toggle("valid", !message && hasValue);
+  }
+
+  // Validates on blur immediately, then re-validates on every keystroke
+  // once a field has already been marked invalid, so errors clear as
+  // soon as the user fixes them instead of waiting for the next submit.
+  function attachLiveValidation(inputId, validatorFn) {
+    const inputEl = document.getElementById(inputId);
+    if (!inputEl) return;
+
+    const runValidation = function () {
+      const value = inputEl.value;
+      const message = validatorFn(value);
+      setFieldError(inputId, message);
+      setFieldValidity(inputId, message, value.trim().length > 0);
+      return message;
+    };
+
+    inputEl.addEventListener("blur", runValidation);
+    inputEl.addEventListener("input", function () {
+      if (inputEl.classList.contains("invalid")) {
+        runValidation();
+      }
+    });
+  }
+
   function getThemePreference() {
     return localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light";
   }
@@ -232,6 +263,15 @@
     const loginForm = document.getElementById("login-form");
     if (!loginForm) return;
 
+    attachLiveValidation("login-email", function (value) {
+      return validateEmail(value) ? "" : "Please enter a valid email address.";
+    });
+    attachLiveValidation("login-password", function (value) {
+      return String(value || "").trim().length >= 6
+        ? ""
+        : "Password must be at least 6 characters.";
+    });
+
     loginForm.addEventListener("submit", function (event) {
       event.preventDefault();
 
@@ -246,12 +286,18 @@
 
       if (!validateEmail(email)) {
         setFieldError("login-email", "Please enter a valid email address.");
+        setFieldValidity("login-email", "invalid", Boolean(email));
         hasError = true;
+      } else {
+        setFieldValidity("login-email", "", true);
       }
 
       if (password.length < 6) {
         setFieldError("login-password", "Password must be at least 6 characters.");
+        setFieldValidity("login-password", "invalid", Boolean(password));
         hasError = true;
+      } else {
+        setFieldValidity("login-password", "", true);
       }
 
       if (hasError) {
@@ -286,6 +332,28 @@
     const signupForm = document.getElementById("signup-form");
     if (!signupForm) return;
 
+    attachLiveValidation("signup-name", function (value) {
+      return String(value || "").trim() ? "" : "Name is required.";
+    });
+    attachLiveValidation("signup-email", function (value) {
+      const email = normalizeEmail(value);
+      if (!validateEmail(email)) return "Please enter a valid email address.";
+      const users = getUsers();
+      const emailAlreadyExists = users.some((user) => normalizeEmail(user.email) === email);
+      return emailAlreadyExists ? "This email is already registered. Please log in." : "";
+    });
+    attachLiveValidation("signup-password", function (value) {
+      return String(value || "").trim().length >= 6
+        ? ""
+        : "Password must be at least 6 characters.";
+    });
+    attachLiveValidation("signup-phone", function (value) {
+      return validatePhone(value) ? "" : "Phone number must contain exactly 10 digits.";
+    });
+    attachLiveValidation("signup-location", function (value) {
+      return String(value || "").trim() ? "" : "Location is required.";
+    });
+
     signupForm.addEventListener("submit", function (event) {
       event.preventDefault();
 
@@ -310,33 +378,49 @@
 
       if (!name) {
         setFieldError("signup-name", "Name is required.");
+        setFieldValidity("signup-name", "invalid", Boolean(name));
         hasError = true;
+      } else {
+        setFieldValidity("signup-name", "", true);
       }
 
       if (!validateEmail(email)) {
         setFieldError("signup-email", "Please enter a valid email address.");
+        setFieldValidity("signup-email", "invalid", Boolean(email));
         hasError = true;
+      } else {
+        setFieldValidity("signup-email", "", true);
       }
 
       if (password.length < 6) {
         setFieldError("signup-password", "Password must be at least 6 characters.");
+        setFieldValidity("signup-password", "invalid", Boolean(password));
         hasError = true;
+      } else {
+        setFieldValidity("signup-password", "", true);
       }
 
       if (!validatePhone(phone)) {
         setFieldError("signup-phone", "Phone number must contain exactly 10 digits.");
+        setFieldValidity("signup-phone", "invalid", Boolean(phone));
         hasError = true;
+      } else {
+        setFieldValidity("signup-phone", "", true);
       }
 
       if (!location) {
         setFieldError("signup-location", "Location is required.");
+        setFieldValidity("signup-location", "invalid", Boolean(location));
         hasError = true;
+      } else {
+        setFieldValidity("signup-location", "", true);
       }
 
       const users = getUsers();
       const emailAlreadyExists = users.some((user) => normalizeEmail(user.email) === email);
       if (emailAlreadyExists) {
         setFieldError("signup-email", "This email is already registered. Please log in.");
+        setFieldValidity("signup-email", "invalid", true);
         hasError = true;
       }
 

@@ -153,6 +153,22 @@
     box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
 }
 
+.input-group input.invalid {
+    border-color: #dc2626;
+}
+
+.input-group input.invalid:focus {
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+}
+
+.input-group input.valid {
+    border-color: #16a34a;
+}
+
+.input-group input.valid:focus {
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+}
+
 .error-message {
     color: #dc2626;
     font-size: 0.75rem;
@@ -462,6 +478,14 @@ body.dark .input-group input::placeholder {
 
 body.dark .input-group input:focus {
   border-color: #ff6b35;
+}
+
+body.dark .input-group input.invalid {
+  border-color: #f87171;
+}
+
+body.dark .input-group input.valid {
+  border-color: #4ade80;
 }
 
 body.dark .auth-link {
