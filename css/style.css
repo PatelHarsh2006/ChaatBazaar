@@ -1134,6 +1134,29 @@
       box-shadow: none;
     }
 
+    /* ===== Smart Combo Preview Section ===== */
+    section.combo-preview {
+      padding: 5rem 1rem;
+      background: #fff3e0;
+      text-align: center;
+    }
+    .combo-preview .container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .combo-preview-text {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: #5d4037;
+      margin-bottom: 2rem;
+    }
+    .combo-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
     /* ===== About Section ===== */
     section.about {
       padding: 5rem 1rem 7rem;
@@ -2808,9 +2831,13 @@ body.dark .card p.description {
 body.dark section.menu,
 body.dark section.specials,
 body.dark section.about,
+body.dark section.combo-preview,
 body.dark section.testimonials {
   background: #252525;
   color: #eee;
+}
+body.dark .combo-preview-text {
+  color: #ccc;
 }
 body.dark .filter-btn {
   background: transparent;
