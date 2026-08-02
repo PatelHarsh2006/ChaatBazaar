@@ -268,7 +268,7 @@ window.invoiceGenerator = (() => {
       `;
     });
 
-    printContainer.innerHTML = `
+    printContainer.textContent = `
       <div class="print-receipt-box">
         <div class="receipt-header">
           <h1>CHAATBAZAR</h1>
