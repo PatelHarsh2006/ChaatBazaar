@@ -24,7 +24,7 @@ window.invoiceGenerator = (() => {
   // Retrieve order details from localStorage
   function getOrderById(orderId) {
     try {
-      const orders = JSON.parse(localStorage.getItem('chaatOrders')) || [];
+      const orders = (JSON.parse(localStorage.getItem('chaatOrders') ?? "null") ?? null) || [];
       return orders.find(o => o.id === orderId);
     } catch (error) {
       console.error("Error loading order for invoice:", error);
