@@ -80,7 +80,7 @@ function showManualLocationInput(callback) {
   const parsedLat = parseFloat(lat);
   const parsedLon = parseFloat(lon);
 
-  if (isNaN(parsedLat) || isNaN(parsedLon)) {
+  if (Number.isNaN(parsedLat) || Number.isNaN(parsedLon)) {
     alert("❌ Invalid coordinates. Please enter valid numbers.");
     showManualLocationInput(callback);
     return;
