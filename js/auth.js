@@ -393,7 +393,7 @@
 
     const profileInitial = document.getElementById("profile-avatar-initial");
     if (profileInitial) {
-      profileInitial.textContent = String(loggedInUser.name || "U").trim().charAt(0).toUpperCase() || "U";
+      profileInitial.textContent = String(loggedInUser.name || "U").trim()[0].toUpperCase() || "U";
     }
   }
 
