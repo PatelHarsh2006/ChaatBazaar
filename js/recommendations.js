@@ -1,7 +1,7 @@
 /// ===== SMART RECOMMENDATION ENGINE =====
 
 // Load cart from localStorage
-let cart = JSON.parse(localStorage.getItem("chaatCart")) || [];
+let cart = (() => { try { return JSON.parse(localStorage.getItem("chaatCart")) } catch { return null } })() || [];
 
 // ===== FOOD PAIRINGS =====
 
