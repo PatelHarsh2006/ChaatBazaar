@@ -1829,7 +1829,7 @@ async function init() {
 
   renderOrdersList();
   updateOrderStatuses();
-  setInterval(updateOrderStatuses, 3000);
+  clearInterval(window.__interval); window.__interval = setInterval(updateOrderStatuses, 3000);
 }
 
 if (document.readyState === "loading") {
