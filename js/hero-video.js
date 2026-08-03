@@ -47,5 +47,5 @@
     activeVideo = 1 - activeVideo;
   };
 
-  window.setInterval(showNextVideo, 6000);
+  window.clearInterval(window.__interval); window.__interval = setInterval(showNextVideo, 6000);
 })();
