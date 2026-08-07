@@ -56,7 +56,7 @@ Built with modern, lightweight web technologies:
 
 ## Important points for Contributors to keep in Mind :
 
-1. Maintain the Orange theme, throughout the Wesbite.
+1. Maintain the Orange theme, throughout the Website.
 
 2. Include "Before" and "After" screenshots of the webpage for all changes, in the Pull Request description.
 
