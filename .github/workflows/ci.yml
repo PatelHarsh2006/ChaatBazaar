@@ -12,4 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - run: echo "CI running successfully"
+      - name: HTMLHint
+        run: npx htmlhint "**/*.html"
+
+      - name: CSS Lint (Basic)
+        run: npx stylelint "css/*.css" --config '{ "rules": { "color-no-invalid-hex": true } }'
