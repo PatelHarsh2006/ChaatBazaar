@@ -59,10 +59,29 @@
           </div>
 
           <div class="input-group">
-            <label for="login-password"><i class="fa-solid fa-lock"></i>Password</label>
-            <input type="password" id="login-password" placeholder="Minimum 6 characters" minlength="6" autocomplete="current-password" required />
-            <p id="login-password-error" class="error-message" aria-live="polite"></p>
-          </div>
+  <label for="login-password">
+    <i class="fa-solid fa-lock"></i>Password
+  </label>
+
+  <div class="password-input-wrapper">
+    <input
+      type="password"
+      id="login-password"
+      placeholder="Minimum 6 characters"
+      minlength="6"
+      autocomplete="current-password"
+      required
+    />
+    <button
+      type="button"
+      id="login-password-toggle"
+      class="password-toggle-btn"
+      aria-label="Show password"
+    >Show</button>
+  </div>
+
+  <p id="login-password-error" class="error-message" aria-live="polite"></p>
+</div>
 
           <p class="form-message" aria-live="polite"></p>
 
