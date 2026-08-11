@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/auth.css" />
-  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="icon" href="img/logo.png" type="image/png" />
 </head>
 <body data-page-type="dashboard">
   <header>
@@ -40,35 +41,127 @@
     </div>
   </header>
 
-  <main class="auth-main" role="main" aria-label="Dashboard page">
-    <div class="food-animation-bg" aria-hidden="true">
-      <span class="floating-food samosa">🥟</span>
-      <span class="floating-food pani-puri">🫓</span>
-      <span class="floating-food chaat">🍲</span>
-      <span class="floating-food chai">☕</span>
-      <span class="floating-food lassi">🥛</span>
+  <main class="dashboard-main container" role="main" aria-label="Dashboard page">
+    <div class="dashboard-page-header">
+      <h2>Welcome back, <span id="dashboard-user-name">User</span>! 👋</h2>
+      <p>Manage your orders, loyalty points, and account settings.</p>
     </div>
 
-    <section class="auth-wrapper">
-      <div class="dashboard-card">
-        <div class="dashboard-page-header">
-          <div class="dashboard-eyebrow">Dashboard</div>
-          <h2>Dashboard - Coming Soon</h2>
-          <p>Hi, <span id="dashboard-user-name">User</span>.</p>
-        </div>
-
-        <div class="dashboard-message">
-          <strong>Coming Soon:</strong> this area will hold order history, saved preferences, rewards, and quick actions for your account.
-        </div>
-
-        <div class="profile-actions">
-          <a href="profile.html" class="profile-action-link">View Profile</a>
-          <a href="index.html" class="profile-action-link secondary">Back to Home</a>
-        </div>
+    <div class="dashboard-stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">📦</div>
+        <div class="stat-value" id="stat-orders">0</div>
+        <div class="stat-label">Total Orders</div>
       </div>
-    </section>
+      <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-value" id="stat-points">0</div>
+        <div class="stat-label">Loyalty Points</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🛒</div>
+        <div class="stat-value" id="stat-cart">0</div>
+        <div class="stat-label">Items in Cart</div>
+      </div>
+    </div>
+
+    <div class="dashboard-section">
+      <h3 class="dashboard-section-title">🛍️ Recent Orders</h3>
+      <div id="dashboard-orders-list" class="order-list">
+        <!-- Orders injected here -->
+      </div>
+    </div>
+
+    <div class="dashboard-section">
+      <h3 class="dashboard-section-title">📍 Default Delivery Address</h3>
+      <form id="address-form" class="address-form">
+        <textarea id="delivery-address-input" rows="3" placeholder="Enter your full delivery address..."></textarea>
+        <button type="button" id="save-address-btn" class="btn-save-address">Save Address</button>
+      </form>
+    </div>
+    
+    <div class="profile-actions" style="margin-bottom: 2rem;">
+      <a href="profile.html" class="profile-action-link">View Profile</a>
+      <a href="orders.html" class="profile-action-link">All Orders</a>
+      <a href="menu.html" class="profile-action-link secondary">Order Food</a>
+    </div>
   </main>
 
+  <div id="toast-notification" class="toast-notification"></div>
+
+  <script src="js/loyalty.js"></script>
+  <script src="js/cart-manager.js"></script>
   <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. User Name
+      const user = JSON.parse(sessionStorage.getItem("chaatUser"));
+      if (user && user.name) {
+        document.getElementById("dashboard-user-name").textContent = user.name;
+      }
+
+      // 2. Orders count & list
+      const orders = JSON.parse(localStorage.getItem("chaatOrders") || "[]");
+      document.getElementById("stat-orders").textContent = orders.length;
+
+      const ordersList = document.getElementById("dashboard-orders-list");
+      if (orders.length === 0) {
+        ordersList.innerHTML = `<div class="empty-state">No orders yet. Time to crave some chaat!</div>`;
+      } else {
+        ordersList.innerHTML = "";
+        orders.slice(0, 3).forEach(order => {
+          ordersList.innerHTML += `
+            <div class="order-item">
+              <div class="order-info">
+                <h4>Order #${order.id || Math.floor(Math.random()*10000)}</h4>
+                <p>${new Date(order.date || Date.now()).toLocaleDateString()} • ₹${order.total || 0}</p>
+              </div>
+              <div class="order-status ${order.status === 'Delivered' ? 'delivered' : 'processing'}">
+                ${order.status || 'Processing'}
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      // 3. Loyalty Points
+      if (window.loyalty) {
+        document.getElementById("stat-points").textContent = window.loyalty.getBalance();
+      }
+
+      // 4. Cart Items
+      if (window.cartManager) {
+        const cartItems = window.cartManager.getItems();
+        const totalCartItems = cartItems.reduce((acc, curr) => acc + curr.quantity, 0);
+        document.getElementById("stat-cart").textContent = totalCartItems;
+      } else {
+        const cart = JSON.parse(localStorage.getItem("chaatCart") || "[]");
+        const totalCartItems = cart.reduce((acc, curr) => acc + curr.quantity, 0);
+        document.getElementById("stat-cart").textContent = totalCartItems;
+      }
+
+      // 5. Address Logic
+      const addressInput = document.getElementById("delivery-address-input");
+      addressInput.value = localStorage.getItem("defaultAddress") || "";
+
+      document.getElementById("save-address-btn").addEventListener("click", () => {
+        localStorage.setItem("defaultAddress", addressInput.value);
+        
+        let toast = document.getElementById("toast-notification");
+        if (!toast) {
+          toast = document.createElement("div");
+          toast.id = "toast-notification";
+          toast.className = "toast-notification";
+          document.body.appendChild(toast);
+        }
+        
+        toast.textContent = "Address saved successfully! ✅";
+        toast.style.display = "block";
+        setTimeout(() => {
+          toast.style.display = "none";
+        }, 3000);
+      });
+    });
+  </script>
 </body>
 </html>
