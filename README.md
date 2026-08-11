@@ -42,6 +42,40 @@ Demo Link : <a href="https://patelharsh2006.github.io/ChaatBazaar/">Link</a>
 
 <img src="https://capsule-render.vercel.app/api?type=rect&height=4&color=FF7B54" width="100%">
 
+## 📁 Project Structure
+
+Below is the directory layout of the ChaatBazaar project to help you navigate the codebase:
+
+```text
+ChaatBazaar/
+├── .github/               # GitHub configuration
+│   └── workflows/         # CI/CD automation pipelines
+│       └── ci.yml         # Continuous Integration workflow configuration
+├── css/                   # Stylesheets for the application
+│   ├── 404.css            # Styling specific to the error page
+│   └── style.css          # Main global styles and theme configurations
+├── data/                  # Local data storage files
+│   └── menu.json          # Structured menu item data (dishes, prices, states)
+├── img/                   # Asset directory for static images and graphics
+│   ├── 1.avif             # Food item image asset
+│   ├── 2.avif             # Food item image asset
+│   ├── 7.avif             # Food item image asset
+│   ├── 8.avif             # Food item image asset
+│   ├── 9.avif             # Food item image asset
+│   └── chaat.png          # Main application logo/banner asset
+├── js/                    # Application client-side scripting
+│   └── main.js            # Core JavaScript logic (cart operations, filtering)
+├── 404.html               # Custom 404 Error Page
+├── about.html             # Information about ChaatBazaar
+├── cart.html              # User shopping cart and order confirmation page
+├── CONTRIBUTING.md        # Detailed rules and setup guidelines for contributors
+├── favicon.png            # Browser tab icon asset
+├── index.html             # Application entry point (Landing / Home Page)
+├── LICENSE                # MIT License file
+├── menu.html              # Browse-able items list page
+├── orders.html            # User order history or current order details page
+└── README.md              # Project documentation
+
 ## 💻 Tech Stack <a name="-tech-stack"></a>
 Built with modern, lightweight web technologies:
 * <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white" alt="HTML5" />
