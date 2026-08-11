@@ -69,9 +69,9 @@ const deliveryTracker = (() => {
     const stage = stageDefinitions[stageIndex];
     if (!stage) return;
 
-    // 1. Update progress bar filled width
+    // 1. Update progress bar filled height
     if (progressBar) {
-      progressBar.style.width = stage.progress;
+      progressBar.style.height = stage.progress;
     }
 
     // 2. Move cart icon on rail
