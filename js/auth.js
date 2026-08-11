@@ -1,7 +1,9 @@
 (function () {
-  const USERS_KEY = "users";
-  const SESSION_KEY = "loggedInUser";
-  const THEME_KEY = "theme";
+  const USERS_KEY       = "users";
+  const SESSION_KEY     = "loggedInUser";
+  const SESSION_CHK_KEY = "loggedInUser_check"; 
+  const THEME_KEY       = "theme";
+  const SESSION_TTL_MS  = 7 * 24 * 60 * 60 * 1000;
 
   function readJSON(key, fallback) {
     try {
@@ -21,16 +23,58 @@
     return readJSON(USERS_KEY, []);
   }
 
-  function getSessionUser() {
-    return readJSON(SESSION_KEY, null);
+  async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data    = encoder.encode(password);
+    const hashBuf = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(hashBuf))
+      .map(function (b) { return b.toString(16).padStart(2, "0"); })
+      .join("");
+  }
+
+  function computeChecksum(payload) {
+    return btoa(encodeURIComponent(payload)).slice(0, 24);
   }
 
   function setSessionUser(user) {
-    writeJSON(SESSION_KEY, user);
+    const payload  = JSON.stringify(user);
+    const checksum = computeChecksum(payload);
+    localStorage.setItem(SESSION_KEY,     payload);
+    localStorage.setItem(SESSION_CHK_KEY, checksum);
+  }
+  
+  function getSessionUser() {
+    const payload  = localStorage.getItem(SESSION_KEY);
+    const checksum = localStorage.getItem(SESSION_CHK_KEY);
+
+    if (!payload) return null;
+    if (computeChecksum(payload) !== checksum) {
+      clearSessionUser();
+      console.warn("Session integrity check failed. Session cleared.");
+      return null;
+    }
+
+    let user;
+    try {
+      user = JSON.parse(payload);
+    } catch {
+      clearSessionUser();
+      return null;
+    }
+    if (user.loginAt) {
+      const age = Date.now() - new Date(user.loginAt).getTime();
+      if (age > SESSION_TTL_MS) {
+        clearSessionUser();
+        return null;
+      }
+    }
+
+    return user;
   }
 
   function clearSessionUser() {
     localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(SESSION_CHK_KEY);
   }
 
   function normalizeEmail(email) {
@@ -38,7 +82,7 @@
   }
 
   function escapeHTML(value) {
-    return String(value || "").replace(/[&<>"'`\/]/g, function (character) {
+    return String(value || "").replace(/[&<>"'`\/]/g, function (ch) {
       return {
         "&": "&amp;",
         "<": "&lt;",
@@ -47,7 +91,7 @@
         "'": "&#39;",
         "`": "&#96;",
         "/": "&#47;"
-      }[character] || character;
+      }[ch] || ch;
     });
   }
 
@@ -56,13 +100,27 @@
   }
 
   function validatePhone(phone) {
-    return /^\d{10}$/.test(String(phone || "").trim());
+    const digits = String(phone || "").replace(/\D/g, "");
+    return digits.length === 10 ||
+      (digits.length === 12 && digits.startsWith("91"));
+  }
+
+  function validatePassword(password) {
+    if (password.length < 8) {
+      return "Password must be at least 8 characters.";
+    }
+    if (!/[A-Z]/.test(password)) {
+      return "Password must include at least one uppercase letter.";
+    }
+    if (!/[0-9]/.test(password)) {
+      return "Password must include at least one number.";
+    }
+    return null; 
   }
 
   function setFieldError(inputId, message) {
     const errorEl = document.getElementById(`${inputId}-error`);
     if (!errorEl) return;
-
     errorEl.textContent = message;
     errorEl.classList.toggle("active", Boolean(message));
   }
@@ -70,20 +128,39 @@
   function setFormMessage(formId, message, type) {
     const form = document.getElementById(formId);
     if (!form) return;
-
     const messageEl = form.querySelector(".form-message");
     if (!messageEl) return;
-
     messageEl.textContent = message;
     messageEl.classList.remove("success", "error");
-    if (type) {
-      messageEl.classList.add(type);
-    }
+    if (type) messageEl.classList.add(type);
   }
 
   function clearFormErrors(fieldIds, formId) {
-    fieldIds.forEach((fieldId) => setFieldError(fieldId, ""));
+    fieldIds.forEach(function (id) { setFieldError(id, ""); });
     setFormMessage(formId, "", "");
+  }
+
+  function setSubmitLoading(form, loading, originalLabel) {
+    const btn = form ? form.querySelector('button[type="submit"]') : null;
+    if (!btn) return;
+    btn.disabled = loading;
+    btn.textContent = loading ? "Please wait…" : (originalLabel || "Submit");
+  }
+
+  function setupPasswordToggle(inputId, toggleId) {
+    const input  = document.getElementById(inputId);
+    const toggle = document.getElementById(toggleId);
+    if (!input || !toggle) return;
+
+    toggle.addEventListener("click", function () {
+      const isPassword = input.type === "password";
+      input.type = isPassword ? "text" : "password";
+      toggle.setAttribute(
+        "aria-label",
+        isPassword ? "Hide password" : "Show password"
+      );
+      toggle.textContent = isPassword ? "Hide" : "Show";
+    });
   }
 
   function getThemePreference() {
@@ -93,7 +170,6 @@
   function updateThemeToggleState(theme) {
     const themeToggle = document.getElementById("theme-toggle");
     if (!themeToggle) return;
-
     const isDark = theme === "dark";
     themeToggle.setAttribute("aria-pressed", String(isDark));
     themeToggle.setAttribute(
@@ -110,10 +186,8 @@
 
   function setupThemeToggle() {
     applyTheme(getThemePreference());
-
     const themeToggle = document.getElementById("theme-toggle");
     if (!themeToggle) return;
-
     themeToggle.addEventListener("click", function () {
       const nextTheme = document.body.classList.contains("dark") ? "light" : "dark";
       localStorage.setItem(THEME_KEY, nextTheme);
@@ -122,23 +196,18 @@
   }
 
   function closeProfileDropdown(options) {
-    const profileMenu = document.querySelector("[data-profile-menu]");
+    const profileMenu   = document.querySelector("[data-profile-menu]");
     const profileToggle = document.getElementById("profileToggle");
-
     if (!profileMenu || !profileToggle) return;
-
     profileMenu.classList.remove("open");
     profileToggle.setAttribute("aria-expanded", "false");
-
-    if (options && options.focusToggle) {
-      profileToggle.focus();
-    }
+    if (options && options.focusToggle) profileToggle.focus();
   }
 
   function setupProfileDropdown() {
-    const profileMenu = document.querySelector("[data-profile-menu]");
+    const profileMenu   = document.querySelector("[data-profile-menu]");
     const profileToggle = document.getElementById("profileToggle");
-    const logoutBtn = document.getElementById("logoutBtn");
+    const logoutBtn     = document.getElementById("logoutBtn");
 
     if (!profileMenu || !profileToggle) return;
 
@@ -147,30 +216,20 @@
       profileToggle.setAttribute("aria-expanded", "true");
     };
 
-    const handleDocumentClick = function (event) {
-      if (!profileMenu.contains(event.target)) {
-        closeProfileDropdown();
-      }
-    };
-
-    const handleEscapeKey = function (event) {
-      if (event.key === "Escape") {
-        closeProfileDropdown({ focusToggle: true });
-      }
-    };
-
     profileToggle.addEventListener("click", function (event) {
       event.stopPropagation();
-
-      if (profileMenu.classList.contains("open")) {
-        closeProfileDropdown();
-      } else {
-        openProfileDropdown();
-      }
+      profileMenu.classList.contains("open")
+        ? closeProfileDropdown()
+        : openProfileDropdown();
     });
 
-    document.addEventListener("click", handleDocumentClick);
-    document.addEventListener("keydown", handleEscapeKey);
+    document.addEventListener("click", function (event) {
+      if (!profileMenu.contains(event.target)) closeProfileDropdown();
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeProfileDropdown({ focusToggle: true });
+    });
 
     if (logoutBtn) {
       logoutBtn.addEventListener("click", function () {
@@ -180,19 +239,18 @@
     }
   }
 
-  // Navbar session rendering.
-  // Why: every page needs the same logged-out/login and logged-in/profile state.
   function renderAuthNav() {
     const authNavItem = document.getElementById("authNavItem");
     if (!authNavItem) return;
 
     const loggedInUser = getSessionUser();
     if (!loggedInUser || !loggedInUser.name) {
-      authNavItem.innerHTML = '<a href="login.html" class="login-btn-nav" aria-label="Go to login page">Login</a>';
+      authNavItem.innerHTML =
+        '<a href="login.html" class="login-btn-nav" aria-label="Go to login page">Login</a>';
       return;
     }
-
-    const safeName = escapeHTML(String(loggedInUser.name).trim());
+    
+    const safeName  = escapeHTML(String(loggedInUser.name).trim());
     const safeEmail = escapeHTML(String(loggedInUser.email || "").trim());
 
     authNavItem.innerHTML = `
@@ -231,19 +289,19 @@
   function handleLoginPage() {
     const loginForm = document.getElementById("login-form");
     if (!loginForm) return;
+    setupPasswordToggle("login-password", "login-password-toggle");
 
-    loginForm.addEventListener("submit", function (event) {
+    loginForm.addEventListener("submit", async function (event) {
       event.preventDefault();
 
-      const emailInput = document.getElementById("login-email");
+      const emailInput    = document.getElementById("login-email");
       const passwordInput = document.getElementById("login-password");
       const email = normalizeEmail(emailInput ? emailInput.value : "");
-      const password = String(passwordInput ? passwordInput.value : "").trim();
+      const password = String(passwordInput ? passwordInput.value : "");
 
       clearFormErrors(["login-email", "login-password"], "login-form");
 
       let hasError = false;
-
       if (!validateEmail(email)) {
         setFieldError("login-email", "Please enter a valid email address.");
         hasError = true;
@@ -259,26 +317,47 @@
         return;
       }
 
-      const users = getUsers();
-      const matchedUser = users.find(
-        (user) => normalizeEmail(user.email) === email && String(user.password || "") === password
-      );
+      setSubmitLoading(loginForm, true);
 
-      if (!matchedUser) {
-        setFormMessage("login-form", "Invalid email or password. Please try again.", "error");
-        return;
+      try {
+        const hashedInput = await hashPassword(password);
+        const users       = getUsers();
+
+        const matchedUser = users.find(function (user) {
+          return (
+            normalizeEmail(user.email) === email &&
+            String(user.password || "") === hashedInput
+          );
+        });
+
+        if (!matchedUser) {
+          setFormMessage(
+            "login-form",
+            "Invalid email or password. Please try again.",
+            "error"
+          );
+          setSubmitLoading(loginForm, false, "Login");
+          return;
+        }
+
+        setSessionUser({
+          name:     matchedUser.name,
+          email:    matchedUser.email,
+          phone:    matchedUser.phone,
+          location: matchedUser.location,
+          loginAt:  new Date().toISOString()
+        });
+        
+        setFormMessage("login-form", "Login successful. Redirecting…", "success");
+        setTimeout(function () {
+          window.location.href = "index.html";
+        }, 800);
+
+      } catch (err) {
+        console.error("Login error:", err);
+        setFormMessage("login-form", "Something went wrong. Please try again.", "error");
+        setSubmitLoading(loginForm, false, "Login");
       }
-
-      setSessionUser({
-        name: matchedUser.name,
-        email: matchedUser.email,
-        phone: matchedUser.phone,
-        location: matchedUser.location,
-        loginAt: new Date().toISOString()
-      });
-
-      setFormMessage("login-form", "Login successful. Redirecting...", "success");
-      window.location.href = "index.html";
     });
   }
 
@@ -286,19 +365,21 @@
     const signupForm = document.getElementById("signup-form");
     if (!signupForm) return;
 
-    signupForm.addEventListener("submit", function (event) {
+    setupPasswordToggle("signup-password", "signup-password-toggle");
+
+    signupForm.addEventListener("submit", async function (event) {
       event.preventDefault();
 
-      const nameInput = document.getElementById("signup-name");
-      const emailInput = document.getElementById("signup-email");
+      const nameInput     = document.getElementById("signup-name");
+      const emailInput    = document.getElementById("signup-email");
       const passwordInput = document.getElementById("signup-password");
-      const phoneInput = document.getElementById("signup-phone");
+      const phoneInput    = document.getElementById("signup-phone");
       const locationInput = document.getElementById("signup-location");
 
-      const name = String(nameInput ? nameInput.value : "").trim();
-      const email = normalizeEmail(emailInput ? emailInput.value : "");
-      const password = String(passwordInput ? passwordInput.value : "").trim();
-      const phone = String(phoneInput ? phoneInput.value : "").trim();
+      const name     = String(nameInput     ? nameInput.value     : "").trim();
+      const email    = normalizeEmail(emailInput ? emailInput.value : "");
+      const password = String(passwordInput ? passwordInput.value : "");
+      const phone    = String(phoneInput    ? phoneInput.value    : "").trim();
       const location = String(locationInput ? locationInput.value : "").trim();
 
       clearFormErrors(
@@ -312,31 +393,27 @@
         setFieldError("signup-name", "Name is required.");
         hasError = true;
       }
-
+      
+      const users = getUsers();
       if (!validateEmail(email)) {
         setFieldError("signup-email", "Please enter a valid email address.");
         hasError = true;
-      }
-
-      if (password.length < 6) {
-        setFieldError("signup-password", "Password must be at least 6 characters.");
+      } else if (users.some(function (u) { return normalizeEmail(u.email) === email; })) {
+        setFieldError("signup-email", "This email is already registered. Please log in.");
         hasError = true;
       }
 
+      const pwError = validatePassword(password);
+      if (pwError) {
+        setFieldError("signup-password", pwError);
+        hasError = true;
+      }
       if (!validatePhone(phone)) {
-        setFieldError("signup-phone", "Phone number must contain exactly 10 digits.");
+        setFieldError("signup-phone", "Enter a valid 10-digit phone number.");
         hasError = true;
       }
-
       if (!location) {
         setFieldError("signup-location", "Location is required.");
-        hasError = true;
-      }
-
-      const users = getUsers();
-      const emailAlreadyExists = users.some((user) => normalizeEmail(user.email) === email);
-      if (emailAlreadyExists) {
-        setFieldError("signup-email", "This email is already registered. Please log in.");
         hasError = true;
       }
 
@@ -345,29 +422,41 @@
         return;
       }
 
-      const newUser = {
-        name,
-        email,
-        password,
-        phone,
-        location,
-        createdAt: new Date().toISOString()
-      };
+      setSubmitLoading(signupForm, true);
 
-      users.push(newUser);
-      writeJSON(USERS_KEY, users);
+      try {
+        const hashedPassword = await hashPassword(password);
 
-      // Auto-login after successful registration as requested.
-      setSessionUser({
-        name: newUser.name,
-        email: newUser.email,
-        phone: newUser.phone,
-        location: newUser.location,
-        loginAt: new Date().toISOString()
-      });
+        const newUser = {
+          name,
+          email,
+          password: hashedPassword,
+          phone,
+          location,
+          createdAt: new Date().toISOString()
+        };
 
-      setFormMessage("signup-form", "Account created successfully. Redirecting...", "success");
-      window.location.href = "index.html";
+        users.push(newUser);
+        writeJSON(USERS_KEY, users);
+
+        setSessionUser({
+          name:     newUser.name,
+          email:    newUser.email,
+          phone:    newUser.phone,
+          location: newUser.location,
+          loginAt:  new Date().toISOString()
+        });
+
+        setFormMessage("signup-form", "Account created! Redirecting…", "success");
+        setTimeout(function () {
+          window.location.href = "index.html";
+        }, 800);
+
+      } catch (err) {
+        console.error("Signup error:", err);
+        setFormMessage("signup-form", "Something went wrong. Please try again.", "error");
+        setSubmitLoading(signupForm, false, "Create Account");
+      }
     });
   }
 
@@ -376,24 +465,22 @@
 
     const loggedInUser = getSessionUser();
     if (!loggedInUser) return;
-
     const profileMap = {
-      "profile-name-value": loggedInUser.name || "",
-      "profile-email-value": loggedInUser.email || "",
-      "profile-phone-value": loggedInUser.phone || "",
+      "profile-name-value":     loggedInUser.name     || "",
+      "profile-email-value":    loggedInUser.email    || "",
+      "profile-phone-value":    loggedInUser.phone    || "",
       "profile-location-value": loggedInUser.location || ""
     };
 
-    Object.keys(profileMap).forEach((elementId) => {
-      const element = document.getElementById(elementId);
-      if (element) {
-        element.textContent = profileMap[elementId];
-      }
+    Object.keys(profileMap).forEach(function (elementId) {
+      const el = document.getElementById(elementId);
+      if (el) el.textContent = profileMap[elementId];
     });
-
+    
     const profileInitial = document.getElementById("profile-avatar-initial");
     if (profileInitial) {
-      profileInitial.textContent = String(loggedInUser.name || "U").trim().charAt(0).toUpperCase() || "U";
+      const safeName = escapeHTML(String(loggedInUser.name || "U").trim());
+      profileInitial.textContent = safeName.charAt(0).toUpperCase() || "U";
     }
   }
 
@@ -410,7 +497,7 @@
   }
 
   function redirectIfAuthenticationStateMismatchesPage() {
-    const pageType = document.body.dataset.pageType || "";
+    const pageType     = document.body.dataset.pageType || "";
     const loggedInUser = getSessionUser();
 
     if ((pageType === "profile" || pageType === "dashboard") && !loggedInUser) {
@@ -422,15 +509,11 @@
       window.location.href = "index.html";
       return true;
     }
-
     return false;
   }
-
+  
   function init() {
-    if (redirectIfAuthenticationStateMismatchesPage()) {
-      return;
-    }
-
+    if (redirectIfAuthenticationStateMismatchesPage()) return;
     setupThemeToggle();
     renderAuthNav();
     handleLoginPage();
